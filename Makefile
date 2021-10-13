@@ -12,7 +12,7 @@ default:
 	@echo -e "\tstandup: Start all required services\n\tteardown: Safely shutdown all services"
 
 standup-network:
-	@if sudo docker network ls | grep -F 'csp-internal' | wc -c | xargs -I% test % -eq 0; then \
+	@if docker network ls | grep -F 'csp-internal' | wc -c | xargs -I% test % -eq 0; then \
         docker network create csp-internal; \
     fi
 

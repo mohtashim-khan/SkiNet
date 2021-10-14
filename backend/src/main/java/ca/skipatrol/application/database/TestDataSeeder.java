@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent> {
 
@@ -17,11 +19,14 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        this.repository.save(new User("username",
-                new BCryptPasswordEncoder().encode("password"),
-                "Isaac",
-                "Newton",
-                Role.USER));
+        Optional<User> userLookup = this.repository.findByUsername("username");
+        if (userLookup.isEmpty()) {
+            this.repository.save(new User("username",
+                    new BCryptPasswordEncoder().encode("password"),
+                    "Isaac",
+                    "Newton",
+                    Role.USER));
+        }
     }
 
 }

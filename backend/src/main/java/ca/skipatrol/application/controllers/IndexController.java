@@ -15,4 +15,7 @@ public class IndexController {
         return Collections.singletonMap("version", Application.API_VERSION);
     }
 
+    @GetMapping("/favicon.ico")
+    public void getFavicon() { }
+
 }

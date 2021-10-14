@@ -6,12 +6,15 @@ RUN apk add openjdk11-jre
 
 RUN apk add maven
 
-COPY ./pom.xml /application/backend/pom.xml
+COPY .mvn/ /application/backend/.mvn
+COPY ./pom.xml ./mvnw /application/backend/
 
-RUN mvn -f /application/backend/pom.xml dependency:go-offline -B
+WORKDIR /application/backend
 
-COPY ./src ./application/backend/src
+RUN ./mvnw dependency:go-offline -B
 
-RUN mvn -f /application/backend/pom.xml -Dmaven.test.skip clean package spring-boot:repackage
+COPY ./src /application/backend/src
+
+RUN ./mvnw -Dmaven.test.skip clean package spring-boot:repackage
 
 ENTRYPOINT ["java", "-jar", "/application/backend/target/application-release.jar"]

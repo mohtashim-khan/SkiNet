@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import static javax.persistence.EnumType.STRING;
 
 import java.util.Date;
 
@@ -25,23 +24,29 @@ private String event_name;
 @Temporal(TemporalType.TIMESTAMP)
 @Getter
 @Setter
-private java.util.Date startDate;
+private Date startDate;
 
 @Column(name = "end_date", nullable = true)
 @Temporal(TemporalType.TIMESTAMP)
 @Getter
 @Setter
-private java.util.Date endDate;
+private Date endDate;
 
 @Column(name = "min_patrollers")
 @Getter
 @Setter
-private Long minPatrollers;
+private int minPatrollers = -1;
 
 @Column(name = "max_patrollers")
 @Getter
 @Setter
-private Long maxPatrollers;
+private int maxPatrollers = -1;
+
+@Column(name = "max_trainees")
+@Getter
+@Setter
+private int maxTrainees = -1;
+
 
 @Column(name = "hl_user")
 @Getter
@@ -57,12 +62,11 @@ private String allDay;
 @Column(name = "group_id")
 @Getter
 @Setter
-private Long groupID;
+private int groupID = -1;
 
 
-public Event(Long event_id, String event_name, Date startDate, Date endDate, Long minPatrollers, Long maxPatrollers,
-        String hlUser, String allDay, Long groupID) {
-    this.event_id = event_id;
+public Event(String event_name, Date startDate, Date endDate, int minPatrollers, int maxPatrollers,
+        String hlUser, String allDay, int groupID) {
     this.event_name = event_name;
     this.startDate = startDate;
     this.endDate = endDate;

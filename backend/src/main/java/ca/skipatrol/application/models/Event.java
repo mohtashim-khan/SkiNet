@@ -12,54 +12,55 @@ public class Event {
 
 @Id
 @GeneratedValue
+@Column(name = "event_id", nullable = false, columnDefinition="int(11)")
 @Getter
-private Long event_id;
+private int event_id;
 
 
-@Column(name = "event_name", nullable = false)
+@Column(name = "event_name", nullable = false, columnDefinition="varchar(255)")
 @Setter
 private String event_name;
 
-@Column(name = "start_date" , nullable = true)
+@Column(name = "start_date" , nullable = true, columnDefinition="datetime")
 @Temporal(TemporalType.TIMESTAMP)
 @Getter
 @Setter
 private Date startDate;
 
-@Column(name = "end_date", nullable = true)
+@Column(name = "end_date", nullable = true, columnDefinition="datetime")
 @Temporal(TemporalType.TIMESTAMP)
 @Getter
 @Setter
 private Date endDate;
 
-@Column(name = "min_patrollers")
+@Column(name = "min_patrollers", nullable = false, columnDefinition="int(11)")
 @Getter
 @Setter
 private int minPatrollers = -1;
 
-@Column(name = "max_patrollers")
+@Column(name = "max_patrollers", nullable = false, columnDefinition="int(11)")
 @Getter
 @Setter
 private int maxPatrollers = -1;
 
-@Column(name = "max_trainees")
+@Column(name = "max_trainees", nullable = false, columnDefinition="int(11)")
 @Getter
 @Setter
 private int maxTrainees = -1;
 
 
-@Column(name = "hl_user")
+@Column(name = "hl_user", nullable = false, columnDefinition="varchar(255)")
 @Getter
 @Setter
 private String hlUser;
 
-@Column(name = "all_day")
+@Column(name = "all_day", nullable = false, columnDefinition="varchar(255)")
 @Getter
 @Setter
 private String allDay;
 
 //Potential Foreign Key?? For now left as is
-@Column(name = "group_id")
+@Column(name = "group_id", nullable = false, columnDefinition="int(11)")
 @Getter
 @Setter
 private int groupID = -1;

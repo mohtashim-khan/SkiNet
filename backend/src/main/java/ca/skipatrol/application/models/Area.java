@@ -13,6 +13,9 @@ public class Area {
     @Id
     @GeneratedValue
     @Getter
+    private Long id;
+
+    @Getter
     @Setter
     @Column(unique = true, nullable = false)
     private String areaname;

@@ -32,7 +32,7 @@ const Header = ({login, setLogin, userAuth, setAuth, CookieService}) => {
     const signOutActions = () =>{
         setLogin("Not Attempted");
         setAuth({username:"", user_type: ""});
-        CookieService.remove("type",'/');
+        CookieService.remove("authorization",'/');
     }
 
     const AuthenticatedHeaderLinks = (link) =>

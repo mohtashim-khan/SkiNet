@@ -8,8 +8,7 @@ WORKDIR application/frontend
 
 RUN npm install
 
-COPY . .
-
-RUN ls
+COPY ./src ./src
+COPY ./public ./public
 
 ENTRYPOINT ["npm", "start"]

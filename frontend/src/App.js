@@ -30,7 +30,7 @@ function App() {
     CookieService.get("type") ? "Successful" : "Not Attempted"
   );
   const [userAuth, setAuth] = useState(
-    CookieService.get("authorization")
+      CookieService.get("userDetails") !== undefined
       ? CookieService.get("userDetails")
       : {
           username: "",

@@ -32,14 +32,14 @@ const SignIn = ({ login, setLogin, CookieService, setUpdateInfo, setAuth }) => {
       .then((response) => {
         if (response.status === 200) {
           setLogin("Successful");
-          CookieService.set("authorization", authorization);
+          CookieService.set("authorization", authorization, {path: '/'});
           const basicUserDetails = {
             username: response.data.username,
             firstName: response.data.firstName,
             lastName: response.data.lastName,
-            role: response.data.role,
+            user_type: response.data.role,
           };
-          CookieService.set("userDetails", basicUserDetails);
+          CookieService.set("userDetails", basicUserDetails, {path: '/'});
           setAuth(basicUserDetails);
           setUpdateInfo(true);
         } else {

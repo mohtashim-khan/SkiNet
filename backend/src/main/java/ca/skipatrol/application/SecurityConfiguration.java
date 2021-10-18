@@ -55,7 +55,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         final CorsConfiguration configuration = new CorsConfiguration();
 
         // Include production origin once that is finalized
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:80", "http://localhost:5000"));
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "http://localhost:80",
+                "http://localhost:5000",
+                "http://localhost"
+        ));
         configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));

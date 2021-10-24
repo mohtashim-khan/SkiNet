@@ -52,6 +52,7 @@ public class EventTests {
         // Search Between July and November, Should return test2 from query.
         searchDatesStart = LocalDateTime.of(2021, Month.JULY, 1, 12, 0, 0);
         searchDatesEnd = LocalDateTime.of(2021, Month.NOVEMBER, 1, 12, 0, 0);
+        result = eventRepository.findByStartDateBetween(searchDatesStart, searchDatesEnd);
         expected.add(test2);
         assertTrue(result.equals(expected));
 

@@ -1,7 +1,6 @@
 package ca.skipatrol.application.models;
 
 import ca.skipatrol.application.repositories.EventRepository;
-import ca.skipatrol.application.repositories.UserRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.util.Date;
+
+import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -18,13 +20,47 @@ public class EventTests {
 
     @Autowired
     EventRepository eventRepository;
+    LocalDateTime startDate_1 = LocalDateTime.of(2021, Month.JANUARY, 1, 12, 0, 0);
+    LocalDateTime endDate_1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
+    LocalDateTime startDate_2 = LocalDateTime.of(2021, Month.OCTOBER, 1, 12, 1);
+    LocalDateTime endDate_2 = LocalDateTime.of(2021, Month.OCTOBER, 12, 12, 1);
 
-    private Date testStartDate =  new Date(1,1,1974);
-    private Date testEndDate = new Date();
+    Event test1 = new Event("test_event", startDate_1, endDate_1, 1, 3, "yes", "yes", 1);
 
-    Event testEvent = new Event("test_event", , endDate, int minPatrollers, int maxPatrollers, String hlUser,
-    String allDay, int groupID)
+    Event test2 = new Event("delete_event", startDate_2, endDate_2, 1, 3, "yes", "yes", 1);
 
+    @BeforeAll
+    public void setup() {
+        eventRepository.save(test1);
+        eventRepository.save(test2);
+    }
 
-    
+    @Test
+    void testFindByStartDateBetween() {
+
+        // Search Between January and April, Should return test1 from query
+        LocalDateTime searchDatesStart = LocalDateTime.of(2021, Month.JANUARY, 1, 12, 0, 0);
+        LocalDateTime searchDatesEnd = LocalDateTime.of(2021, Month.APRIL, 1, 12, 0, 0);
+
+        List<Event> result = eventRepository.findByStartDateBetween(searchDatesStart, searchDatesEnd);
+        List<Event> expected = new ArrayList<Event>();
+        expected.add(test1);
+        assertTrue(result.equals(expected));
+        expected.clear();
+        result.clear();
+
+        // Search Between July and December, Should return test2 from query.
+        searchDatesStart = LocalDateTime.of(2021, Month.JULY, 1, 12, 0, 0);
+        searchDatesEnd = LocalDateTime.of(2021, Month.NOVEMBER, 1, 12, 0, 0);
+        expected.add(test2);
+        assertTrue(result.equals(expected));
+
+    }
+
+    @AfterAll
+    public void disassemble() {
+        eventRepository.delete(test1);
+        eventRepository.delete(test2);
+    }
+
 }

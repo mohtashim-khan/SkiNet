@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import java.util.Date;
+import java.time.*;
 
 @Entity(name = "event")
 public class Event {
@@ -24,13 +24,13 @@ public class Event {
     @Temporal(TemporalType.TIMESTAMP)
     @Getter
     @Setter
-    private Date startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "end_date", nullable = true, columnDefinition = "datetime")
     @Temporal(TemporalType.TIMESTAMP)
     @Getter
     @Setter
-    private Date endDate;
+    private LocalDateTime endDate;
 
     @Column(name = "min_patrollers", nullable = false, columnDefinition = "int(11)")
     @Getter
@@ -63,7 +63,7 @@ public class Event {
     @Setter
     private int groupID = -1;
 
-    public Event(String event_name, Date startDate, Date endDate, int minPatrollers, int maxPatrollers, String hlUser,
+    public Event(String event_name, LocalDateTime startDate, LocalDateTime endDate, int minPatrollers, int maxPatrollers, String hlUser,
             String allDay, int groupID) {
         this.event_name = event_name;
         this.startDate = startDate;

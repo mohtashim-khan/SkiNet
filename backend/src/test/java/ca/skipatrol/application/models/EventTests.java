@@ -45,7 +45,7 @@ public class EventTests {
         List<Event> result = eventRepository.findByStartDateBetween(searchDatesStart, searchDatesEnd);
         List<Event> expected = new ArrayList<Event>();
         expected.add(test1);
-        assertTrue(result.equals(expected));
+        assertTrue(expected.get(0).equals(result.get(0)));
         expected.clear();
         result.clear();
 
@@ -54,12 +54,12 @@ public class EventTests {
         searchDatesEnd = LocalDateTime.of(2021, Month.NOVEMBER, 1, 12, 0, 0);
         result = eventRepository.findByStartDateBetween(searchDatesStart, searchDatesEnd);
         expected.add(test2);
-        assertTrue(result.equals(expected));
+        assertTrue(expected.get(0).equals(result.get(0)));
 
     }
 
     @AfterAll
-    public void disassemble() {
+    public void done() {
         eventRepository.delete(test1);
         eventRepository.delete(test2);
     }

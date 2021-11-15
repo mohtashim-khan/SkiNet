@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface Action_LogRepository extends JpaRepository<Action_LogRepository,Long> {
+public interface Action_LogRepository extends JpaRepository<Action_Log, Long> {
     Optional<Action_Log> findByEvent(Event event);
 
     Action_Log save(Action_Log action_log);

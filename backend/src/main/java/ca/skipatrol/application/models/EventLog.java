@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,8 +17,7 @@ public class EventLog {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name="event_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
     private Event event;
 
     @Getter
@@ -39,8 +37,7 @@ public class EventLog {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(nullable = true, name="id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
     private Area area;
 
     @Getter

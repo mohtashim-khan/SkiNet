@@ -7,15 +7,15 @@ import javax.persistence.*;
 
 import java.time.*;
 import java.lang.Object;
+import java.util.Set;
 
 @Entity(name = "event")
 public class Event {
 
     @Id
     @GeneratedValue
-    @Column(name = "event_id", nullable = false, columnDefinition = "int(11)")
     @Getter
-    private int event_id;
+    private Long event_id;
 
     @Column(name = "event_name", nullable = false, columnDefinition = "varchar(255)")
     @Setter
@@ -62,6 +62,10 @@ public class Event {
     @Setter
     private int groupID = -1;
 
+    @Getter
+    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
+    private Set<EventLog> eventLog;
+
     public Event(String event_name, LocalDateTime startDate, LocalDateTime endDate, int minPatrollers,
             int maxPatrollers, String hlUser, String allDay, int groupID) {
         this.event_name = event_name;
@@ -87,7 +91,7 @@ public class Event {
         int result = 1;
         result = prime * result + ((allDay == null) ? 0 : allDay.hashCode());
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-        result = prime * result + event_id;
+        result = (int) (prime * result + event_id);
         result = prime * result + ((event_name == null) ? 0 : event_name.hashCode());
         result = prime * result + groupID;
         result = prime * result + ((hlUser == null) ? 0 : hlUser.hashCode());

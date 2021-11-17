@@ -95,7 +95,7 @@ public class EventLog {
 
     private EventLog(){}
 
-    public EventLog(int eventlog_id,
+    public EventLog(
                     Event event,
                     String event_name,
                     String username,
@@ -111,7 +111,6 @@ public class EventLog {
                     String email,
                     String phone_number,
                     byte trainer) {
-        this.eventlog_id = eventlog_id;
         this.event = event;
         this.event_name = event_name;
         this.username = username;

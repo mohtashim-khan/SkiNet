@@ -36,7 +36,7 @@ public class EventLogTests {
     LocalDateTime test_TimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
     LocalDateTime test_TimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
 
-    EventLog testEventLog = new EventLog(1,
+    EventLog testEventLog = new EventLog(
             testEvent,
             "test_event",
             "test_username",

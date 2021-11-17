@@ -68,6 +68,13 @@ public class EventLogTests {
         assertTrue(testVal.size() > 0);
     }
 
+    @Test
+    void testfindByEvent_id()
+    {
+        List<EventLog> testVal = eventLogRepository.getEventLogInfo(testEvent.getEvent_id());
+        assertTrue(testVal.size() > 0);
+    }
+
     @AfterAll
     public void done()
     {

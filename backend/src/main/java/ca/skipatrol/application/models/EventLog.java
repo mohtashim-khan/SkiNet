@@ -17,7 +17,8 @@ public class EventLog {
 
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne
+    @JoinColumn(name="event_id", nullable = false)
     private Event event;
 
     @Getter
@@ -37,7 +38,8 @@ public class EventLog {
 
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne
+    @JoinColumn(name="id")
     private Area area;
 
     @Getter

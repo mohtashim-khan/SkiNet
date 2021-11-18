@@ -25,7 +25,6 @@ public class Area {
 
     public Area(String areaname) {
         this.areaname = areaname;
-
     }
 
 }

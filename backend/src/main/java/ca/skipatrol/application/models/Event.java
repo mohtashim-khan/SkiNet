@@ -87,7 +87,7 @@ public class Event {
         int result = 1;
         result = prime * result + ((allDay == null) ? 0 : allDay.hashCode());
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-        result = prime * result + event_id;
+        result = (prime * result + event_id);
         result = prime * result + ((event_name == null) ? 0 : event_name.hashCode());
         result = prime * result + groupID;
         result = prime * result + ((hlUser == null) ? 0 : hlUser.hashCode());

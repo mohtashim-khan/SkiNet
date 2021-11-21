@@ -2,6 +2,8 @@ package ca.skipatrol.application.repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import ca.skipatrol.application.models.Event;
@@ -30,5 +32,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
      * For now just implemented the simple version with no Day of the week sorting.
      */
     List<Event> findByStartDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+
+    Optional<Event> findByEventName(String name);
 
 }

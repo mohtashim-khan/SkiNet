@@ -58,6 +58,11 @@ public class EventTests {
 
     }
 
+    @Test
+    public void testFindByEventName() {
+        assertTrue(eventRepository.findByEventName("test_event").isPresent());
+    }
+
     @AfterAll
     public void done() {
         eventRepository.delete(test1);

@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EventLogRepository extends JpaRepository<EventLog, Long> {
-
-    EventLog save(EventLog eventLog);
 
     @Query("SELECT el FROM EventLog el WHERE event_id = ?1")
     List<EventLog> getEventLogInfo(int eventid);

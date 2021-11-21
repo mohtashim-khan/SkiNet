@@ -19,7 +19,7 @@ public class Event {
 
     @Column(name = "event_name", nullable = false, columnDefinition = "varchar(255)")
     @Setter
-    private String event_name;
+    private String eventName;
 
     @Column(name = "start_date", nullable = true, columnDefinition = "datetime")
     @Getter
@@ -64,7 +64,7 @@ public class Event {
 
     public Event(String event_name, LocalDateTime startDate, LocalDateTime endDate, int minPatrollers,
             int maxPatrollers, String hlUser, String allDay, int groupID) {
-        this.event_name = event_name;
+        this.eventName = event_name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.minPatrollers = minPatrollers;
@@ -88,7 +88,7 @@ public class Event {
         result = prime * result + ((allDay == null) ? 0 : allDay.hashCode());
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
         result = (prime * result + event_id);
-        result = prime * result + ((event_name == null) ? 0 : event_name.hashCode());
+        result = prime * result + ((eventName == null) ? 0 : eventName.hashCode());
         result = prime * result + groupID;
         result = prime * result + ((hlUser == null) ? 0 : hlUser.hashCode());
         result = prime * result + maxPatrollers;
@@ -119,10 +119,10 @@ public class Event {
                 return false;
         } else if (!endDate.equals(other.endDate))
             return false;
-        if (event_name == null) {
-            if (other.event_name != null)
+        if (eventName == null) {
+            if (other.eventName != null)
                 return false;
-        } else if (!event_name.equals(other.event_name))
+        } else if (!eventName.equals(other.eventName))
             return false;
         if (groupID != other.groupID)
             return false;

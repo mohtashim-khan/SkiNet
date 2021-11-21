@@ -69,7 +69,7 @@ public class EventLog {
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "timestamp default '0000-00-00 00:00:00'")
+    @Column(nullable = false, columnDefinition = "timestamp")
     private LocalDateTime timestamp_subrequest;
 
     @Getter

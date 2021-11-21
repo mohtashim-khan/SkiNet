@@ -5,6 +5,7 @@ import ca.skipatrol.application.repositories.AreaRepository;
 import ca.skipatrol.application.repositories.EventLogRepository;
 import ca.skipatrol.application.repositories.EventRepository;
 import ca.skipatrol.application.repositories.UserRepository;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -59,12 +60,12 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
 
         Optional<Area> areaLookup = this.areaRepository.findByAreaname("Scantron");
         if (areaLookup.isEmpty()) {
-            Area testArea = new Area("Scranton");
+            Area testArea = new Area("Scantron");
             this.areaRepository.save(testArea);
             areaLookup = Optional.of(testArea);
         }
 
-        if (Stream.of(userLookup, eventLookup, areaLookup).allMatch(Optional::isPresent)) {
+        if (userLookup.isPresent() && areaLookup.isPresent() && eventLookup.isPresent()) {
             LocalDateTime test_TimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
             LocalDateTime test_TimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
             EventLog testEventLog = new EventLog(

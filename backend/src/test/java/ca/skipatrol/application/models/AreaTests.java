@@ -1,6 +1,7 @@
 package ca.skipatrol.application.models;
 
 import ca.skipatrol.application.repositories.AreaRepository;
+import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,9 @@ public class AreaTests {
     @Autowired
     AreaRepository areaRepository;
 
-    Area testArea = new Area("Scranton");
+    String areaName = RandomString.make(12);
+
+    Area testArea = new Area(areaName);
 
     @BeforeAll
     public void setup() { areaRepository.save(testArea);
@@ -25,7 +28,7 @@ public class AreaTests {
 
     @Test
     void testFindAreaByAreaname() {
-        assertTrue(areaRepository.findByAreaname("Scranton").isPresent());
+        assertTrue(areaRepository.findByAreaname(areaName).isPresent());
     }
 
     @AfterAll

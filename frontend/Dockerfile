@@ -6,7 +6,7 @@ COPY ./package.json /application/frontend/package.json
 
 WORKDIR application/frontend
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY ./src ./src
 COPY ./public ./public

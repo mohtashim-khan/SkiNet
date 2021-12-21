@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import API from "../../services/APIService";
 import {
   Container,
   Button,
@@ -23,13 +24,16 @@ const SignIn = ({ login, setLogin, CookieService, setUpdateInfo, setAuth }) => {
 
   function verifyCredentials(username, password) {
     const authorization = "Basic " + window.btoa(username + ":" + password);
-    const payload = { 
-      params: { username: username },
-      headers: { authorization: authorization } 
+    const payload = {
+      username: username,
     };
-    axios
-      .get("http://localhost:8080/api/users/search/findByUsername", payload)
+    const params = new URLSearchParams(payload);
+    API.set_authentication(authorization);
+    
+    API
+      .get("users/search/findByUsername", {}, params)
       .then((response) => {
+        console.log(response)
         if (response.status === 200) {
           setLogin("Successful");
           CookieService.set("authorization", authorization, {path: '/'});

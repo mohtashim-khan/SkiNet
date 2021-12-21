@@ -61,7 +61,7 @@ public class EventTests {
 
     @Test
     public void testFindByEventName() {
-        assertTrue(eventRepository.findByEventName("test_event").isPresent());
+        assertTrue(!eventRepository.findByEventName("test_event").isEmpty());
     }
 
     @AfterAll

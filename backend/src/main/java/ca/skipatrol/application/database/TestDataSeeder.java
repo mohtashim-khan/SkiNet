@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
 import java.util.stream.Stream;
+import java.util.List;
+
 
 @Component
 public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent> {
@@ -49,13 +51,13 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
             userLookup = Optional.of(user);
         }
 
-        Optional<Event> eventLookup = this.eventRepository.findByEventName("testEventName");
+        List<Event> eventLookup = this.eventRepository.findByEventName("testEventName");
         if (eventLookup.isEmpty()) {
             LocalDateTime startDate_1 = LocalDateTime.of(2021, Month.JANUARY, 1, 12, 0, 0);
             LocalDateTime endDate_1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
             Event test = new Event("test_event", startDate_1, endDate_1, 1, 3, "yes", "yes", 1);
             this.eventRepository.save(test);
-            eventLookup = Optional.of(test);
+            eventLookup = List.of(test);
         }
 
         Optional<Area> areaLookup = this.areaRepository.findByAreaname("Scantron");
@@ -65,11 +67,11 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
             areaLookup = Optional.of(testArea);
         }
 
-        if (userLookup.isPresent() && areaLookup.isPresent() && eventLookup.isPresent()) {
+        if (userLookup.isPresent() && areaLookup.isPresent() && !eventLookup.isEmpty()) {
             LocalDateTime test_TimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
             LocalDateTime test_TimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
             EventLog testEventLog = new EventLog(
-                    eventLookup.get(),
+                    eventLookup.get(0),
                     "test_event",
                     "test_username",
                     "test_name",

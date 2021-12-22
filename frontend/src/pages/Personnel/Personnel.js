@@ -5,7 +5,9 @@ const UsersListPage = ({ session }) => {
 
   useEffect(() => {
     session.get("users").then((resp) => {
-      setUsers(resp.data._embedded.users);
+      if (resp.status === 200) {
+        setUsers(resp.data._embedded.users);
+      }
     });
   });
 
@@ -22,7 +24,7 @@ const UsersListPage = ({ session }) => {
         </thead>
         <tbody>
           {users.map((row) => (
-            <tr>
+            <tr key={row.username}>
               <th>{row.username}</th>
               <td>{row.firstName}</td>
               <td>{row.lastName}</td>

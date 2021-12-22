@@ -110,9 +110,9 @@ const Header = ({ session }) => {
       <Route path="/personnel">
         {({ match }) =>
           match ? (
-            <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
-              <div class="container">
-                <ul class="navbar-nav mr-auto">
+            <nav className="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
+              <div className="container">
+                <ul className="navbar-nav mr-auto">
                   <Route path="/personnel/users" exact>
                     {({ match }) => (
                       <li className={match ? "nav-item active" : "nav-item"}>
@@ -141,9 +141,9 @@ const Header = ({ session }) => {
       <Route path="/roster">
         {({ match }) =>
           match ? (
-            <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
-              <div class="container">
-                <ul class="navbar-nav mr-auto">
+            <nav className="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
+              <div className="container">
+                <ul className="navbar-nav mr-auto">
                   <Route path="/roster/calendar" exact>
                     {({ match }) => (
                       <li className={match ? "nav-item active" : "nav-item"}>
@@ -172,9 +172,9 @@ const Header = ({ session }) => {
       <Route path="/admin">
         {({ match }) =>
           match ? (
-            <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
-              <div class="container">
-                <ul class="navbar-nav mr-auto">
+            <nav className="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
+              <div className="container">
+                <ul className="navbar-nav mr-auto">
                   <Route path="/admin/lookups" exact>
                     {({ match }) => (
                       <li className={match ? "nav-item active" : "nav-item"}>

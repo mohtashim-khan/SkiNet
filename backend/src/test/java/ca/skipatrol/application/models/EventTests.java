@@ -21,10 +21,10 @@ public class EventTests {
 
     @Autowired
     EventRepository eventRepository;
-    LocalDateTime startDate_1 = LocalDateTime.of(2021, Month.JANUARY, 1, 12, 0, 0);
-    LocalDateTime endDate_1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
-    LocalDateTime startDate_2 = LocalDateTime.of(2021, Month.OCTOBER, 1, 12, 1);
-    LocalDateTime endDate_2 = LocalDateTime.of(2021, Month.OCTOBER, 12, 12, 1);
+    LocalDateTime startDate_1 = LocalDateTime.of(1000, Month.JANUARY, 1, 12, 0, 0);
+    LocalDateTime endDate_1 = LocalDateTime.of(1000, Month.JANUARY, 12, 12, 1);
+    LocalDateTime startDate_2 = LocalDateTime.of(1000, Month.OCTOBER, 1, 12, 1);
+    LocalDateTime endDate_2 = LocalDateTime.of(1000, Month.OCTOBER, 12, 12, 1);
 
     Event test1 = new Event(RandomString.make(12), startDate_1, endDate_1, 1, 3, "yes", "yes", 1);
 
@@ -40,8 +40,8 @@ public class EventTests {
     void testFindByStartDateBetween() {
 
         // Search Between January and April, Should return test1 from query
-        LocalDateTime searchDatesStart = LocalDateTime.of(2021, Month.JANUARY, 1, 12, 0, 0);
-        LocalDateTime searchDatesEnd = LocalDateTime.of(2021, Month.APRIL, 1, 12, 0, 0);
+        LocalDateTime searchDatesStart = LocalDateTime.of(1000, Month.JANUARY, 1, 12, 0, 0);
+        LocalDateTime searchDatesEnd = LocalDateTime.of(1000, Month.APRIL, 1, 12, 0, 0);
 
         List<Event> result = eventRepository.findByStartDateBetween(searchDatesStart, searchDatesEnd);
         List<Event> expected = new ArrayList<Event>();
@@ -51,8 +51,8 @@ public class EventTests {
         result.clear();
 
         // Search Between July and November, Should return test2 from query.
-        searchDatesStart = LocalDateTime.of(2021, Month.JULY, 1, 12, 0, 0);
-        searchDatesEnd = LocalDateTime.of(2021, Month.NOVEMBER, 1, 12, 0, 0);
+        searchDatesStart = LocalDateTime.of(1000, Month.JULY, 1, 12, 0, 0);
+        searchDatesEnd = LocalDateTime.of(1000, Month.NOVEMBER, 1, 12, 0, 0);
         result = eventRepository.findByStartDateBetween(searchDatesStart, searchDatesEnd);
         expected.add(test2);
         assertTrue(expected.get(0).equals(result.get(0)));

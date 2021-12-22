@@ -29,6 +29,7 @@ import CookieService from "./services/CookieServices";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import UsersListPage from "./pages/Personnel/Personnel";
+import AreasPage from "./pages/Admin/Areas";
 
 const NotFound = () => {
   return (
@@ -91,6 +92,12 @@ class App extends Component {
           <ProtectedRoute
             path="/admin/lookups"
             Component={AdminLookupsPage}
+            session={this.session}
+          />
+
+          <ProtectedRoute
+            path="/admin/areas"
+            Component={AreasPage}
             session={this.session}
           />
 

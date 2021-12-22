@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Route, Link, useHistory } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import { Button, SignOutButton } from "../Elements/Elements";
@@ -36,9 +36,15 @@ const Header = ({ session }) => {
       <>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item active">
-              <Link className="nav-link">News</Link>
-            </li>
+            <Route path="/news">
+              {({ match }) => (
+                <li className={match ? "nav-item active" : "nav-item"}>
+                  <Link className="nav-link" to="/news">
+                    News
+                  </Link>
+                </li>
+              )}
+            </Route>
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
@@ -51,12 +57,20 @@ const Header = ({ session }) => {
                 Personnel
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Link className="dropdown-item" to="/personnel/users">
-                  Users
-                </Link>
-                <Link className="dropdown-item" to="/personnel/reports">
-                  Reports
-                </Link>
+                <Route path="/personnel/users">
+                  {({ match }) => (
+                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/personnel/users">
+                      Users
+                    </Link>
+                  )}
+                </Route>
+                <Route path="/personnel/reports">
+                  {({ match }) => (
+                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/personnel/reports">
+                      Reports
+                    </Link>
+                  )}
+                </Route>
               </div>
             </li>
             <li className="nav-item dropdown">
@@ -72,12 +86,20 @@ const Header = ({ session }) => {
                 Roster
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Link className="dropdown-item" to="/roster/reports">
-                  Reports
-                </Link>
-                <Link className="dropdown-item" to="/personnel/calendar">
-                  Calendar
-                </Link>
+                <Route path="/roster/reports">
+                  {({ match }) => (
+                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/personnel/reports">
+                      Reports
+                    </Link>
+                  )}
+                </Route>
+                <Route path="/roster/calendar">
+                  {({ match }) => (
+                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/personnel/calendar">
+                      Calendar
+                    </Link>
+                  )}
+                </Route>
               </div>
             </li>
             <li className="nav-item dropdown">
@@ -93,12 +115,20 @@ const Header = ({ session }) => {
                 Admin
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Link className="dropdown-item" to="/admin/lookups">
-                  Lookups
-                </Link>
-                <Link className="dropdown-item" to="/admin/areas">
-                  Areas
-                </Link>
+                <Route path="/admin/lookups">
+                  {({ match }) => (
+                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/admin/lookups">
+                      Lookups
+                    </Link>
+                  )}
+                </Route>
+                <Route path="/admin/areas">
+                  {({ match }) => (
+                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/admin/areas">
+                      Areas
+                    </Link>
+                  )}
+                </Route>
               </div>
             </li>
           </ul>
@@ -149,9 +179,7 @@ const Header = ({ session }) => {
           <img src={CSPLogo} width="32px" />
           <span> CSP</span>
         </a>
-        {session.logged_in()
-          ? renderLoggedInNavigation()
-          : renderLoggedOutNavigation()}
+        {session.logged_in() ? renderLoggedInNavigation() : renderLoggedOutNavigation()}
       </nav>
     </>
   );

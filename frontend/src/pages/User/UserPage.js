@@ -9,6 +9,7 @@ import { faAddressCard, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faPhoneAlt } from '@fortawesome/free-solid-svg-icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { ChangePassword } from '../../components'
+import CookieService from "../../services/CookieServices";
 
 
 const UserPage = ({userAuth}) => {
@@ -20,7 +21,11 @@ const UserPage = ({userAuth}) => {
     useEffect(() => {
       if(atStart) {
         try {
-          axios.get('/getEventLogItems/'+ userAuth.username)
+          const payload = { 
+            params: { username: userAuth.username },
+            headers: { authorization: CookieService.get("authorization") } 
+          };
+          axios.get('http://localhost:8080/api/eventLogs/search/findByUsername', payload)
             .then(response => {
               if(response.status === 200)
               {
@@ -48,21 +53,11 @@ const UserPage = ({userAuth}) => {
                 console.log('error ' + error);
             });
 
-            axios.get('/getUserData/'+ userAuth.username)
+            axios.get('http://localhost:8080/api/users/search/findByUsername', payload)
             .then(response => {
               if(response.status === 200)
               {
-                let data = [];
-                for (let i = 0; i < response.data.length; i++) {
-                    data = {
-                      name: userAuth.name,
-                      username: userAuth.username,
-                      phone_number: response.data[i].phone_number,
-                      email: response.data[i].email,
-                      user_type: userAuth.user_type,
-                    }
-                }
-                setUserData(data);
+                setUserData(response.data);
               }
               else{
                   console.log("No User")
@@ -82,9 +77,9 @@ const UserPage = ({userAuth}) => {
     const renderUserCard = () => {
       return (
         <div>
-          <div className = "user-header">{userData.name}</div>
+          <div className = "user-header">{userData.firstName} {userData.lastName}</div>
           <div className = "username">{userData.username}</div>
-          <div className = "user-type"><FontAwesomeIcon icon={faAddressCard} /> {(userData.user_type==="Rostered")?"Patroller":userData.user_type}</div>
+          <div className = "user-type"><FontAwesomeIcon icon={faAddressCard} /> {userData.role}</div>
           <div className = "contact-info"><FontAwesomeIcon icon={faEnvelope} /> {userData.email}</div>
           <div className = "contact-info"><FontAwesomeIcon icon={faPhoneAlt} /> {userData.phone_number}</div>
           <ChangePassword user={userData.username}/>

@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import API from "../../services/APIService";
 import {
   Container,
   Button,
@@ -19,7 +18,7 @@ import {
   Img,
 } from "../../components/Elements/Elements";
 
-const SignIn = ({ login, setLogin, CookieService, setUpdateInfo, setAuth }) => {
+const SignIn = ({ session }) => {
   const history = useHistory();
 
   function verifyCredentials(username, password) {
@@ -28,31 +27,25 @@ const SignIn = ({ login, setLogin, CookieService, setUpdateInfo, setAuth }) => {
       username: username,
     };
     const params = new URLSearchParams(payload);
-    API.set_authentication(authorization);
-    
-    API
+    session.set_login(authorization);
+
+    session
       .get("users/search/findByUsername", {}, params)
       .then((response) => {
-        console.log(response)
         if (response.status === 200) {
-          setLogin("Successful");
-          CookieService.set("authorization", authorization, {path: '/'});
           const basicUserDetails = {
             username: response.data.username,
             firstName: response.data.firstName,
             lastName: response.data.lastName,
             user_type: response.data.role,
           };
-          CookieService.set("userDetails", basicUserDetails, {path: '/'});
-          setAuth(basicUserDetails);
-          setUpdateInfo(true);
-        } else {
-          setLogin("Unsuccessful");
+          session.set_session_data(basicUserDetails);
+          history.push("/news")
+          window.location.reload();
         }
       })
       .catch((err) => {
         console.log(err);
-        setLogin("Unsuccessful");
       });
   }
 
@@ -61,22 +54,22 @@ const SignIn = ({ login, setLogin, CookieService, setUpdateInfo, setAuth }) => {
   // document.getElementById('loginMessageID').innerHTML = "Login in succesful"; //This displays "Login in succesful" above the login button
   // else
   // document.getElementById('loginMessageID').innerHTML = "Login failed. Invalid username or password"; //This displays "Login failed. Invalid username or password" above the login button
-  function LoginSuccess(props) {
-    const isLoggedIn = props.isLoggedIn;
-    if (login === "Not Attempted") {
-      return <Subtitle>Not attempted</Subtitle>;
-    } else if (login === "Unsuccessful") {
-      return <Subtitle>Sign In Un-Successful</Subtitle>;
-    }
-    return <Subtitle></Subtitle>;
-  }
+  // function LoginSuccess(props) {
+  //   const isLoggedIn = props.isLoggedIn;
+  //   if (login === "Not Attempted") {
+  //     return <Subtitle>Not attempted</Subtitle>;
+  //   } else if (login === "Unsuccessful") {
+  //     return <Subtitle>Sign In Un-Successful</Subtitle>;
+  //   }
+  //   return <Subtitle></Subtitle>;
+  // }
 
-  useEffect(() => {
-    //TODO redirect if login is successful
-    if (login === "Successful") {
-      history.push("/roster/start");
-    }
-  }, [login]);
+  // useEffect(() => {
+  //   //TODO redirect if login is successful
+  //   if (login === "Successful") {
+  //     history.push("/roster/start");
+  //   }
+  // }, [login]);
 
   const handleKeyPress = (event, type) => {
     if (event.code === "Enter" || event.code === "NumpadEnter") {
@@ -139,7 +132,6 @@ const SignIn = ({ login, setLogin, CookieService, setUpdateInfo, setAuth }) => {
                 >
                   Sign In
                 </ButtonPadding>
-                <LoginSuccess isLoggedIn={login} />
               </TextWrapper>
             </InfoColumn>
             <InfoColumn>

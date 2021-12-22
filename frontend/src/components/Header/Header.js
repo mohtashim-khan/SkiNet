@@ -1,22 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Route, Link, useHistory } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
-import { IconContext } from "react-icons/lib";
-import { Button, SignOutButton } from "../Elements/Elements";
 import CSPLogo from "../../images/CSP-logo.png";
-
-import {
-  HeaderNav,
-  HeaderContainer,
-  HeaderLogo,
-  HeaderIcon,
-  HeaderMobileIcon,
-  HeaderMenu,
-  HeaderItem,
-  HeaderLinks,
-  HeaderItemButton,
-  HeaderButtonLink,
-} from "./HeaderElements";
 
 const Header = ({ session }) => {
   const history = useHistory();
@@ -45,92 +29,33 @@ const Header = ({ session }) => {
                 </li>
               )}
             </Route>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Personnel
-              </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Route path="/personnel/users">
-                  {({ match }) => (
-                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/personnel/users">
-                      Users
-                    </Link>
-                  )}
-                </Route>
-                <Route path="/personnel/reports">
-                  {({ match }) => (
-                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/personnel/reports">
-                      Reports
-                    </Link>
-                  )}
-                </Route>
-              </div>
-            </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Roster
-              </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Route path="/roster/reports">
-                  {({ match }) => (
-                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/personnel/reports">
-                      Reports
-                    </Link>
-                  )}
-                </Route>
-                <Route path="/roster/calendar">
-                  {({ match }) => (
-                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/personnel/calendar">
-                      Calendar
-                    </Link>
-                  )}
-                </Route>
-              </div>
-            </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Admin
-              </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Route path="/admin/lookups">
-                  {({ match }) => (
-                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/admin/lookups">
-                      Lookups
-                    </Link>
-                  )}
-                </Route>
-                <Route path="/admin/areas">
-                  {({ match }) => (
-                    <Link className={match ? "dropdown-item active" : "dropdown-item"} to="/admin/areas">
-                      Areas
-                    </Link>
-                  )}
-                </Route>
-              </div>
-            </li>
+            <Route path="/personnel">
+              {({ match }) => (
+                <li className={match ? "nav-item active" : "nav-item"}>
+                  <Link className="nav-link" to="/personnel/users">
+                    Personnel
+                  </Link>
+                </li>
+              )}
+            </Route>
+            <Route path="/roster">
+              {({ match }) => (
+                <li className={match ? "nav-item active" : "nav-item"}>
+                  <Link className="nav-link" to="/roster/calendar">
+                    Roster
+                  </Link>
+                </li>
+              )}
+            </Route>
+            <Route path="/admin">
+              {({ match }) => (
+                <li className={match ? "nav-item active" : "nav-item"}>
+                  <Link className="nav-link" to="/admin/lookups">
+                    Admin
+                  </Link>
+                </li>
+              )}
+            </Route>
           </ul>
         </div>
 
@@ -174,13 +99,106 @@ const Header = ({ session }) => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">
           <img src={CSPLogo} width="32px" />
           <span> CSP</span>
         </a>
         {session.logged_in() ? renderLoggedInNavigation() : renderLoggedOutNavigation()}
       </nav>
+
+      <Route path="/personnel">
+        {({ match }) =>
+          match ? (
+            <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
+              <div class="container">
+                <ul class="navbar-nav mr-auto">
+                  <Route path="/personnel/users" exact>
+                    {({ match }) => (
+                      <li className={match ? "nav-item active" : "nav-item"}>
+                        <Link className="nav-link" to="/personnel/users">
+                          Users
+                        </Link>
+                      </li>
+                    )}
+                  </Route>
+                  <Route path="/personnel/reports" exact>
+                    {({ match }) => (
+                      <li className={match ? "nav-item active" : "nav-item"}>
+                        <Link className="nav-link" to="/personnel/reports">
+                          Reports
+                        </Link>
+                      </li>
+                    )}
+                  </Route>
+                </ul>
+              </div>
+            </nav>
+          ) : undefined
+        }
+      </Route>
+
+      <Route path="/roster">
+        {({ match }) =>
+          match ? (
+            <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
+              <div class="container">
+                <ul class="navbar-nav mr-auto">
+                  <Route path="/roster/calendar" exact>
+                    {({ match }) => (
+                      <li className={match ? "nav-item active" : "nav-item"}>
+                        <Link className="nav-link" to="/roster/calendar">
+                          Calendar
+                        </Link>
+                      </li>
+                    )}
+                  </Route>
+                  <Route path="/roster/reports" exact>
+                    {({ match }) => (
+                      <li className={match ? "nav-item active" : "nav-item"}>
+                        <Link className="nav-link" to="/roster/reports">
+                          Reports
+                        </Link>
+                      </li>
+                    )}
+                  </Route>
+                </ul>
+              </div>
+            </nav>
+          ) : undefined
+        }
+      </Route>
+
+      <Route path="/admin">
+        {({ match }) =>
+          match ? (
+            <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-secondary">
+              <div class="container">
+                <ul class="navbar-nav mr-auto">
+                  <Route path="/admin/lookups" exact>
+                    {({ match }) => (
+                      <li className={match ? "nav-item active" : "nav-item"}>
+                        <Link className="nav-link" to="/admin/lookups">
+                          Lookups
+                        </Link>
+                      </li>
+                    )}
+                  </Route>
+                  <Route path="/admin/areas" exact>
+                    {({ match }) => (
+                      <li className={match ? "nav-item active" : "nav-item"}>
+                        <Link className="nav-link" to="/admin/areas">
+                          Areas
+                        </Link>
+                      </li>
+                    )}
+                  </Route>
+                </ul>
+              </div>
+            </nav>
+          ) : undefined
+        }
+      </Route>
     </>
   );
 };

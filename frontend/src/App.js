@@ -19,6 +19,8 @@ import Roster from "./pages/Roster/Roster";
 import UserPage from "./pages/User/UserPage.js";
 import OtherUserPage from "./pages/User/OtherUserPage.js";
 
+import AdminLookupsPage from "./pages/Admin/Lookups";
+
 import Session from "./services/SessionService";
 
 //Cookie Service
@@ -26,7 +28,7 @@ import CookieService from "./services/CookieServices";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import PersonnelPage from "./pages/Personnel/Personnel";
+import UsersListPage from "./pages/Personnel/Personnel";
 
 const NotFound = () => {
   return (
@@ -81,8 +83,14 @@ class App extends Component {
           />
 
           <ProtectedRoute
-            path="/personnel"
-            Component={PersonnelPage}
+            path="/personnel/users"
+            Component={UsersListPage}
+            session={this.session}
+          />
+
+          <ProtectedRoute
+            path="/admin/lookups"
+            Component={AdminLookupsPage}
             session={this.session}
           />
 

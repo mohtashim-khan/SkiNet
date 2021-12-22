@@ -1,160 +1,160 @@
-import React, {useState, useEffect} from 'react'
-import { FaBars, FaTimes } from 'react-icons/fa'
-import { IconContext } from 'react-icons/lib'
-import { Button, SignOutButton } from '../Elements/Elements'
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { IconContext } from "react-icons/lib";
+import { Button, SignOutButton } from "../Elements/Elements";
+import CSPLogo from "../../images/CSP-logo.png";
+
 import {
-    HeaderNav,
-    HeaderContainer,
-    HeaderLogo,
-    HeaderIcon,
-    HeaderMobileIcon,
-    HeaderMenu,
-    HeaderItem,
-    HeaderLinks,
-    HeaderItemButton,
-    HeaderButtonLink
-} from './HeaderElements'
+  HeaderNav,
+  HeaderContainer,
+  HeaderLogo,
+  HeaderIcon,
+  HeaderMobileIcon,
+  HeaderMenu,
+  HeaderItem,
+  HeaderLinks,
+  HeaderItemButton,
+  HeaderButtonLink,
+} from "./HeaderElements";
 
-const Header = ({login, setLogin, userAuth, setAuth, CookieService}) => {
-    const[click, setClick] = useState(false);
-    const[button, setButton] = useState(true);
+const Header = ({ session }) => {
+  const history = useHistory();
 
-    const handleClick = () => setClick(!click);
+  const [click, setClick] = useState(false);
 
-    const showButton = () => {
-        if (window.innerWidth <= 960) {
-            setButton(false);
-        } else {
-            setButton(true);
-        }
-    };
+  const handleClick = () => setClick(!click);
 
-    const signOutActions = () =>{
-        setLogin("Not Attempted");
-        setAuth({username:"", user_type: ""});
-        CookieService.remove("authorization",'/');
-    }
+  const logOut = () => {
+    session.log_out();
+    history.push("/");
+    window.location.reload();
+  };
 
-    const AuthenticatedHeaderLinks = (link) =>
-    {
-        if(userAuth.user_type === "System Admin" && link === "admin")
-        {
-            return (
-                <>
-                    <HeaderItem>
-                        <HeaderLinks to='/admin'>
-                            Admin
-                        </HeaderLinks>
-                    </HeaderItem>
-                    <HeaderItem>
-                        <HeaderLinks to='/area'>
-                            Area
-                        </HeaderLinks>
-                    </HeaderItem>
-                </>
-            )
-        }
-        else if(userAuth.user_type === "Hill Admin" && link === "area")
-        {
-            return (
-                <HeaderItem>
-                    <HeaderLinks to='/area'>
-                        Area
-                    </HeaderLinks>
-                </HeaderItem>
-            )
-        }
-        else{
-            return <></>
-        }
-
-    }
-
-    useEffect(() => {
-        showButton()
-    }, [])
-
-    window.addEventListener('resize', showButton);
-
+  const renderLoggedInNavigation = () => {
     return (
-        <>
-        <IconContext.Provider value = {{color: '#fff'}}>
-            <HeaderNav>
-                <HeaderContainer>
-                    <HeaderLogo to="/">
-                        <HeaderIcon />
-                        CSP
-                    </HeaderLogo>
-                    <HeaderMobileIcon onClick = {handleClick}>
-                        {click ? <FaTimes /> : <FaBars />}
-                    </HeaderMobileIcon>
-                    <HeaderMenu onClick = {handleClick} click={click}>
-                        <HeaderItem>
-                            <HeaderLinks to='/'>
-                                Home
-                            </HeaderLinks>
-                        </HeaderItem>
+      <>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item active">
+              <Link className="nav-link">News</Link>
+            </li>
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Personnel
+              </a>
+              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <Link className="dropdown-item" to="/personnel/users">
+                  Users
+                </Link>
+                <Link className="dropdown-item" to="/personnel/reports">
+                  Reports
+                </Link>
+              </div>
+            </li>
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Roster
+              </a>
+              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <Link className="dropdown-item" to="/roster/reports">
+                  Reports
+                </Link>
+                <Link className="dropdown-item" to="/personnel/calendar">
+                  Calendar
+                </Link>
+              </div>
+            </li>
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Admin
+              </a>
+              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <Link className="dropdown-item" to="/admin/lookups">
+                  Lookups
+                </Link>
+                <Link className="dropdown-item" to="/admin/areas">
+                  Areas
+                </Link>
+              </div>
+            </li>
+          </ul>
+        </div>
 
-                        {(login === "Successful")?
-                            <>
-                                <HeaderItem>
-                                    <HeaderLinks to='/roster/start'>
-                                        Roster
-                                    </HeaderLinks>
-                                </HeaderItem>
-                                {AuthenticatedHeaderLinks("admin")}
-                                {AuthenticatedHeaderLinks("area")}
-                                <HeaderItem>
-                                    <HeaderLinks to='/user'>
-                                        User
-                                    </HeaderLinks>
-                                </HeaderItem>
-                                <HeaderItemButton>
-                                    {button ? (
-                                        <HeaderButtonLink to="/sign-in">
-                                            <SignOutButton primary onClick={() =>{signOutActions()}}>
-                                                SIGN OUT
-                                            </SignOutButton>
-                                        </HeaderButtonLink>
-                                    ) :(
-                                        <HeaderButtonLink to="/sign-in">
-                                            <SignOutButton fontBig primary onClick={() =>{signOutActions()}}>
-                                                SIGN OUT
-                                            </SignOutButton>
-                                        </HeaderButtonLink>
-                                    )}
-                                </HeaderItemButton>
-                            </>
-                            :
-                            <>
-                                <HeaderItemButton>
-                                    {button ? (
-                                        <HeaderButtonLink to="/sign-in">
-                                            <Button primary>
-                                                SIGN IN
-                                            </Button>
-                                        </HeaderButtonLink>
-                                    ) :(
-                                        <HeaderButtonLink to="/sign-in">
-                                            <Button fontBig primary>
-                                                SIGN IN
-                                            </Button>
-                                        </HeaderButtonLink>
-                                    )}
-                                </HeaderItemButton>
+        <div>
+          <button className="btn btn-light my-2 my-sm-0" onClick={logOut}>
+            Sign Out
+          </button>
+        </div>
+      </>
+    );
+  };
 
-                            </>
-                        }
-                    </HeaderMenu>
-                </HeaderContainer>
-            </HeaderNav>
-        </IconContext.Provider>
-        </>
-    )
-}
+  const renderLoggedOutNavigation = () => {
+    return (
+      <>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav mr-auto"></ul>
+        </div>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <button
+          className="btn btn-light my-2 my-sm-0"
+          onClick={() => {
+            history.push("/sign-in");
+          }}
+        >
+          Sign In
+        </button>
+      </>
+    );
+  };
 
+  return (
+    <>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <a className="navbar-brand" href="#">
+          <img src={CSPLogo} width="32px" />
+          <span> CSP</span>
+        </a>
+        {session.logged_in()
+          ? renderLoggedInNavigation()
+          : renderLoggedOutNavigation()}
+      </nav>
+    </>
+  );
+};
 
-
-
-
-export default Header
+export default Header;

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, {Component, useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
+
 
 import {
   ProtectedRoute,
@@ -19,13 +20,77 @@ import Roster from "./pages/Roster/Roster";
 import UserPage from "./pages/User/UserPage.js";
 import OtherUserPage from "./pages/User/OtherUserPage.js";
 
+import Session from "./services/SessionService";
+
 //Cookie Service
 import CookieService from "./services/CookieServices";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import PersonnelPage from "./pages/Personnel/Personnel";
 
-function App() {
+const NotFound = () => {
+  return (
+      <>
+          <p>Page not found!</p>
+      </>
+  )
+}
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.session = new Session();
+  }
+
+  render = () => {
+    return (<Router>
+      <Header
+        session={this.session}
+      />
+      <Switch>
+        <ProtectedRoute
+          path="/roster/:event_id"
+          Component={Roster}
+          session={this.session}
+        />
+        <ProtectedRoute
+          path="/user"
+          Component={UserPage}
+          session={this.session}
+        />
+
+        <ProtectedRoute
+          path="/users/:usernameParam"
+          Component={OtherUserPage}
+          session={this.session}
+        />
+
+        <ProtectedRoute
+          path="/personnel"
+          Component={PersonnelPage}
+          session={this.session}
+        />
+
+        {/* Can access if they Are NOT Signed in */}
+        <ProtectedLogin
+          path="/sign-in"
+          Component={SignIn}
+          session={this.session}
+        />
+
+        {/* Unprotected Can Access by Anyone */}
+        <Route path="/sign-up" />
+        <Route exact path="/test" component={Roster} />
+        <Route exact path="/" component={Home} />
+        <Route component={NotFound} />
+      </Switch>
+      <Footer />
+    </Router>)
+  };
+}
+
+function App2() {
   const [login, setLogin] = useState(
     CookieService.get("type") ? "Successful" : "Not Attempted"
   );
@@ -62,74 +127,7 @@ function App() {
     // }
   }, [updateInfo, userAuth]);
 
-  return (
-    <Router>
-      <Header
-        login={login}
-        setLogin={setLogin}
-        userAuth={userAuth}
-        setAuth={setAuth}
-        CookieService={CookieService}
-      />
-      <Switch>
-        {/* Can access if they Are Signed in */}
-        <ProtectedRouteHillAdmin
-          path="/area"
-          Component={Area2}
-          login={login}
-          setLogin={setLogin}
-          userAuth={userAuth}
-        />
-        <ProtectedRouteSysAdmin
-          path="/admin"
-          Component={Admin2}
-          login={login}
-          setLogin={setLogin}
-          userAuth={userAuth}
-        />
-        {/* <ProtectedRoute path="/roster" Component={Roster} login={login} setLogin={setLogin} userAuth={userAuth}/> */}
-        <ProtectedRoute
-          path="/roster/:event_id"
-          Component={Roster}
-          login={login}
-          setLogin={setLogin}
-          userAuth={userAuth}
-        />
-        <ProtectedRoute
-          path="/user"
-          Component={UserPage}
-          login={login}
-          setLogin={setLogin}
-          userAuth={userAuth}
-        />
-        <ProtectedRoute
-          path="/users/:usernameParam"
-          Component={OtherUserPage}
-          login={login}
-          setLogin={setLogin}
-          userAuth={userAuth}
-        />
-
-        {/* Can access if they Are NOT Signed in */}
-        <ProtectedLogin
-          path="/sign-in"
-          Component={SignIn}
-          login={login}
-          setLogin={setLogin}
-          CookieService={CookieService}
-          setAuth={setAuth}
-          setUpdateInfo={setUpdateInfo}
-        />
-
-        {/* Unprotected Can Access by Anyone */}
-        <Route path="/sign-up" />
-        <Route exact path="/test" component={Roster} />
-        <Route exact path="/" component={Home} />
-        <Route component={Home} />
-      </Switch>
-      <Footer />
-    </Router>
-  );
+  return {};
 }
 
 export default App;

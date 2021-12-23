@@ -18,12 +18,18 @@ public class LookupController {
     @Autowired
     LookupServices lookupServices;
 
-    @RequestMapping(value = "/customapi/lookups/season", method = RequestMethod.PUT)
-    public ResponseEntity<Object>
-    saveSeason(@RequestBody Season season) {
+    @RequestMapping(value = "/customapi/lookups/season", method = RequestMethod.PUT, headers = "Accept=application/json")
+    public ResponseEntity<Object> saveSeason(@RequestBody Season season) {
 
         lookupServices.saveSeason(season);
         return new ResponseEntity<>("Season saved correctly", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/customapi/lookups/season/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteSeason(@PathVariable long id) {
+
+        lookupServices.deleteSeason(id);
+        return new ResponseEntity<>("Season deleted correctly", HttpStatus.OK);
     }
 
 

@@ -17,12 +17,26 @@ public class LookupServicesImpl implements LookupServices {
     @Autowired
     SeasonRepository seasonRepository;
 
-    public void saveSeason(Season season){
+    public void saveSeason(Season season) {
         List<Season> seasonList = seasonRepository.findAll();
-        season.setSequence(seasonList.size()+1);
+        season.setSequence(seasonList.size() + 1);
         seasonRepository.save(season);
 
     }
 
+    public void deleteSeason(long id) {
+        List<Season> seasonList = seasonRepository.findAll();
+        int delSeq = seasonRepository.findById(id).getSequence();
+        seasonRepository.deleteById(id);
 
+        if (delSeq != seasonList.size()) {
+            for (int i = delSeq; i < seasonList.size(); i++) {
+                Season updatedSeason = seasonList.get(i);
+                updatedSeason.setSequence(updatedSeason.getSequence() - 1);
+                seasonRepository.save(updatedSeason);
+
+            }
+        }
+
+    }
 }

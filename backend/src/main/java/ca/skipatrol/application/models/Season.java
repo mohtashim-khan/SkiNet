@@ -33,7 +33,7 @@ public class Season {
 
     @Getter
     @Setter
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private int sequence;
 
     private Season() {

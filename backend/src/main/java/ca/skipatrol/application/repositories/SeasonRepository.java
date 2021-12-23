@@ -17,6 +17,8 @@ public interface SeasonRepository extends JpaRepository<Season,Long> {
     Season save(Season season);
     void deleteById(long id);
     List<Season> findAll();
+    Season findById(long id);
+    Season findBySequence(int seq);
 
 
 }

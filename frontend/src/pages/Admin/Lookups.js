@@ -1,4 +1,17 @@
-const AdminLookupsPage = () => {
+import React, { useState, useEffect } from "react";
+
+const AdminLookupsPage = ({ session }) => {
+
+  const [brand, setBrands] = useState([]);
+
+  useEffect(() => {
+    session.get("brands").then((resp) => {
+      if (resp.status === 200) {
+        setBrands(resp.data._embedded.brands);
+      }
+    });
+  });
+
   return (
     <>
       <div class="container">
@@ -16,7 +29,16 @@ const AdminLookupsPage = () => {
               </ul>
             </div>
           </div>
-          <div class="col-4 p-3">.col-4</div>
+          <div class="col-4 p-3">
+            <div class="container" data-spy="scroll">
+              <h5>Jacket Brand</h5>
+              <ul class="list-group">
+                { brand.map( (row) => (
+                    <li class="list-group-item">{row.name}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
           <div class="col-4 p-3">.col-4</div>
         </div>
 

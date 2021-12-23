@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -38,6 +39,12 @@ public class ActionLogTests {
     @Test
     void testFindByEvent(){
         assertTrue(actionLogRepository.findByEvent(testEvent).isPresent());
+    }
+
+    @Test
+    void testGetEvent(){
+        List<ActionLog> testVal = actionLogRepository.getEventInfo((testEvent.getEvent_id()));
+        assertTrue(testVal.size() > 0 );
     }
 
     @AfterAll

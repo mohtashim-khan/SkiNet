@@ -1,20 +1,22 @@
 package ca.skipatrol.application.repositories;
 
-import ca.skipatrol.application.models.Area;
+
+import ca.skipatrol.application.models.Season;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
 import java.util.Optional;
 
 
-public interface AreaRepository extends JpaRepository<Area,Long> {
+public interface SeasonRepository extends JpaRepository<Season,Long> {
 
-    Optional<Area> findByAreaname(String areaname);
+    Optional<Season> findBySeasonname(String seasonname);
 
-    Area save(Area area); //LATER ON -- HANDLE CASE FOR IF AREA ALREADY EXISTS
+    Season save(Season season);
     void deleteById(long id);
-
+    List<Season> findAll();
 
 
 }

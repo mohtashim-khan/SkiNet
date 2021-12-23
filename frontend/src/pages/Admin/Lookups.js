@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
+import './Lookups.css'
 
 const AdminLookupsPage = ({ session }) => {
 
   const [brand, setBrands] = useState([]);
+  const [discipline, setDisciplines] = useState([]);
+  const [award, setAwards] = useState([]);
+  const [season, setSeasons] = useState([]);
+  const [selectedSeason, setSelectedSeasons] = useState(new Set());
 
   useEffect(() => {
     session.get("brands").then((resp) => {
@@ -10,46 +15,108 @@ const AdminLookupsPage = ({ session }) => {
         setBrands(resp.data._embedded.brands);
       }
     });
+
+    session.get("disciplines").then((resp) => {
+      if (resp.status === 200) {
+        setDisciplines(resp.data._embedded.disciplines);
+      }
+    });
+
+    session.get("awards").then((resp) => {
+      if (resp.status === 200) {
+        setAwards(resp.data._embedded.awards);
+      }
+    });
+
+    session.get("seasons").then((resp) => {
+      if (resp.status === 200) {
+        setSeasons(resp.data._embedded.seasons);
+      }
+    });
   });
+
+  function hasCus(seasonname) {
+    return selectedSeason.has(seasonname);
+  }
 
   return (
     <>
       <div class="container">
         <div class="row">
           <div class="col-4 p-3">
-            <div class="container" data-spy="scroll">
-              <h5>External - Instruction/Coaching</h5>
-              <ul class="list-group">
-                <li class="list-group-item">CSIA - Level I</li>
-                <li class="list-group-item">CSIA - Level II</li>
-                <li class="list-group-item">CSIA - Level III</li>
-                <li class="list-group-item">CSIA - Level IV</li>
-                <li class="list-group-item">CASI - Level 1</li>
-                <li class="list-group-item">CASI - Level 1</li>
+            <h5>External - Instruction/Coaching</h5>
+            <div class="overflow-auto" data-spy="scroll">
+              <div class="list-group scrollableList ">
+                <a href="#" onClick={() => foo("test")} class="list-group-item list-group-item-action"
+                >CSIA - Level I </a>
+                <a href="#" class="list-group-item list-group-item-action">CSIA - Level II</a>
+                <a href="#" class="list-group-item list-group-item-action">CSIA - Level III</a>
+                <a href="#" class="list-group-item list-group-item-action">CSIA - Level IV</a>
+                <a href="#" class="list-group-item list-group-item-action">CASI - Level 1</a>
+                <a href="#" class="list-group-item list-group-item-action">CASI - Level 1</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-4 p-3">
+            <h5>Jacket Brand</h5>
+            <div class="overflow-auto" data-spy="scroll">
+              <ul class="list-group scrollableList ">
+                {brand.map((row) => (
+                  <li class="list-group-item">{row.name}</li>
+                ))}
               </ul>
             </div>
           </div>
           <div class="col-4 p-3">
-            <div class="container" data-spy="scroll">
-              <h5>Jacket Brand</h5>
-              <ul class="list-group">
-                { brand.map( (row) => (
-                    <li class="list-group-item">{row.name}</li>
+            <h5>Lake Louise Awards</h5>
+            <div class="overflow-auto" data-spy="scroll">
+              <ul class="list-group scrollableList ">
+                {award.map((row) => (
+                  <li class="list-group-item">{row.name}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-4 p-3">
+            <h5>On-Snow Evaluation Disciplines</h5>
+            <div class="overflow-auto" data-spy="scroll">
+              <ul class="list-group scrollableList ">
+                {discipline.map((row) => (
+                  <li class="list-group-item">{row.disciplinename}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div class="col-4 p-3">
+            <h5>Seasons</h5>
+            <div class="overflow-auto" data-spy="scroll">
+              <ul class="list-group scrollableList ">
+                {season.map((row) => (
+                  <li onClick={() => {
+                    selectedSeason.add(row.seasonname);
+                    console.log(selectedSeason);
+                    setSelectedSeasons(row.seasonname)
+                  }} class={"list-group-item " + (() => { return hasCus(row.seasonname) ? "active" : "" })}>{row.seasonname}</li>
                 ))}
               </ul>
             </div>
           </div>
           <div class="col-4 p-3">.col-4</div>
         </div>
-
-        <div class="row">
-          <div class="col-4 p-3">.col-4</div>
-          <div class="col-4 p-3">.col-4</div>
-          <div class="col-4 p-3">.col-4</div>
-        </div>
       </div>
     </>
   );
 };
+
+function foo(i) {
+  console.log(i);
+}
+
+
+
+
 
 export default AdminLookupsPage;

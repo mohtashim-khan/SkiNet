@@ -17,26 +17,23 @@ import static javax.persistence.EnumType.STRING;
 
 public class Discipline {
 
+    // Members
     @Id
     @GeneratedValue
     @Getter
     private Long id;
 
-    public String getDisciplinename() {
-        return disciplinename;
-    }
-
     @Getter
     @Setter
     @Column(unique = true, nullable = false)
-    private String disciplinename;
+    private String description;
 
+    // Constructors
     private Discipline() {
     }
 
-    public Discipline(String disciplinename) {
-        this.disciplinename = disciplinename;
+    public Discipline(String description) {
+        this.description = description;
     }
-
 
 }

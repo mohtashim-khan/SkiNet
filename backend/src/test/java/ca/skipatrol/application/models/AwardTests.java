@@ -31,9 +31,9 @@ public class AwardTests {
 
     @Test
     void testGetBrandByName(){
-        assertTrue(awardRepository.getAwardByName(name).isPresent());
+        assertTrue(awardRepository.findByDescription(name).isPresent());
         awardRepository.delete(award);
-        assertFalse(awardRepository.getAwardByName(name).isPresent());
+        assertFalse(awardRepository.findByDescription(name).isPresent());
         awardRepository.save(award);
     }
 

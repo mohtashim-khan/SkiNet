@@ -12,13 +12,8 @@ import java.util.Optional;
 
 public interface SeasonRepository extends JpaRepository<Season,Long> {
 
-    Optional<Season> findBySeasonname(String seasonname);
+    Optional<Season> findByDescription(String description);
 
-    Season save(Season season);
-    void deleteById(long id);
-    List<Season> findAll();
     Season findById(long id);
-    Season findBySequence(int seq);
-
 
 }

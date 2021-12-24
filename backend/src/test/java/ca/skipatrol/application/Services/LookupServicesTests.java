@@ -1,7 +1,8 @@
-package ca.skipatrol.application.models;
+package ca.skipatrol.application.Services;
 
 import ca.skipatrol.application.Interfaces.LookupServices;
 import ca.skipatrol.application.repositories.SeasonRepository;
+import ca.skipatrol.application.models.Season;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,9 +28,9 @@ public class LookupServicesTests {
     String testSeasonName2 = "SUMMERsadasd";
     String testSeasonName3 = "SPRINGsdsd";
 
-    Season testSeason1 = new Season(testSeasonName1);
-    Season testSeason2 = new Season(testSeasonName2);
-    Season testSeason3 = new Season(testSeasonName3);
+    Season testSeason1 = new Season(testSeasonName1, 1);
+    Season testSeason2 = new Season(testSeasonName2, 2);
+    Season testSeason3 = new Season(testSeasonName3, 3);
 
 
 

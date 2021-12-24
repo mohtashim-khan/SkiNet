@@ -31,9 +31,9 @@ public class BrandTests {
 
     @Test
     void testGetBrandByName(){
-        assertTrue(brandRepository.getBrandByName(name).isPresent());
+        assertTrue(brandRepository.findByDescription(name).isPresent());
         brandRepository.delete(brand);
-        assertFalse(brandRepository.getBrandByName(name).isPresent());
+        assertFalse(brandRepository.findByDescription(name).isPresent());
         brandRepository.save(brand);
     }
 

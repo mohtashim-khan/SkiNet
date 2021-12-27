@@ -62,7 +62,7 @@ const AdminLookupsPage = ({ session }) => {
             <div class="overflow-auto" data-spy="scroll">
               <ul class="list-group scrollableList ">
                 {brand.map((row) => (
-                  <li class="list-group-item">{row.name}</li>
+                  <li class="list-group-item">{row.description}</li>
                 ))}
               </ul>
             </div>
@@ -72,7 +72,7 @@ const AdminLookupsPage = ({ session }) => {
             <div class="overflow-auto" data-spy="scroll">
               <ul class="list-group scrollableList ">
                 {award.map((row) => (
-                  <li class="list-group-item">{row.name}</li>
+                  <li class="list-group-item">{row.description}</li>
                 ))}
               </ul>
             </div>
@@ -85,9 +85,10 @@ const AdminLookupsPage = ({ session }) => {
             <div class="overflow-auto" data-spy="scroll">
               <ul class="list-group scrollableList ">
                 {discipline.map((row) => (
-                  <li class="list-group-item">{row.disciplinename}</li>
+                  <li class="list-group-item">{row.description}</li>
                 ))}
               </ul>
+              <button>testButton</button>
             </div>
           </div>
           <div class="col-4 p-3">
@@ -96,10 +97,10 @@ const AdminLookupsPage = ({ session }) => {
               <ul class="list-group scrollableList ">
                 {season.map((row) => (
                   <li onClick={() => {
-                    selectedSeason.add(row.seasonname);
+                    selectedSeason.add(row.description);
                     console.log(selectedSeason);
-                    setSelectedSeasons(row.seasonname)
-                  }} class={"list-group-item " + (() => { return hasCus(row.seasonname) ? "active" : "" })}>{row.seasonname}</li>
+                    setSelectedSeasons(row.description)
+                  }} class={"list-group-item " + (() => { return hasCus(row.description) ? "active" : "" })}>{row.description}</li>
                 ))}
               </ul>
             </div>

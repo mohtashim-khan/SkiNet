@@ -65,7 +65,7 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
         }
 
         Optional<Season> seasonLookup;
-        for(int i = 0; i < seasonDefaults.length; i++) {
+        for(int i = 1; i < seasonDefaults.length; i++) {
             seasonLookup = this.seasonRepository.findByDescription(seasonDefaults[i]);
             if (seasonLookup.isEmpty()){
                 Season season = new Season(seasonDefaults[i], i);

@@ -1,13 +1,44 @@
 import React, { useState, useEffect } from "react";
 import './Lookups.css'
 
+const SeasonsLookupComponent = ({ session }) => {
+  const [season, setSeasons] = useState([]);
+  const [selectedSeason, setSelectedSeasons] = useState(new Set());
+
+  useEffect(() => {
+    session.get("seasons").then((resp) => {
+      if (resp.status === 200) {
+        setSeasons(resp.data._embedded.seasons);
+      }
+    });
+  });
+
+  return (
+    <div class="col-4 p-3">
+    <h5>Seasons</h5>
+    <div class="overflow-auto" data-spy="scroll">
+      <ul class="list-group scrollableList ">
+        {season.map((row) => (
+          <li onClick={() => {
+            if (selectedSeason.has(row.description)) {
+              selectedSeason.delete(row.description);
+            } else {
+              selectedSeason.add(row.description);
+            }
+            setSelectedSeasons(selectedSeason);
+          }} className={"list-group-item " + (selectedSeason.has(row.description) ? "active" : "")}>{row.description}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+  );
+}
+
 const AdminLookupsPage = ({ session }) => {
 
   const [brand, setBrands] = useState([]);
   const [discipline, setDisciplines] = useState([]);
   const [award, setAwards] = useState([]);
-  const [season, setSeasons] = useState([]);
-  const [selectedSeason, setSelectedSeasons] = useState(new Set());
 
   useEffect(() => {
     session.get("brands").then((resp) => {
@@ -27,17 +58,7 @@ const AdminLookupsPage = ({ session }) => {
         setAwards(resp.data._embedded.awards);
       }
     });
-
-    session.get("seasons").then((resp) => {
-      if (resp.status === 200) {
-        setSeasons(resp.data._embedded.seasons);
-      }
-    });
   });
-
-  function hasCus(seasonname) {
-    return selectedSeason.has(seasonname);
-  }
 
   return (
     <>
@@ -47,7 +68,7 @@ const AdminLookupsPage = ({ session }) => {
             <h5>External - Instruction/Coaching</h5>
             <div class="overflow-auto" data-spy="scroll">
               <div class="list-group scrollableList ">
-                <a href="#" onClick={() => foo("test")} class="list-group-item list-group-item-action"
+                <a href="#" class="list-group-item list-group-item-action"
                 >CSIA - Level I </a>
                 <a href="#" class="list-group-item list-group-item-action">CSIA - Level II</a>
                 <a href="#" class="list-group-item list-group-item-action">CSIA - Level III</a>
@@ -91,33 +112,12 @@ const AdminLookupsPage = ({ session }) => {
               <button>testButton</button>
             </div>
           </div>
-          <div class="col-4 p-3">
-            <h5>Seasons</h5>
-            <div class="overflow-auto" data-spy="scroll">
-              <ul class="list-group scrollableList ">
-                {season.map((row) => (
-                  <li onClick={() => {
-                    selectedSeason.add(row.description);
-                    console.log(selectedSeason);
-                    setSelectedSeasons(row.description)
-                  }} class={"list-group-item " + (() => { return hasCus(row.description) ? "active" : "" })}>{row.description}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <SeasonsLookupComponent session={session} />
           <div class="col-4 p-3">.col-4</div>
         </div>
       </div>
     </>
   );
 };
-
-function foo(i) {
-  console.log(i);
-}
-
-
-
-
 
 export default AdminLookupsPage;

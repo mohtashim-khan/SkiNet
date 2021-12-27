@@ -39,9 +39,9 @@ public class DisciplineTests {
     @Test
     void testFindAll() {
         List<Discipline> testList = disciplineRepository.findAll();
-        assertTrue(testList.get(0).getDisciplinename().equals(testDisciplineName1));
-        assertTrue(testList.get(1).getDisciplinename().equals(testDisciplineName2));
-        assertTrue(testList.get(2).getDisciplinename().equals(testDisciplineName3));
+        assertTrue(testList.get(0).getDescription().equals(testDisciplineName1));
+        assertTrue(testList.get(1).getDescription().equals(testDisciplineName2));
+        assertTrue(testList.get(2).getDescription().equals(testDisciplineName3));
     }
 
 

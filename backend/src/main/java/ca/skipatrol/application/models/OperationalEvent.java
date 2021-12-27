@@ -14,21 +14,21 @@ public class OperationalEvent {
     @Getter
     @Setter
     @Column(columnDefinition = "binary(16)")
-    private UUID OperationalEventID;
+    private UUID operationalEventID;
 
     @Getter
     @Setter
     @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String Description;
+    private String description;
 
     public OperationalEvent() {}
 
     public OperationalEvent(UUID operationalEventID, String description) {
-        OperationalEventID = operationalEventID;
-        Description = description;
+        this.operationalEventID = operationalEventID;
+        this.description = description;
     }
 
     public OperationalEvent(String description) {
-        Description = description;
+        this.description = description;
     }
 }

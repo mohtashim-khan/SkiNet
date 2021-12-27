@@ -16,17 +16,17 @@ public class Award {
     @Getter
     @Setter
     @Column(nullable = false)
-    private Long award_id;
+    private Long awardID;
 
     @Getter
     @Setter
     @Column(unique = true, nullable = false)
-    private String name;
+    private String description;
 
     private Award(){}
 
-    public Award(String name){
-        this.name = name;
+    public Award(String description){
+        this.description = description;
     }
 
 }

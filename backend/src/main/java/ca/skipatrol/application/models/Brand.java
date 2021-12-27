@@ -16,17 +16,17 @@ public class Brand {
     @Getter
     @Setter
     @Column(nullable = false)
-    private Long brand_id;
+    private Long brandID;
 
     @Getter
     @Setter
     @Column(unique = true, nullable = false)
-    private String name;
+    private String description;
 
     private Brand(){}
 
-    public Brand(String name){
-        this.name = name;
+    public Brand(String description){
+        this.description = description;
     }
 
 }

@@ -12,10 +12,6 @@ import java.util.Optional;
 
 public interface DisciplineRepository extends JpaRepository<Discipline,Long> {
 
-    Optional<Discipline> findByDisciplinename(String disciplinename);
-    //Discipline save(Discipline discipline); // LATER ON -- HANDLE CASE FOR IF SAVE DOES NOT EXIST
-    void deleteById(long id);
-    List<Discipline> findAll();
-
+    Optional<Discipline> findByDescription(String description);
 
 }

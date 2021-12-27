@@ -10,12 +10,6 @@ import java.util.Optional;
 
 public interface AwardRepository extends JpaRepository<Award, Long> {
 
-
-
-    @Query("SELECT award FROM Award award WHERE name = ?1")
-    Optional<Award> getAwardByName(String name);
-
-    Brand save(Brand brand);
-    List<Award> findAll();
+    Optional<Award> findByDescription(String description);
 
 }

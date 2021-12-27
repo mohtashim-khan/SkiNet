@@ -17,32 +17,29 @@ import static javax.persistence.EnumType.STRING;
 
 public class Season {
 
+    // Members
     @Id
     @GeneratedValue
     @Getter
     private Long id;
 
-    public String getSeasonname() {
-        return seasonname;
-    }
-
     @Getter
     @Setter
     @Column(unique = true, nullable = false)
-    private String seasonname;
+    private String description;
 
     @Getter
     @Setter
     @Column(nullable = false)
     private int sequence;
 
+    // Constructors
     private Season() {
     }
 
-    public Season(String seasonname) {
-        this.seasonname = seasonname;
-
+    public Season(String description, int sequence) {
+        this.description = description;
+        this.sequence = sequence;
     }
-
 
 }

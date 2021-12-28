@@ -25,6 +25,10 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
     private SeasonRepository seasonRepository;
     @Autowired
     private OperationalEventRepository operationalEventRepository;
+    @Autowired
+    private PermissionRepository permissionRepository;
+    @Autowired
+    private ConditionsRepository conditionsRepository;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -79,6 +83,24 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             if (operationalEventLookup.isEmpty()) {
                 OperationalEvent operationalEvent = new OperationalEvent(name);
                 this.operationalEventRepository.save(operationalEvent);
+            }
+        }
+
+        Optional<Permission> permissionLookup;
+        for(int i = 0; i < permissionDefaults.length; i++) {
+            permissionLookup = this.permissionRepository.findByDescription(permissionDefaults[i]);
+            if (permissionLookup.isEmpty()){
+                Permission permission = new Permission(permissionDefaults[i], i);
+                this.permissionRepository.save(permission);
+            }
+        }
+
+        Optional<Conditions> conditionLookup;
+        for(String name : conditionDefaults) {
+            conditionLookup = this.conditionsRepository.findByDescription(name);
+            if (conditionLookup.isEmpty()) {
+                Conditions conditions = new Conditions(name);
+                this.conditionsRepository.save(conditions);
             }
         }
 
@@ -146,5 +168,17 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             "Ski Improvement",
             "Toboggan Training",
             "Lift Evacuation"
+    };
+
+    private String[] permissionDefaults = {
+            "Administrator",
+            "User"
+    };
+
+    private String[] conditionDefaults = {
+            "Very Good",
+            "Good",
+            "Average",
+            "Poor"
     };
 }

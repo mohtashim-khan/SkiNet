@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Lookups.css";
+import $ from "jquery";
+import { Button, Modal } from "react-bootstrap";
 
 const SeasonsLookupComponent = ({ session }) => {
   const [season, setSeasons] = useState([]);
@@ -11,7 +13,7 @@ const SeasonsLookupComponent = ({ session }) => {
         setSeasons(resp.data._embedded.seasons);
       }
     });
-  }, [season]);
+  }, [setSeasons]);
 
   return (
     <div class="col-4 p-3">
@@ -38,13 +40,10 @@ const SeasonsLookupComponent = ({ session }) => {
       </div>
       <div className="d-flex flex-row-reverse mt-1">
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-secondary">
+          <button type="button" class="btn btn-danger">
             Left
           </button>
-          <button type="button" class="btn btn-secondary">
-            Middle
-          </button>
-          <button type="button" class="btn btn-secondary">
+          <button type="button" class="btn btn-primary">
             Right
           </button>
         </div>
@@ -54,54 +53,152 @@ const SeasonsLookupComponent = ({ session }) => {
 };
 
 const JacketBrandLookup = ({ session }) => {
-  const [brand, setBrands] = useState([]);
+  const [brand, setBrands] = useState(new Map());
   const [selectedBrand, setSelectedBrands] = useState(new Set());
+  const [deletePrompted, setDeletePrompted] = useState(false);
+  const [creationPrompted, setCreatePrompted] = useState(false);
 
-  useEffect(() => {
+  function getBrands() {
     session.get("brands").then((resp) => {
       if (resp.status === 200) {
-        setBrands(resp.data._embedded.brands);
+        var brands = new Map();
+        resp.data._embedded.brands.map((b) => {
+          brands.set(b.brandID, b.description);
+        });
+        setBrands(brands);
       }
     });
+  }
+
+  useEffect(() => {
+    getBrands();
   }, [brand]);
+
+  function promptDeleteOpen() {
+    setDeletePrompted(true);
+  }
+
+  function promptDeleteCancel() {
+    setDeletePrompted(false);
+  }
+
+  function promptDeleteExecute() {
+    // const ids = Array.from(selectedBrand).join(",");
+    const params = new URLSearchParams();
+    Array.from(selectedBrand).map(k => {
+      params.append("ids", k);
+    })
+    session
+      .delete("lookups/brand/deleteInBatch?" + params.toString(), {}, {}, true)
+      .then((response) => {
+        if (response.status == 200) {
+          getBrands();
+          selectedBrand.clear();
+          setDeletePrompted(false);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  function promptCreateOpen() {
+    setCreatePrompted(true);
+  }
+
+  function promptCreateCancel() {
+    setCreatePrompted(false);
+  }
+
+  function promptCreateExecute() {
+    const newJacketName = $("#jacket-name").val();
+    setCreatePrompted(false);
+  }
 
   return (
     <div class="col-4 p-3">
       <h5>Jacket Brand</h5>
       <div class="overflow-auto" data-spy="scroll">
         <ul class="list-group scrollableList ">
-          {brand.map((row) => (
-            <li
-              // TODO: Change key to row.id when id becomes visible from the API
-              key={row.description}
-              onClick={() => {
-                if (selectedBrand.has(row.description)) {
-                  selectedBrand.delete(row.description);
-                } else {
-                  selectedBrand.add(row.description);
-                }
-                setSelectedBrands(selectedBrand);
-              }}
-              className={"list-group-item " + (selectedBrand.has(row.description) ? "active" : "")}
-            >
-              {row.description}
-            </li>
-          ))}
+          {Array.from(brand).map((kv) => {
+            const k = kv[0];
+            const v = kv[1];
+            return (
+              <li
+                key={k}
+                onClick={() => {
+                  if (selectedBrand.has(k)) {
+                    selectedBrand.delete(k);
+                  } else {
+                    selectedBrand.add(k);
+                  }
+                  setSelectedBrands(selectedBrand);
+                }}
+                className={"list-group-item " + (selectedBrand.has(k) ? "active" : "")}
+              >
+                {v}
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div class="d-flex flex-row-reverse mt-1">
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-secondary">
-            Left
+          <button type="button" onClick={promptDeleteOpen} class="btn btn-danger">
+            Delete
           </button>
-          <button type="button" class="btn btn-secondary">
-            Middle
-          </button>
-          <button type="button" class="btn btn-secondary">
-            Right
+          <button type="button" onClick={promptCreateOpen} class="btn btn-primary">
+            Add
           </button>
         </div>
       </div>
+
+      <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Are you sure you want to delete these items?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ul className="list-group">
+            {Array.from(selectedBrand).map((k) => (
+              <li className="list-group-item" key={k}>
+                {brand.get(k)}
+              </li>
+            ))}
+          </ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={promptDeleteExecute}>
+            Save Changes
+          </Button>
+          <Button variant="secondary" onClick={promptDeleteCancel}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={creationPrompted} onHide={promptCreateCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create a look-up item</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form>
+            <div class="form-group">
+              <label for="jacket-name" class="col-form-label">
+                Jacket Name:
+              </label>
+              <input type="text" class="form-control" id="jacket-name" />
+            </div>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={promptCreateExecute}>
+            Save Changes
+          </Button>
+          <Button variant="secondary" onClick={promptCreateCancel}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
@@ -116,7 +213,7 @@ const AwardLookup = ({ session }) => {
         setAwards(resp.data._embedded.awards);
       }
     });
-  }, [award]);
+  }, [setAwards]);
 
   return (
     <div class="col-4 p-3">
@@ -169,7 +266,7 @@ const DisciplineLookup = ({ session }) => {
         setDisciplines(resp.data._embedded.disciplines);
       }
     });
-  }, [discipline]);
+  }, [setDisciplines]);
 
   return (
     <div class="col-4 p-3">
@@ -224,7 +321,7 @@ const AdminLookupsPage = ({ session }) => {
 
         <div class="row">
           <SeasonsLookupComponent session={session} />
-          
+
           {/* <div class="col-4 p-3">
             <h5>External - Instruction/Coaching</h5>
             <div class="overflow-auto" data-spy="scroll">
@@ -239,7 +336,6 @@ const AdminLookupsPage = ({ session }) => {
               </div>
             </div>
           </div> */}
-          
         </div>
       </div>
     </>

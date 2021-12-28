@@ -38,10 +38,10 @@ class Session {
   }
 
   _get_base_url() {
-    return "http://" + this.api_url + "/api";
+    return "http://" + this.api_url;
   }
 
-  async get(endpoint, params_ = {}, urlParams = {}) {
+  async get(endpoint, params_ = {}, urlParams = {}, custom = false) {
     var payload = {
       headers: {
         authorization: this._get(this.SESSION_AUTH),
@@ -50,12 +50,29 @@ class Session {
     if (Object.keys(params_).length > 0) {
       payload["params"] = params_;
     }
-    var url = this._get_base_url() + "/" + endpoint;
+    var url = this._get_base_url() + (custom ? "/customapi" : "/api") + "/" + endpoint;
     if (Object.keys(urlParams).length > 0) {
       const queryString = urlParams.toString();
       url += queryString.length > 0 ? "?" + queryString : "";
     }
     return axios.get(url, payload);
+  }
+
+  async delete(endpoint, params_, urlParams, custom) {
+    var payload = {
+      headers: {
+        authorization: this._get(this.SESSION_AUTH),
+      },
+    };
+    if (Object.keys(params_).length > 0) {
+      payload["params"] = params_;
+    }
+    var url = this._get_base_url() + (custom ? "/customapi" : "/api") + "/" + endpoint;
+    if (Object.keys(urlParams).length > 0) {
+      const queryString = urlParams.toString();
+      url += queryString.length > 0 ? "?" + queryString : "";
+    }
+    return axios.delete(url, payload);
   }
 }
 

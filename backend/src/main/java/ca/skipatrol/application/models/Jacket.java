@@ -42,4 +42,24 @@ public class Jacket {
     @ManyToOne
     private Uniform uniform;
 
+    public Jacket() {
+    }
+
+    public Jacket(String number, Brand brand, Size size, Conditions condition, Uniform uniform) {
+        this.number = number;
+        this.brand = brand;
+        this.size = size;
+        this.condition = condition;
+        this.uniform = uniform;
+    }
+
+    public Jacket(UUID jacketID, String number, Brand brand, Size size, Conditions condition, Uniform uniform) {
+        this.jacketID = jacketID;
+        this.number = number;
+        this.brand = brand;
+        this.size = size;
+        this.condition = condition;
+        this.uniform = uniform;
+    }
+
 }

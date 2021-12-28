@@ -42,4 +42,21 @@ public class Vest {
 
     public Vest() {
     }
+
+    public Vest(String number, Brand brand, Size size, Conditions condition, Uniform uniform) {
+        this.number = number;
+        this.brand = brand;
+        this.size = size;
+        this.condition = condition;
+        this.uniform = uniform;
+    }
+
+    public Vest(UUID vestID, String number, Brand brand, Size size, Conditions condition, Uniform uniform) {
+        this.vestID = vestID;
+        this.number = number;
+        this.brand = brand;
+        this.size = size;
+        this.condition = condition;
+        this.uniform = uniform;
+    }
 }

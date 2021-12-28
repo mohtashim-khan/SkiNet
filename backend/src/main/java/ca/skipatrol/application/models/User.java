@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.UUID;
+
 import static javax.persistence.EnumType.STRING;
 
 @Entity
@@ -13,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue
     @Getter
-    private Long id;
+    private UUID userID;
 
     @Column(unique = true, nullable = false)
     @Getter

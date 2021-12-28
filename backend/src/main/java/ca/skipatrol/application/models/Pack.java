@@ -38,4 +38,19 @@ public class Pack {
 
     public Pack() {
     }
+
+    public Pack(String number, Brand brand, Conditions condition, Uniform uniform) {
+        this.number = number;
+        this.brand = brand;
+        this.condition = condition;
+        this.uniform = uniform;
+    }
+
+    public Pack(UUID packID, String number, Brand brand, Conditions condition, Uniform uniform) {
+        this.packID = packID;
+        this.number = number;
+        this.brand = brand;
+        this.condition = condition;
+        this.uniform = uniform;
+    }
 }

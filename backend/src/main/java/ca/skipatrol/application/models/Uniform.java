@@ -31,5 +31,20 @@ public class Uniform {
     @ManyToOne
     private User user;
 
+    public Uniform() {
+    }
+
+    public Uniform(Boolean leaseSigned, Boolean returned, User user) {
+        this.leaseSigned = leaseSigned;
+        this.returned = returned;
+        this.user = user;
+    }
+
+    public Uniform(UUID uniformID, Boolean leaseSigned, Boolean returned, User user) {
+        this.uniformID = uniformID;
+        this.leaseSigned = leaseSigned;
+        this.returned = returned;
+        this.user = user;
+    }
 
 }

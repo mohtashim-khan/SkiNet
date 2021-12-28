@@ -11,24 +11,29 @@ const UsersListPage = ({ session }) => {
     });
   });
 
+
   return (
     <>
-      <table class="table">
+      <table class="table" it = "sortTable">
         <thead>
           <tr>
-            <th scope="col">Username</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
+            <th scope="col">
+              Username
+            </th>
+            <th scope="col">Name</th>
             <th scope="col">Role</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Email</th>
           </tr>
         </thead>
         <tbody>
           {users.map((row) => (
             <tr key={row.username}>
               <th>{row.username}</th>
-              <td>{row.firstName}</td>
-              <td>{row.lastName}</td>
+              <td>{row.firstName + " " + row.lastName}</td>
               <td>{row.role}</td>
+              <td>{"Contact information here probably. "}</td>
+              <td>{"Contact information here probably. "}</td>
             </tr>
           ))}
         </tbody>

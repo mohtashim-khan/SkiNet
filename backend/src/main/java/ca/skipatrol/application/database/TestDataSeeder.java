@@ -49,6 +49,21 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
             userLookup = Optional.of(user);
         }
 
+        Optional<User> userLookup2 = this.repository.findByUsername("AAAAA");
+        if (userLookup2.isEmpty()) {
+            User user = new User("AAAAA",
+                    new BCryptPasswordEncoder().encode("password"),
+                    "Michael",
+                    "Scott",
+                    Role.USER);
+            this.repository.save(new User("AAAAA",
+                    new BCryptPasswordEncoder().encode("password"),
+                    "Michael",
+                    "Scott",
+                    Role.USER));
+            userLookup2 = Optional.of(user);
+        }
+
         Optional<Event> eventLookup = this.eventRepository.findByEventName("testEventName");
         if (eventLookup.isEmpty()) {
             LocalDateTime startDate_1 = LocalDateTime.of(2021, Month.JANUARY, 1, 12, 0, 0);

@@ -7,10 +7,12 @@ import java.util.UUID;
 
 @Entity
 public class Conditions {
+
     @Id
     @GeneratedValue
     @Getter
     @Setter
+    @Column(columnDefinition = "binary(16)")
     private UUID conditionID;
 
     @Getter

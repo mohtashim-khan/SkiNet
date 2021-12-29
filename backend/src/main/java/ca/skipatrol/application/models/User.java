@@ -15,6 +15,7 @@ public class User {
     @Id
     @GeneratedValue
     @Getter
+    @Column(columnDefinition = "binary(16)")
     private UUID userID;
 
     @Column(unique = true, nullable = false)
@@ -32,20 +33,14 @@ public class User {
     @Setter
     private String lastName;
 
-    @Column(nullable = false)
-    @Enumerated(STRING)
-    @Getter
-    private Role role;
-
     private User() {
     }
 
-    public User(String username, String password, String firstName, String lastName, Role role) {
+    public User(String username, String password, String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
 }

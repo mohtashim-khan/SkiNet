@@ -26,8 +26,6 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
     @Autowired
     private OperationalEventRepository operationalEventRepository;
     @Autowired
-    private PermissionRepository permissionRepository;
-    @Autowired
     private ConditionsRepository conditionsRepository;
 
     @Override
@@ -83,15 +81,6 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             if (operationalEventLookup.isEmpty()) {
                 OperationalEvent operationalEvent = new OperationalEvent(name);
                 this.operationalEventRepository.save(operationalEvent);
-            }
-        }
-
-        Optional<Permission> permissionLookup;
-        for(int i = 0; i < permissionDefaults.length; i++) {
-            permissionLookup = this.permissionRepository.findByDescription(permissionDefaults[i]);
-            if (permissionLookup.isEmpty()){
-                Permission permission = new Permission(permissionDefaults[i], i);
-                this.permissionRepository.save(permission);
             }
         }
 
@@ -168,11 +157,6 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             "Ski Improvement",
             "Toboggan Training",
             "Lift Evacuation"
-    };
-
-    private String[] permissionDefaults = {
-            "Administrator",
-            "User"
     };
 
     private String[] conditionDefaults = {

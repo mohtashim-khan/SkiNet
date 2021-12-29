@@ -30,6 +30,12 @@ public class PersonAward {
     @Setter
     @ManyToOne
     @JoinColumn(nullable = false)
+    private Season season;
+
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private User user;
 
     public PersonAward() {

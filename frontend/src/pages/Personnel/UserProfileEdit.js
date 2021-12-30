@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 const TrainingAndEval = ({ session, user }) => {
   const [discipline, setDisciplines] = useState([]);
+  const [date, setDate] = useState(null);
 
   useEffect(() => {
     session.get("disciplines").then((resp) => {
@@ -15,66 +16,136 @@ const TrainingAndEval = ({ session, user }) => {
 
   return (
     <>
-      <form class="mb-5">
-        <h4>
-          <b>Training and Evaluation</b>
-        </h4>
-        {/* <div class="form-group">
-          <label for="exampleInputEmail1">First Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder={user.firstName}
-          />
+      <div class="card mx-auto">
+
+        <div class="card-header">
+          <h4>
+            <b>Training and Evaluation</b>
+          </h4>
         </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Last Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="exampleInputPassword1"
-            placeholder={user.lastName}
-          />
-        </div> */}
-        <h5>On Snow Evaluation</h5>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupSelect01">
-              Discipline Type
-            </label>
+        <form class="mb-5">
+          <div class="card-body">
+            <h5>On Snow Evaluation</h5>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Discipline Type
+                </label>
+              </div>
+
+              <select class="custom-select" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                {discipline.map((row) => (
+                  <option value={row}>{row.description}</option>
+                ))}
+              </select>
+
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text">
+                  Date Evaluated
+                </label>
+              </div>
+
+              <Form.Control type="date" name='date_of_birth' onChange={(e) => { setDate(e.target.value) }}
+              />
+
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Evaluated By
+                </label>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder={date}
+              />
+
+            </div>
+
+            <h5>Evaluator Snow Training</h5>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Event Type
+                </label>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder={date}
+              />
+
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text">
+                  Date Completed
+                </label>
+              </div>
+
+              <Form.Control type="date" name='date_of_birth' onChange={(e) => { setDate(e.target.value) }}
+              />
+
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Evaluated By
+                </label>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder={date}
+              />
+
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">
+              Submit
+            </button>
           </div>
+        </form>
 
-          <select class="custom-select" id="inputGroupSelect01">
-            <option selected>Choose...</option>
-            {discipline.map((row) => (
-              <option value={row}>{row.description}</option>
-            ))}
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-          Submit
-        </button>
-      </form>
+      </div>
     </>
   );
 };
 const PatrolCommitment = ({ session, user }) => {
+  const [discipline, setDisciplines] = useState([]);
   return (
     <>
       <form class="mb-5">
-        <h3>Patrol Commitment</h3>
+        <h3>Commitment Achieved</h3>
         <div class="form-group">
-          <label for="exampleInputEmail1">First Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder={user.firstName}
-          />
+          {discipline.map((row) => (
+            <div class="form-group">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id={row.id}
+              />
+              <label class="form-check-label" for={row.description}>
+                {row.description}
+              </label>
+            </div>
+          ))}
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">First Name</label>
@@ -140,7 +211,7 @@ const LakeLouiseRoles = ({ session, user }) => {
                 value=""
                 id={row.id}
               />
-              <label class="form-check-label" for={row.id}>
+              <label class="form-check-label" for={row.description}>
                 {row.description}
               </label>
             </div>

@@ -15,7 +15,7 @@ const TrainingAndEval = ({ session, user }) => {
 
   return (
     <>
-      <form>
+      <form class="mb-5">
         <h4>
           <b>Training and Evaluation</b>
         </h4>
@@ -64,7 +64,7 @@ const TrainingAndEval = ({ session, user }) => {
 const PatrolCommitment = ({ session, user }) => {
   return (
     <>
-      <form>
+      <form class="mb-5">
         <h3>Patrol Commitment</h3>
         <div class="form-group">
           <label for="exampleInputEmail1">First Name</label>
@@ -129,7 +129,7 @@ const LakeLouiseRoles = ({ session, user }) => {
   }, []);
   return (
     <>
-      <form>
+      <form class="mb-5">
         <h3>Lake Louise Roles</h3>
         <div class="form-group">
           {discipline.map((row) => (
@@ -157,7 +157,7 @@ const LakeLouiseRoles = ({ session, user }) => {
 const PatrolUniformAndEquipment = ({ sessions, user }) => {
   return (
     <>
-      <form>
+      <form class="mb-5">
         <h3>Patrol Uniform and Equipment</h3>
         <div class="form-group">
           <label for="exampleInputEmail1">First Name</label>
@@ -202,7 +202,7 @@ const PatrolUniformAndEquipment = ({ sessions, user }) => {
 const LakeLouiseAwards = ({ session, user }) => {
   return (
     <>
-      <form>
+      <form class="mb-5">
         <h3>Lake Louise Awards</h3>
         <div class="form-group">
           <label for="exampleInputEmail1">First Name</label>
@@ -247,7 +247,7 @@ const LakeLouiseAwards = ({ session, user }) => {
 const General = ({ session, user }) => {
   return (
     <>
-      <form>
+      <form class="mb-2">
         <h3>General</h3>
         <div class="form-group">
           <label for="exampleInputEmail1">First Name</label>
@@ -311,24 +311,14 @@ const UserProfileEdit = ({ session }) => {
         <Row>
           <Col>
             <TrainingAndEval session={session} user={user} />
-          </Col>
-          <Col>
             <PatrolCommitment session={session} user={user} />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
             <LakeLouiseRoles session={session} user={user} />
           </Col>
+
           <Col>
             <PatrolUniformAndEquipment session={session} user={user} />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
+
             <LakeLouiseAwards session={session} user={user} />
-          </Col>
-          <Col>
             <General session={session} user={user} />
           </Col>
         </Row>

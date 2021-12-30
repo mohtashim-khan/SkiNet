@@ -33,6 +33,15 @@ public class User {
     @Setter
     private String lastName;
 
+    @Getter
+    @Setter
+    private String email;
+
+    @Getter
+    @Setter
+    private String phoneNumber;
+
+
     private User() {
     }
 

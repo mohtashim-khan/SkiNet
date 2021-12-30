@@ -1,6 +1,5 @@
 package ca.skipatrol.application.models;
 
-import jdk.dynalink.Operation;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -18,7 +17,7 @@ public class OperationalEvent {
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
+    @Column(nullable = false)
     private String description;
 
     public OperationalEvent() {}

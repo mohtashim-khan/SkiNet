@@ -38,14 +38,21 @@ class UserDetailsServiceImpl implements UserDetailsService {
 
     private String retrieveUserRole(User user)
     {
-        Optional<Role> userRole = roleRepository.findByUser_userID(user.getUserID());
-        if (userRole.isEmpty())
-            return "USER";
+        try
+        {
+            Optional<Role> userRole = roleRepository.findByUser_userID(user.getUserID());
+            if (userRole.isEmpty())
+                return "USER";
 
-        if (userRole.get().getAdmin())
-            return "ADMIN";
-        else
+            if (userRole.get().getAdmin())
+                return "ADMIN";
+            else
+                return "USER";
+        }
+        catch(Exception ex)
+        {
             return "USER";
+        }
     }
 
 }

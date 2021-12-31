@@ -50,7 +50,8 @@ class Session {
     if (Object.keys(params_).length > 0) {
       payload["params"] = params_;
     }
-    var url = this._get_base_url() + (custom ? "/customapi" : "/api") + "/" + endpoint;
+    var url =
+      this._get_base_url() + (custom ? "/customapi" : "/api") + "/" + endpoint;
     if (Object.keys(urlParams).length > 0) {
       const queryString = urlParams.toString();
       url += queryString.length > 0 ? "?" + queryString : "";
@@ -67,12 +68,38 @@ class Session {
     if (Object.keys(params_).length > 0) {
       payload["params"] = params_;
     }
-    var url = this._get_base_url() + (custom ? "/customapi" : "/api") + "/" + endpoint;
+    var url =
+      this._get_base_url() + (custom ? "/customapi" : "/api") + "/" + endpoint;
     if (Object.keys(urlParams).length > 0) {
       const queryString = urlParams.toString();
       url += queryString.length > 0 ? "?" + queryString : "";
     }
+
     return axios.delete(url, payload);
+  }
+  /**
+   * Creates a post request
+   * @param {*} endpoint
+   * @param {*} body E.g., format this as {description: 'Spyder'}, etc
+   * @param {*} urlParams
+   * @param {*} custom
+   * @returns
+   */
+  async post(endpoint, body, urlParams, custom) {
+    var payload = {
+      headers: {
+        authorization: this._get(this.SESSION_AUTH),
+      },
+    };
+
+    var url =
+      this._get_base_url() + (custom ? "/customapi" : "/api") + "/" + endpoint;
+    if (Object.keys(urlParams).length > 0) {
+      const queryString = urlParams.toString();
+      url += queryString.length > 0 ? "?" + queryString : "";
+    }
+
+    return axios.post(url, body, payload);
   }
 }
 

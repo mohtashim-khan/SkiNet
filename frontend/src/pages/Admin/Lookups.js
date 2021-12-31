@@ -31,7 +31,10 @@ const SeasonsLookupComponent = ({ session }) => {
                 }
                 setSelectedSeasons(selectedSeason);
               }}
-              className={"list-group-item " + (selectedSeason.has(row.description) ? "active" : "")}
+              className={
+                "list-group-item " +
+                (selectedSeason.has(row.description) ? "active" : "")
+              }
             >
               {row.description}
             </li>
@@ -85,9 +88,9 @@ const JacketBrandLookup = ({ session }) => {
   function promptDeleteExecute() {
     // const ids = Array.from(selectedBrand).join(",");
     const params = new URLSearchParams();
-    Array.from(selectedBrand).map(k => {
+    Array.from(selectedBrand).map((k) => {
       params.append("ids", k);
-    })
+    });
     session
       .delete("lookups/brand/deleteInBatch?" + params.toString(), {}, {}, true)
       .then((response) => {
@@ -113,6 +116,20 @@ const JacketBrandLookup = ({ session }) => {
   function promptCreateExecute() {
     const newJacketName = $("#jacket-name").val();
     setCreatePrompted(false);
+    console.log(newJacketName);
+
+    const params = new URLSearchParams();
+    session
+      .post("brands", { description: newJacketName }, {}, false)
+      .then((response) => {
+        if (response.status == 200) {
+          getBrands();
+          setCreatePrompted(false);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   return (
@@ -134,7 +151,9 @@ const JacketBrandLookup = ({ session }) => {
                   }
                   setSelectedBrands(selectedBrand);
                 }}
-                className={"list-group-item " + (selectedBrand.has(k) ? "active" : "")}
+                className={
+                  "list-group-item " + (selectedBrand.has(k) ? "active" : "")
+                }
               >
                 {v}
               </li>
@@ -144,10 +163,18 @@ const JacketBrandLookup = ({ session }) => {
       </div>
       <div class="d-flex flex-row-reverse mt-1">
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button type="button" onClick={promptDeleteOpen} class="btn btn-danger">
+          <button
+            type="button"
+            onClick={promptDeleteOpen}
+            class="btn btn-danger"
+          >
             Delete
           </button>
-          <button type="button" onClick={promptCreateOpen} class="btn btn-primary">
+          <button
+            type="button"
+            onClick={promptCreateOpen}
+            class="btn btn-primary"
+          >
             Add
           </button>
         </div>
@@ -155,7 +182,9 @@ const JacketBrandLookup = ({ session }) => {
 
       <Modal show={deletePrompted} onHide={promptDeleteCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>Are you sure you want to delete these items?</Modal.Title>
+          <Modal.Title>
+            Are you sure you want to delete these items?
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ul className="list-group">
@@ -232,7 +261,10 @@ const AwardLookup = ({ session }) => {
                 }
                 setSelectedAwards(selectedAward);
               }}
-              className={"list-group-item " + (selectedAward.has(row.description) ? "active" : "")}
+              className={
+                "list-group-item " +
+                (selectedAward.has(row.description) ? "active" : "")
+              }
             >
               {row.description}
             </li>
@@ -285,7 +317,10 @@ const DisciplineLookup = ({ session }) => {
                 }
                 setSelectedDisciplines(selectedDiscipline);
               }}
-              className={"list-group-item " + (selectedDiscipline.has(row.description) ? "active" : "")}
+              className={
+                "list-group-item " +
+                (selectedDiscipline.has(row.description) ? "active" : "")
+              }
             >
               {row.description}
             </li>

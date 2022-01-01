@@ -28,7 +28,7 @@ const UsersListPage = ({ session }) => {
           {users.map((row) => (
             <tr key={row.username}>
               <td>
-                <Link className="link" to={"/personnel/user/" + row.id}>
+                <Link className="link" to={"/personnel/user/" + row.userID}>
                   {row.username}
                 </Link>
               </td>

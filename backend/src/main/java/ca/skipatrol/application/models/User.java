@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.UUID;
+
 import static javax.persistence.EnumType.STRING;
 
 @Entity
@@ -13,7 +15,8 @@ public class User {
     @Id
     @GeneratedValue
     @Getter
-    private Long id;
+    @Column(columnDefinition = "binary(16)")
+    private UUID userID;
 
     @Column(unique = true, nullable = false)
     @Getter
@@ -30,20 +33,23 @@ public class User {
     @Setter
     private String lastName;
 
-    @Column(nullable = false)
-    @Enumerated(STRING)
     @Getter
-    private Role role;
+    @Setter
+    private String email;
+
+    @Getter
+    @Setter
+    private String phoneNumber;
+
 
     private User() {
     }
 
-    public User(String username, String password, String firstName, String lastName, Role role) {
+    public User(String username, String password, String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
 }

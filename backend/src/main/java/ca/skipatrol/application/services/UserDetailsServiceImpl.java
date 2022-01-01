@@ -1,6 +1,8 @@
 package ca.skipatrol.application.services;
 
+import ca.skipatrol.application.models.Role;
 import ca.skipatrol.application.models.User;
+import ca.skipatrol.application.repositories.RoleRepository;
 import ca.skipatrol.application.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -22,13 +25,34 @@ class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Failed username lookup"));
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(retrieveUserRole(user)));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+    }
+
+    private String retrieveUserRole(User user)
+    {
+        try
+        {
+            Optional<Role> userRole = roleRepository.findByUser_userID(user.getUserID());
+            if (userRole.isEmpty())
+                return "USER";
+
+            if (userRole.get().getAdmin())
+                return "ADMIN";
+            else
+                return "USER";
+        }
+        catch(Exception ex)
+        {
+            return "USER";
+        }
     }
 
 }

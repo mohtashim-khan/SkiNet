@@ -14,6 +14,7 @@ import SignIn from "./pages/SignIn/SignIn";
 import Roster from "./pages/Roster/Roster";
 import UserPage from "./pages/User/UserPage.js";
 import OtherUserPage from "./pages/User/OtherUserPage.js";
+import UserProfileEdit from "./pages/Personnel/UserProfileEdit";
 
 import AdminLookupsPage from "./pages/Admin/Lookups";
 
@@ -68,11 +69,11 @@ class App extends Component {
             session={this.session}
           />
 
-          <ProtectedRoute
-            path="/users/:usernameParam"
+          {/* <ProtectedRoute
+            path="/personnel/user/:usernameParam"
             Component={OtherUserPage}
             session={this.session}
-          />
+          /> */}
 
           <ProtectedRoute
             path="/personnel/users"
@@ -89,6 +90,12 @@ class App extends Component {
           <ProtectedRoute
             path="/admin/areas"
             Component={AreasPage}
+            session={this.session}
+          />
+
+          <ProtectedRoute
+            path="/personnel/user/:id"
+            Component={UserProfileEdit}
             session={this.session}
           />
 

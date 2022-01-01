@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const UsersListPage = ({ session }) => {
   const [users, setUsers] = useState([]);
@@ -11,15 +12,12 @@ const UsersListPage = ({ session }) => {
     });
   });
 
-
   return (
     <>
-      <table class="table" it = "sortTable">
+      <table class="table" it="sortTable">
         <thead>
           <tr>
-            <th scope="col">
-              Username
-            </th>
+            <th scope="col">Username</th>
             <th scope="col">Name</th>
             <th scope="col">Role</th>
             <th scope="col">Phone</th>
@@ -29,7 +27,11 @@ const UsersListPage = ({ session }) => {
         <tbody>
           {users.map((row) => (
             <tr key={row.username}>
-              <th>{row.username}</th>
+              <td>
+                <Link className="link" to={"/personnel/user/" + row.id}>
+                  {row.username}
+                </Link>
+              </td>
               <td>{row.firstName + " " + row.lastName}</td>
               <td>{row.role}</td>
               <td>{"Contact information here probably. "}</td>

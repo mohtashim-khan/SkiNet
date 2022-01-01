@@ -1,10 +1,7 @@
 package ca.skipatrol.application.database;
 
 import ca.skipatrol.application.models.*;
-import ca.skipatrol.application.repositories.AreaRepository;
-import ca.skipatrol.application.repositories.EventLogRepository;
-import ca.skipatrol.application.repositories.EventRepository;
-import ca.skipatrol.application.repositories.UserRepository;
+import ca.skipatrol.application.repositories.*;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -21,7 +18,7 @@ import java.util.stream.Stream;
 public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     @Autowired
     private EventRepository eventRepository;
@@ -32,36 +29,47 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
     @Autowired
     private EventLogRepository eventLogRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        Optional<User> userLookup = this.repository.findByUsername("username");
+        Optional<User> userLookup = this.userRepository.findByUsername("username");
         if (userLookup.isEmpty()) {
             User user = new User("username",
                     new BCryptPasswordEncoder().encode("password"),
                     "Isaac",
-                    "Newton",
-                    Role.USER);
-            this.repository.save(new User("username",
+                    "Newton");
+            this.userRepository.save(new User("username",
                     new BCryptPasswordEncoder().encode("password"),
                     "Isaac",
-                    "Newton",
-                    Role.USER));
+                    "Newton"));
             userLookup = Optional.of(user);
+
+            user = userRepository.findByUsername("username").get();
+            Role role = new Role(false, false, false, false,
+                    false, false, false,
+                    false, false, false, false, user);
+            this.roleRepository.save(role);
         }
 
-        Optional<User> userLookup2 = this.repository.findByUsername("AAAAA");
+        Optional<User> userLookup2 = this.userRepository.findByUsername("AAAAA");
         if (userLookup2.isEmpty()) {
             User user = new User("AAAAA",
                     new BCryptPasswordEncoder().encode("password"),
                     "Michael",
-                    "Scott",
-                    Role.USER);
-            this.repository.save(new User("AAAAA",
+                    "Scott");
+            this.userRepository.save(new User("AAAAA",
                     new BCryptPasswordEncoder().encode("password"),
                     "Michael",
-                    "Scott",
-                    Role.USER));
+                    "Scott"));
             userLookup2 = Optional.of(user);
+
+            user = userRepository.findByUsername("username").get();
+            Role role = new Role(false, false, false, false,
+                    false, false, false,
+                    false, false, false, false, user);
+            this.roleRepository.save(role);
         }
 
         Optional<Event> eventLookup = this.eventRepository.findByEventName("testEventName");

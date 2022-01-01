@@ -6,28 +6,29 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-public class OperationalEvent {
+public class Conditions {
 
     @Id
     @GeneratedValue
     @Getter
     @Setter
     @Column(columnDefinition = "binary(16)")
-    private UUID operationalEventID;
+    private UUID conditionID;
 
     @Getter
     @Setter
     @Column(nullable = false)
     private String description;
 
-    public OperationalEvent() {}
+    public Conditions() {
+    }
 
-    public OperationalEvent(UUID operationalEventID, String description) {
-        this.operationalEventID = operationalEventID;
+    public Conditions(String description) {
         this.description = description;
     }
 
-    public OperationalEvent(String description) {
+    public Conditions(UUID conditionID, String description) {
+        this.conditionID = conditionID;
         this.description = description;
     }
 }

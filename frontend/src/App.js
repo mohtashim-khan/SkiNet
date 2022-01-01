@@ -5,15 +5,11 @@ import axios from "axios";
 import {
   ProtectedRoute,
   ProtectedLogin,
-  ProtectedRouteSysAdmin,
-  ProtectedRouteHillAdmin,
 } from "./components/App/ProtectedRoutes";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Home from "./pages/Home/Home";
-import Admin2 from "./pages/Admin2/Admin";
-import Area2 from "./pages/Area2/Area";
 import SignIn from "./pages/SignIn/SignIn";
 import Roster from "./pages/Roster/Roster";
 import UserPage from "./pages/User/UserPage.js";
@@ -22,13 +18,8 @@ import OtherUserPage from "./pages/User/OtherUserPage.js";
 import AdminLookupsPage from "./pages/Admin/Lookups";
 
 import Session from "./services/SessionService";
-
-//Cookie Service
-import CookieService from "./services/CookieServices";
-
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import UsersListPage from "./pages/Personnel/Personnel";
+import RosterPlanner from "./pages/Roster/RosterPlanner";
 import AreasPage from "./pages/Admin/Areas";
 
 const NotFound = () => {
@@ -67,8 +58,8 @@ class App extends Component {
         <Header session={this.session} />
         <Switch>
           <ProtectedRoute
-            path="/roster/:event_id"
-            Component={Roster}
+            path="/roster/calendar"
+            Component={RosterPlanner}
             session={this.session}
           />
           <ProtectedRoute
@@ -120,48 +111,4 @@ class App extends Component {
   };
 }
 
-function App2() {
-  const [login, setLogin] = useState(
-    CookieService.get("type") ? "Successful" : "Not Attempted"
-  );
-  const [userAuth, setAuth] = useState(
-    CookieService.get("userDetails") !== undefined
-      ? CookieService.get("userDetails")
-      : {
-          username: "",
-          user_type: "",
-        }
-  );
-
-  const [updateInfo, setUpdateInfo] = useState(true);
-
-  useEffect(() => {
-    //TODO redirect if login is successful
-    // if(updateInfo)
-    // {
-    //   //wait(50); //If the user info is not updated uncomment this
-    //   const AuthStr = 'Bearer ' + CookieService.get("type");
-    //   axios.get('/users', { headers: { 'Authorization': AuthStr } })
-    //     .then(response => {
-    //       // If request is good...
-    //       setAuth(
-    //       {
-    //           username: response.data.username,
-    //           user_type: response.data.user_type
-    //       });
-    //     })
-    //     .catch((error) => {
-    //       console.log('error ' + error);
-    //   });
-    //   setUpdateInfo(false);
-    // }
-  }, [updateInfo, userAuth]);
-
-  return {};
-}
-
 export default App;
-
-function TestRemoveLater() {
-  return <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />;
-}

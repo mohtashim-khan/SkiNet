@@ -1,5 +1,6 @@
 package ca.skipatrol.application.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,13 +26,14 @@ public class OperationalTraining {
     @Getter
     @Setter
     @JoinColumn(nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private OperationalEvent operationalEvent;
 
     @Getter
     @Setter
+    @JsonBackReference
     @JoinColumn(nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     public OperationalTraining() {

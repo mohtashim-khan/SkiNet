@@ -1,5 +1,6 @@
 package ca.skipatrol.application.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
@@ -30,8 +31,9 @@ public class EvalTraining {
 
     @Getter
     @Setter
+    @JsonBackReference
     @JoinColumn(nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     public EvalTraining() {

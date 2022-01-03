@@ -1,5 +1,6 @@
 package ca.skipatrol.application.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -74,7 +75,8 @@ public class Role {
     @Getter
     @Setter
     @JoinColumn(nullable = false)
-    @ManyToOne
+    @JsonBackReference
+    @OneToOne(fetch = FetchType.EAGER)
     private User user;
 
     public Role() {

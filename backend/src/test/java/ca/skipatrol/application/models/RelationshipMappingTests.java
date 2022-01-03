@@ -68,12 +68,10 @@ public class RelationshipMappingTests {
         testBrand = brandRepository.findAll().get(0);
         testSize = sizeRepository.findAll().get(0);
         testCondition = conditionsRepository.findAll().get(0);
-        testUser = userRepository.findByUsername("username").get();
+//        testUser = userRepository.findByUsername("username").get();
 
         testUniform = new Uniform(false, false, null);
         uniformRepository.save(testUniform);
-
-        //EntityManagerFactory emfactory = Persistence.createEntityManagerFactory();
     }
 
     @AfterAll
@@ -92,7 +90,7 @@ public class RelationshipMappingTests {
     }
 
     @Test
-    void testEagerLoadForVest() {
+    void testLazyLoadForVest() {
         Vest testVest = new Vest("testNumber2", testBrand, testSize, testCondition, testUniform);
         vestRepository.save(testVest);
         Vest returnVest = vestRepository.getById(testVest.getVestID());
@@ -105,21 +103,85 @@ public class RelationshipMappingTests {
 
     //endregion
 
+    //region Jacket Relational Mapping Tests
+    @Test
+    void testSaveDeleteJacket() {
+        Jacket testJacket = new Jacket("testNumber", testBrand, testSize, testCondition, null);
+        jacketRepository.save(testJacket);
+        assertTrue(jacketRepository.existsById(testJacket.getJacketID()));
+        jacketRepository.delete(testJacket);
+        assertFalse(jacketRepository.existsById(testJacket.getJacketID()));
+    }
+
+    @Test
+    void testLazyLoadForJacket() {
+        Jacket testJacket = new Jacket("testNumber2", testBrand, testSize, testCondition, testUniform);
+        jacketRepository.save(testJacket);
+        Jacket returnJacket = jacketRepository.getById(testJacket.getJacketID());
+        assertEquals(returnJacket.getBrand(), testBrand);
+        assertEquals(returnJacket.getCondition(), testCondition);
+        assertEquals(returnJacket.getSize(), testSize);
+        assertEquals(returnJacket.getUniform(), testUniform);
+        jacketRepository.delete(testJacket);
+    }
+
+    //endregion
+
+    //region Pack Relational Mapping Tests
+    @Test
+    void testSaveDeletePack() {
+        Pack testPack = new Pack("testNumber", testBrand, testCondition, null);
+        packRepository.save(testPack);
+        assertTrue(packRepository.existsById(testPack.getPackID()));
+        packRepository.delete(testPack);
+        assertFalse(packRepository.existsById(testPack.getPackID()));
+    }
+
+    @Test
+    void testLazyLoadForPack() {
+        Pack testPack = new Pack("testNumber2", testBrand, testCondition, testUniform);
+        packRepository.save(testPack);
+        Pack returnPack = packRepository.getById(testPack.getPackID());
+        assertEquals(returnPack.getBrand(), testBrand);
+        assertEquals(returnPack.getCondition(), testCondition);
+        assertEquals(returnPack.getUniform(), testUniform);
+        packRepository.delete(testPack);
+    }
+
+    //endregion
+
     //region Uniform Relational Mapping Tests
-//    @Test
-//    void testLazyLoadForUniform() {
-//        Vest testVest = new Vest("testNumber3", testBrand, testSize, testCondition, testUniform);
-//        Uniform testUniform  = new Uniform(false, false, null);
-//        testUniform.setVests(Arrays.asList(testVest));
-//
-//        uniformRepository.save(testUniform);
-//        vestRepository.save(testVest);
+    @Test
+    void testSaveDeleteUniform() {
+        Uniform testUniform  = new Uniform(false, false, null);
+        uniformRepository.save(testUniform);
+        assertTrue(uniformRepository.existsById(testUniform.getUniformID()));
+        uniformRepository.delete(testUniform);
+        assertFalse(uniformRepository.existsById(testUniform.getUniformID()));
+    }
 
-        //Uniform returnUniform = uniformRepository.getById(testUniform.getUniformID());
+    @Test
+    void testLazyLoadForUniform() {
+        Vest testVest = new Vest("testNumber3", testBrand, testSize, testCondition, testUniform);
+        Pack testPack = new Pack("testNumber3", testBrand, testCondition, testUniform);
+        Jacket testJacket = new Jacket("testNumber3", testBrand, testSize, testCondition, testUniform);
+        Uniform testUniform  = new Uniform(false, false, null);
+        testUniform.setVests(Arrays.asList(testVest));
+        testUniform.setJackets(Arrays.asList(testJacket));
+        testUniform.setPacks(Arrays.asList(testPack));
 
-//        uniformRepository.delete(testUniform);
-//        vestRepository.delete(testVest);
-//    }
+        uniformRepository.save(testUniform);
+        vestRepository.save(testVest);
+
+        Uniform returnUniform = uniformRepository.getById(testUniform.getUniformID());
+
+        assertEquals(returnUniform.getVests().get(0), testVest);
+        assertEquals(returnUniform.getJackets().get(0), testJacket);
+        assertEquals(returnUniform.getPacks().get(0), testPack);
+
+        uniformRepository.delete(testUniform);
+        vestRepository.delete(testVest);
+    }
     //endregion
 
 }

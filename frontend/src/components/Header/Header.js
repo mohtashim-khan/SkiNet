@@ -134,7 +134,7 @@ const Header = ({ session }) => {
                 </ul>
               </div>
             </nav>
-          ) : undefined
+          ) : null
         }
       </Route>
 
@@ -165,7 +165,7 @@ const Header = ({ session }) => {
                 </ul>
               </div>
             </nav>
-          ) : undefined
+          ) : null
         }
       </Route>
 
@@ -196,7 +196,7 @@ const Header = ({ session }) => {
                 </ul>
               </div>
             </nav>
-          ) : undefined
+          ) : null
         }
       </Route>
     </>

@@ -50,38 +50,42 @@ public class LookupController {
 
     @RequestMapping(value = "/customapi/lookups/brand/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteBrandInBatch(@RequestParam ArrayList<Long> ids) {
-        brandRepository.deleteAllByIdInBatch(ids);
-        for (Long id : ids) {
-            assert (brandRepository.findById(id).isEmpty());
-        }
-        return new ResponseEntity<>("Brands deleted correctly", HttpStatus.OK);
+        boolean returnVal = lookupServices.deleteBrandsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Brands deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting brands", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(value = "/customapi/lookups/award/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteAwardInBatch(@RequestParam ArrayList<Long> ids) {
-        awardRepository.deleteAllByIdInBatch(ids);
-        for (Long id : ids) {
-            assert (awardRepository.findById(id).isEmpty());
-        }
-        return new ResponseEntity<>("Awards deleted correctly", HttpStatus.OK);
+        boolean returnVal = lookupServices.deleteAwardsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Awards deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting awards", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(value = "/customapi/lookups/season/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteSeasonInBatch(@RequestParam ArrayList<Long> ids) {
-        seasonRepository.deleteAllByIdInBatch(ids);
-        for (Long id : ids) {
-            assert (seasonRepository.findById(id).isEmpty());
-        }
-        return new ResponseEntity<>("Season deleted correctly", HttpStatus.OK);
+        boolean returnVal = lookupServices.deleteSeasonsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Seasons deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting seasons", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(value = "/customapi/lookups/discipline/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteDisciplineInBatch(@RequestParam ArrayList<Long> ids) {
-        disciplineRepository.deleteAllByIdInBatch(ids);
-        for (Long id : ids) {
-            assert (disciplineRepository.findById(id).isEmpty());
-        }
-        return new ResponseEntity<>("Discipline deleted correctly", HttpStatus.OK);
+        boolean returnVal = lookupServices.deleteDisciplineInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Disciplines deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting disciplines", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

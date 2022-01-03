@@ -1,11 +1,16 @@
 package ca.skipatrol.application.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
+@NamedEntityGraph(
+        name = "graph.Vest.uniform",
+        attributeNodes = @NamedAttributeNode("uniform")
+)
 public class Vest {
 
     @Id
@@ -22,22 +27,27 @@ public class Vest {
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
     private Brand brand;
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
     private Size size;
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
     private Conditions condition;
 
     @Getter
     @Setter
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Uniform uniform;
 
     public Vest() {

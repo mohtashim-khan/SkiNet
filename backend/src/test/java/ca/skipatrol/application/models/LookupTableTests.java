@@ -32,13 +32,6 @@ public class LookupTableTests {
     @Autowired
     AwardRepository awardRepository;
 
-    // Predefined test variables
-    Award testAward = new Award("testAward");
-
-    @BeforeAll
-    void setup()
-    { }
-
 
     //region Operational Event Lookup Table Tests
     @Test

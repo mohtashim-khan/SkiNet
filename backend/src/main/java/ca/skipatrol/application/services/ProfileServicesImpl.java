@@ -69,22 +69,48 @@ public class ProfileServicesImpl implements ProfileServices {
                 uniform.getUser());
 
         if(getVests) {
-            Hibernate.initialize(uniform.getVests());
+            Hibernate.initialize(uniform.getVests().size());
             returnVal.setVests(uniform.getVests());
         }
         if(getJackets) {
-            Hibernate.initialize(uniform.getJackets());
+            Hibernate.initialize(uniform.getJackets().size());
             returnVal.setJackets(uniform.getJackets());
         }
         if(getPacks) {
-            Hibernate.initialize(uniform.getPacks());
+            Hibernate.initialize(uniform.getPacks().size());
             returnVal.setPacks(uniform.getPacks());
         }
 
         return returnVal;
     }
 
+    public User retrieveUserTrainingAndEvaluation(UUID userID, boolean getEvalTrainings, boolean getOpTrainings, boolean getOnSnowEvals)
+    {
+        User user = userRepository.findById(userID).get();
 
+        User returnVal = new User(user.getUserID(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhoneNumber());
+
+        if(getEvalTrainings) {
+            Hibernate.initialize(user.getEvalTrainings().size());
+            returnVal.setEvalTrainings(user.getEvalTrainings());
+        }
+        if(getOpTrainings) {
+            Hibernate.initialize(user.getOperationalTrainings().size());
+            returnVal.setOperationalTrainings(user.getOperationalTrainings());
+        }
+        if (getOnSnowEvals) {
+            Hibernate.initialize(user.getOnSnowEvals().size());
+            returnVal.setOnSnowEvals(user.getOnSnowEvals());
+        }
+
+        return returnVal;
+    }
 
 }
 

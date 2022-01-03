@@ -2,6 +2,7 @@ package ca.skipatrol.application.controllers;
 
 import ca.skipatrol.application.Interfaces.ProfileServices;
 import ca.skipatrol.application.models.Uniform;
+import ca.skipatrol.application.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,16 @@ public class ProfilesController {
         return new ResponseEntity<>(uniform, HttpStatus.OK);
     }
 
-
+    @RequestMapping(value = "/customapi/profile/user/TrainingAndEvaluation", method = RequestMethod.GET)
+    public ResponseEntity<Object> getUserTrainingAndEvaluation(
+            @RequestParam UUID userID,
+            @RequestParam(required = false) boolean getEvalTrainings,
+            @RequestParam(required = false) boolean getOpTrainings,
+            @RequestParam(required = false) boolean getOnSnowEvals)
+    {
+        User user = profileServices.retrieveUserTrainingAndEvaluation(userID, getEvalTrainings, getOpTrainings, getOnSnowEvals);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
 
 

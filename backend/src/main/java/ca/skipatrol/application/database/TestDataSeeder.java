@@ -39,11 +39,16 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
             User user = new User("username",
                     new BCryptPasswordEncoder().encode("password"),
                     "Isaac",
-                    "Newton");
+                    "Newton",
+                    "test@email.com",
+                    "000-000-0000"
+                    );
             this.userRepository.save(new User("username",
                     new BCryptPasswordEncoder().encode("password"),
                     "Isaac",
-                    "Newton"));
+                    "Newton",
+                    "test@email.com",
+                    "000-000-0000"));
             userLookup = Optional.of(user);
 
             user = userRepository.findByUsername("username").get();
@@ -58,11 +63,17 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
             User user = new User("AAAAA",
                     new BCryptPasswordEncoder().encode("password"),
                     "Michael",
-                    "Scott");
+                    "Scott",
+                    "test@email.com",
+                    "000-000-0000"
+            );
             this.userRepository.save(new User("AAAAA",
                     new BCryptPasswordEncoder().encode("password"),
                     "Michael",
-                    "Scott"));
+                    "Scott",
+                    "test@email.com",
+                    "000-000-0000"
+            ));
             userLookup2 = Optional.of(user);
 
             user = userRepository.findByUsername("username").get();

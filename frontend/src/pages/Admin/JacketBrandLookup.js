@@ -5,25 +5,27 @@ import { Button, Modal } from "react-bootstrap";
 
 const JacketBrandLookup = ({ session }) => {
   const [brand, setBrands] = useState(new Map());
-  const [selectedBrand, setSelectedBrands] = useState(new Set());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
 
   function getBrands() {
     session.get("brands").then((resp) => {
       if (resp.status === 200) {
-        var brands = new Map();
+        var updatedBrands = new Map();
         resp.data._embedded.brands.map((b) => {
-          brands.set(b.brandID, b.description);
+          updatedBrands.set(b.brandID, {
+            description: b.description,
+            selected: false,
+          });
         });
-        setBrands(brands);
+        setBrands(new Map(updatedBrands));
       }
     });
   }
 
   useEffect(() => {
     getBrands();
-  }, [brand]);
+  }, []);
 
   function promptDeleteOpen() {
     setDeletePrompted(true);
@@ -34,23 +36,23 @@ const JacketBrandLookup = ({ session }) => {
   }
 
   function promptDeleteExecute() {
-    // const ids = Array.from(selectedBrand).join(",");
     const params = new URLSearchParams();
-    Array.from(selectedBrand).map((k) => {
-      params.append("ids", k);
+    brand.forEach((v, k) => {
+      if (v.selected) {
+        params.append("ids", k);
+      }
     });
     session
       .delete("lookups/brand/deleteInBatch?" + params.toString(), {}, {}, true)
       .then((response) => {
         if (response.status == 200) {
           getBrands();
-          selectedBrand.clear();
-          setDeletePrompted(false);
         }
       })
       .catch((e) => {
         console.log(e);
       });
+    setDeletePrompted(false);
   }
 
   function promptCreateOpen() {
@@ -63,21 +65,17 @@ const JacketBrandLookup = ({ session }) => {
 
   function promptCreateExecute() {
     const newJacketName = $("#jacket-name").val();
-    setCreatePrompted(false);
-    console.log(newJacketName);
-
-    const params = new URLSearchParams();
     session
       .post("brands", { description: newJacketName }, {}, false)
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status == 201) {
           getBrands();
-          setCreatePrompted(false);
         }
       })
       .catch((e) => {
         console.log(e);
       });
+    setCreatePrompted(false);
   }
 
   return (
@@ -87,21 +85,20 @@ const JacketBrandLookup = ({ session }) => {
         <ul class="list-group scrollableList ">
           {Array.from(brand).map((kv) => {
             const k = kv[0];
-            const v = kv[1];
+            const v = kv[1].description;
+            const selected = kv[1].selected;
             return (
               <li
                 key={k}
                 onClick={() => {
-                  if (selectedBrand.has(k)) {
-                    selectedBrand.delete(k);
-                  } else {
-                    selectedBrand.add(k);
-                  }
-                  setSelectedBrands(selectedBrand);
+                  var selectedBrandItem = brand.get(k);
+                  brand.set(k, {
+                    description: selectedBrandItem.description,
+                    selected: !selectedBrandItem.selected,
+                  });
+                  setBrands(new Map(brand));
                 }}
-                className={
-                  "list-group-item " + (selectedBrand.has(k) ? "active" : "")
-                }
+                className={"list-group-item " + (selected ? "active" : "")}
               >
                 {v}
               </li>
@@ -111,18 +108,10 @@ const JacketBrandLookup = ({ session }) => {
       </div>
       <div class="d-flex flex-row-reverse mt-1">
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button
-            type="button"
-            onClick={promptDeleteOpen}
-            class="btn btn-danger"
-          >
+          <button type="button" onClick={promptDeleteOpen} class="btn btn-danger">
             Delete
           </button>
-          <button
-            type="button"
-            onClick={promptCreateOpen}
-            class="btn btn-primary"
-          >
+          <button type="button" onClick={promptCreateOpen} class="btn btn-primary">
             Add
           </button>
         </div>
@@ -130,17 +119,19 @@ const JacketBrandLookup = ({ session }) => {
 
       <Modal show={deletePrompted} onHide={promptDeleteCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            Are you sure you want to delete these items?
-          </Modal.Title>
+          <Modal.Title>Are you sure you want to delete these items?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ul className="list-group">
-            {Array.from(selectedBrand).map((k) => (
-              <li className="list-group-item" key={k}>
-                {brand.get(k)}
-              </li>
-            ))}
+            {Array.from(brand).map((vk) => {
+              if (vk[1].selected) {
+                return (
+                  <li className="list-group-item" key={vk[0]}>
+                    {vk[1].description}
+                  </li>
+                );
+              }
+            })}
           </ul>
         </Modal.Body>
         <Modal.Footer>

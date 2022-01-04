@@ -1,66 +1,109 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Table,
+  Modal,
+  Button,
+} from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 
 const PatrolCommitment = ({ session, user }) => {
   const [discipline, setDisciplines] = useState([]);
+  const [editPrompted, setEditPrompted] = useState(false);
+
+  function promptEditOpen() {
+    setEditPrompted(true);
+  }
+
+  function promptEditCancel() {
+    setEditPrompted(false);
+  }
+
+  function promptEditExecute() {
+    setEditPrompted(false);
+  }
   return (
     <>
-      <form class="mb-5">
-        <h3>Commitment Achieved</h3>
-        <div class="form-group">
-          {discipline.map((row) => (
-            <div class="form-group">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id={row.id}
-              />
-              <label class="form-check-label" for={row.description}>
-                {row.description}
-              </label>
-            </div>
-          ))}
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">First Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder={user.firstName}
-          />
-        </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Last Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="exampleInputPassword1"
-            placeholder={user.lastName}
-          />
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupSelect01">
-              Options
-            </label>
+      <div class="card">
+        <form class="mb-0.5">
+          <div class="card-header">
+            <h4>
+              <b>Commitment Achieved</b>
+            </h4>
           </div>
-          <select class="custom-select" id="inputGroupSelect01">
-            <option selected>Choose...</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-        </div>
 
-        <button type="submit" class="btn btn-primary">
-          Submit
-        </button>
-      </form>
+          <div class="card-body">
+            <table class="table table-bordered hover">
+              <thead>
+                <tr>
+                  <th>Season</th>
+                  <th>Days Committed</th>
+                  <th>Commitment Achieved</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Beginning of Time</td>
+                  <td>13</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>2012-EOW</td>
+                  <td>7</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>EOW</td>
+                  <td>666</td>
+                  <td>No</td>
+                </tr>
+              </tbody>
+            </table>{" "}
+            <button
+              class="btn btn-primary"
+              type="button"
+              onClick={promptEditOpen}
+            >
+              Edit
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <Modal show={editPrompted} onHide={promptEditCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editing Lake Louise Awards</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div class="form-check">
+            {discipline.map((row) => (
+              <div class="form-group">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id={row.id}
+                />
+                <label class="form-check-label" for={row.description}>
+                  {row.description}
+                </label>
+              </div>
+            ))}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={promptEditExecute}>
+            Submit
+          </Button>
+          <Button variant="secondary" onClick={promptEditCancel}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

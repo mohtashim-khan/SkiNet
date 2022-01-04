@@ -5,25 +5,27 @@ import { Button, Modal } from "react-bootstrap";
 
 const AwardLookup = ({ session }) => {
   const [award, setAwards] = useState(new Map());
-  const [selectedAward, setSelectedAwards] = useState(new Set());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
 
   function getAwards() {
     session.get("awards").then((resp) => {
       if (resp.status === 200) {
-        var awards = new Map();
-        resp.data._embedded.awards.map((a) => {
-          awards.set(a.awardID, a.description);
+        var updatedAwards = new Map();
+        resp.data._embedded.awards.map((b) => {
+          updatedAwards.set(b.awardID, {
+            description: b.description,
+            selected: false,
+          });
         });
-        setAwards(awards);
+        setAwards(new Map(updatedAwards));
       }
     });
   }
 
   useEffect(() => {
     getAwards();
-  }, [award]);
+  }, []);
 
   function promptDeleteOpen() {
     setDeletePrompted(true);
@@ -34,23 +36,23 @@ const AwardLookup = ({ session }) => {
   }
 
   function promptDeleteExecute() {
-    // const ids = Array.from(selectedBrand).join(",");
     const params = new URLSearchParams();
-    Array.from(selectedAward).map((k) => {
-      params.append("ids", k);
+    award.forEach((v, k) => {
+      if (v.selected) {
+        params.append("ids", k);
+      }
     });
     session
       .delete("lookups/award/deleteInBatch?" + params.toString(), {}, {}, true)
       .then((response) => {
         if (response.status == 200) {
           getAwards();
-          selectedAward.clear();
-          setDeletePrompted(false);
         }
       })
       .catch((e) => {
         console.log(e);
       });
+    setDeletePrompted(false);
   }
 
   function promptCreateOpen() {
@@ -63,45 +65,40 @@ const AwardLookup = ({ session }) => {
 
   function promptCreateExecute() {
     const newAwardName = $("#award-name").val();
-    setCreatePrompted(false);
-    console.log(newAwardName);
-
-    const params = new URLSearchParams();
     session
       .post("awards", { description: newAwardName }, {}, false)
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status == 201) {
           getAwards();
-          setCreatePrompted(false);
         }
       })
       .catch((e) => {
         console.log(e);
       });
+    setCreatePrompted(false);
   }
 
   return (
     <div class="col-4 p-3">
-      <h5>Lake Louise Awards</h5>
+      <h5>Award Brand</h5>
       <div class="overflow-auto" data-spy="scroll">
         <ul class="list-group scrollableList ">
           {Array.from(award).map((kv) => {
             const k = kv[0];
-            const v = kv[1];
+            const v = kv[1].description;
+            const selected = kv[1].selected;
             return (
               <li
                 key={k}
                 onClick={() => {
-                  if (selectedAward.has(k)) {
-                    selectedAward.delete(k);
-                  } else {
-                    selectedAward.add(k);
-                  }
-                  setSelectedAwards(selectedAward);
+                  var selectedAwardItem = award.get(k);
+                  award.set(k, {
+                    description: selectedAwardItem.description,
+                    selected: !selectedAwardItem.selected,
+                  });
+                  setAwards(new Map(award));
                 }}
-                className={
-                  "list-group-item " + (selectedAward.has(k) ? "active" : "")
-                }
+                className={"list-group-item " + (selected ? "active" : "")}
               >
                 {v}
               </li>
@@ -136,11 +133,15 @@ const AwardLookup = ({ session }) => {
         </Modal.Header>
         <Modal.Body>
           <ul className="list-group">
-            {Array.from(selectedAward).map((k) => (
-              <li className="list-group-item" key={k}>
-                {award.get(k)}
-              </li>
-            ))}
+            {Array.from(award).map((vk) => {
+              if (vk[1].selected) {
+                return (
+                  <li className="list-group-item" key={vk[0]}>
+                    {vk[1].description}
+                  </li>
+                );
+              }
+            })}
           </ul>
         </Modal.Body>
         <Modal.Footer>

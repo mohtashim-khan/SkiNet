@@ -10,7 +10,7 @@ const UsersListPage = ({ session }) => {
         setUsers(resp.data._embedded.users);
       }
     });
-  });
+  }, []);
 
   return (
     <>
@@ -34,8 +34,8 @@ const UsersListPage = ({ session }) => {
               </td>
               <td>{row.firstName + " " + row.lastName}</td>
               <td>{row.role}</td>
-              <td>{"Contact information here probably. "}</td>
-              <td>{"Contact information here probably. "}</td>
+              <td>{row.phoneNumber}</td>
+              <td>{row.email}</td>
             </tr>
           ))}
         </tbody>

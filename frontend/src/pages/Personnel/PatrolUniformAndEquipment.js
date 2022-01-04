@@ -4,12 +4,27 @@ import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 
 const PatrolUniformAndEquipment = ({ sessions, user }) => {
+  const [editPrompted, setEditPrompted] = useState(false);
+
+  function promptEditOpen() {
+    setEditPrompted(true);
+  }
+
+  function promptEditCancel() {
+    setEditPrompted(false);
+  }
+
+  function promptEditExecute() {
+    setEditPrompted(false);
+  }
   return (
     <>
       <div class="card">
-        <form class="mb-5">
+        <form class="mb-0.5">
           <div class="card-header">
-            <h3>Patrol Uniform and Equipment</h3>
+            <h4>
+              <b>Patrol Uniform and Equipment</b>
+            </h4>
           </div>
           <div class="card-body">
             <div class="form-group">
@@ -45,12 +60,33 @@ const PatrolUniformAndEquipment = ({ sessions, user }) => {
               </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">
-              Submit
+            <button
+              class="btn btn-primary"
+              type="button"
+              onClick={promptEditOpen}
+            >
+              Edit
             </button>
           </div>
         </form>
       </div>
+
+      <Modal show={editPrompted} onHide={promptEditCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editing Lake Louise Awards</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div class="form-check"></div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={promptEditExecute}>
+            Submit
+          </Button>
+          <Button variant="secondary" onClick={promptEditCancel}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

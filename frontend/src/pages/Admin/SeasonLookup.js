@@ -3,28 +3,29 @@ import $ from "jquery";
 import "./Lookups.css";
 import { Button, Modal } from "react-bootstrap";
 
-const DisciplineLookup = ({ session }) => {
-  const [discipline, setDiscipline] = useState(new Map());
+const SeasonLookup = ({ session }) => {
+  const [season, setSeason] = useState(new Map());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
 
-  function getDisciplines() {
-    session.get("disciplines").then((resp) => {
+  function getSeasons() {
+    session.get("seasons").then((resp) => {
       if (resp.status === 200) {
-        var updatedDisciplines = new Map();
-        resp.data._embedded.disciplines.map((b) => {
-          updatedDisciplines.set(b.id, {
+        var updatedSeasons = new Map();
+        resp.data._embedded.seasons.map((b) => {
+          updatedSeasons.set(b.id, {
+            sequence: b.sequence,
             description: b.description,
             selected: false,
           });
         });
-        setDiscipline(new Map(updatedDisciplines));
+        setSeason(new Map(updatedSeasons));
       }
     });
   }
 
   useEffect(() => {
-    getDisciplines();
+    getSeasons();
   }, []);
 
   function promptDeleteOpen() {
@@ -37,21 +38,16 @@ const DisciplineLookup = ({ session }) => {
 
   function promptDeleteExecute() {
     const params = new URLSearchParams();
-    discipline.forEach((v, k) => {
+    season.forEach((v, k) => {
       if (v.selected) {
         params.append("ids", k);
       }
     });
     session
-      .delete(
-        "lookups/discipline/deleteInBatch?" + params.toString(),
-        {},
-        {},
-        true
-      )
+      .delete("lookups/season/deleteInBatch?" + params.toString(), {}, {}, true)
       .then((response) => {
         if (response.status == 200) {
-          getDisciplines();
+          getSeasons();
         }
       })
       .catch((e) => {
@@ -69,12 +65,12 @@ const DisciplineLookup = ({ session }) => {
   }
 
   function promptCreateExecute() {
-    const newDisciplineName = $("#discipline-name").val();
+    const newSeasonName = $("#season-name").val();
     session
-      .post("disciplines", { description: newDisciplineName }, {}, false)
+      .post("seasons", { description: newSeasonName }, {}, false)
       .then((response) => {
         if (response.status == 201) {
-          getDisciplines();
+          getSeasons();
         }
       })
       .catch((e) => {
@@ -85,27 +81,28 @@ const DisciplineLookup = ({ session }) => {
 
   return (
     <div class="col-4 p-3">
-      <h5>Discipline</h5>
+      <h5>Season</h5>
       <div class="overflow-auto" data-spy="scroll">
         <ul class="list-group scrollableList ">
-          {Array.from(discipline).map((kv) => {
+          {Array.from(season).map((kv) => {
             const k = kv[0];
             const v = kv[1].description;
+            const l = kv[1].sequence;
             const selected = kv[1].selected;
             return (
               <li
                 key={k}
                 onClick={() => {
-                  var selectedDisciplineItem = discipline.get(k);
-                  discipline.set(k, {
-                    description: selectedDisciplineItem.description,
-                    selected: !selectedDisciplineItem.selected,
+                  var selectedSeasonItem = season.get(k);
+                  season.set(k, {
+                    description: selectedSeasonItem.description,
+                    selected: !selectedSeasonItem.selected,
                   });
-                  setDiscipline(new Map(discipline));
+                  setSeason(new Map(season));
                 }}
                 className={"list-group-item " + (selected ? "active" : "")}
               >
-                {v}
+                {v + " LOLOLOLOLLOLOLOL " + l}
               </li>
             );
           })}
@@ -138,7 +135,7 @@ const DisciplineLookup = ({ session }) => {
         </Modal.Header>
         <Modal.Body>
           <ul className="list-group">
-            {Array.from(discipline).map((vk) => {
+            {Array.from(season).map((vk) => {
               if (vk[1].selected) {
                 return (
                   <li className="list-group-item" key={vk[0]}>
@@ -166,10 +163,10 @@ const DisciplineLookup = ({ session }) => {
         <Modal.Body>
           <form>
             <div class="form-group">
-              <label for="discipline-name" class="col-form-label">
-                Discipline Name:
+              <label for="season-name" class="col-form-label">
+                Season Name:
               </label>
-              <input type="text" class="form-control" id="discipline-name" />
+              <input type="text" class="form-control" id="season-name" />
             </div>
           </form>
         </Modal.Body>
@@ -186,4 +183,4 @@ const DisciplineLookup = ({ session }) => {
   );
 };
 
-export default DisciplineLookup;
+export default SeasonLookup;

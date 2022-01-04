@@ -175,7 +175,7 @@ const TrainingAndEval = ({ session, user }) => {
             <Modal.Title>Add New Training Evaluation Certification</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <form class="mb-5">
+            <form class="mb-2">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <label class="input-group-text" for="inputGroupSelect01">

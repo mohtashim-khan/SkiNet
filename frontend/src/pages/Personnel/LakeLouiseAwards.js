@@ -51,7 +51,7 @@ const LakeLouiseAwards = ({ session, user }) => {
             <Modal.Title>Editing Lake Louise Awards</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <form class="mb-5">
+            <form class="mb-2">
               <h5>On Snow Evaluation</h5>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">

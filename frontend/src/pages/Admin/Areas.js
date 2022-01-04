@@ -9,7 +9,7 @@ const AreasPage = ({ session }) => {
         setAreas(resp.data._embedded.areas);
       }
     });
-  });
+  }, []);
 
   return (
     <>

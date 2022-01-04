@@ -3,6 +3,7 @@ import "./Lookups.css";
 import JacketBrandLookup from "./JacketBrandLookup.js";
 import AwardLookup from "./AwardLookup.js";
 import DisciplineLookup from "./DisciplineLookup.js";
+import SeasonLookup from "./SeasonLookup.js";
 
 const SeasonsLookupComponent = ({ session }) => {
   const [season, setSeasons] = useState([]);
@@ -67,7 +68,7 @@ const AdminLookupsPage = ({ session }) => {
         </div>
 
         <div class="row">
-          <SeasonsLookupComponent session={session} />
+          <SeasonLookup session={session} />
         </div>
       </div>
     </>

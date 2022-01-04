@@ -17,7 +17,7 @@ public class UserTests {
     @Autowired
     UserRepository userRepository;
 
-    User testUser = new User("testUser", "testPass", "Michael", "Scott");
+    User testUser = new User("testUser", "testPass", "Michael", "Scott", "test@email.com", "000-000-0000");
 
     @BeforeAll
     public void setup() {

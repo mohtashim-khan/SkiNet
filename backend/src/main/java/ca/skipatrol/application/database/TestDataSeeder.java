@@ -76,7 +76,7 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
             ));
             userLookup2 = Optional.of(user);
 
-            user = userRepository.findByUsername("username").get();
+            user = userRepository.findByUsername("AAAAA").get();
             Role role = new Role(false, false, false, false,
                     false, false, false,
                     false, false, false, false, user);

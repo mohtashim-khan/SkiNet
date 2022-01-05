@@ -3,10 +3,12 @@ import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 
-const TrainingAndEval = ({ session, user }) => {
+const TrainingAndEval = ({ session, userID }) => {
   const [discipline, setDisciplines] = useState([]);
   const [date, setDate] = useState(null);
   const [onSnowEvals, setOnSnowEvals] = useState([]);
+  const [operationalTraining, setOperationalTraining] = useState([]);
+  const [evaluationTraining, setEvaluationTraining] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
 
   const [type, setType] = useState("1");
@@ -155,15 +157,21 @@ const TrainingAndEval = ({ session, user }) => {
       }
     });
 
-
-    var id = user.userID;
-    var url = "userID=" + id + "&getEvalTrainings=false&getOpTrainings=false&getOnSnowEvals=true";
-    session.get("profile/user/TrainingAndEvaluation?" + url, {}, {}, true).then((resp) => {
-      if (resp.status === 200) {
-        setOnSnowEvals(resp.data.onSnowEvals);
-        console.log(onSnowEvals);
-      }
-    });
+    var id = userID;
+    var url =
+      "userID=" +
+      id +
+      "&getEvalTrainings=true&getOpTrainings=true&getOnSnowEvals=true";
+    session
+      .get("profile/user/TrainingAndEvaluation?" + url, {}, {}, true)
+      .then((resp) => {
+        if (resp.status === 200) {
+          setOnSnowEvals(resp.data.onSnowEvals);
+          setOperationalTraining(resp.data.operationalTraining);
+          setEvaluationTraining(resp.data.evaluationTraining);
+          console.log(onSnowEvals);
+        }
+      });
   }, []);
 
   return (
@@ -175,11 +183,65 @@ const TrainingAndEval = ({ session, user }) => {
           </h4>
         </div>
         <div class="card-body">
-          <p>Display current Training and Eval stuff here</p>
+          <h5>
+            <b>Patroller On-Snow Evaluations</b>
+          </h5>
+          <table class="table table-bordered hover" it="sortTable">
+            <thead>
+              <tr>
+                <th scope="col">Discipline</th>
+                <th scope="col">Evaluation Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {onSnowEvals.map((row) => (
+                <tr>
+                  <td>{row.discipline.description}</td>
+                  <td>{row.evaluationDate.substring(0, 10)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
+          <h5>
+            <b>Evaluator Training</b>
+          </h5>
+          <table class="table table-bordered hover" it="sortTable">
+            <thead>
+              <tr>
+                <th scope="col">Discipline</th>
+                <th scope="col">Evaluation Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {onSnowEvals.map((row) => (
+                <tr>
+                  <td>{row.discipline.description}</td>
+                  <td>{row.evaluationDate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-
-
+          <h5>
+            <b>Patroller Operational Training</b>
+          </h5>
+          <table class="table table-bordered hover" it="sortTable">
+            <thead>
+              <tr>
+                <th scope="col">Discipline</th>
+                <th scope="col">Evaluation Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {onSnowEvals.map((row) => (
+                <tr>
+                  <td>{row.discipline.description}</td>
+                  <td>{row.evaluationDate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
           <button class="btn btn-primary" type="button" onClick={promptAddOpen}>
             Add

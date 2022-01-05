@@ -89,6 +89,13 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<PersonAward> personAwards;
 
+    //Uniforms Section
+    @Getter
+    @Setter
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Uniform> uniforms;
+
 
     // Constructors
     private User() {

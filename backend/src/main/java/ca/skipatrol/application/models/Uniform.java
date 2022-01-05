@@ -1,5 +1,6 @@
 package ca.skipatrol.application.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +31,9 @@ public class Uniform {
 
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     @Getter

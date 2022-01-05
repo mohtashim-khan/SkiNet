@@ -6,12 +6,14 @@ import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @Component
@@ -19,18 +21,39 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private EventRepository eventRepository;
-
     @Autowired
     private AreaRepository areaRepository;
-
     @Autowired
     private EventLogRepository eventLogRepository;
-
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private EvalTrainingRepository evalTrainingRepository;
+    @Autowired
+    private OperationalTrainingRepository operationalTrainingRepository;
+    @Autowired
+    private EmergencyContactRepository emergencyContactRepository;
+    @Autowired
+    private PatrolCommitmentRepository patrolCommitmentRepository;
+    @Autowired
+    private PersonAwardRepository personAwardRepository;
+
+    @Autowired
+    OperationalEventRepository operationalEventRepository;
+    @Autowired
+    DisciplineRepository disciplineRepository;
+    @Autowired
+    BrandRepository brandRepository;
+    @Autowired
+    SizeRepository sizeRepository;
+    @Autowired
+    ConditionsRepository conditionsRepository;
+    @Autowired
+    SeasonRepository seasonRepository;
+    @Autowired
+    AwardRepository awardRepository;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -43,19 +66,24 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
                     "test@email.com",
                     "000-000-0000"
                     );
-            this.userRepository.save(new User("username",
-                    new BCryptPasswordEncoder().encode("password"),
-                    "Isaac",
-                    "Newton",
-                    "test@email.com",
-                    "000-000-0000"));
-            userLookup = Optional.of(user);
+            this.userRepository.save(user);
 
             user = userRepository.findByUsername("username").get();
             Role role = new Role(false, false, false, false,
                     false, false, false,
                     false, false, false, false, user);
             this.roleRepository.save(role);
+
+
+            OperationalEvent operationalEvent = operationalEventRepository.findByDescription("Lift Evacuation").get();
+            Season season = seasonRepository.findByDescription("2023 - 2024").get();
+            Award award = awardRepository.findByDescription("The Lake Louise Family Award").get();
+
+            evalTrainingRepository.save(new EvalTraining("testEventType", LocalDateTime.now(), user));
+            operationalTrainingRepository.save(new OperationalTraining(LocalDateTime.now(), operationalEvent, user));
+            emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", user));
+            patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "testNote", season, user));
+            personAwardRepository.save(new PersonAward("testComment", award, season, user));
         }
 
         Optional<User> userLookup2 = this.userRepository.findByUsername("AAAAA");

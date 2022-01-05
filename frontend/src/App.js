@@ -22,6 +22,9 @@ import Session from "./services/SessionService";
 import UsersListPage from "./pages/Personnel/Personnel";
 import RosterPlanner from "./pages/Roster/RosterPlanner";
 import AreasPage from "./pages/Admin/Areas";
+import NewsBulletinPage from "./pages/News/NewsBulletinPage";
+import CreateNewsPost from "./pages/News/CreateNewsPost";
+import SinglePostPage from "./pages/News/SinglePostPage";
 
 const NotFound = () => {
   return (
@@ -63,9 +66,30 @@ class App extends Component {
             Component={RosterPlanner}
             session={this.session}
           />
+          
           <ProtectedRoute
             path="/user"
             Component={UserPage}
+            session={this.session}
+          />
+
+          <ProtectedRoute
+            exact
+            path="/news/create"
+            Component={CreateNewsPost}
+            session={this.session}
+          />
+
+          <ProtectedRoute
+            exact
+            path="/news/view/:postId"
+            Component={SinglePostPage}
+            session={this.session}
+          />    
+
+          <ProtectedRoute
+            path="/news"
+            Component={NewsBulletinPage}
             session={this.session}
           />
 

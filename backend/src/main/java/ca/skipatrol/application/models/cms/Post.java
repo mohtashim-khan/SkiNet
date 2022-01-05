@@ -1,6 +1,7 @@
 package ca.skipatrol.application.models.cms;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,7 +16,14 @@ public class Post {
     @Getter
     private Long id;
 
-    @Column
+    @Column(columnDefinition="TEXT")
+    @Getter
+    @Setter
+    private String title;
+
+    @Column(columnDefinition="TEXT")
+    @Getter
+    @Setter
     private String body;
 
     @Column(insertable = false,

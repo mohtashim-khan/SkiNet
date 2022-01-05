@@ -33,7 +33,7 @@ public class OnSnowEval {
     @Setter
     @JsonBackReference
     @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     public OnSnowEval() {

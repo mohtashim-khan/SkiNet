@@ -58,8 +58,6 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
         @Autowired
         private OnSnowEvalRepository onSnowEvalRepository;
 
-        @Autowired
-        private DisciplineRepository disciplineRepository;
 
         @Override
         public void onApplicationEvent(ApplicationReadyEvent event) {

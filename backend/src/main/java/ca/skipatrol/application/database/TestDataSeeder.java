@@ -1,23 +1,22 @@
 package ca.skipatrol.application.database;
 
 import ca.skipatrol.application.models.*;
+import ca.skipatrol.application.models.cms.Post;
 import ca.skipatrol.application.repositories.*;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.function.Function;
 
 @Component
-public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent> {
+public final class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent> {
 
         @Autowired
         private UserRepository userRepository;
@@ -57,7 +56,8 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
 
         @Autowired
         private OnSnowEvalRepository onSnowEvalRepository;
-
+        @Autowired
+        private PostRepository postRepository;
 
         @Override
         public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -154,6 +154,70 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
                                         "test_PhoneNumber",
                                         (byte) 1);
                         this.eventLogRepository.save(testEventLog);
+                }
+
+                seedTestPostData();
+        }
+
+        private void seedTestPostData() {
+                {
+                        String title = "Got Stuck? Try These Tips To Streamline Your SKI PATROL";
+                        Optional<Post> testPost = this.postRepository.findByTitle(title);
+
+                        if (testPost.isEmpty()) {
+                                Post newTestPost = new Post();
+                                newTestPost.setTitle(title);
+                                newTestPost.setBody(
+                                                "According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyways. Because bees don't care what humans think is impossible.");
+                                this.postRepository.save(newTestPost);
+                        }
+                }
+
+                {
+                        String title = "Skiing Burnout Is Real. Here’s How to Avoid It";
+                        Optional<Post> testPost = this.postRepository.findByTitle(title);
+
+                        if (testPost.isEmpty()) {
+                                Post newTestPost = new Post();
+                                newTestPost.setTitle(title);
+                                newTestPost.setBody("The Turks pay me a golden treasure. Yet, I am poor, \n" +
+                                                " because I am a river to my people! Is \n" +
+                                                " that service?" + "\n\n" +
+                                                " There's nothing further here for a \n" +
+                                                " warrior. We drive bargains. Old men's \n" +
+                                                " work. Young men make wars and the virtues \n" +
+                                                " of war are the virtues of young men; \n" +
+                                                " courage and hope for the future. Then, \n" +
+                                                " old men make the peace. And the vices of \n" +
+                                                " peace are the vices of old men; mistrust \n" +
+                                                " and caution. It must be so. What I owe \n" +
+                                                " you is beyond evaluation. The power-\n" +
+                                                " house, the telephone exchange - these I \n" +
+                                                " concede; the pumping plant I must retain.");
+                                this.postRepository.save(newTestPost);
+                        }
+                }
+
+                int requiredTestPostCount = 20;
+                for (long currentPostCount = this.postRepository
+                                .count(); currentPostCount < requiredTestPostCount; currentPostCount++) {
+                        int titleLength = 6;
+                        int bodyLength = 20;
+                        int defaultWordLength = 5;
+
+                        Function<Integer, String> sentenceGenerator = (n) -> {
+                                StringBuilder sb = new StringBuilder();
+                                for (int i = 0; i < n; i++) {
+                                        sb.append(RandomString.make(defaultWordLength));
+                                        sb.append(" ");
+                                }
+                                return sb.toString();
+                        };
+
+                        Post newTestPost = new Post();
+                        newTestPost.setTitle(sentenceGenerator.apply(titleLength));
+                        newTestPost.setBody(sentenceGenerator.apply(bodyLength));
+                        this.postRepository.save(newTestPost);
                 }
         }
 

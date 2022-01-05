@@ -43,16 +43,18 @@ public class PersonAward {
     public PersonAward() {
     }
 
-    public PersonAward(String comments, Award award, User user) {
+    public PersonAward(String comments, Award award, Season season, User user) {
         this.comments = comments;
         this.award = award;
+        this.season = season;
         this.user = user;
     }
 
-    public PersonAward(UUID personAwardID, String comments, Award award, User user) {
+    public PersonAward(UUID personAwardID, String comments, Award award, Season season, User user) {
         this.personAwardID = personAwardID;
         this.comments = comments;
         this.award = award;
+        this.season = season;
         this.user = user;
     }
 }

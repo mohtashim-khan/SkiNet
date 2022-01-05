@@ -48,8 +48,9 @@ const NewsBulletinPage = ({ session }) => {
   }, [setPosts, currentPage]);
 
   function performSearch() {
-    setSearchState(true);
+    if (searchRef.current.value.trim().length == 0) return;
 
+    setSearchState(true);
     const searchTerms = searchRef.current.value.split(" ");
     const searchPayload = JSON.stringify(searchTerms);
 
@@ -77,6 +78,7 @@ const NewsBulletinPage = ({ session }) => {
                 placeholder="Search query..."
                 aria-label="Search"
                 aria-describedby="search-btn"
+                required={true}
                 onKeyDown={(e) => {
                   if (e.code == "Enter") {
                     e.preventDefault();

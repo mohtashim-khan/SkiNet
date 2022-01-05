@@ -6,6 +6,7 @@ import "./UserProfileEdit.css";
 const TrainingAndEval = ({ session, user }) => {
   const [discipline, setDisciplines] = useState([]);
   const [date, setDate] = useState(null);
+  const [onSnowEvals, setOnSnowEvals] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
 
   const [type, setType] = useState("1");
@@ -153,6 +154,16 @@ const TrainingAndEval = ({ session, user }) => {
         setDisciplines(resp.data._embedded.disciplines);
       }
     });
+
+
+    var id = user.userID;
+    var url = "userID=" + id + "&getEvalTrainings=false&getOpTrainings=false&getOnSnowEvals=true";
+    session.get("profile/user/TrainingAndEvaluation?" + url, {}, {}, true).then((resp) => {
+      if (resp.status === 200) {
+        setOnSnowEvals(resp.data.onSnowEvals);
+        console.log(onSnowEvals);
+      }
+    });
   }, []);
 
   return (
@@ -165,6 +176,11 @@ const TrainingAndEval = ({ session, user }) => {
         </div>
         <div class="card-body">
           <p>Display current Training and Eval stuff here</p>
+
+
+
+
+
           <button class="btn btn-primary" type="button" onClick={promptAddOpen}>
             Add
           </button>

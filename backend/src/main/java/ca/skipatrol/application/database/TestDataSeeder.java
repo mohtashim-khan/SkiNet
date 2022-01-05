@@ -32,6 +32,12 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private OnSnowEvalRepository onSnowEvalRepository;
+
+    @Autowired
+    private DisciplineRepository disciplineRepository;
+
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         Optional<User> userLookup = this.userRepository.findByUsername("username");
@@ -41,8 +47,7 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
                     "Isaac",
                     "Newton",
                     "test@email.com",
-                    "000-000-0000"
-                    );
+                    "000-000-0000");
             this.userRepository.save(new User("username",
                     new BCryptPasswordEncoder().encode("password"),
                     "Isaac",
@@ -65,15 +70,13 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
                     "Michael",
                     "Scott",
                     "test@email.com",
-                    "000-000-0000"
-            );
+                    "000-000-0000");
             this.userRepository.save(new User("AAAAA",
                     new BCryptPasswordEncoder().encode("password"),
                     "Michael",
                     "Scott",
                     "test@email.com",
-                    "000-000-0000"
-            ));
+                    "000-000-0000"));
             userLookup2 = Optional.of(user);
 
             user = userRepository.findByUsername("AAAAA").get();
@@ -81,6 +84,11 @@ public class TestDataSeeder implements ApplicationListener<ApplicationReadyEvent
                     false, false, false,
                     false, false, false, false, user);
             this.roleRepository.save(role);
+            LocalDateTime date1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
+            Discipline testDiscipline = new Discipline("fuck");
+            disciplineRepository.save(testDiscipline);
+            OnSnowEval onSnowEval = new OnSnowEval(date1, testDiscipline, user);
+            this.onSnowEvalRepository.save(onSnowEval);
         }
 
         Optional<Event> eventLookup = this.eventRepository.findByEventName("testEventName");

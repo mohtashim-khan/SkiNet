@@ -167,9 +167,9 @@ const TrainingAndEval = ({ session, userID }) => {
       .then((resp) => {
         if (resp.status === 200) {
           setOnSnowEvals(resp.data.onSnowEvals);
-          setOperationalTraining(resp.data.operationalTraining);
-          setEvaluationTraining(resp.data.evaluationTraining);
-          console.log(onSnowEvals);
+          setOperationalTraining(resp.data.operationalTrainings);
+          setEvaluationTraining(resp.data.evalTrainings);
+          console.log(evaluationTraining);
         }
       });
   }, []);
@@ -182,66 +182,101 @@ const TrainingAndEval = ({ session, userID }) => {
             <b>Training and Evaluation</b>
           </h4>
         </div>
+
         <div class="card-body">
-          <h5>
-            <b>Patroller On-Snow Evaluations</b>
-          </h5>
-          <table class="table table-bordered hover" it="sortTable">
-            <thead>
-              <tr>
-                <th scope="col">Discipline</th>
-                <th scope="col">Evaluation Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {onSnowEvals.map((row) => (
+          {/* <div>
+            <h5>
+              <b>Patroller On-Snow Evaluations</b>
+            </h5>
+            <table class="table table-bordered hover" it="sortTable">
+              <thead>
                 <tr>
-                  <td>{row.discipline.description}</td>
-                  <td>{row.evaluationDate.substring(0, 10)}</td>
+                  <th scope="col">Discipline</th>
+                  <th scope="col">Evaluation Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {onSnowEvals.map((row) => (
+                  <tr>
+                    <td>{row.discipline.description}</td>
+                    <td>{row.evaluationDate.substring(0, 10)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div> */}
 
-          <h5>
-            <b>Evaluator Training</b>
-          </h5>
-          <table class="table table-bordered hover" it="sortTable">
-            <thead>
-              <tr>
-                <th scope="col">Discipline</th>
-                <th scope="col">Evaluation Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {onSnowEvals.map((row) => (
-                <tr>
-                  <td>{row.discipline.description}</td>
-                  <td>{row.evaluationDate}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {onSnowEvals.length !== 0 && (
+            <div>
+              <h5>
+                <b>Patroller On-Snow Evaluations</b>
+              </h5>
+              <table class="table table-bordered hover" it="sortTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Discipline</th>
+                    <th scope="col">Evaluation Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {onSnowEvals.map((row) => (
+                    <tr>
+                      <td>{row.discipline.description}</td>
+                      <td>{row.evaluationDate.substring(0, 10)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-          <h5>
-            <b>Patroller Operational Training</b>
-          </h5>
-          <table class="table table-bordered hover" it="sortTable">
-            <thead>
-              <tr>
-                <th scope="col">Discipline</th>
-                <th scope="col">Evaluation Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {onSnowEvals.map((row) => (
-                <tr>
-                  <td>{row.discipline.description}</td>
-                  <td>{row.evaluationDate}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {evaluationTraining.length !== 0 && (
+            <div>
+              <h5>
+                <b>Evaluator Training</b>
+              </h5>
+              <table class="table table-bordered hover" it="sortTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Event Type</th>
+                    <th scope="col">Completion Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {evaluationTraining.map((row) => (
+                    <tr>
+                      <td>{row.eventType}</td>
+                      <td>{row.completedDate.substring(0, 10)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {operationalTraining.length !== 0 && (
+            <div>
+              <h5>
+                <b>Patroller Operational Training</b>
+              </h5>
+              <table class="table table-bordered hover" it="sortTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Operational Event</th>
+                    <th scope="col">Completion Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {operationalTraining.map((row) => (
+                    <tr>
+                      <td>{row.operationalEvent.description}</td>
+                      <td>{row.completedDate.substring(0, 10)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           <button class="btn btn-primary" type="button" onClick={promptAddOpen}>
             Add

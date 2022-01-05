@@ -1,5 +1,6 @@
 package ca.skipatrol.application.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,14 +29,15 @@ public class PersonAward {
 
     @Getter
     @Setter
-    @ManyToOne
     @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Season season;
 
     @Getter
     @Setter
-    @ManyToOne
+    @JsonBackReference
     @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     public PersonAward() {

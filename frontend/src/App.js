@@ -20,6 +20,7 @@ import AdminLookupsPage from "./pages/Admin/Lookups";
 
 import Session from "./services/SessionService";
 import UsersListPage from "./pages/Personnel/Personnel";
+import Reports from "./pages/Personnel/Reports";
 import RosterPlanner from "./pages/Roster/RosterPlanner";
 import AreasPage from "./pages/Admin/Areas";
 import NewsBulletinPage from "./pages/News/NewsBulletinPage";
@@ -120,6 +121,12 @@ class App extends Component {
           <ProtectedRoute
             path="/personnel/user/:id"
             Component={UserProfileEdit}
+            session={this.session}
+          />
+
+          <ProtectedRoute
+            path="/personnel/reports"
+            Component={Reports}
             session={this.session}
           />
 

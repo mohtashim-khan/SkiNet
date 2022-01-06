@@ -11,7 +11,6 @@ import {
   InputGroup,
   FormControl,
   Button,
-  Form,
 } from "react-bootstrap";
 
 import { Link, useHistory } from "react-router-dom";
@@ -65,6 +64,15 @@ const NewsBulletinPage = ({ session }) => {
     searchRef.current.value = "";
     setSearchState(false);
     getPosts();
+  }
+
+  function truncateParagraph(text, maximumLength) {
+    if (text.length <= maximumLength) {
+      return text;
+    }
+    
+    const subString = text.substr(0, maximumLength - 1);
+    return subString.substr(0, subString.lastIndexOf(" ")) + "...";
   }
 
   return (
@@ -134,7 +142,7 @@ const NewsBulletinPage = ({ session }) => {
                     {post.title} <Badge bg="secondary">CSP LL Awards</Badge>
                   </Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">{post.publishedDate}</Card.Subtitle>
-                  <Card.Text>{post.body}</Card.Text>
+                  <Card.Text>{truncateParagraph(post.body, 128)}</Card.Text>
                   <a
                     onClick={() => {
                       history.push("/news/view/" + post.id);

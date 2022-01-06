@@ -17,7 +17,7 @@ import AdminLookupsPage from "./pages/Admin/Lookups";
 
 import Session from "./services/SessionService";
 import UsersListPage from "./pages/Personnel/Personnel";
-import Reports from "./pages/Personnel/Reports";
+import Reports from "./pages/Personnel/Reports/Reports";
 import RosterPlanner from "./pages/Roster/RosterPlanner";
 import AreasPage from "./pages/Admin/Areas";
 import NewsBulletinPage from "./pages/News/NewsBulletinPage";

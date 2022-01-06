@@ -3,9 +3,12 @@ import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 
-const TrainingAndEval = ({ session, user }) => {
+const TrainingAndEval = ({ session, userID }) => {
   const [discipline, setDisciplines] = useState([]);
   const [date, setDate] = useState(null);
+  const [onSnowEvals, setOnSnowEvals] = useState([]);
+  const [operationalTraining, setOperationalTraining] = useState([]);
+  const [evaluationTraining, setEvaluationTraining] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
 
   const [type, setType] = useState("1");
@@ -153,6 +156,22 @@ const TrainingAndEval = ({ session, user }) => {
         setDisciplines(resp.data._embedded.disciplines);
       }
     });
+
+    var id = userID;
+    var url =
+      "userID=" +
+      id +
+      "&getEvalTrainings=true&getOpTrainings=true&getOnSnowEvals=true";
+    session
+      .get("profile/user/TrainingAndEvaluation?" + url, {}, {}, true)
+      .then((resp) => {
+        if (resp.status === 200) {
+          setOnSnowEvals(resp.data.onSnowEvals);
+          setOperationalTraining(resp.data.operationalTrainings);
+          setEvaluationTraining(resp.data.evalTrainings);
+          console.log(evaluationTraining);
+        }
+      });
   }, []);
 
   return (
@@ -163,8 +182,102 @@ const TrainingAndEval = ({ session, user }) => {
             <b>Training and Evaluation</b>
           </h4>
         </div>
+
         <div class="card-body">
-          <p>Display current Training and Eval stuff here</p>
+          {/* <div>
+            <h5>
+              <b>Patroller On-Snow Evaluations</b>
+            </h5>
+            <table class="table table-bordered hover" it="sortTable">
+              <thead>
+                <tr>
+                  <th scope="col">Discipline</th>
+                  <th scope="col">Evaluation Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {onSnowEvals.map((row) => (
+                  <tr>
+                    <td>{row.discipline.description}</td>
+                    <td>{row.evaluationDate.substring(0, 10)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div> */}
+
+          {onSnowEvals.length !== 0 && (
+            <div>
+              <h5>
+                <b>Patroller On-Snow Evaluations</b>
+              </h5>
+              <table class="table table-bordered hover" it="sortTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Discipline</th>
+                    <th scope="col">Evaluation Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {onSnowEvals.map((row) => (
+                    <tr>
+                      <td>{row.discipline.description}</td>
+                      <td>{row.evaluationDate.substring(0, 10)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {evaluationTraining.length !== 0 && (
+            <div>
+              <h5>
+                <b>Evaluator Training</b>
+              </h5>
+              <table class="table table-bordered hover" it="sortTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Event Type</th>
+                    <th scope="col">Completion Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {evaluationTraining.map((row) => (
+                    <tr>
+                      <td>{row.eventType}</td>
+                      <td>{row.completedDate.substring(0, 10)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {operationalTraining.length !== 0 && (
+            <div>
+              <h5>
+                <b>Patroller Operational Training</b>
+              </h5>
+              <table class="table table-bordered hover" it="sortTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Operational Event</th>
+                    <th scope="col">Completion Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {operationalTraining.map((row) => (
+                    <tr>
+                      <td>{row.operationalEvent.description}</td>
+                      <td>{row.completedDate.substring(0, 10)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
           <button class="btn btn-primary" type="button" onClick={promptAddOpen}>
             Add
           </button>

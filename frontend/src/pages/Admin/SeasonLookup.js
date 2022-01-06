@@ -102,7 +102,7 @@ const SeasonLookup = ({ session }) => {
                 }}
                 className={"list-group-item " + (selected ? "active" : "")}
               >
-                {v + " LOLOLOLOLLOLOLOL " + l}
+                {v + " LOLOLOLOLLFUCKOLOLOL " + l}
               </li>
             );
           })}

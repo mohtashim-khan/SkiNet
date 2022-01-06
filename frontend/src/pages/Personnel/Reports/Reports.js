@@ -61,15 +61,15 @@ const Reports = ({ session }) => {
 
               <ReportTrainingAndEval session={session} />
 
-              <ReportPatrolCommitment />
+              <ReportPatrolCommitment session={session} />
 
-              <ReportLakeLouiseRoles />
+              <ReportLakeLouiseRoles session={session} />
 
-              <ReportPatrolUniformAndEquipment />
+              <ReportPatrolUniformAndEquipment session={session} />
 
-              <ReportLakeLouiseAwards />
+              <ReportLakeLouiseAwards session={session} />
 
-              <ReportGeneral />
+              <ReportGeneral session={session} />
 
               <div class="row">
                 <div class="col">

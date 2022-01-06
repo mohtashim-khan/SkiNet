@@ -1,4 +1,5 @@
 import React from "react";
+import { Form } from "react-bootstrap";
 
 export default function ReportGeneral({ session }) {
   return (
@@ -17,9 +18,26 @@ export default function ReportGeneral({ session }) {
 
         <div class="collapse" id="Gen">
           <div class="card-body">
-            Some placeholder content for the collapse component. This panel is
-            hidden by default but revealed when the user activates the relevant
-            trigger.
+            <div class="row">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">
+                    Has Emergency Contact:
+                  </label>
+                </div>
+                <Form.Control as="select" custom>
+                  <option class="text-center" selected value="1">
+                    -
+                  </option>
+                  <option class="text-center" value="2">
+                    Yes
+                  </option>
+                  <option class="text-center" value="3">
+                    No
+                  </option>
+                </Form.Control>
+              </div>
+            </div>
           </div>
         </div>
       </div>

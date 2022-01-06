@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 
 export default function ReportLakeLouiseRoles({ session }) {
-  const [allSelected, setAllSelected] = useState(true);
+  const [allSelected, setAllSelected] = useState(false);
   const [checked, setChecked] = useState([
-    true, // 0 - Active
-    true, // 1 - Admin
-    true, // 2 - APL
-    true, // 3 - HL
-    true, // 4 - New_User
-    true, // 5 - On-Snow Evaluator
-    true, // 6 - Orienteer
-    true, // 7 - P0 Lead
-    true, // 8 - PL
-    true, // 9 - Recruitment Lead
-    true, // 10 - Training Event Lead
+    false, // 0 - Active
+    false, // 1 - Admin
+    false, // 2 - APL
+    false, // 3 - HL
+    false, // 4 - New_User
+    false, // 5 - On-Snow Evaluator
+    false, // 6 - Orienteer
+    false, // 7 - P0 Lead
+    false, // 8 - PL
+    false, // 9 - Recruitment Lead
+    false, // 10 - Training Event Lead
   ]);
 
   const roles = [
@@ -24,7 +24,7 @@ export default function ReportLakeLouiseRoles({ session }) {
     "New_User",
     "On-Snow Evaluator",
     "Orienteer",
-    "P0 Lead",
+    "P0/Lead",
     "PL",
     "Recruitment Lead",
     "Training Event Lead",

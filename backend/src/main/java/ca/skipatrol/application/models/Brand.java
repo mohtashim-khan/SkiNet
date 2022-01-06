@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.UUID;
 
 @Entity
 public class Brand {
@@ -15,8 +16,8 @@ public class Brand {
     @GeneratedValue
     @Getter
     @Setter
-    @Column(nullable = false)
-    private Long brandID;
+    @Column(columnDefinition = "binary(16)")
+    private UUID brandID;
 
     @Getter
     @Setter

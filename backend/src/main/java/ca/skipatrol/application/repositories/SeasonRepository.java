@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
-public interface SeasonRepository extends JpaRepository<Season,Long> {
+public interface SeasonRepository extends JpaRepository<Season, UUID> {
 
     Optional<Season> findByDescription(String description);
-
-    Season findById(long id);
 
 }

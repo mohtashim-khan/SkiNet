@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import javax.persistence.*;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import static javax.persistence.EnumType.STRING;
 
@@ -21,7 +22,9 @@ public class Discipline {
     @Id
     @GeneratedValue
     @Getter
-    private Long id;
+    @Setter
+    @Column(columnDefinition = "binary(16)")
+    private UUID disciplineID;
 
     @Getter
     @Setter

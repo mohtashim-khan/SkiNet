@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class LookupController {
@@ -42,14 +43,21 @@ public class LookupController {
     }
 
     @RequestMapping(value = "/customapi/lookups/season/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> deleteSeason(@PathVariable long id) {
+    public ResponseEntity<Object> deleteSeason(@PathVariable UUID id) {
 
         lookupServices.deleteSeason(id);
         return new ResponseEntity<>("Season deleted correctly", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/customapi/lookups/size/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteSize(@PathVariable UUID id) {
+
+        lookupServices.deleteSize(id);
+        return new ResponseEntity<>("Size deleted correctly", HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/customapi/lookups/brand/deleteInBatch", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> deleteBrandInBatch(@RequestParam ArrayList<Long> ids) {
+    public ResponseEntity<Object> deleteBrandInBatch(@RequestParam ArrayList<UUID> ids) {
         boolean returnVal = lookupServices.deleteBrandsInBatch(ids);
 
         if(returnVal)
@@ -59,7 +67,7 @@ public class LookupController {
     }
 
     @RequestMapping(value = "/customapi/lookups/award/deleteInBatch", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> deleteAwardInBatch(@RequestParam ArrayList<Long> ids) {
+    public ResponseEntity<Object> deleteAwardInBatch(@RequestParam ArrayList<UUID> ids) {
         boolean returnVal = lookupServices.deleteAwardsInBatch(ids);
 
         if(returnVal)
@@ -69,7 +77,7 @@ public class LookupController {
     }
 
     @RequestMapping(value = "/customapi/lookups/season/deleteInBatch", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> deleteSeasonInBatch(@RequestParam ArrayList<Long> ids) {
+    public ResponseEntity<Object> deleteSeasonInBatch(@RequestParam ArrayList<UUID> ids) {
         boolean returnVal = lookupServices.deleteSeasonsInBatch(ids);
 
         if(returnVal)
@@ -79,13 +87,43 @@ public class LookupController {
     }
 
     @RequestMapping(value = "/customapi/lookups/discipline/deleteInBatch", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> deleteDisciplineInBatch(@RequestParam ArrayList<Long> ids) {
+    public ResponseEntity<Object> deleteDisciplineInBatch(@RequestParam ArrayList<UUID> ids) {
         boolean returnVal = lookupServices.deleteDisciplineInBatch(ids);
 
         if(returnVal)
             return new ResponseEntity<>("Disciplines deleted correctly", HttpStatus.OK);
 
         return new ResponseEntity<>("Error deleting disciplines", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/lookups/operationalEvent/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteOperationalEventsInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = lookupServices.deleteOperationalEventsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Operational Events deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting operational events", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/lookups/size/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteSizesInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = lookupServices.deleteSizesInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Sizes deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting sizes", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/lookups/condition/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteConditionsInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = lookupServices.deleteConditionsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Conditions deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting conditions", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

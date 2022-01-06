@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
-public interface DisciplineRepository extends JpaRepository<Discipline,Long> {
+public interface DisciplineRepository extends JpaRepository<Discipline, UUID> {
 
     Optional<Discipline> findByDescription(String description);
 

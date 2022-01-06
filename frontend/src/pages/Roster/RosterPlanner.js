@@ -3,32 +3,48 @@ import React, { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-import { ListGroup, ListGroupItem } from "react-bootstrap";
+import { Container, Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
 
 const RosterPlanner = ({ session }) => {
   const [activeDateTitle, setActiveDateTitle] = useState("");
+  const [calendarReadyState, setCalendarReadyState] = useState(false);
   const calendarRef = React.createRef();
 
+  function getCalendarApi() {
+    return calendarRef.current.getApi();
+  }
+
   useEffect(() => {
-    let calendarApi = calendarRef.current.getApi();
-    setActiveDateTitle(calendarApi.currentDataManager.getCurrentData().viewTitle);
+    setCalendarReadyState(true);
+    setActiveDateTitle(getCalendarApi().currentDataManager.getCurrentData().viewTitle);
   }, []);
+
+  function onDateSetEvent(dateSetEvent) {
+    if (calendarReadyState) {
+      setActiveDateTitle(getCalendarApi().currentDataManager.getCurrentData().viewTitle);
+    }
+  }
 
   return (
     <>
-      <div className="container-xxl">
-        <div className="row m-2">
-          <div className="col-8">
-            <FullCalendar ref={calendarRef} plugins={[dayGridPlugin]} initialView="dayGridMonth" />
-          </div>
-          <div className="col-4">
-            <h3>Events in the month of {activeDateTitle}</h3>
+      <Container className="p-3">
+        <Row>
+          <Col xl={8}>
+            <FullCalendar
+              ref={calendarRef}
+              plugins={[dayGridPlugin]}
+              initialView="dayGridMonth"
+              datesSet={onDateSetEvent}
+            />
+          </Col>
+          <Col xl={4}>
+            <h5>Events in the month of <small class="text-muted">{activeDateTitle}</small></h5>
             <ListGroup>
               <ListGroupItem>...</ListGroupItem>
             </ListGroup>
-          </div>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

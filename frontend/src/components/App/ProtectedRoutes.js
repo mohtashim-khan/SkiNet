@@ -1,8 +1,6 @@
 import { Route, Redirect } from "react-router-dom";
 
 export const ProtectedRoute = ({ Component, session, ...rest }) => {
-  console.log("protected route" + session.logged_in());
-
   if (session.logged_in()) {
     return <Route {...rest} render={() => <Component session={session} />} />;
   } else {
@@ -11,7 +9,6 @@ export const ProtectedRoute = ({ Component, session, ...rest }) => {
 };
 
 export const HomeRoute = ({ Component, session, ...rest }) => {
-  console.log(session.logged_in());
   return (
     <Route
       {...rest}

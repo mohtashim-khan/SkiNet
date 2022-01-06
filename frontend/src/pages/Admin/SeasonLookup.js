@@ -13,7 +13,7 @@ const SeasonLookup = ({ session }) => {
       if (resp.status === 200) {
         var updatedSeasons = new Map();
         resp.data._embedded.seasons.map((b) => {
-          updatedSeasons.set(b.id, {
+          updatedSeasons.set(b.seasonID, {
             sequence: b.sequence,
             description: b.description,
             selected: false,

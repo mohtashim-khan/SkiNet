@@ -31,6 +31,10 @@ public class OnSnowEval {
 
     @Getter
     @Setter
+    private String evaluatedBy;
+
+    @Getter
+    @Setter
     @JsonBackReference
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)

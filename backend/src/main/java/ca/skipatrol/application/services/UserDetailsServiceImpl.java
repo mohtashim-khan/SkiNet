@@ -32,19 +32,15 @@ class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Failed username lookup"));
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(retrieveUserRole(user)));
+        grantedAuthorities.add(new SimpleGrantedAuthority(retrieveUserRole(user.getRole())));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 
-    private String retrieveUserRole(User user)
+    private String retrieveUserRole(Role role)
     {
         try
         {
-            Optional<Role> userRole = roleRepository.findByUser_userID(user.getUserID());
-            if (userRole.isEmpty())
-                return "USER";
-
-            if (userRole.get().getAdmin())
+            if (role.getAdmin())
                 return "ADMIN";
             else
                 return "USER";

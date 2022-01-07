@@ -13,7 +13,7 @@ const DisciplineLookup = ({ session }) => {
       if (resp.status === 200) {
         var updatedDisciplines = new Map();
         resp.data._embedded.disciplines.map((b) => {
-          updatedDisciplines.set(b.id, {
+          updatedDisciplines.set(b.disciplineID, {
             description: b.description,
             selected: false,
           });

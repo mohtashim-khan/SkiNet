@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import $ from "jquery";
 import "./UserProfileEdit.css";
+import Alert from 'react-bootstrap/Alert'
 
 const TrainingAndEval = ({ session, userID }) => {
   const [discipline, setDisciplines] = useState([]);
-  const [date, setDate] = useState(null);
+
   const [onSnowEvals, setOnSnowEvals] = useState([]);
   const [operationalTraining, setOperationalTraining] = useState([]);
   const [evaluationTraining, setEvaluationTraining] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
+  const [user, setUser] = useState([]);
 
+  const [date, setDate] = useState(null);
+  const [theEventType, setTheEventType] = useState(null);
+  const [error, setError] = useState(false);
   const [type, setType] = useState("1");
 
   function promptAddOpen() {
@@ -18,11 +24,15 @@ const TrainingAndEval = ({ session, userID }) => {
   }
 
   function promptAddCancel() {
+    setType("1")
     setEditPrompted(false);
+    setError(false);
   }
 
   function promptAddExecute() {
+    setType("1")
     setEditPrompted(false);
+    setError(false);
   }
 
   function OnChangeVal(event) {
@@ -30,10 +40,39 @@ const TrainingAndEval = ({ session, userID }) => {
     console.log("fuck you");
   }
 
+
+  function addEvalTraining() {
+
+    try {
+      const myDate = new Date($("#EvalTrainingDate").val()).toISOString()
+      const myEval = $("#EvalTrainingEvent").val();
+      if (myEval.length === 0) {
+        throw 'empty eval';
+      }
+      session.post("evalTrainings", {
+        eventType: myEval, completedDate: myDate, user: user._links.self.href
+
+      }, {}, false).then(() => { readNewTrainingAndEvals() })
+      promptAddCancel()
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+
+    console.log("ASFASDFS", user._links.self.href)
+
+  }
+
   const AddEval = () => {
     if (type === "1") {
       return (
         <>
+          <Alert variant="danger" show={error} onClose={() => setError(false)} dismissible={true}>
+            <Alert.Heading>Uh oh!</Alert.Heading>
+            <p>
+              Looks like you entered an incorrect value for one of the fields!
+            </p>
+          </Alert>
           <h5>On Snow Evaluation</h5>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -57,6 +96,7 @@ const TrainingAndEval = ({ session, userID }) => {
             <Form.Control
               type="date"
               name="date_of_birth"
+              value={date}
               onChange={(e) => {
                 setDate(e.target.value);
               }}
@@ -74,15 +114,25 @@ const TrainingAndEval = ({ session, userID }) => {
               class="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              placeholder={date}
+            //placeholder={date}
             />
           </div>
+          <Button variant="primary" >
+            Submit
+          </Button>
         </>
       );
     } else if (type === "2") {
       return (
         <>
+          <Alert variant="danger" show={error} onClose={() => setError(false)} dismissible={true}>
+            <Alert.Heading>Uh oh!</Alert.Heading>
+            <p>
+              Looks like you need glasses
+            </p>
+          </Alert>
           <h5>Evaluator Snow Training</h5>
+
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="inputGroupSelect01">
@@ -92,9 +142,11 @@ const TrainingAndEval = ({ session, userID }) => {
             <input
               type="text"
               class="form-control"
-              id="exampleInputEmail1"
+              id="EvalTrainingEvent"
+              name="myEvalInput"
               aria-describedby="emailHelp"
-              placeholder={date}
+
+
             />
           </div>
 
@@ -106,16 +158,28 @@ const TrainingAndEval = ({ session, userID }) => {
             <Form.Control
               type="date"
               name="date_of_birth"
-              onChange={(e) => {
-                setDate(e.target.value);
-              }}
+              id="EvalTrainingDate"
+            // value={date}
+            // onChange={(e) => {
+            //   setDate(e.target.value);
+            // }}
             />
           </div>
+          <Button variant="primary" onClick={addEvalTraining}>
+            Submit
+          </Button>
+
         </>
       );
     } else {
       return (
         <>
+          <Alert variant="danger" show={error} onClose={() => setError(false)} dismissible={true}>
+            <Alert.Heading>Uh oh!</Alert.Heading>
+            <p>
+              Looks like you entered an incorrect value for one of the fields!
+            </p>
+          </Alert>
           <h5>Patroller Operational Training</h5>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -128,7 +192,8 @@ const TrainingAndEval = ({ session, userID }) => {
               class="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              placeholder={date}
+              placeholder={"Event Type"}
+              onChange={(e) => { setTheEventType(e.target.value) }}
             />
           </div>
 
@@ -140,23 +205,22 @@ const TrainingAndEval = ({ session, userID }) => {
             <Form.Control
               type="date"
               name="date_of_birth"
+              value={date}
               onChange={(e) => {
                 setDate(e.target.value);
               }}
             />
+
           </div>
+          <Button variant="primary">
+            Submit
+          </Button>
         </>
       );
     }
   };
 
-  useEffect(() => {
-    session.get("disciplines").then((resp) => {
-      if (resp.status === 200) {
-        setDisciplines(resp.data._embedded.disciplines);
-      }
-    });
-
+  function readNewTrainingAndEvals() {
     var id = userID;
     var url =
       "userID=" +
@@ -169,9 +233,25 @@ const TrainingAndEval = ({ session, userID }) => {
           setOnSnowEvals(resp.data.onSnowEvals);
           setOperationalTraining(resp.data.operationalTrainings);
           setEvaluationTraining(resp.data.evalTrainings);
-          console.log(evaluationTraining);
+          //console.log(evaluationTraining);
         }
       });
+  }
+
+  useEffect(() => {
+    session.get("users/" + userID).then((resp) => {
+      if (resp.status === 200) {
+        setUser(resp.data);
+      }
+    });
+
+    session.get("disciplines").then((resp) => {
+      if (resp.status === 200) {
+        setDisciplines(resp.data._embedded.disciplines);
+
+      }
+    })
+    readNewTrainingAndEvals();
   }, []);
 
   return (
@@ -184,27 +264,6 @@ const TrainingAndEval = ({ session, userID }) => {
         </div>
 
         <div class="card-body">
-          {/* <div>
-            <h5>
-              <b>Patroller On-Snow Evaluations</b>
-            </h5>
-            <table class="table table-bordered hover" it="sortTable">
-              <thead>
-                <tr>
-                  <th scope="col">Discipline</th>
-                  <th scope="col">Evaluation Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {onSnowEvals.map((row) => (
-                  <tr>
-                    <td>{row.discipline.description}</td>
-                    <td>{row.evaluationDate.substring(0, 10)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div> */}
 
           {onSnowEvals.length !== 0 && (
             <div>
@@ -310,9 +369,7 @@ const TrainingAndEval = ({ session, userID }) => {
 
               <AddEval />
 
-              <button type="submit" class="btn btn-primary">
-                Submit
-              </button>
+
             </form>
           </Modal.Body>
           <Modal.Footer>

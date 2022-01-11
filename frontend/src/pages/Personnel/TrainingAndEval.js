@@ -51,7 +51,7 @@ const TrainingAndEval = ({ session, userID }) => {
       }
       session.post("onSnowEvals", {
         evaluationDate: myDate, discipline: discipline[myDiscipline]._links.self.href, evaluatedBy: myEval, user: user._links.self.href
-        // CHECK CHAT I'm getting _links not found ---- unrelated I was getting errors on the backend when i included evaluatedBy in the backend as well
+
       }, {}, false).then(() => { readNewTrainingAndEvals() })
       promptAddCancel()
     } catch (err) {
@@ -292,6 +292,8 @@ const TrainingAndEval = ({ session, userID }) => {
       });
   }
 
+
+
   useEffect(() => {
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
@@ -435,14 +437,7 @@ const TrainingAndEval = ({ session, userID }) => {
 
             </form>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={promptAddExecute}>
-              Submit
-            </Button>
-            <Button variant="secondary" onClick={promptAddCancel}>
-              Close
-            </Button>
-          </Modal.Footer>
+
         </Modal>
       </div>
     </>

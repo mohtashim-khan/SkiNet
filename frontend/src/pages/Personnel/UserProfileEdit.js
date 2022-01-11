@@ -32,7 +32,7 @@ const UserProfileEdit = ({ session }) => {
         <Row>
           <Col>
             <TrainingAndEval session={session} userID={id} user={user} />
-            <PatrolCommitment session={session} user={user} />
+            <PatrolCommitment session={session} userID={id} user={user} />
             <LakeLouiseRoles session={session} user={user} />
           </Col>
 

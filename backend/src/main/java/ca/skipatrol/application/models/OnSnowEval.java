@@ -43,16 +43,18 @@ public class OnSnowEval {
     public OnSnowEval() {
     }
 
-    public OnSnowEval(LocalDateTime evaluationDate, Discipline discipline, User user) {
+    public OnSnowEval(LocalDateTime evaluationDate, Discipline discipline, String evaluatedBy, User user) {
         this.evaluationDate = evaluationDate;
         this.discipline = discipline;
         this.user = user;
+        this.evaluatedBy = evaluatedBy;
     }
 
-    public OnSnowEval(UUID onSnowEvalID, LocalDateTime evaluationDate, Discipline discipline, User user) {
+    public OnSnowEval(UUID onSnowEvalID, LocalDateTime evaluationDate, Discipline discipline, String evaluatedBy, User user) {
         this.onSnowEvalID = onSnowEvalID;
         this.evaluationDate = evaluationDate;
         this.discipline = discipline;
         this.user = user;
+        this.evaluatedBy = evaluatedBy;
     }
 }

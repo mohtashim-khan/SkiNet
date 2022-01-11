@@ -84,7 +84,7 @@ export default function ReportPatrolCommitment({ session }) {
               <div class="input-group mb-2">
                 <div class="input-group-prepend">
                   <label class="input-group-text" for="inputGroupSelect01">
-                    From
+                    Season
                   </label>
                 </div>
 

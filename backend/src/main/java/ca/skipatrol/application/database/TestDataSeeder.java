@@ -114,7 +114,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         LocalDateTime date1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
                         Discipline testDiscipline = new Discipline("fuck");
                         disciplineRepository.save(testDiscipline);
-                        OnSnowEval onSnowEval = new OnSnowEval(date1, testDiscipline, user);
+                        OnSnowEval onSnowEval = new OnSnowEval(date1, testDiscipline, "branden", user);
                         this.onSnowEvalRepository.save(onSnowEval);
                 }
 

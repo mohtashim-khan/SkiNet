@@ -336,6 +336,7 @@ const TrainingAndEval = ({ session, userID }) => {
                   <tr>
                     <th scope="col">Discipline</th>
                     <th scope="col">Evaluation Date</th>
+                    <th scope="col">Evaluation By</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -343,6 +344,7 @@ const TrainingAndEval = ({ session, userID }) => {
                     <tr>
                       <td>{row.discipline.description}</td>
                       <td>{row.evaluationDate.substring(0, 10)}</td>
+                      <td>{row.evaluatedBy}</td>
                     </tr>
                   ))}
                 </tbody>

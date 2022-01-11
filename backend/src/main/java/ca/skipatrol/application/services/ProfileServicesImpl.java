@@ -227,6 +227,29 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
+    public User retrieveUserRole(UUID userID)
+    {
+        Optional<User> userEntity = userRepository.findById(userID);
+
+        if (userEntity.isPresent())
+        {
+            User user = userEntity.get();
+
+            User returnVal = new User(user.getUserID(),
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPhoneNumber());
+
+            returnVal.setRole(user.getRole());
+
+            return returnVal;
+        }
+        return null;
+    }
+
     public User retrieveUserAll(UUID userID)
     {
         Optional<User> userEntity = userRepository.findById(userID);
@@ -256,6 +279,7 @@ public class ProfileServicesImpl implements ProfileServices {
             returnVal.setPatrolCommitments(user.getPatrolCommitments());
             Hibernate.initialize(user.getPersonAwards().size());
             returnVal.setPersonAwards(user.getPersonAwards());
+            returnVal.setRole(user.getRole());
 
             return returnVal;
         }

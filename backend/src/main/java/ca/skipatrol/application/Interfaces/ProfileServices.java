@@ -13,6 +13,7 @@ public interface ProfileServices {
     User retrieveUserPatrolCommitments(UUID userID);
     User retrieveUserAwards(UUID userID);
     User retrieveUserUniform(UUID userID);
+    User retrieveUserRole(UUID userID);
     User retrieveUserAll(UUID userID);
 
 }

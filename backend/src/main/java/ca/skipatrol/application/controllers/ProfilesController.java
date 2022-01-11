@@ -84,6 +84,17 @@ public class ProfilesController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RequestMapping(value = "/customapi/profile/user/Role", method = RequestMethod.GET)
+    public ResponseEntity<Object> retrieveUserRoles(
+            @RequestParam UUID userID)
+    {
+        User user = profileServices.retrieveUserRole(userID);
+
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @RequestMapping(value = "/customapi/profile/user", method = RequestMethod.GET)
     public ResponseEntity<Object> retrieveUserAll(
             @RequestParam UUID userID)

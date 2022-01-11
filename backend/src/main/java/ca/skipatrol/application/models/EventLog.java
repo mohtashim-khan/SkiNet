@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 public class EventLog {
@@ -13,12 +14,13 @@ public class EventLog {
     @GeneratedValue
     @Getter
     @Setter
-    private int eventlog_id;
+    @Column(columnDefinition = "binary(16)")
+    private UUID eventLogID;
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name="event_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
     private Event event;
 
     @Getter
@@ -38,8 +40,8 @@ public class EventLog {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name="id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
     private Area area;
 
     @Getter

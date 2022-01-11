@@ -18,6 +18,23 @@ public class VisibleFieldConfiguration implements RepositoryRestConfigurer {
         config.exposeIdsFor(User.class);
         config.exposeIdsFor(Discipline.class);
         config.exposeIdsFor(Post.class);
+        config.exposeIdsFor(ActionLog.class);
+        config.exposeIdsFor(Area.class);
+        config.exposeIdsFor(Conditions.class);
+        config.exposeIdsFor(EmergencyContact.class);
+        config.exposeIdsFor(EvalTraining.class);
+        config.exposeIdsFor(Event.class);
+        config.exposeIdsFor(EventLog.class);
+        config.exposeIdsFor(Jacket.class);
+        config.exposeIdsFor(OnSnowEval.class);
+        config.exposeIdsFor(OperationalEvent.class);
+        config.exposeIdsFor(OperationalTraining.class);
+        config.exposeIdsFor(Pack.class);
+        config.exposeIdsFor(PatrolCommitment.class);
+        config.exposeIdsFor(PersonAward.class);
+        config.exposeIdsFor(Role.class);
+        config.exposeIdsFor(Uniform.class);
+        config.exposeIdsFor(Vest.class);
     }
 
 }

@@ -64,14 +64,14 @@ public class EventLogTests {
     @Test
     void testFindByUsername()
     {
-        List<EventLog> testVal = eventLogRepository.findByUsername("test_username");
+        List<EventLog> testVal = eventLogRepository.findAllByUsername("test_username");
         assertTrue(testVal.size() > 0);
     }
 
     @Test
-    void testfindByEvent_id()
+    void testfindByEventID()
     {
-        List<EventLog> testVal = eventLogRepository.getEventLogInfo(testEvent.getEvent_id());
+        List<EventLog> testVal = eventLogRepository.findAllByEvent_eventID(testEvent.getEventID());
         assertTrue(testVal.size() > 0);
     }
 

@@ -43,7 +43,7 @@ public class ActionLogTests {
 
     @Test
     void testGetEvent(){
-        List<ActionLog> testVal = actionLogRepository.getEventInfo((testEvent.getEvent_id()));
+        List<ActionLog> testVal = actionLogRepository.findAllByEvent_eventID(testEvent.getEventID());
         assertTrue(testVal.size() > 0 );
     }
 

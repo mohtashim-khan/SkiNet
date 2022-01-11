@@ -6,15 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
-public interface AreaRepository extends JpaRepository<Area,Long> {
+public interface AreaRepository extends JpaRepository<Area, UUID> {
 
     Optional<Area> findByAreaname(String areaname);
-
-    Area save(Area area); //LATER ON -- HANDLE CASE FOR IF AREA ALREADY EXISTS
-    void deleteById(long id);
-
-
-
 }

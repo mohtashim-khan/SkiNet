@@ -37,9 +37,9 @@ const UserProfileEdit = ({ session }) => {
           </Col>
 
           <Col>
-            <PatrolUniformAndEquipment session={session} user={user} />
-            <LakeLouiseAwards session={session} user={user} />
-            <General session={session} user={user} />
+            <PatrolUniformAndEquipment session={session} userID={id} />
+            <LakeLouiseAwards session={session} userID={id} />
+            <General session={session} userID={id} />
           </Col>
         </Row>
       </Container>

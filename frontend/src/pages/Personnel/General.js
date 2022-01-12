@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 
-const General = ({ session, user }) => {
+const General = ({ session, userID }) => {
   const [editPrompted, setEditPrompted] = useState(false);
 
   function promptEditOpen() {
@@ -35,7 +35,7 @@ const General = ({ session, user }) => {
                 class="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
-                placeholder={user.firstName}
+              // placeholder={user.firstName}
               />
             </div>
             <div class="form-group">
@@ -44,7 +44,7 @@ const General = ({ session, user }) => {
                 type="text"
                 class="form-control"
                 id="exampleInputPassword1"
-                placeholder={user.lastName}
+              // placeholder={user.lastName}
               />
             </div>
             <div class="input-group mb-3">

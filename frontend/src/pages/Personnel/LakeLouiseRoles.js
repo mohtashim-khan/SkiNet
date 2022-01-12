@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
+import $ from "jquery";
 
 const LakeLouiseRoles = ({ session, userID }) => {
   // Change this to be roles, once the roles DB is set up.
@@ -11,6 +12,8 @@ const LakeLouiseRoles = ({ session, userID }) => {
   const [user, setUsers] = useState([]);
 
   const [userRoles, setUserRoles] = useState([]);
+  const [rolesArray, setRolesArray] = useState([]);
+
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -18,26 +21,50 @@ const LakeLouiseRoles = ({ session, userID }) => {
 
   function promptEditCancel() {
     setEditPrompted(false);
+
   }
 
   function promptEditExecute() {
     setEditPrompted(false);
+
+  }
+  function editRoles() {
+    let temp = role;
+    for (const x in rolesArray) {
+      temp[rolesArray[x]] = $("#" + String(rolesArray[x])).is(":checked");
+      console.log($("#" + String(rolesArray[x])).is(":checked"));
+    }
+    setRoles(temp);
+    console.log(temp);
+    session.put("roles/" + role.roleID, temp, {}, false).then((resp) => {
+      if (resp.status === 200 || resp.status === 201) {
+        setRoles(resp.data)
+
+
+        //console.log("This should be the roles", resp.data[fuck[0]], fuck[0].typeof);
+
+      }
+    })
+    promptEditCancel()
   }
 
   function readUserRoles() {
-    const rolesArray = Object.keys(role);
-    rolesArray.shift();
-    rolesArray.pop();
-    console.log("retard", rolesArray)
+    const tempArray = Object.keys(role);
+
+    tempArray.shift();
+    tempArray.pop();
+    setRolesArray(tempArray);
+    console.log("retard", tempArray)
     const rolesVals = [];
-    for (let i = 0; i < rolesArray.length; ++i) {
-      console.log("aaaa", role[rolesArray[i]]);
-      if (role[rolesArray[i]]) {
-        rolesVals.push(rolesArray[i]);
+    for (let i = 0; i < tempArray.length; ++i) {
+      console.log("aaaa", role[tempArray[i]]);
+      if (role[tempArray[i]]) {
+        rolesVals.push(tempArray[i]);
       }
     }
-    return rolesVals;
+    setUserRoles(rolesVals);
   }
+
   useEffect(() => {
 
     session.get("disciplines").then((resp) => {
@@ -45,30 +72,31 @@ const LakeLouiseRoles = ({ session, userID }) => {
         setDisciplines(resp.data._embedded.disciplines);
       }
 
-      session.get("users/" + userID).then((resp) => {
-        if (resp.status === 200) {
-          setUsers(resp.data);
-
-        }
-      })
-
-      session.get("users/" + userID + "/role").then((resp) => {
-        if (resp.status === 200) {
-          setRoles(resp.data)
-          const fuck = Object.keys(resp.data);
-
-          //console.log("This should be the roles", resp.data[fuck[0]], fuck[0].typeof);
-
-        }
-      })
 
       console.log("fucker", user);
 
     });
+    session.get("users/" + userID).then((resp) => {
+      if (resp.status === 200) {
+        setUsers(resp.data);
+
+      }
+    })
+
+    session.get("users/" + userID + "/role").then((resp) => {
+      if (resp.status === 200) {
+        setRoles(resp.data)
+        const fuck = Object.keys(resp.data);
+
+        //console.log("This should be the roles", resp.data[fuck[0]], fuck[0].typeof);
+
+      }
+    })
+
   }, []);
 
 
-  useEffect(() => { console.log("Shitter", readUserRoles()) }, [role])
+  useEffect(() => { readUserRoles() }, [role])
 
   return (
     <>
@@ -80,21 +108,11 @@ const LakeLouiseRoles = ({ session, userID }) => {
         </div>
         <div class="card-body">
           <form class="mb-0.5">
-            <div class="form-check">
-              {discipline.map((row) => (
-                <div class="form-group">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id={row.id}
-                  />
-                  <label class="form-check-label" for={row.description}>
-                    {row.description}
-                  </label>
-                </div>
+            <ul class="list-group mb-3">
+              {userRoles.map((row) => (
+                <li class="list-group-item">{row}</li>
               ))}
-            </div>
+            </ul>
             <button
               class="btn btn-primary"
               type="button"
@@ -111,30 +129,27 @@ const LakeLouiseRoles = ({ session, userID }) => {
           <Modal.Title>Editing Lake Louise Awards</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="form-check">
-            {discipline.map((row) => (
+          <div class="form-check mb-3">
+            {rolesArray.map((row) => (
               <div class="form-group">
                 <input
                   class="form-check-input"
                   type="checkbox"
-                  value=""
-                  id={row.id}
+                  defaultChecked={role[row]}
+                  id={row}
                 />
-                <label class="form-check-label" for={row.description}>
-                  {row.description}
+                <label class="form-check-label">
+                  {row}
                 </label>
               </div>
             ))}
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={promptEditExecute}>
+
+          <Button variant="primary" onClick={editRoles}>
             Submit
           </Button>
-          <Button variant="secondary" onClick={promptEditCancel}>
-            Close
-          </Button>
-        </Modal.Footer>
+        </Modal.Body>
+
       </Modal>
     </>
   );

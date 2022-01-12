@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 
-const LakeLouiseAwards = ({ session, user }) => {
+const LakeLouiseAwards = ({ session, userID }) => {
   const [discipline, setDisciplines] = useState([]);
   const [date, setDate] = useState(null);
   const [editPrompted, setEditPrompted] = useState(false);

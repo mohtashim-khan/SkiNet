@@ -68,9 +68,9 @@ public class LookupTableTests {
     {
         Discipline testDiscipline = new Discipline("testDiscipline");
         disciplineRepository.save(testDiscipline);
-        assertTrue(disciplineRepository.existsById(testDiscipline.getId()));
+        assertTrue(disciplineRepository.existsById(testDiscipline.getDisciplineID()));
         disciplineRepository.delete(testDiscipline);
-        assertFalse(disciplineRepository.existsById(testDiscipline.getId()));
+        assertFalse(disciplineRepository.existsById(testDiscipline.getDisciplineID()));
     }
 
     @Test
@@ -185,9 +185,9 @@ public class LookupTableTests {
     {
         Season testSeason  = new Season("testSeason", 99);
         seasonRepository.save(testSeason);
-        assertTrue(seasonRepository.existsById(testSeason.getId()));
+        assertTrue(seasonRepository.existsById(testSeason.getSeasonID()));
         seasonRepository.delete(testSeason);
-        assertFalse(seasonRepository.existsById(testSeason.getId()));
+        assertFalse(seasonRepository.existsById(testSeason.getSeasonID()));
     }
 
     @Test

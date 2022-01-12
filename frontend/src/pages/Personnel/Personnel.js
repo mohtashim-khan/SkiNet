@@ -11,7 +11,7 @@ const UsersListPage = ({ session }) => {
       }
     });
   }, []);
-
+  console.log(users);
   return (
     <>
       <table class="table" it="sortTable">

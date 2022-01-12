@@ -5,6 +5,7 @@ import { Button, Modal } from "react-bootstrap";
 
 const SeasonLookup = ({ session }) => {
   const [season, setSeason] = useState(new Map());
+
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
 
@@ -13,7 +14,7 @@ const SeasonLookup = ({ session }) => {
       if (resp.status === 200) {
         var updatedSeasons = new Map();
         resp.data._embedded.seasons.map((b) => {
-          updatedSeasons.set(b.id, {
+          updatedSeasons.set(b.seasonID, {
             sequence: b.sequence,
             description: b.description,
             selected: false,
@@ -23,6 +24,8 @@ const SeasonLookup = ({ session }) => {
       }
     });
   }
+
+
 
   useEffect(() => {
     getSeasons();
@@ -84,28 +87,30 @@ const SeasonLookup = ({ session }) => {
       <h5>Season</h5>
       <div class="overflow-auto" data-spy="scroll">
         <ul class="list-group scrollableList ">
-          {Array.from(season).map((kv) => {
-            const k = kv[0];
-            const v = kv[1].description;
-            const l = kv[1].sequence;
-            const selected = kv[1].selected;
-            return (
-              <li
-                key={k}
-                onClick={() => {
-                  var selectedSeasonItem = season.get(k);
-                  season.set(k, {
-                    description: selectedSeasonItem.description,
-                    selected: !selectedSeasonItem.selected,
-                  });
-                  setSeason(new Map(season));
-                }}
-                className={"list-group-item " + (selected ? "active" : "")}
-              >
-                {v + " LOLOLOLOLLOLOLOL " + l}
-              </li>
-            );
-          })}
+          {
+
+            Array.from(season).map((kv) => {
+              const k = kv[0];
+              const v = kv[1].description;
+              const l = kv[1].sequence;
+              const selected = kv[1].selected;
+              return (
+                <li
+                  key={k}
+                  onClick={() => {
+                    var selectedSeasonItem = season.get(k);
+                    season.set(k, {
+                      description: selectedSeasonItem.description,
+                      selected: !selectedSeasonItem.selected,
+                    });
+                    setSeason(new Map(season));
+                  }}
+                  className={"list-group-item " + (selected ? "active" : "")}
+                >
+                  {v}
+                </li>
+              );
+            })}
         </ul>
       </div>
       <div class="d-flex flex-row-reverse mt-1">

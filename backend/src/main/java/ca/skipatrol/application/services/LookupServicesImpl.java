@@ -2,6 +2,7 @@ package ca.skipatrol.application.services;
 
 import ca.skipatrol.application.Interfaces.LookupServices;
 import ca.skipatrol.application.models.Season;
+import ca.skipatrol.application.models.Size;
 import ca.skipatrol.application.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -39,10 +41,10 @@ public class LookupServicesImpl implements LookupServices {
         seasonRepository.save(season);
     }
 
-    public void deleteSeason(long id) {
+    public void deleteSeason(UUID seasonID) {
         List<Season> seasonList = seasonRepository.findAll();
-        int delSeq = seasonRepository.findById(id).getSequence();
-        seasonRepository.deleteById(id);
+        int delSeq = seasonRepository.findById(seasonID).get().getSequence();
+        seasonRepository.deleteById(seasonID);
 
         if (delSeq != seasonList.size()) {
             for (int i = delSeq; i < seasonList.size(); i++) {
@@ -53,12 +55,26 @@ public class LookupServicesImpl implements LookupServices {
         }
     }
 
-    public boolean deleteBrandsInBatch(ArrayList<Long> ids) {
+    public void deleteSize(UUID sizeID) {
+        List<Size> sizeList = sizeRepository.findAll();
+        int delSeq = sizeRepository.findById(sizeID).get().getSequence();
+        sizeRepository.deleteById(sizeID);
+
+        if (delSeq != sizeList.size()) {
+            for (int i = delSeq; i < sizeList.size(); i++) {
+                Size updatedSize = sizeList.get(i);
+                updatedSize.setSequence(updatedSize.getSequence() - 1);
+                sizeRepository.save(updatedSize);
+            }
+        }
+    }
+
+    public boolean deleteBrandsInBatch(ArrayList<UUID> brandIDs) {
         try
         {
-            brandRepository.deleteAllByIdInBatch(ids);
-            for (Long id : ids) {
-                assert (brandRepository.findById(id).isEmpty());
+            brandRepository.deleteAllByIdInBatch(brandIDs);
+            for (UUID brandID : brandIDs) {
+                assert (brandRepository.findById(brandID).isEmpty());
             }
             return true;
         }
@@ -68,13 +84,13 @@ public class LookupServicesImpl implements LookupServices {
         }
     }
 
-    public boolean deleteAwardsInBatch(ArrayList<Long> ids)
+    public boolean deleteAwardsInBatch(ArrayList<UUID> awardIDs)
     {
         try
         {
-            awardRepository.deleteAllByIdInBatch(ids);
-            for (Long id : ids) {
-                assert (awardRepository.findById(id).isEmpty());
+            awardRepository.deleteAllByIdInBatch(awardIDs);
+            for (UUID awardID : awardIDs) {
+                assert (awardRepository.findById(awardID).isEmpty());
             }
             return true;
         }
@@ -84,13 +100,13 @@ public class LookupServicesImpl implements LookupServices {
         }
     }
 
-    public boolean deleteSeasonsInBatch(ArrayList<Long> ids)
+    public boolean deleteSeasonsInBatch(ArrayList<UUID> seasonIDs)
     {
         try
         {
-            for (Long id : ids) {
-                this.deleteSeason(id);
-                assert (seasonRepository.findById(id).isEmpty());
+            for (UUID seasonID : seasonIDs) {
+                this.deleteSeason(seasonID);
+                assert (seasonRepository.findById(seasonID).isEmpty());
             }
             return true;
         }
@@ -100,13 +116,13 @@ public class LookupServicesImpl implements LookupServices {
         }
     }
 
-    public boolean deleteDisciplineInBatch(ArrayList<Long> ids)
+    public boolean deleteDisciplineInBatch(ArrayList<UUID> disciplineIDs)
     {
         try
         {
-            disciplineRepository.deleteAllByIdInBatch(ids);
-            for (Long id : ids) {
-                assert (disciplineRepository.findById(id).isEmpty());
+            disciplineRepository.deleteAllByIdInBatch(disciplineIDs);
+            for (UUID disciplineID : disciplineIDs) {
+                assert (disciplineRepository.findById(disciplineID).isEmpty());
             }
             return true;
         }
@@ -116,5 +132,52 @@ public class LookupServicesImpl implements LookupServices {
         }
     }
 
+    public boolean deleteOperationalEventsInBatch(ArrayList<UUID> operationalEventIDs)
+    {
+        try
+        {
+            operationalEventRepository.deleteAllByIdInBatch(operationalEventIDs);
+            for (UUID operationalEventID : operationalEventIDs) {
+                assert (operationalEventRepository.findById(operationalEventID).isEmpty());
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    public boolean deleteSizesInBatch(ArrayList<UUID> sizeIDs)
+    {
+        try
+        {
+            for (UUID sizeID : sizeIDs) {
+                this.deleteSize(sizeID);
+                assert (sizeRepository.findById(sizeID).isEmpty());
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    public boolean deleteConditionsInBatch(ArrayList<UUID> conditionIDs)
+    {
+        try
+        {
+            conditionsRepository.deleteAllByIdInBatch(conditionIDs);
+            for (UUID conditionID : conditionIDs) {
+                assert (conditionsRepository.findById(conditionID).isEmpty());
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
 
 }

@@ -35,9 +35,75 @@ public class ProfilesController {
             @RequestParam(required = false) boolean getOnSnowEvals)
     {
         User user = profileServices.retrieveUserTrainingAndEvaluation(userID, getEvalTrainings, getOpTrainings, getOnSnowEvals);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RequestMapping(value = "/customapi/profile/user/EmergencyContacts", method = RequestMethod.GET)
+    public ResponseEntity<Object> getUserEmergencyContacts(
+            @RequestParam UUID userID)
+    {
+        User user = profileServices.retrieveUserEmergencyContacts(userID);
 
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/PatrolCommitments", method = RequestMethod.GET)
+    public ResponseEntity<Object> getUserPatrolCommitments(
+            @RequestParam UUID userID)
+    {
+        User user = profileServices.retrieveUserPatrolCommitments(userID);
+
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/Awards", method = RequestMethod.GET)
+    public ResponseEntity<Object> getUserAwards(
+            @RequestParam UUID userID)
+    {
+        User user = profileServices.retrieveUserAwards(userID);
+
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/Uniform", method = RequestMethod.GET)
+    public ResponseEntity<Object> retrieveUserUniform(
+            @RequestParam UUID userID)
+    {
+        User user = profileServices.retrieveUserUniform(userID);
+
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/Role", method = RequestMethod.GET)
+    public ResponseEntity<Object> retrieveUserRoles(
+            @RequestParam UUID userID)
+    {
+        User user = profileServices.retrieveUserRole(userID);
+
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user", method = RequestMethod.GET)
+    public ResponseEntity<Object> retrieveUserAll(
+            @RequestParam UUID userID)
+    {
+        User user = profileServices.retrieveUserAll(userID);
+
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }

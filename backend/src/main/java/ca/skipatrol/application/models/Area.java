@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.UUID;
+
 import static javax.persistence.EnumType.STRING;
 
 @Entity
@@ -13,7 +15,9 @@ public class Area {
     @Id
     @GeneratedValue
     @Getter
-    private Long id;
+    @Setter
+    @Column(columnDefinition = "binary(16)")
+    private UUID areaID;
 
     @Getter
     @Setter
@@ -26,5 +30,7 @@ public class Area {
     public Area(String areaname) {
         this.areaname = areaname;
     }
+
+
 
 }

@@ -31,24 +31,30 @@ public class OnSnowEval {
 
     @Getter
     @Setter
+    private String evaluatedBy;
+
+    @Getter
+    @Setter
     @JsonBackReference
     @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     public OnSnowEval() {
     }
 
-    public OnSnowEval(LocalDateTime evaluationDate, Discipline discipline, User user) {
+    public OnSnowEval(LocalDateTime evaluationDate, Discipline discipline, String evaluatedBy, User user) {
         this.evaluationDate = evaluationDate;
         this.discipline = discipline;
         this.user = user;
+        this.evaluatedBy = evaluatedBy;
     }
 
-    public OnSnowEval(UUID onSnowEvalID, LocalDateTime evaluationDate, Discipline discipline, User user) {
+    public OnSnowEval(UUID onSnowEvalID, LocalDateTime evaluationDate, Discipline discipline, String evaluatedBy, User user) {
         this.onSnowEvalID = onSnowEvalID;
         this.evaluationDate = evaluationDate;
         this.discipline = discipline;
         this.user = user;
+        this.evaluatedBy = evaluatedBy;
     }
 }

@@ -14,12 +14,14 @@ const UserProfileEdit = ({ session }) => {
   const [user, setUsers] = useState([]);
 
   useEffect(() => {
+    console.log("FUCK YOU - 1")
     session.get("users/" + id).then((resp) => {
+      console.log("FUCK YOU - 2", resp.data)
       if (resp.status === 200) {
         setUsers(resp.data);
       }
     });
-  }, [setUsers]);
+  }, []);
 
   return (
     <>
@@ -29,8 +31,8 @@ const UserProfileEdit = ({ session }) => {
         </h1>
         <Row>
           <Col>
-            <TrainingAndEval session={session} user={user} />
-            <PatrolCommitment session={session} user={user} />
+            <TrainingAndEval session={session} userID={id} user={user} />
+            <PatrolCommitment session={session} userID={id} user={user} />
             <LakeLouiseRoles session={session} user={user} />
           </Col>
 

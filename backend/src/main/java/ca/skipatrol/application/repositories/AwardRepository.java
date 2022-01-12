@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface AwardRepository extends JpaRepository<Award, Long> {
+public interface AwardRepository extends JpaRepository<Award, UUID> {
 
     Optional<Award> findByDescription(String description);
 

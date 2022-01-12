@@ -10,10 +10,95 @@ import {
 } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
+import $ from "jquery";
+import Alert from 'react-bootstrap/Alert'
 
-const PatrolCommitment = ({ session, user }) => {
+const PatrolCommitment = ({ session, userID }) => {
   const [discipline, setDisciplines] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
+  const [patrolCommit, setPatrolCommit] = useState([]);
+  const [user, setUser] = useState([]);
+  const [error, setError] = useState(false);
+
+  const [seasons, setSeasons] = useState([]);
+  const [sortedSeasons, setSortedSeasons] = useState([]);
+
+  function OnChangeVal(event) {
+    //setType(event.target.value);
+    console.log("fuck you");
+  }
+
+  function promptAddCancel() {
+    setEditPrompted(false);
+    setError(false);
+  }
+
+  function addPatrolCommit() {
+    try {
+
+      const mySeason = $("#seasonSelect").val();
+      const myNotes = $("#notesSelect").val();
+      const myDays = $("#daysSelect").val();
+      const achieved = $("#commitmentAchieved").val();
+
+      if (myDays.length === 0 || achieved < 0 || myDays === null || mySeason === -1) {
+        throw 'empty eval';
+      }
+      const achievedBool = achieved === 1 ? true : false;
+
+      session.post("patrolCommitments", {
+        achieved: achievedBool, days: myDays, notes: myNotes, season: seasons[mySeason]._links.self.href, user: user._links.self.href
+
+      }, {}, false).then(() => { readNewPatrolCommitments() })
+      promptAddCancel()
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+
+    console.log("ASFASDFS", user._links.self.href)
+  }
+
+  function readNewPatrolCommitments() {
+    var id = userID;
+    var url =
+      "userID=" +
+      id;
+
+    session
+      .get("profile/user/PatrolCommitments?" + url, {}, {}, true)
+      .then((resp) => {
+        if (resp.status === 200) {
+          setPatrolCommit(resp.data.patrolCommitments);
+          console.log(patrolCommit);
+        }
+      });
+
+  }
+
+  useEffect(() => {
+
+    session.get("users/" + userID).then((resp) => {
+      if (resp.status === 200) {
+        setUser(resp.data);
+      }
+    });
+    session.get("seasons").then((resp) => {
+      if (resp.status === 200) {
+        setSeasons(resp.data._embedded.seasons);
+      }
+    });
+
+    readNewPatrolCommitments();
+  }, []);
+
+  useEffect(() => {
+    let tempSeasons = [...seasons];
+    tempSeasons.sort(function (a, b) {
+      return a.sequence - b.sequence;
+    });
+    setSortedSeasons(tempSeasons);
+  }, [seasons]);
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -37,30 +122,26 @@ const PatrolCommitment = ({ session, user }) => {
           </div>
 
           <div class="card-body">
+
             <table class="table table-bordered hover">
               <thead>
                 <tr>
                   <th>Season</th>
                   <th>Days Committed</th>
                   <th>Commitment Achieved</th>
+                  <th>Notes</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Beginning of Time</td>
-                  <td>13</td>
-                  <td>Yes</td>
-                </tr>
-                <tr>
-                  <td>2012-EOW</td>
-                  <td>7</td>
-                  <td>Yes</td>
-                </tr>
-                <tr>
-                  <td>EOW</td>
-                  <td>666</td>
-                  <td>No</td>
-                </tr>
+                {patrolCommit.map((row) => (
+                  <tr>
+                    <td>{row.season.description}</td>
+                    <td>{row.days}</td>
+                    <td>{row.achieved ? "Yes" : "No"}</td>
+                    <td>{row.notes}</td>
+                  </tr>
+                ))}
+
               </tbody>
             </table>{" "}
             <button
@@ -68,7 +149,7 @@ const PatrolCommitment = ({ session, user }) => {
               type="button"
               onClick={promptEditOpen}
             >
-              Edit
+              Add
             </button>
           </div>
         </form>
@@ -76,24 +157,91 @@ const PatrolCommitment = ({ session, user }) => {
 
       <Modal show={editPrompted} onHide={promptEditCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>Editing Lake Louise Awards</Modal.Title>
+          <Modal.Title>Adding Patrol Commitment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="form-check">
-            {discipline.map((row) => (
-              <div class="form-group">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id={row.id}
-                />
-                <label class="form-check-label" for={row.description}>
-                  {row.description}
-                </label>
-              </div>
-            ))}
+
+          <Alert variant="danger" show={error} onClose={() => setError(false)} dismissible={true}>
+            <Alert.Heading>Uh oh!</Alert.Heading>
+            <p>
+              Looks like you need glasses
+            </p>
+          </Alert>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">
+                Commitment Achieved:
+              </label>
+            </div>
+            <Form.Control as="select" custom id="commitmentAchieved">
+              <option class="text-center" selected value={-1}>
+                -
+              </option>
+              <option class="text-center" value={1}>
+                Yes
+              </option>
+              <option class="text-center" value={0}>
+                No
+              </option>
+              <option class="text-center" value={-2}>
+                Inactive
+              </option>
+            </Form.Control>
           </div>
+
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="daysSelect">
+                Commitment Days
+              </label>
+            </div>
+            <input
+              class="text-center form-control"
+              type="number"
+              id="daysSelect"
+              min="0"
+              placeholder={0}
+              data-bind="value:daysSelect"
+            ></input>
+          </div>
+
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="seasonSelect">
+                Season:
+              </label>
+            </div>
+
+            <Form.Control
+              as="select"
+              custom
+              onChange={OnChangeVal.bind(this)}
+              id="seasonSelect"
+            >
+              <option
+                class="text-center"
+                selected
+                value={-1}
+              >
+                -
+              </option>
+
+              {sortedSeasons.map((row, index) => (
+                <option class="text-center" value={index}>
+                  {row.description}
+                </option>
+              ))}
+            </Form.Control>
+          </div>
+
+          <div class="input-group mb-2">
+            <span class="input-group-text">Notes</span>
+            <textarea class="form-control" aria-label="With textarea" id="notesSelect"></textarea>
+          </div>
+
+          <Button variant="primary" onClick={addPatrolCommit}>
+            Submit
+          </Button>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={promptEditExecute}>

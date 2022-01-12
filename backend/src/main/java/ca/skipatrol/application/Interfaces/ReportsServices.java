@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 public interface ReportsServices {
 
-    void getReportData(JsonObject reportData);
+    void getReportData(JsonObject inputDataJSON);
 
     
     

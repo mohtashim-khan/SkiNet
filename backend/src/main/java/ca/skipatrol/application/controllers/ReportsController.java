@@ -23,6 +23,7 @@ public class ReportsController {
     public void getReportData(@RequestBody String reportData)
     {
         JsonObject reportJSONObject = JsonParser.parseString(reportData).getAsJsonObject();
+        //System.out.println(reportJSONObject.get("libraryname").getAsString());
         reportsServices.getReportData(reportJSONObject);
 
 

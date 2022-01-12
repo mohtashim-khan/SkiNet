@@ -3,10 +3,14 @@ import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 
-const LakeLouiseRoles = ({ session, user }) => {
+const LakeLouiseRoles = ({ session, userID }) => {
   // Change this to be roles, once the roles DB is set up.
   const [discipline, setDisciplines] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
+  const [role, setRoles] = useState([]);
+  const [user, setUsers] = useState([]);
+
+  const [userRoles, setUserRoles] = useState([]);
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -20,13 +24,52 @@ const LakeLouiseRoles = ({ session, user }) => {
     setEditPrompted(false);
   }
 
+  function readUserRoles() {
+    const rolesArray = Object.keys(role);
+    rolesArray.shift();
+    rolesArray.pop();
+    console.log("retard", rolesArray)
+    const rolesVals = [];
+    for (let i = 0; i < rolesArray.length; ++i) {
+      console.log("aaaa", role[rolesArray[i]]);
+      if (role[rolesArray[i]]) {
+        rolesVals.push(rolesArray[i]);
+      }
+    }
+    return rolesVals;
+  }
   useEffect(() => {
+
     session.get("disciplines").then((resp) => {
       if (resp.status === 200) {
         setDisciplines(resp.data._embedded.disciplines);
       }
+
+      session.get("users/" + userID).then((resp) => {
+        if (resp.status === 200) {
+          setUsers(resp.data);
+
+        }
+      })
+
+      session.get("users/" + userID + "/role").then((resp) => {
+        if (resp.status === 200) {
+          setRoles(resp.data)
+          const fuck = Object.keys(resp.data);
+
+          //console.log("This should be the roles", resp.data[fuck[0]], fuck[0].typeof);
+
+        }
+      })
+
+      console.log("fucker", user);
+
     });
   }, []);
+
+
+  useEffect(() => { console.log("Shitter", readUserRoles()) }, [role])
+
   return (
     <>
       <div class="card">

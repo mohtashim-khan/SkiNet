@@ -72,9 +72,9 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("username").get();
-                        Role role = new Role(false, false, false, false,
+                        Role role = new Role(true, false, false, false,
                                         false, false, false,
-                                        false, false, false, false, user);
+                                        false, true, true, false, user);
                         this.roleRepository.save(role);
 
                         OperationalEvent operationalEvent = operationalEventRepository
@@ -108,7 +108,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
 
                         user = userRepository.findByUsername("AAAAA").get();
                         Role role = new Role(false, false, false, false,
-                                        false, false, false,
+                                        false, true, false,
                                         false, false, false, false, user);
                         this.roleRepository.save(role);
                         LocalDateTime date1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);

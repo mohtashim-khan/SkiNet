@@ -85,7 +85,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         evalTrainingRepository.save(new EvalTraining("testEventType", LocalDateTime.now(), user));
                         operationalTrainingRepository
                                         .save(new OperationalTraining(LocalDateTime.now(), operationalEvent, user));
-                        emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", user));
+                        emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "jerk", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "testNote", season, user));
                         personAwardRepository.save(new PersonAward("testComment", award, season, user));
                 }

@@ -72,9 +72,9 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("username").get();
-                        Role role = new Role(false, false, false, false,
+                        Role role = new Role(true, false, false, false,
                                         false, false, false,
-                                        false, false, false, false, user);
+                                        false, true, true, false, user);
                         this.roleRepository.save(role);
 
                         OperationalEvent operationalEvent = operationalEventRepository
@@ -85,7 +85,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         evalTrainingRepository.save(new EvalTraining("testEventType", LocalDateTime.now(), user));
                         operationalTrainingRepository
                                         .save(new OperationalTraining(LocalDateTime.now(), operationalEvent, user));
-                        emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", user));
+                        emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "jerk", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "testNote", season, user));
                         personAwardRepository.save(new PersonAward("testComment", award, season, user));
                 }
@@ -108,7 +108,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
 
                         user = userRepository.findByUsername("AAAAA").get();
                         Role role = new Role(false, false, false, false,
-                                        false, false, false,
+                                        false, true, false,
                                         false, false, false, false, user);
                         this.roleRepository.save(role);
                         LocalDateTime date1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);

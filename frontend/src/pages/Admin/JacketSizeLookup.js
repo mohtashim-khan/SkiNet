@@ -66,7 +66,7 @@ const JacketSizeLookup = ({ session }) => {
     function promptCreateExecute() {
         const newSizeName = $("#size-name").val();
         session
-            .post("sizes", { description: newSizeName }, {}, false)
+            .post("lookups/size", { description: newSizeName }, {}, true)
             .then((response) => {
                 if (response.status == 201) {
                     getSizes();
@@ -91,10 +91,10 @@ const JacketSizeLookup = ({ session }) => {
                             <li
                                 key={k}
                                 onClick={() => {
-                                    var selectedBrandItem = size.get(k);
+                                    var selectedSizeItem = size.get(k);
                                     size.set(k, {
-                                        description: selectedBrandItem.description,
-                                        selected: !selectedBrandItem.selected,
+                                        description: selectedSizeItem.description,
+                                        selected: !selectedSizeItem.selected,
                                     });
                                     setSizes(new Map(size));
                                 }}

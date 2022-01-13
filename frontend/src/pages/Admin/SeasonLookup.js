@@ -70,7 +70,7 @@ const SeasonLookup = ({ session }) => {
   function promptCreateExecute() {
     const newSeasonName = $("#season-name").val();
     session
-      .post("seasons", { description: newSeasonName }, {}, false)
+      .post("lookups/season", { description: newSeasonName }, {}, true)
       .then((response) => {
         if (response.status == 201) {
           getSeasons();

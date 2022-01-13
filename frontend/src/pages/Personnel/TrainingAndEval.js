@@ -3,14 +3,14 @@ import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import $ from "jquery";
 import "./UserProfileEdit.css";
-import Alert from 'react-bootstrap/Alert'
+import Alert from "react-bootstrap/Alert";
 
 const TrainingAndEval = ({ session, userID }) => {
   const [discipline, setDisciplines] = useState([]);
 
   const [onSnowEvals, setOnSnowEvals] = useState([]);
   const [operationalTraining, setOperationalTraining] = useState([]);
-  const [operationalEvent, setOperationalEvent] = useState([])
+  const [operationalEvent, setOperationalEvent] = useState([]);
   const [evaluationTraining, setEvaluationTraining] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
   const [user, setUser] = useState([]);
@@ -25,13 +25,13 @@ const TrainingAndEval = ({ session, userID }) => {
   }
 
   function promptAddCancel() {
-    setType("1")
+    setType("1");
     setEditPrompted(false);
     setError(false);
   }
 
   function promptAddExecute() {
-    setType("1")
+    setType("1");
     setEditPrompted(false);
     setError(false);
   }
@@ -43,79 +43,112 @@ const TrainingAndEval = ({ session, userID }) => {
 
   function addOnSnowEval() {
     try {
-      const myDate = new Date($("#OnSnowTrainingDate").val()).toISOString()
+      const myDate = new Date($("#OnSnowTrainingDate").val()).toISOString();
       const myDiscipline = $("#OnSnowDisciplines").val();
       const myEval = $("#OnSnowEvalBy").val();
       if (myEval.length === 0 || myDiscipline === -1) {
-        throw 'empty eval';
+        throw "empty eval";
       }
-      session.post("onSnowEvals", {
-        evaluationDate: myDate, discipline: discipline[myDiscipline]._links.self.href, evaluatedBy: myEval, user: user._links.self.href
-
-      }, {}, false).then(() => { readNewTrainingAndEvals() })
-      promptAddCancel()
+      session
+        .post(
+          "onSnowEvals",
+          {
+            evaluationDate: myDate,
+            discipline: discipline[myDiscipline]._links.self.href,
+            evaluatedBy: myEval,
+            user: user._links.self.href,
+          },
+          {},
+          false
+        )
+        .then(() => {
+          readNewTrainingAndEvals();
+        });
+      promptAddCancel();
     } catch (err) {
       console.log(err);
       setError(true);
     }
 
-    console.log("ASFASDFS", user._links.self.href)
+    console.log("ASFASDFS", user._links.self.href);
   }
 
   function addEvalTraining() {
-
     try {
-      const myDate = new Date($("#EvalTrainingDate").val()).toISOString()
+      const myDate = new Date($("#EvalTrainingDate").val()).toISOString();
       const myEval = $("#EvalTrainingEvent").val();
       if (myEval.length === 0) {
-        throw 'empty eval';
+        throw "empty eval";
       }
-      session.post("evalTrainings", {
-        eventType: myEval, completedDate: myDate, user: user._links.self.href
-
-      }, {}, false).then(() => { readNewTrainingAndEvals() })
-      promptAddCancel()
+      session
+        .post(
+          "evalTrainings",
+          {
+            eventType: myEval,
+            completedDate: myDate,
+            user: user._links.self.href,
+          },
+          {},
+          false
+        )
+        .then(() => {
+          readNewTrainingAndEvals();
+        });
+      promptAddCancel();
     } catch (err) {
       console.log(err);
       setError(true);
     }
 
-    console.log("ASFASDFS", user._links.self.href)
-
+    console.log("ASFASDFS", user._links.self.href);
   }
 
   function addOperationalTraining() {
-
     try {
-      const myDate = new Date($("#OperationalTrainingDate").val()).toISOString()
+      const myDate = new Date(
+        $("#OperationalTrainingDate").val()
+      ).toISOString();
       const myOperationalIndex = $("#OperationalTrainingEvent").val();
 
       if (myOperationalIndex === -1) {
-        throw 'empty operational';
+        throw "empty operational";
       }
 
       console.log(myOperationalIndex);
-      session.post("operationalTrainings", {
-        completedDate: myDate, operationalEvent: operationalEvent[myOperationalIndex]._links.self.href, user: user._links.self.href
-
-      }, {}, false).then(() => { readNewTrainingAndEvals() })
-      promptAddCancel()
+      session
+        .post(
+          "operationalTrainings",
+          {
+            completedDate: myDate,
+            operationalEvent:
+              operationalEvent[myOperationalIndex]._links.self.href,
+            user: user._links.self.href,
+          },
+          {},
+          false
+        )
+        .then(() => {
+          readNewTrainingAndEvals();
+        });
+      promptAddCancel();
     } catch (err) {
       console.log(err);
       setError(true);
     }
-
   }
 
   const AddEval = () => {
     if (type === "1") {
       return (
         <>
-          <Alert variant="danger" show={error} onClose={() => setError(false)} dismissible={true}>
+          <Alert
+            variant="danger"
+            show={error}
+            onClose={() => setError(false)}
+            dismissible={true}
+          >
             <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>
-              Looks like you need glasses
-            </p>
+            <p>Looks like you need glasses</p>
           </Alert>
           <h5>Patroller On-Snow Evaluation</h5>
 
@@ -124,11 +157,12 @@ const TrainingAndEval = ({ session, userID }) => {
               <label class="input-group-text" for="inputGroupSelect01">
                 Discipline:
               </label>
-
             </div>
 
             <select class="custom-select" id="OnSnowDisciplines">
-              <option selected value={-1}>Choose...</option>
+              <option selected value={-1}>
+                Choose...
+              </option>
               {discipline.map((row, index) => (
                 <option value={index}>{row.description}</option>
               ))}
@@ -144,10 +178,10 @@ const TrainingAndEval = ({ session, userID }) => {
               type="date"
               name="date_of_birth"
               id="OnSnowTrainingDate"
-            // value={date}
-            // onChange={(e) => {
-            //   setDate(e.target.value);
-            // }}
+              // value={date}
+              // onChange={(e) => {
+              //   setDate(e.target.value);
+              // }}
             />
           </div>
 
@@ -163,26 +197,25 @@ const TrainingAndEval = ({ session, userID }) => {
               id="OnSnowEvalBy"
               name="myEvalInput"
               aria-describedby="emailHelp"
-
-
             />
           </div>
-
 
           <Button variant="primary" onClick={addOnSnowEval}>
             Submit
           </Button>
-
         </>
       );
     } else if (type === "2") {
       return (
         <>
-          <Alert variant="danger" show={error} onClose={() => setError(false)} dismissible={true}>
+          <Alert
+            variant="danger"
+            show={error}
+            onClose={() => setError(false)}
+            dismissible={true}
+          >
             <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>
-              Looks like you need glasses
-            </p>
+            <p>Looks like you need glasses</p>
           </Alert>
           <h5>Evaluator Snow Training</h5>
 
@@ -198,8 +231,6 @@ const TrainingAndEval = ({ session, userID }) => {
               id="EvalTrainingEvent"
               name="myEvalInput"
               aria-describedby="emailHelp"
-
-
             />
           </div>
 
@@ -212,26 +243,28 @@ const TrainingAndEval = ({ session, userID }) => {
               type="date"
               name="date_of_birth"
               id="EvalTrainingDate"
-            // value={date}
-            // onChange={(e) => {
-            //   setDate(e.target.value);
-            // }}
+              // value={date}
+              // onChange={(e) => {
+              //   setDate(e.target.value);
+              // }}
             />
           </div>
           <Button variant="primary" onClick={addEvalTraining}>
             Submit
           </Button>
-
         </>
       );
     } else {
       return (
         <>
-          <Alert variant="danger" show={error} onClose={() => setError(false)} dismissible={true}>
+          <Alert
+            variant="danger"
+            show={error}
+            onClose={() => setError(false)}
+            dismissible={true}
+          >
             <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>
-              Looks like you need glasses
-            </p>
+            <p>Looks like you need glasses</p>
           </Alert>
           <h5>Patroller Operational Training</h5>
 
@@ -243,7 +276,9 @@ const TrainingAndEval = ({ session, userID }) => {
             </div>
 
             <select class="custom-select" id="OperationalTrainingEvent">
-              <option selected value={-1}>Choose...</option>
+              <option selected value={-1}>
+                Choose...
+              </option>
               {operationalEvent.map((row, index) => (
                 <option value={index}>{row.description}</option>
               ))}
@@ -259,16 +294,15 @@ const TrainingAndEval = ({ session, userID }) => {
               type="date"
               name="date_of_birth"
               id="OperationalTrainingDate"
-            // value={date}
-            // onChange={(e) => {
-            //   setDate(e.target.value);
-            // }}
+              // value={date}
+              // onChange={(e) => {
+              //   setDate(e.target.value);
+              // }}
             />
           </div>
           <Button variant="primary" onClick={addOperationalTraining}>
             Submit
           </Button>
-
         </>
       );
     }
@@ -292,8 +326,6 @@ const TrainingAndEval = ({ session, userID }) => {
       });
   }
 
-
-
   useEffect(() => {
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
@@ -304,16 +336,14 @@ const TrainingAndEval = ({ session, userID }) => {
     session.get("operationalEvents").then((resp) => {
       if (resp.status === 200) {
         setOperationalEvent(resp.data._embedded.operationalEvents);
-
       }
-    })
+    });
 
     session.get("disciplines").then((resp) => {
       if (resp.status === 200) {
         setDisciplines(resp.data._embedded.disciplines);
-
       }
-    })
+    });
     readNewTrainingAndEvals();
   }, []);
 
@@ -327,7 +357,6 @@ const TrainingAndEval = ({ session, userID }) => {
         </div>
 
         <div class="card-body">
-
           {onSnowEvals.length !== 0 && (
             <div>
               <h5>
@@ -433,11 +462,8 @@ const TrainingAndEval = ({ session, userID }) => {
               </div>
 
               <AddEval />
-
-
             </form>
           </Modal.Body>
-
         </Modal>
       </div>
     </>

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
+import $ from "jquery";
 
 const General = ({ session, userID }) => {
   const [editPrompted, setEditPrompted] = useState(false);
   const [user, setUser] = useState([]);
-  const [name, setName] = useState([]);
-  const [relationship, setRelationship] = useState([]);
+  const [emergencyContact, setEmergencyContact] = useState([]);
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -21,11 +21,44 @@ const General = ({ session, userID }) => {
     setEditPrompted(false);
   }
 
+  function editEmergencyContact() {
+    let temp = emergencyContact[0];
+    temp.name = $("#nameSelect").val();
+    temp.relationship = $("#relationshipSelect").val();
+    temp.phone = $("#phoneSelect").val();
+    let emergencyContactsID = emergencyContact[0].emergencyContactID;
+
+    session
+      .put("emergencyContacts/" + emergencyContactsID, temp, {}, false)
+      .then((resp) => {
+        if (resp === 200 || resp === 201) {
+          console.log(resp.data);
+          setEmergencyContact(resp.data);
+        }
+      });
+    promptEditCancel();
+  }
+
+  function readEmergencyContact() {
+    session.get("users/" + userID + "/emergencyContacts").then((resp) => {
+      if (resp.status === 200) {
+        setEmergencyContact(resp.data._embedded.emergencyContacts);
+        console.log(
+          "emergency Contact:",
+          resp.data._embedded.emergencyContacts[0].name
+        );
+      }
+    });
+  }
+
   useEffect(() => {
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
         setUser(resp.data);
+        console.log("test", resp.data);
+        //http://localhost:8080/api/users/87d58f27-0b2d-4a14-9309-9873dbc4dd2a/emergencyContacts
       }
+      readEmergencyContact();
     });
   }, []);
 
@@ -40,39 +73,47 @@ const General = ({ session, userID }) => {
           </div>
 
           <div class="card-body">
-            <div class="form-group">
-              <label for="exampleInputEmail1">First Name</label>
-              <input
-                type="text"
-                class="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                // placeholder={user.firstName}
-              />
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Last Name</label>
-              <input
-                type="text"
-                class="form-control"
-                id="exampleInputPassword1"
-                // placeholder={user.lastName}
-              />
-            </div>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">
-                  Options
+                  <b>Name</b>
                 </label>
               </div>
-              <select class="custom-select" id="inputGroupSelect01">
-                <option selected>Choose...</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
+              <input
+                type="text"
+                class="form-control"
+                value={emergencyContact[0] && emergencyContact[0].name}
+                disabled
+              ></input>
             </div>
 
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  <b>Relationship</b>
+                </label>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                value={emergencyContact[0] && emergencyContact[0].relationship} //this is not a good solution
+                disabled
+              ></input>
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  <b>Phone Number</b>
+                </label>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                value={emergencyContact[0] && emergencyContact[0].phone}
+                disabled
+              ></input>
+            </div>
             <button
               class="btn btn-primary"
               type="button"
@@ -100,49 +141,56 @@ const General = ({ session, userID }) => {
             </h5>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">
+                <label class="input-group-text" for="nameSelect">
                   Name
                 </label>
               </div>
               <input
                 type="tel"
                 class="form-control"
-                id="OnSnowEvalBy"
+                id="nameSelect"
                 name="myEvalInput"
                 aria-describedby="emailHelp"
+                placeholder={emergencyContact[0] && emergencyContact[0].name}
               />
             </div>
 
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">
+                <label class="input-group-text" for="relationshipSelect">
                   Relationship
                 </label>
               </div>
               <input
                 type="tel"
                 class="form-control"
-                id="OnSnowEvalBy"
+                id="relationshipSelect"
                 name="myEvalInput"
                 aria-describedby="emailHelp"
+                placeholder={
+                  emergencyContact[0] && emergencyContact[0].relationship
+                }
               />
             </div>
 
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">
+                <label class="input-group-text" for="phoneSelect">
                   Phone Number
                 </label>
               </div>
               <input
                 type="tel"
                 class="form-control"
-                id="OnSnowEvalBy"
+                id="phoneSelect"
                 name="myEvalInput"
                 aria-describedby="emailHelp"
+                placeholder={emergencyContact[0] && emergencyContact[0].phone}
               />
             </div>
-            <Button variant="primary">Submit</Button>
+            <Button variant="primary" onClick={editEmergencyContact}>
+              Submit
+            </Button>
           </div>
         </Modal.Body>
       </Modal>

@@ -29,6 +29,11 @@ public class EmergencyContact {
 
     @Getter
     @Setter
+    @Column(nullable = false)
+    private String name;
+
+    @Getter
+    @Setter
     @JsonBackReference
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
@@ -37,16 +42,18 @@ public class EmergencyContact {
     public EmergencyContact() {
     }
 
-    public EmergencyContact(String relationship, String phone, User user) {
+    public EmergencyContact(String relationship, String phone, String name, User user) {
         this.relationship = relationship;
         this.phone = phone;
+        this.name = name;
         this.user = user;
     }
 
-    public EmergencyContact(UUID emergencyContactID, String relationship, String phone, User user) {
+    public EmergencyContact(UUID emergencyContactID, String relationship, String phone, String name, User user) {
         this.emergencyContactID = emergencyContactID;
         this.relationship = relationship;
         this.phone = phone;
+        this.name = name;
         this.user = user;
     }
 }

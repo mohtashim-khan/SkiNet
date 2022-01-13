@@ -5,6 +5,9 @@ import "./UserProfileEdit.css";
 
 const General = ({ session, userID }) => {
   const [editPrompted, setEditPrompted] = useState(false);
+  const [user, setUser] = useState([]);
+  const [name, setName] = useState([]);
+  const [relationship, setRelationship] = useState([]);
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -17,6 +20,15 @@ const General = ({ session, userID }) => {
   function promptEditExecute() {
     setEditPrompted(false);
   }
+
+  useEffect(() => {
+    session.get("users/" + userID).then((resp) => {
+      if (resp.status === 200) {
+        setUser(resp.data);
+      }
+    });
+  }, []);
+
   return (
     <>
       <div class="card">
@@ -35,7 +47,7 @@ const General = ({ session, userID }) => {
                 class="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
-              // placeholder={user.firstName}
+                // placeholder={user.firstName}
               />
             </div>
             <div class="form-group">
@@ -44,7 +56,7 @@ const General = ({ session, userID }) => {
                 type="text"
                 class="form-control"
                 id="exampleInputPassword1"
-              // placeholder={user.lastName}
+                // placeholder={user.lastName}
               />
             </div>
             <div class="input-group mb-3">
@@ -66,7 +78,7 @@ const General = ({ session, userID }) => {
               type="button"
               onClick={promptEditOpen}
             >
-              Edit
+              Add
             </button>
           </div>
         </form>
@@ -74,19 +86,65 @@ const General = ({ session, userID }) => {
 
       <Modal show={editPrompted} onHide={promptEditCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>Editing Lake Louise Awards</Modal.Title>
+          <Modal.Title>Editing General Information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="form-check"></div>
+          {/* <div class="form-group">
+            <h4>
+              <b>User Information</b>
+            </h4>
+          </div> */}
+          <div class="form-group">
+            <h5>
+              <b>Emergency Contact Information</b>
+            </h5>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Name
+                </label>
+              </div>
+              <input
+                type="tel"
+                class="form-control"
+                id="OnSnowEvalBy"
+                name="myEvalInput"
+                aria-describedby="emailHelp"
+              />
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Relationship
+                </label>
+              </div>
+              <input
+                type="tel"
+                class="form-control"
+                id="OnSnowEvalBy"
+                name="myEvalInput"
+                aria-describedby="emailHelp"
+              />
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Phone Number
+                </label>
+              </div>
+              <input
+                type="tel"
+                class="form-control"
+                id="OnSnowEvalBy"
+                name="myEvalInput"
+                aria-describedby="emailHelp"
+              />
+            </div>
+            <Button variant="primary">Submit</Button>
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={promptEditExecute}>
-            Submit
-          </Button>
-          <Button variant="secondary" onClick={promptEditCancel}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

@@ -54,6 +54,7 @@ const LakeLouiseAwards = ({ session, userID }) => {
           false
         )
         .then(() => {
+          readNewAwards();
           readPersonAwards();
         });
       promptEditCancel();
@@ -82,10 +83,20 @@ const LakeLouiseAwards = ({ session, userID }) => {
             tempVal.award = resp.data.description;
           }
         });
+
       tempAwardInfo.push(tempVal);
     });
-    setAwardInfo(tempAwardInfo);
-    console.log("ASDAS", tempAwardInfo);
+
+    console.log("asdfasdf", tempAwardInfo);
+    setAwardInfo([...tempAwardInfo]);
+  }
+
+  function readNewAwards() {
+    session.get("users/" + userID + "/personAwards").then((resp) => {
+      if (resp.status === 200) {
+        setPersonAwards(resp.data._embedded.personAwards);
+      }
+    });
   }
 
   useEffect(() => {
@@ -95,11 +106,7 @@ const LakeLouiseAwards = ({ session, userID }) => {
       }
     });
 
-    session.get("users/" + userID + "/personAwards").then((resp) => {
-      if (resp.status === 200) {
-        setPersonAwards(resp.data._embedded.personAwards);
-      }
-    });
+    readNewAwards();
 
     session.get("seasons").then((resp) => {
       if (resp.status === 200) {
@@ -147,6 +154,7 @@ const LakeLouiseAwards = ({ session, userID }) => {
                 </tr>
               </thead>
               <tbody>
+                {console.log("rendertest", awardInfo)}
                 {awardInfo.map((row, index) => (
                   <tr>
                     <td>{row.season}</td>
@@ -186,12 +194,7 @@ const LakeLouiseAwards = ({ session, userID }) => {
                   Award:
                 </label>
               </div>
-              <Form.Control
-                as="select"
-                custom
-                //onChange={OnChangeVal.bind(this)}
-                id="awardSelect"
-              >
+              <Form.Control as="select" custom id="awardSelect">
                 <option class="text-center" selected value={-1}>
                   -
                 </option>

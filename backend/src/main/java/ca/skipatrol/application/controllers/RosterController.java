@@ -31,7 +31,11 @@ public class RosterController {
 
     @RequestMapping(value = "customapi/roster/addToEventLog", method = RequestMethod.PUT)
     public ResponseEntity<Object> AddToEventLog(@RequestBody EventLog eventLog) {
-        rosterServices.AddToEventLog(eventLog, userRepository.findByUsername("username").get());
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
+        int code = rosterServices.AddToEventLog(eventLog, userRepository.findByUsername("username").get());
+
+        if (code == 204)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

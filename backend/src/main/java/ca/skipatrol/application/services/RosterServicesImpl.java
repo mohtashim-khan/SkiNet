@@ -81,7 +81,7 @@ public class RosterServicesImpl implements RosterServices {
                     if (waitPerson.isPresent())
                     {
                         // TODO: Need to review this logic!
-                        EventLog update = existingEventLogs.stream().filter(x -> x.getUser().getUsername() == eventLog.getUser().getUsername()).findFirst().get();
+                        EventLog update = existingEventLogs.stream().filter(x -> x.getUser().getUsername().equals(eventLog.getUser().getUsername())).findFirst().get();
 
                         update.setTimestampRostered(LocalDateTime.now());
                         update.setRole(update.getUser().getUserType());

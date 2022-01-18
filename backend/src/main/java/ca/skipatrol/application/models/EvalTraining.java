@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -27,7 +27,7 @@ public class EvalTraining {
     @Getter
     @Setter
     @Column(nullable = false)
-    private LocalDateTime completedDate;
+    private LocalDate completedDate;
 
     @Getter
     @Setter
@@ -39,13 +39,13 @@ public class EvalTraining {
     public EvalTraining() {
     }
 
-    public EvalTraining(String eventType, LocalDateTime completedDate, User user) {
+    public EvalTraining(String eventType, LocalDate completedDate, User user) {
         this.eventType = eventType;
         this.completedDate = completedDate;
         this.user = user;
     }
 
-    public EvalTraining(UUID evalTrainingID, String eventType, LocalDateTime completedDate, User user) {
+    public EvalTraining(UUID evalTrainingID, String eventType, LocalDate completedDate, User user) {
         this.evalTrainingID = evalTrainingID;
         this.eventType = eventType;
         this.completedDate = completedDate;

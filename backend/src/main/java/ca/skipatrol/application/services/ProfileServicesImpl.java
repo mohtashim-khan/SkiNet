@@ -103,7 +103,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPhoneNumber());
+                    user.getPhoneNumber(),
+                    user.getUserType());
 
             if (getEvalTrainings) {
                 Hibernate.initialize(user.getEvalTrainings().size());
@@ -137,7 +138,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPhoneNumber());
+                    user.getPhoneNumber(),
+                    user.getUserType());
 
             Hibernate.initialize(user.getEmergencyContacts().size());
             returnVal.setEmergencyContacts(user.getEmergencyContacts());
@@ -161,7 +163,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPhoneNumber());
+                    user.getPhoneNumber(),
+                    user.getUserType());
 
             Hibernate.initialize(user.getPatrolCommitments().size());
             returnVal.setPatrolCommitments(user.getPatrolCommitments());
@@ -185,7 +188,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPhoneNumber());
+                    user.getPhoneNumber(),
+                    user.getUserType());
 
             Hibernate.initialize(user.getPersonAwards().size());
             returnVal.setPersonAwards(user.getPersonAwards());
@@ -209,7 +213,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPhoneNumber());
+                    user.getPhoneNumber(),
+                    user.getUserType());
 
             List<Uniform> uniforms = new ArrayList();
 
@@ -241,7 +246,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPhoneNumber());
+                    user.getPhoneNumber(),
+                    user.getUserType());
 
             returnVal.setRole(user.getRole());
 
@@ -264,7 +270,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPhoneNumber());
+                    user.getPhoneNumber(),
+                    user.getUserType());
 
 
             Hibernate.initialize(user.getEvalTrainings().size());

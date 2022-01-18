@@ -49,6 +49,12 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private Role role;
 
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    @Enumerated(STRING)
+    private EventRole userType;
+
     // Training and Evaluation Section
     @Getter
     @Setter
@@ -101,16 +107,17 @@ public class User {
     private User() {
     }
 
-    public User(String username, String password, String firstName, String lastName, String email, String phoneNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType) {
         this.username = username;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.userType = userType;
     }
 
-    public User(UUID userID, String username, String password, String firstName, String lastName, String email, String phoneNumber) {
+    public User(UUID userID, String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -118,30 +125,40 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.userType = userType;
     }
 
-    public User(String firstName,
+    public User(UUID userID,
+                String username,
+                String password,
+                String firstName,
                 String lastName,
                 String email,
                 String phoneNumber,
                 Role role,
+                EventRole userType,
                 List<EvalTraining> evalTrainings,
                 List<OperationalTraining> operationalTrainings,
                 List<OnSnowEval> onSnowEvals,
                 List<EmergencyContact> emergencyContacts,
                 List<PatrolCommitment> patrolCommitments,
-                List<PersonAward> personAwards) {
+                List<PersonAward> personAwards,
+                List<Uniform> uniforms) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.role = role;
+        this.userType = userType;
         this.evalTrainings = evalTrainings;
         this.operationalTrainings = operationalTrainings;
         this.onSnowEvals = onSnowEvals;
         this.emergencyContacts = emergencyContacts;
         this.patrolCommitments = patrolCommitments;
         this.personAwards = personAwards;
+        this.uniforms = uniforms;
     }
-
 }

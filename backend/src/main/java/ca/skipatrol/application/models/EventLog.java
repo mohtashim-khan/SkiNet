@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static javax.persistence.EnumType.STRING;
+
 @Entity
 public class EventLog {
 
@@ -25,18 +27,9 @@ public class EventLog {
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String event_name;
-
-    @Getter
-    @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String username;
-
-    @Getter
-    @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String name;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private User user;
 
     @Getter
     @Setter
@@ -46,86 +39,104 @@ public class EventLog {
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String role;
+    @Column(nullable = false)
+    @Enumerated(STRING)
+    private EventRole role;
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String user_type;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    private User shadowing;
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String shadowing;
-
-    @Getter
-    @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String attendance;
+    @Enumerated(STRING)
+    private EventAttendance attendance;
 
     @Getter
     @Setter
     @Column(nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
-    private LocalDateTime timestamp_rostered;
+    private LocalDateTime timestampRostered;
 
     @Getter
     @Setter
     @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime timestamp_subrequest;
+    private LocalDateTime timestampSubrequest;
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar(1000)")
+    @Column(columnDefinition = "varchar(1000)")
     private String comment;
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
+    @Column(columnDefinition = "varchar(255)")
     private String email;
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String phone_number;
+    @Column(columnDefinition = "varchar(255)")
+    private String phoneNumber;
 
     @Getter
     @Setter
-    @Column(nullable = false, columnDefinition = "tinyint(1) default 0")
-    private byte trainer;
+    @Column(nullable = false)
+    private Boolean trainer;
 
-    private EventLog(){}
+    public EventLog(){}
 
-    public EventLog(
-                    Event event,
-                    String event_name,
-                    String username,
-                    String name,
+    public EventLog(Event event,
+                    User user,
                     Area area,
-                    String role,
-                    String user_type,
-                    String shadowing,
-                    String attendance,
-                    LocalDateTime timestamp_rostered,
-                    LocalDateTime timestamp_subrequest,
+                    EventRole role,
+                    User shadowing,
+                    EventAttendance attendance,
+                    LocalDateTime timestampRostered,
+                    LocalDateTime timestampSubrequest,
                     String comment,
                     String email,
-                    String phone_number,
-                    byte trainer) {
+                    String phoneNumber,
+                    Boolean trainer) {
         this.event = event;
-        this.event_name = event_name;
-        this.username = username;
-        this.name = name;
+        this.user = user;
         this.area = area;
         this.role = role;
-        this.user_type = user_type;
         this.shadowing = shadowing;
         this.attendance = attendance;
-        this.timestamp_rostered = timestamp_rostered;
-        this.timestamp_subrequest = timestamp_subrequest;
+        this.timestampRostered = timestampRostered;
+        this.timestampSubrequest = timestampSubrequest;
         this.comment = comment;
         this.email = email;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
+        this.trainer = trainer;
+    }
+
+    public EventLog(UUID eventLogID,
+                    Event event,
+                    User user,
+                    Area area,
+                    EventRole role,
+                    User shadowing,
+                    EventAttendance attendance,
+                    LocalDateTime timestampRostered,
+                    LocalDateTime timestampSubrequest,
+                    String comment,
+                    String email,
+                    String phoneNumber,
+                    Boolean trainer) {
+        this.eventLogID = eventLogID;
+        this.event = event;
+        this.user = user;
+        this.area = area;
+        this.role = role;
+        this.shadowing = shadowing;
+        this.attendance = attendance;
+        this.timestampRostered = timestampRostered;
+        this.timestampSubrequest = timestampSubrequest;
+        this.comment = comment;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.trainer = trainer;
     }
 

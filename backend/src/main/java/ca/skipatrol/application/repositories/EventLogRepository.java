@@ -11,12 +11,7 @@ import java.util.UUID;
 
 public interface EventLogRepository extends JpaRepository<EventLog, UUID> {
 
-//    @Query("SELECT el FROM EventLog el WHERE event_id = ?1")
-//    List<EventLog> getEventLogInfo(UUID eventID);
-
-//    List<EventLog> findbyEvent_Eventid(int event_id);
-
     List<EventLog> findAllByEvent_eventID(UUID eventID);
 
-    List<EventLog> findAllByUsername(String username);
+//    List<EventLog> findAllByUsername(String username);
 }

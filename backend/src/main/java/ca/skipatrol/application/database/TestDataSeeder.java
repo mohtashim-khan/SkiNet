@@ -55,6 +55,17 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
         AwardRepository awardRepository;
 
         @Autowired
+        VestRepository vestRepository;
+
+        @Autowired
+        JacketRepository jacketRepository;
+
+        @Autowired
+        PackRepository packRepository;
+        @Autowired
+        UniformRepository uniformRepository;
+
+        @Autowired
         private OnSnowEvalRepository onSnowEvalRepository;
         @Autowired
         private PostRepository postRepository;
@@ -89,6 +100,22 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "jerk", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "testNote", season, user));
                         personAwardRepository.save(new PersonAward("testComment", award, season, user));
+
+                        Uniform uniform = new Uniform(true, false, user);
+                        uniformRepository.save(uniform);
+
+                        Brand spyder = new Brand("tempBrand");
+                        brandRepository.save(spyder);
+                        Conditions condition = new Conditions("Mediocre");
+
+                        conditionsRepository.save(condition);
+                        Size size = new Size("small", 999);
+                        sizeRepository.save(size);
+
+                        jacketRepository.save(new Jacket("69", spyder, size, condition, uniform));
+                        vestRepository.save(new Vest("420", spyder, size, condition, uniform));
+                        packRepository.save(new Pack("666", spyder, condition, uniform));
+
                 }
 
                 Optional<User> userLookup2 = this.userRepository.findByUsername("AAAAA");

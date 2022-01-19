@@ -43,7 +43,7 @@ const ConditionsLookup = ({ session }) => {
             }
         });
         session
-            .delete("lookups/conditions/deleteInBatch?" + params.toString(), {}, {}, true)
+            .delete("lookups/condition/deleteInBatch?" + params.toString(), {}, {}, true)
             .then((response) => {
                 if (response.status == 200) {
                     getConditions();

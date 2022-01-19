@@ -1,6 +1,7 @@
 package ca.skipatrol.application.Interfaces;
 
 import ca.skipatrol.application.models.Season;
+import ca.skipatrol.application.models.Size;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 public interface LookupServices {
 
     public void saveSeason(Season season);
+    public void saveSize(Size size);
     public void deleteSeason(UUID seasonID);
     public void deleteSize(UUID sizeID);
     public boolean deleteBrandsInBatch(ArrayList<UUID> brandIDs);
@@ -17,6 +19,7 @@ public interface LookupServices {
     public boolean deleteOperationalEventsInBatch(ArrayList<UUID> disciplineIDs);
     public boolean deleteSizesInBatch(ArrayList<UUID> disciplineIDs);
     public boolean deleteConditionsInBatch(ArrayList<UUID> disciplineIDs);
+
 
 
 }

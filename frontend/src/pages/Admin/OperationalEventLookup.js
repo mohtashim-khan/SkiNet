@@ -65,6 +65,7 @@ const OperationalEventLookup = ({ session }) => {
 
     function promptCreateExecute() {
         const newOperationalEventName = $("#operationalEvent-name").val();
+        console.log(newOperationalEventName);
         session
             .post("operationalEvents", { description: newOperationalEventName }, {}, false)
             .then((response) => {
@@ -151,10 +152,10 @@ const OperationalEventLookup = ({ session }) => {
                 <Modal.Body>
                     <form>
                         <div class="form-group">
-                            <label for="OperationalEvent-name" class="col-form-label">
+                            <label for="operationalEvent-name" class="col-form-label">
                                 Jacket Name:
                             </label>
-                            <input type="text" class="form-control" id="OperationalEvent-name" />
+                            <input type="text" class="form-control" id="operationalEvent-name" />
                         </div>
                     </form>
                 </Modal.Body>

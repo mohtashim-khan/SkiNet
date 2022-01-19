@@ -41,6 +41,12 @@ public class LookupServicesImpl implements LookupServices {
         seasonRepository.save(season);
     }
 
+    public void saveSize(Size size) {
+        List<Size> sizeList = sizeRepository.findAll();
+        size.setSequence(sizeList.size());
+        sizeRepository.save(size);
+    }
+
     public void deleteSeason(UUID seasonID) {
         List<Season> seasonList = seasonRepository.findAll();
         int delSeq = seasonRepository.findById(seasonID).get().getSequence();
@@ -60,10 +66,10 @@ public class LookupServicesImpl implements LookupServices {
         int delSeq = sizeRepository.findById(sizeID).get().getSequence();
         sizeRepository.deleteById(sizeID);
 
-        if (delSeq != sizeList.size()) {
+        if (delSeq != sizeList.size()-1) {
             for (int i = delSeq; i < sizeList.size(); i++) {
                 Size updatedSize = sizeList.get(i);
-                updatedSize.setSequence(updatedSize.getSequence() - 1);
+                updatedSize.setSequence(updatedSize.getSequence());
                 sizeRepository.save(updatedSize);
             }
         }

@@ -69,13 +69,14 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Isaac",
                                         "Newton",
                                         "test@email.com",
-                                        "000-000-0000");
+                                        "000-000-0000",
+                                        EventRole.ROSTERED);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("username").get();
-                        Role role = new Role(false, false, false, false,
+                        Role role = new Role(true, false, false, false,
                                         false, false, false,
-                                        false, false, false, false, user);
+                                        false, true, true, false, user);
                         this.roleRepository.save(role);
 
                         OperationalEvent operationalEvent = operationalEventRepository
@@ -87,8 +88,8 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
 
                         evalTrainingRepository.save(new EvalTraining("testEventType", LocalDate.now(), user));
                         operationalTrainingRepository
-                                        .save(new OperationalTraining(LocalDate.now(), operationalEvent, user));
-                        emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", user));
+                                        .save(new OperationalTraining(LocalDateTime.now(), operationalEvent, user));
+                        emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "jerk", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "testNote", season, user));
                         personAwardRepository.save(new PersonAward("testComment", award, season, user));
                         personAwardRepository.save(new PersonAward("testComment", award2, season, user));
@@ -102,22 +103,24 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Michael",
                                         "Scott",
                                         "test@email.com",
-                                        "000-000-0000");
+                                        "000-000-0000",
+                                        EventRole.ROSTERED);
                         this.userRepository.save(new User("AAAAA",
                                         new BCryptPasswordEncoder().encode("password"),
                                         "Michael",
                                         "Scott",
                                         "test@email.com",
-                                        "000-000-0000"));
+                                        "000-000-0000",
+                                        EventRole.ROSTERED));
                         userLookup2 = Optional.of(user);
 
                         user = userRepository.findByUsername("AAAAA").get();
                         Role role = new Role(false, false, false, false,
-                                        false, false, false,
+                                        false, true, false,
                                         false, false, false, false, user);
                         this.roleRepository.save(role);
-                        LocalDate date1 = LocalDate.of(2021, Month.JANUARY, 12);
-                        Discipline testDiscipline = new Discipline("fuck");
+                        LocalDateTime date1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
+                        Discipline testDiscipline = new Discipline("testDiscipline");
                         disciplineRepository.save(testDiscipline);
                         OnSnowEval onSnowEval = new OnSnowEval(date1, testDiscipline, "branden", user);
                         this.onSnowEvalRepository.save(onSnowEval);
@@ -127,7 +130,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                 if (eventLookup.isEmpty()) {
                         LocalDateTime startDate_1 = LocalDateTime.of(2021, Month.JANUARY, 1, 12, 0, 0);
                         LocalDateTime endDate_1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
-                        Event test = new Event("test_event", startDate_1, endDate_1, 1, 3, "yes", "yes", 1);
+                        Event test = new Event("testEventName", startDate_1, endDate_1, 1, 3, "yes", "yes", 1);
                         this.eventRepository.save(test);
                         eventLookup = Optional.of(test);
                 }
@@ -139,25 +142,22 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         areaLookup = Optional.of(testArea);
                 }
 
-                if (userLookup.isPresent() && areaLookup.isPresent() && eventLookup.isPresent()) {
-                        LocalDateTime test_TimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
-                        LocalDateTime test_TimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
-                        EventLog testEventLog = new EventLog(
-                                        eventLookup.get(),
-                                        "test_event",
-                                        "test_username",
-                                        "test_name",
-                                        areaLookup.get(),
-                                        "test_role",
-                                        "test_userType",
-                                        "test_shadowing",
-                                        "test_attendance",
-                                        test_TimestampRostered,
-                                        test_TimestampRequest,
-                                        "test_Comment",
-                                        "test_Email",
-                                        "test_PhoneNumber",
-                                        (byte) 1);
+                userLookup = this.userRepository.findByUsername("username");
+                eventLookup = this.eventRepository.findByEventName("testEventName");
+                if (userLookup.isPresent() && eventLookup.isPresent()) {
+                        LocalDateTime test_TimestampSubRequest = LocalDateTime.of(1970,1,1,0,0);
+                        EventLog testEventLog = new EventLog(eventLookup.get(),
+                                userLookup.get(),
+                                null,
+                                EventRole.ROSTERED,
+                                null,
+                                null,
+                                LocalDateTime.now(),
+                                test_TimestampSubRequest,
+                                "testComment",
+                                "testEmail",
+                                "123-123-1234",
+                                false);
                         this.eventLogRepository.save(testEventLog);
                 }
 

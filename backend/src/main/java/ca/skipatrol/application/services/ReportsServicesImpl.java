@@ -58,8 +58,10 @@ public class ReportsServicesImpl implements ReportsServices {
 
         // OnSnowEval
         String onSnowDisciplineType = gson.fromJson(inputDataJSON.get("onSnowDisciplineType"), String.class);
-        String onSnowDateEvaluatedLowerJSON = gson.fromJson(inputDataJSON.get("onSnowDateEvaluatedLower"), String.class);
-        String onSnowDateEvaluatedUpperJSON = gson.fromJson(inputDataJSON.get("onSnowDateEvaluatedUpper"), String.class);
+        String onSnowDateEvaluatedLowerJSON = gson.fromJson(inputDataJSON.get("onSnowDateEvaluatedLower"),
+                String.class);
+        String onSnowDateEvaluatedUpperJSON = gson.fromJson(inputDataJSON.get("onSnowDateEvaluatedUpper"),
+                String.class);
         String onSnowEvaluatedBy = gson.fromJson(inputDataJSON.get("onSnowEvaluatedBy"), String.class);
 
         // EvalTraining
@@ -69,9 +71,10 @@ public class ReportsServicesImpl implements ReportsServices {
 
         // Operational Training
         String patrollerEventType = gson.fromJson(inputDataJSON.get("patrollerEventType"), String.class);
-        String patrollerDateCompletedUpperJSON = gson.fromJson(inputDataJSON.get("patrollerDateCompletedUpper"), String.class);
-        String patrollerDateCompletedLowerJSON = gson.fromJson(inputDataJSON.get("patrollerDateCompletedLower"), String.class);
-
+        String patrollerDateCompletedUpperJSON = gson.fromJson(inputDataJSON.get("patrollerDateCompletedUpper"),
+                String.class);
+        String patrollerDateCompletedLowerJSON = gson.fromJson(inputDataJSON.get("patrollerDateCompletedLower"),
+                String.class);
 
         // Patrol Commitment
         Boolean commitmentAchieved = gson.fromJson(inputDataJSON.get("commitmentAchieved"), Boolean.class);
@@ -127,13 +130,15 @@ public class ReportsServicesImpl implements ReportsServices {
         ArrayList<Predicate> conditions = new ArrayList<>();
 
         // Join OnSnow Eval tables
-        if (onSnowDisciplineType != null || onSnowDateEvaluatedLowerJSON != null || onSnowDateEvaluatedUpperJSON != null || onSnowEvaluatedBy != null) {
+        if (onSnowDisciplineType != null || onSnowDateEvaluatedLowerJSON != null || onSnowDateEvaluatedUpperJSON != null
+                || onSnowEvaluatedBy != null) {
             Join<User, OnSnowEval> onSnowEvalJoin = user.join("onSnowEvals");
 
-            if (onSnowDateEvaluatedLowerJSON != null && onSnowDateEvaluatedUpperJSON != null){
+            if (onSnowDateEvaluatedLowerJSON != null && onSnowDateEvaluatedUpperJSON != null) {
                 LocalDate onSnowDateEvaluatedLower = LocalDate.parse(onSnowDateEvaluatedLowerJSON);
                 LocalDate onSnowDateEvaluatedUpper = LocalDate.parse(onSnowDateEvaluatedUpperJSON);
-                conditions.add(builder.between(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedLower, onSnowDateEvaluatedUpper));
+                conditions.add(builder.between(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedLower,
+                        onSnowDateEvaluatedUpper));
             }
 
             if (onSnowEvaluatedBy != null) {
@@ -157,23 +162,26 @@ public class ReportsServicesImpl implements ReportsServices {
                 conditions.add(builder.equal(evalTrainingJoin.get("eventType"), evalEventType));
             }
 
-            if (evalDateCompletedUpperJSON != null && evalDateCompletedLowerJSON != null){
+            if (evalDateCompletedUpperJSON != null && evalDateCompletedLowerJSON != null) {
                 LocalDate evalDateCompletedUpper = LocalDate.parse(evalDateCompletedUpperJSON);
                 LocalDate evalDateCompletedLower = LocalDate.parse(evalDateCompletedLowerJSON);
 
-                conditions.add(builder.between(evalTrainingJoin.get("completedDate"), evalDateCompletedLower, evalDateCompletedUpper));
+                conditions.add(builder.between(evalTrainingJoin.get("completedDate"), evalDateCompletedLower,
+                        evalDateCompletedUpper));
             }
         }
 
         // Join OperationalTraining
-        if (patrollerDateCompletedLowerJSON != null || patrollerDateCompletedUpperJSON != null|| patrollerEventType != null) {
+        if (patrollerDateCompletedLowerJSON != null || patrollerDateCompletedUpperJSON != null
+                || patrollerEventType != null) {
             Join<User, OperationalTraining> opTrainingJoin = user.join("operationalTrainings");
 
             if (patrollerDateCompletedLowerJSON != null && patrollerDateCompletedUpperJSON != null) {
                 LocalDate patrollerDateCompletedLower = LocalDate.parse(patrollerDateCompletedLowerJSON);
                 LocalDate patrollerDateCompletedUpper = LocalDate.parse(patrollerDateCompletedUpperJSON);
 
-                conditions.add(builder.between(opTrainingJoin.get("completedDate"), patrollerDateCompletedLower, patrollerDateCompletedUpper));
+                conditions.add(builder.between(opTrainingJoin.get("completedDate"), patrollerDateCompletedLower,
+                        patrollerDateCompletedUpper));
             }
 
             if (patrollerEventType != null) {
@@ -349,19 +357,55 @@ public class ReportsServicesImpl implements ReportsServices {
         if (hasEmergencyContact != null) {
 
             if (hasEmergencyContact == true) {
-                conditions.add(builder.equal(user.get("emergencyContacts"), null));
+                conditions.add(builder.isNotEmpty(user.get("emergencyContacts")));
             } else if (hasEmergencyContact == false) {
-                conditions.add(builder.notEqual(user.get("emergencyContacts"), null));
+                conditions.add(builder.isEmpty(user.get("emergencyContacts")));
             }
         }
 
         // Make Query
-        TypedQuery<User> typedQuery = em.createQuery(query.select(user).where(conditions.toArray(new Predicate[] {})));
+        List<User> results;
+        ArrayList<User> returnResults = new ArrayList<User>();
+
+        if (conditions.isEmpty()) {
+            TypedQuery<User> typedQuery = em.createQuery(query.select(user));
+            results = typedQuery.getResultList();
+            for (User result : results) {
+
+                returnResults.add(buildUserDTO(result));
+            }
+
+        } else {
+            TypedQuery<User> typedQuery = em
+                    .createQuery(query.select(user).where(conditions.toArray(new Predicate[] {})));
+            results = typedQuery.getResultList();
+            for (User result : results) {
+
+                returnResults.add(buildUserDTO(result));
+            }
+
+        }
 
         // Return Results
-        List<User> results = typedQuery.getResultList();
-        return results;
+        return returnResults;
 
+    }
+
+    //User Data Transfer Object - needed to avoid lazy loading errors
+    public User buildUserDTO(User user) {
+        if (user != null) {
+
+            User returnVal = new User(user.getUserID(),
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPhoneNumber());
+
+            return returnVal;
+        }
+        return null;
     }
 
 }

@@ -22,7 +22,7 @@ const General = ({ session, userID }) => {
   }
 
   function editEmergencyContact() {
-    let temp = emergencyContact[0];
+    let temp = emergencyContact;
     temp.name = $("#nameSelect").val();
     temp.relationship = $("#relationshipSelect").val();
     temp.phone = $("#phoneSelect").val();

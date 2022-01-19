@@ -1,8 +1,6 @@
 package ca.skipatrol.application.controllers;
 
-import ca.skipatrol.application.Interfaces.LookupServices;
 import ca.skipatrol.application.Interfaces.PostServices;
-import ca.skipatrol.application.models.Season;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

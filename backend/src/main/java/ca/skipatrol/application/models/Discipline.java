@@ -1,17 +1,12 @@
 package ca.skipatrol.application.models;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
 
-import java.util.Arrays;
 import java.util.UUID;
 
-import static javax.persistence.EnumType.STRING;
 
 @Entity
 
@@ -32,7 +27,7 @@ public class Discipline {
     private String description;
 
     // Constructors
-    private Discipline() {
+    public Discipline() {
     }
 
     public Discipline(String description) {

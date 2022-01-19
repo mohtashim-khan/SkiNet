@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -21,7 +21,7 @@ public class OperationalTraining {
     @Getter
     @Setter
     @Column(nullable = false)
-    private LocalDateTime completedDate;
+    private LocalDate completedDate;
 
     @Getter
     @Setter
@@ -39,13 +39,13 @@ public class OperationalTraining {
     public OperationalTraining() {
     }
 
-    public OperationalTraining(LocalDateTime completedDate, OperationalEvent operationalEvent, User user) {
+    public OperationalTraining(LocalDate completedDate, OperationalEvent operationalEvent, User user) {
         this.completedDate = completedDate;
         this.operationalEvent = operationalEvent;
         this.user = user;
     }
 
-    public OperationalTraining(UUID operationalTrainingID, LocalDateTime completedDate, OperationalEvent operationalEvent, User user) {
+    public OperationalTraining(UUID operationalTrainingID, LocalDate completedDate, OperationalEvent operationalEvent, User user) {
         this.operationalTrainingID = operationalTrainingID;
         this.completedDate = completedDate;
         this.operationalEvent = operationalEvent;

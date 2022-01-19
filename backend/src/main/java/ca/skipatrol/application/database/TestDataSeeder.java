@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
@@ -93,13 +94,16 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         .findByDescription("Lift Evacuation").get();
                         Season season = seasonRepository.findByDescription("2023 - 2024").get();
                         Award award = awardRepository.findByDescription("The Lake Louise Family Award").get();
+                        Award award2 = awardRepository.findByDescription("Mallard Award").get();
 
-                        evalTrainingRepository.save(new EvalTraining("testEventType", LocalDateTime.now(), user));
+
+                        evalTrainingRepository.save(new EvalTraining("testEventType", LocalDate.now(), user));
                         operationalTrainingRepository
-                                        .save(new OperationalTraining(LocalDateTime.now(), operationalEvent, user));
+                                        .save(new OperationalTraining(LocalDate.now(), operationalEvent, user));
                         emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "jerk", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "testNote", season, user));
                         personAwardRepository.save(new PersonAward("testComment", award, season, user));
+                        personAwardRepository.save(new PersonAward("testComment", award2, season, user));
 
                         Uniform uniform = new Uniform(true, false, user);
                         uniformRepository.save(uniform);
@@ -141,7 +145,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         false, true, false,
                                         false, false, false, false, user);
                         this.roleRepository.save(role);
-                        LocalDateTime date1 = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
+                        LocalDate date1 = LocalDate.of(2021, Month.JANUARY, 12);
                         Discipline testDiscipline = new Discipline("testDiscipline");
                         disciplineRepository.save(testDiscipline);
                         OnSnowEval onSnowEval = new OnSnowEval(date1, testDiscipline, "branden", user);

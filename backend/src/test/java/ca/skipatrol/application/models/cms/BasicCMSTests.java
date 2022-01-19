@@ -1,7 +1,5 @@
 package ca.skipatrol.application.models.cms;
 
-import ca.skipatrol.application.models.cms.Comment;
-import ca.skipatrol.application.models.cms.Post;
 import ca.skipatrol.application.repositories.PostRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

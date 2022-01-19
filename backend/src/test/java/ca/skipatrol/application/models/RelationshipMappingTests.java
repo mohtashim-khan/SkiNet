@@ -2,8 +2,6 @@ package ca.skipatrol.application.models;
 
 
 import ca.skipatrol.application.repositories.*;
-import org.hibernate.Hibernate;
-import org.hibernate.proxy.HibernateProxy;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,10 +9,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.transaction.Transactional;
 import java.util.*;
 

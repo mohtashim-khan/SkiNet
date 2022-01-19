@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -21,7 +21,7 @@ public class OnSnowEval {
     @Getter
     @Setter
     @Column(nullable = false)
-    private LocalDateTime evaluationDate;
+    private LocalDate evaluationDate;
 
     @Getter
     @Setter
@@ -43,14 +43,14 @@ public class OnSnowEval {
     public OnSnowEval() {
     }
 
-    public OnSnowEval(LocalDateTime evaluationDate, Discipline discipline, String evaluatedBy, User user) {
+    public OnSnowEval(LocalDate evaluationDate, Discipline discipline, String evaluatedBy, User user) {
         this.evaluationDate = evaluationDate;
         this.discipline = discipline;
         this.user = user;
         this.evaluatedBy = evaluatedBy;
     }
 
-    public OnSnowEval(UUID onSnowEvalID, LocalDateTime evaluationDate, Discipline discipline, String evaluatedBy, User user) {
+    public OnSnowEval(UUID onSnowEvalID, LocalDate evaluationDate, Discipline discipline, String evaluatedBy, User user) {
         this.onSnowEvalID = onSnowEvalID;
         this.evaluationDate = evaluationDate;
         this.discipline = discipline;

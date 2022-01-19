@@ -24,7 +24,7 @@ public class Award {
     @Column(unique = true, nullable = false)
     private String description;
 
-    private Award(){}
+    public Award(){}
 
     public Award(String description){
         this.description = description;

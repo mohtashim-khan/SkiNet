@@ -76,7 +76,7 @@ public class Event {
         this.groupID = groupID;
     }
 
-    private Event() {
+    public Event() {
     }
 
     /*

@@ -5,7 +5,6 @@ import ca.skipatrol.application.models.Season;
 import ca.skipatrol.application.models.Size;
 import ca.skipatrol.application.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

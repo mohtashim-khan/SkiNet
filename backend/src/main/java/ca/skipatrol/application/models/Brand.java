@@ -24,7 +24,7 @@ public class Brand {
     @Column(unique = true, nullable = false)
     private String description;
 
-    private Brand(){}
+    public Brand(){}
 
     public Brand(String description){
         this.description = description;

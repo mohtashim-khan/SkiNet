@@ -349,7 +349,7 @@ public class ReportsServicesImpl implements ReportsServices {
         if (awards != null) {
             Join<User, PersonAward> personAwardJoin = user.join("personAwards");
             Join<PersonAward, Award> awardJoin = personAwardJoin.join("award");
-            conditions.add(awardJoin.get("description").in((Object[]) awards)); // TODO: TEST THIS
+            conditions.add(awardJoin.get("description").in((Object[]) awards));
 
         }
 

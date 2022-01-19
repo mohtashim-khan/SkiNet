@@ -44,7 +44,7 @@ public class ActionLog {
     @Column(nullable = false)
     private LocalDateTime timeStamp_action;
 
-    private ActionLog(){}
+    public ActionLog(){}
 
     public ActionLog(Event event, String username, String action_user, String result, LocalDateTime timeStamp_action){
         this.event = event;

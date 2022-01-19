@@ -27,7 +27,7 @@ public class Discipline {
     private String description;
 
     // Constructors
-    private Discipline() {
+    public Discipline() {
     }
 
     public Discipline(String description) {

@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 import java.util.UUID;
 
-import static javax.persistence.EnumType.STRING;
 
 @Entity
 public class Area {
@@ -24,7 +23,7 @@ public class Area {
     @Column(unique = true, nullable = false)
     private String areaname;
 
-    private Area() {
+    public Area() {
     }
 
     public Area(String areaname) {

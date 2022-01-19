@@ -6,7 +6,6 @@ import ca.skipatrol.application.models.*;
 import ca.skipatrol.application.repositories.*;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -216,7 +215,7 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getPhoneNumber(),
                     user.getUserType());
 
-            List<Uniform> uniforms = new ArrayList();
+            List<Uniform> uniforms = new ArrayList<Uniform>();
 
             if(user.getUniforms().size() > 0) {
                 for (Uniform uniform : user.getUniforms()) {

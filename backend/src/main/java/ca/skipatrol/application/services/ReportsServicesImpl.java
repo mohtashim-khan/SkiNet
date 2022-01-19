@@ -401,7 +401,8 @@ public class ReportsServicesImpl implements ReportsServices {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPhoneNumber());
+                    user.getPhoneNumber(),
+                    user.getUserType());
 
             return returnVal;
         }

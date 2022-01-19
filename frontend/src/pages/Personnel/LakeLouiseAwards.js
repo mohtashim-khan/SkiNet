@@ -7,6 +7,7 @@ import Alert from "react-bootstrap/Alert";
 
 const LakeLouiseAwards = ({ session, userID }) => {
   const [editPrompted, setEditPrompted] = useState(false);
+  const [update, setUpdate] = useState(false);
   const [personAwards, setPersonAwards] = useState([]);
   const [awardInfo, setAwardInfo] = useState([]);
   const [user, setUsers] = useState([]);
@@ -53,11 +54,12 @@ const LakeLouiseAwards = ({ session, userID }) => {
           {},
           false
         )
-        .then(() => {
+        .then((resp) => {
           readNewAwards();
           readPersonAwards();
         });
       promptEditCancel();
+      setUpdate(!update);
     } catch (err) {
       console.log(err);
       setError(true);
@@ -66,9 +68,9 @@ const LakeLouiseAwards = ({ session, userID }) => {
 
   function readPersonAwards() {
     const tempAwardInfo = [];
-    personAwards.map((row) => {
+    personAwards.map(async (row) => {
       const tempVal = { season: "", award: "" };
-      session
+      await session
         .get("personAwards/" + row.personAwardID + "/season")
         .then((resp) => {
           if (resp.status === 200) {
@@ -76,7 +78,7 @@ const LakeLouiseAwards = ({ session, userID }) => {
           }
         });
 
-      session
+      await session
         .get("personAwards/" + row.personAwardID + "/award")
         .then((resp) => {
           if (resp.status === 200) {
@@ -87,8 +89,9 @@ const LakeLouiseAwards = ({ session, userID }) => {
       tempAwardInfo.push(tempVal);
     });
 
-    console.log("asdfasdf", tempAwardInfo);
+    // console.log("asdfasdf", tempAwardInfo);
     setAwardInfo([...tempAwardInfo]);
+    setUpdate(!update);
   }
 
   function readNewAwards() {

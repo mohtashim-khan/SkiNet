@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.security.Principal;
+
 @RestController
 public class RosterController {
     @Autowired
@@ -30,12 +32,16 @@ public class RosterController {
     UserRepository userRepository;
 
     @RequestMapping(value = "customapi/roster/addToEventLog", method = RequestMethod.PUT)
-    public ResponseEntity<Object> AddToEventLog(@RequestBody EventLog eventLog) {
-        int code = rosterServices.AddToEventLog(eventLog, userRepository.findByUsername("username").get());
+    public ResponseEntity<Object> AddToEventLog(@RequestBody EventLog eventLog, Principal principal) {
+
+        int code = 500;
+        if (principal != null)
+            code = rosterServices.AddToEventLog(eventLog, userRepository.findByUsername(principal.getName()).get());
 
         if (code == 204)
             return ResponseEntity.status(HttpStatus.OK).build();
         else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
 }

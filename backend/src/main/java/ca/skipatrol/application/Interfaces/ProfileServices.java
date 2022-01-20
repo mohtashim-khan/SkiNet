@@ -3,6 +3,7 @@ package ca.skipatrol.application.Interfaces;
 import ca.skipatrol.application.models.Uniform;
 import ca.skipatrol.application.models.User;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public interface ProfileServices {
@@ -15,5 +16,9 @@ public interface ProfileServices {
     User retrieveUserUniform(UUID userID);
     User retrieveUserRole(UUID userID);
     User retrieveUserAll(UUID userID);
+    public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
+    public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);
+    public boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs);
+    public boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs);
 
 }

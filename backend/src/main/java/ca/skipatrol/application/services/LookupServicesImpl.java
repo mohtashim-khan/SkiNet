@@ -30,6 +30,8 @@ public class LookupServicesImpl implements LookupServices {
     SeasonRepository seasonRepository;
     @Autowired
     AwardRepository awardRepository;
+    @Autowired
+    PatrolCommitmentRepository patrolCommitmentRepository;
     //endregion
 
 
@@ -184,5 +186,7 @@ public class LookupServicesImpl implements LookupServices {
             return false;
         }
     }
+
+
 
 }

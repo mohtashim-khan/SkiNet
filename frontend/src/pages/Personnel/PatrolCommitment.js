@@ -20,12 +20,41 @@ const PatrolCommitment = ({ session, userID }) => {
   const [user, setUser] = useState([]);
   const [error, setError] = useState(false);
 
+  const [deletePrompted, setDeletePrompted] = useState(false);
+
+
   const [seasons, setSeasons] = useState([]);
   const [sortedSeasons, setSortedSeasons] = useState([]);
 
-  function OnChangeVal(event) {
-    //setType(event.target.value);
-    console.log("fuck you");
+
+  function promptDeleteCancel() {
+    setDeletePrompted(false);
+  }
+
+  function deletePatrolCommit() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in patrolCommit) {
+      temp.push($("#" + String(x)).is(":checked"));
+      console.log("THIS SHIT", $("#" + String(x)).is(":checked"));
+    }
+    for (const y in patrolCommit) {
+      if (temp[y]) {
+        params.append("ids", patrolCommit[y].patrolCommitmentID)
+      }
+    }
+
+    session
+      .delete("profile/user/PatrolCommitments/deleteInBatch?" + params.toString(), {}, {}, true)
+      .then((response) => {
+        if (response.status == 200) {
+          readNewPatrolCommitments()
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    setDeletePrompted(false);
   }
 
   function promptAddCancel() {
@@ -104,6 +133,10 @@ const PatrolCommitment = ({ session, userID }) => {
     setEditPrompted(true);
   }
 
+  function promptDeleteOpen() {
+    setDeletePrompted(true);
+  }
+
   function promptEditCancel() {
     setEditPrompted(false);
   }
@@ -145,15 +178,48 @@ const PatrolCommitment = ({ session, userID }) => {
               </tbody>
             </table>{" "}
             <button
-              class="btn btn-primary"
+              class="btn btn-primary m-1"
               type="button"
               onClick={promptEditOpen}
             >
               Add
             </button>
+
+            <button
+              class="btn btn-primary m-1"
+              type="button"
+              onClick={promptDeleteOpen}
+            >
+              Delete
+            </button>
           </div>
         </form>
       </div>
+      <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Deleting Patrol Commitment(s)</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div class="form-check mb-3">
+            {patrolCommit.map((row, index) => (
+              <div class="form-group">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  defaultChecked={false}
+                  id={index}
+                />
+                <label class="form-check-label">
+                  {"Season: " + row.season.description + ", Days: " + row.days + ", Achieved: " + (row.achieved ? "Yes" : "No")}
+                </label>
+              </div>
+            ))}
+          </div>
+          <Button variant="primary" onClick={deletePatrolCommit}>
+            Submit
+          </Button>
+        </Modal.Body>
+      </Modal>
 
       <Modal show={editPrompted} onHide={promptEditCancel}>
         <Modal.Header closeButton>
@@ -215,7 +281,7 @@ const PatrolCommitment = ({ session, userID }) => {
             <Form.Control
               as="select"
               custom
-              onChange={OnChangeVal.bind(this)}
+
               id="seasonSelect"
             >
               <option
@@ -243,14 +309,7 @@ const PatrolCommitment = ({ session, userID }) => {
             Submit
           </Button>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={promptEditExecute}>
-            Submit
-          </Button>
-          <Button variant="secondary" onClick={promptEditCancel}>
-            Close
-          </Button>
-        </Modal.Footer>
+
       </Modal>
     </>
   );

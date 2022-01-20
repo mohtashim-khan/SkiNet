@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
@@ -104,6 +105,46 @@ public class ProfilesController {
         if (user != null)
             return new ResponseEntity<>(user, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/PatrolCommitments/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deletePatrolCommitmentsInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = profileServices.deletePatrolCommitmentsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Patrol Commitments deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting conditions", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/EvalTrainings/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteEvalTrainingsInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = profileServices.deleteEvalTrainingsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Eval Trainings deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting conditions", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/OperationalTrainings/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteOperationalTrainingsInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = profileServices.deleteOperationalTrainingsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Operational Trainings Evals deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting conditions", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/OnSnowEvals/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteOnSnowEvalsInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = profileServices.deleteOnSnowEvalsInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("On Snow Evals deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting conditions", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

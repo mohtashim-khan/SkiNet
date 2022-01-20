@@ -43,6 +43,8 @@ public class ProfileServicesImpl implements ProfileServices {
     UserRepository userRepository;
     @Autowired
     EvalTrainingRepository evalTrainingRepository;
+    @Autowired
+    OperationalTrainingRepository operationalTrainingRepository;
     //endregion
 
     //region Service Declarations
@@ -293,7 +295,68 @@ public class ProfileServicesImpl implements ProfileServices {
     }
 
     //endregion
+    public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs)
+    {
+        try
+        {
+            patrolCommitmentRepository.deleteAllByIdInBatch(patrolCommitmentIDs);
+            for (UUID patrolCommitmentID : patrolCommitmentIDs) {
+                assert (patrolCommitmentRepository.findById(patrolCommitmentID).isEmpty());
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
 
+    public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs)
+    {
+        try
+        {
+            evalTrainingRepository.deleteAllByIdInBatch(evalTrainingIDs);
+            for (UUID evalTrainingID : evalTrainingIDs) {
+                assert (evalTrainingRepository.findById(evalTrainingID).isEmpty());
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    public boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs)
+    {
+        try
+        {
+            operationalTrainingRepository.deleteAllByIdInBatch(operationalTrainingIDs);
+            for (UUID operationalTrainingID : operationalTrainingIDs) {
+                assert (operationalTrainingRepository.findById(operationalTrainingID).isEmpty());
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    public boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs){
+        try
+        {
+            onSnowEvalRepository.deleteAllByIdInBatch(onSnowEvalIDs);
+            for (UUID onSnowEvalID : onSnowEvalIDs) {
+                assert (onSnowEvalRepository.findById(onSnowEvalID).isEmpty());
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
 
 
 }

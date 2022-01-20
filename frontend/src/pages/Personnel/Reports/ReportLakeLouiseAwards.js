@@ -2,7 +2,7 @@ import { map } from "jquery";
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 
-export default function ReportLakeLouiseRoles({ session }) {
+export default function ReportLakeLouiseRoles({ session, awardResult, setAwardResult }) {
   const [allSelected, setAllSelected] = useState(false);
   const [checked, setChecked] = useState([]);
   const [awards, setAwards] = useState([]);

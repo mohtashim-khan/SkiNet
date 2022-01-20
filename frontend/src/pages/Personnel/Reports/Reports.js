@@ -7,12 +7,53 @@ import ReportPatrolCommitment from "./ReportPatrolCommitment";
 import ReportPatrolUniformAndEquipment from "./ReportPatrolUniformAndEquipment";
 import ReportTrainingAndEval from "./ReportTrainingAndEval";
 import "./Reports.css";
+import $ from "jquery";
+
+import FilterContext from "./ReportFilterContext";
+
+// const ReportsChild = () => {
+//   const [state, setState] = useContext(FilterContext);
+
+//   return <div>
+//     <b>{JSON.stringify(state)}</b>
+
+//     <button onClick={() => { setState(state => ({ ...state, hasEmergencyContact: !state.hasEmergencyContact })) }}>red button</button>
+//   </div>;
+// };
+
+// const Reports = ({ session }) => {
+//   const [state, setState] = useState({
+//     hasEmergencyContact: false
+//   });
+
+//   return <FilterContext.Provider value={[state, setState]}>
+//     <ReportsChild />
+//     <i>{JSON.stringify(state)}</i>
+
+//     <button onClick={() => { setState(state => ({ ...state, hasEmergencyContact: !state.hasEmergencyContact })) }}>green button</button>
+//   </FilterContext.Provider >;
+// };
 
 const Reports = ({ session }) => {
+  const [genResult, setGenResult] = useState({});
+  const [awardResult, setAwardResult] = useState({});
+  const [roleResult, setRoleResult] = useState({});
+  const [patComResult, setPatComResult] = useState({});
+  const [uniformResult, setUniformResult] = useState({});
+  const [trainingResult, setTrainingResult] = useState({});
+  const [generateNewReport, setGenerateNewReport] = useState(false);
+
+  const [state, setState] = useState({
+    hasEmergencyContact: false
+  });
+
   return (
-    <>
+    <FilterContext.Provider value={[state, setState]}>
       <div>
         <h2>Reports</h2>
+        <pre>
+          {JSON.stringify(state)}
+        </pre>
         <div class="container-fluid">
           <div class="row justify-content-md-center">
             <div class="col col-lg-9">
@@ -59,23 +100,24 @@ const Reports = ({ session }) => {
                 </div>
               </div>
 
-              <ReportTrainingAndEval session={session} />
+              <ReportTrainingAndEval session={session} trainingResult={trainingResult} setTrainingResult={setTrainingResult} />
 
-              <ReportPatrolCommitment session={session} />
+              <ReportPatrolCommitment session={session} patComResult={patComResult} setPatComResult={setPatComResult} />
 
-              <ReportLakeLouiseRoles session={session} />
+              <ReportLakeLouiseRoles session={session} roleResult={roleResult} setRoleResult={setRoleResult} />
 
-              <ReportPatrolUniformAndEquipment session={session} />
+              <ReportPatrolUniformAndEquipment session={session} uniformResult={uniformResult} setUniformResult={uniformResult} />
 
-              <ReportLakeLouiseAwards session={session} />
+              <ReportLakeLouiseAwards session={session} awardResult={awardResult} setAwardResult={setAwardResult} />
 
-              <ReportGeneral session={session} />
+              <ReportGeneral session={session} genResult={genResult} setGenResult={setGenResult} />
 
               <div class="row">
                 <div class="col">
                   <button
                     type="button"
                     class="myButton btn btn-primary float-end"
+                    onClick={generateReport}
                   >
                     Generate Report
                   </button>
@@ -85,7 +127,7 @@ const Reports = ({ session }) => {
           </div>
         </div>
       </div>
-    </>
+    </FilterContext.Provider>
   );
 };
 export default Reports;

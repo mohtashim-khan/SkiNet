@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 
-export default function ReportTrainingAndEval({ session }) {
+export default function ReportTrainingAndEval({ session, trainingResult, setTrainingResult }) {
   return (
     <>
       <div class="card">

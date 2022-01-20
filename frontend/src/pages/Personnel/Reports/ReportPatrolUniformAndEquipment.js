@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function ReportPatrolUniformAndEquipment({ session }) {
+export default function ReportPatrolUniformAndEquipment({ session, uniformResult, setUniformResult }) {
   const [brands, setBrands] = useState([]);
 
   useEffect(() => {
@@ -60,54 +60,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
               <div class="collapse" id="pack">
                 <div class="card-body">
                   PACK
-                  {/*<div class="input-group mb-2">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">
-                    From
-                  </label>
-                </div>
 
-                <Form.Control
-                  as="select"
-                  custom
-                  
-                >
-                  <option
-                    class="text-center"
-                    selected
-                    value="asdfasdfasdfasdf1"
-                  >
-                    -
-                  </option>
-
-                  {brand.map((row) => (
-                    <option class="text-center" value={row}>
-                      {row.description}
-                    </option>
-                  ))}
-                </Form.Control>
-                <label class="input-group-text" for="inputGroupSelect01">
-                  To
-                </label>
-                <Form.Control
-                  as="select"
-                  custom
-                  
-                >
-                  <option
-                    class="text-center"
-                    selected
-                    value="asdfasdfasdfasdf2"
-                  >
-                    -
-                  </option>
-                  {sortedSeasons.map((row) => (
-                    <option class="text-center" value={row}>
-                      {row.description}
-                    </option>
-                  ))}
-                </Form.Control>
-              </div>*/}
                 </div>
               </div>
             </div>

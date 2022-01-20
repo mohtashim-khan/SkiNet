@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function ReportLakeLouiseRoles({ session }) {
+export default function ReportLakeLouiseRoles({ session, roleResult, setRoleResult }) {
   const [allSelected, setAllSelected] = useState(false);
   const [checked, setChecked] = useState([
     false, // 0 - Active

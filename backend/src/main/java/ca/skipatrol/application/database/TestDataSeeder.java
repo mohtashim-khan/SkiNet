@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Calendar;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -71,9 +72,12 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
         @Autowired
         private PostRepository postRepository;
 
+        private Optional<User> userLookup;
+        private Optional<Area> areaLookup;
+
         @Override
         public void onApplicationEvent(ApplicationReadyEvent event) {
-                Optional<User> userLookup = this.userRepository.findByUsername("username");
+                userLookup = this.userRepository.findByUsername("username");
                 if (userLookup.isEmpty()) {
                         User user = new User("username",
                                         new BCryptPasswordEncoder().encode("password"),
@@ -85,7 +89,9 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("username").get();
-                        Role role = new Role(true, false, false, false,
+                        userLookup = Optional.of(user);
+
+                        Role role = new Role(false, false, false, false,
                                         false, false, false,
                                         false, true, true, false, user);
                         this.roleRepository.save(role);
@@ -161,7 +167,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         eventLookup = Optional.of(test);
                 }
 
-                Optional<Area> areaLookup = this.areaRepository.findByAreaname("Scantron");
+                areaLookup = this.areaRepository.findByAreaname("Scantron");
                 if (areaLookup.isEmpty()) {
                         Area testArea = new Area("Scantron");
                         this.areaRepository.save(testArea);
@@ -186,6 +192,8 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                 false);
                         this.eventLogRepository.save(testEventLog);
                 }
+
+                seedTestEventData();
 
                 seedTestPostData();
         }
@@ -249,6 +257,43 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         newTestPost.setTitle(sentenceGenerator.apply(titleLength));
                         newTestPost.setBody(sentenceGenerator.apply(bodyLength));
                         this.postRepository.save(newTestPost);
+                }
+        }
+
+        void seedTestEventData() {
+                int[] days = {
+                        1, 3, 5, 11, 22, 23, 24, 27, 28
+                };
+                int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+                for (int day : days) {
+                        String testEventName = "testEventName" + day;
+                        Optional<Event> eventLookup = this.eventRepository.findByEventName(testEventName);
+                        if (eventLookup.isEmpty()) {
+                                LocalDateTime startDate = LocalDateTime.of(2022, Month.of(currentMonth), day, 6, 0, 0);
+                                LocalDateTime endDate = LocalDateTime.of(2022, Month.of(currentMonth), day, 12, 1);
+                                Event test = new Event(testEventName, startDate, endDate, 1, 3, "yes", "yes", 1);
+                                // TODO: Convert this to saveAll
+                                this.eventRepository.save(test);
+                                eventLookup = Optional.of(test);
+                        }
+
+                        if (userLookup.isPresent() && areaLookup.isPresent()) {
+                                LocalDateTime testTimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
+                                LocalDateTime testTimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
+                                EventLog testEventLog = new EventLog(eventLookup.get(),
+                                        userLookup.get(),
+                                        null,
+                                        EventRole.ROSTERED,
+                                        null,
+                                        null,
+                                        testTimestampRostered,
+                                        testTimestampRequest,
+                                        "testComment",
+                                        "testEmail",
+                                        "123-123-1234",
+                                        false);
+                                this.eventLogRepository.save(testEventLog);
+                        }
                 }
         }
 

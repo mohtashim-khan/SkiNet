@@ -20,6 +20,7 @@ public class Event {
     private UUID eventID;
 
     @Column(name = "event_name", nullable = false, columnDefinition = "varchar(255)")
+    @Getter
     @Setter
     private String eventName;
 

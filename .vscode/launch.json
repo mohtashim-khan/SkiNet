@@ -1,0 +1,30 @@
+{
+    "configurations": [
+        {
+            "name": "Frontend - React",
+            "request": "launch",
+            "type": "pwa-chrome",
+            "url": "http://localhost:3000/",
+            "webRoot": "${workspaceFolder}/frontend",
+        },
+        {
+            "type": "java",
+            "name": "Backend - Spring",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "ca.skipatrol.application.Application",
+            "projectName": "application",
+            "args": ""
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Launch Frontend AND Backend",
+            "configurations": [
+                "Frontend - React",
+                "Backend - Spring"
+            ]
+        }
+    ]
+}

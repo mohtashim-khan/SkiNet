@@ -100,7 +100,6 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         .findByDescription("Lift Evacuation").get();
                         Season season = seasonRepository.findByDescription("2023 - 2024").get();
                         Award award = awardRepository.findByDescription("The Lake Louise Family Award").get();
-                        Award award2 = awardRepository.findByDescription("Mallard Award").get();
 
 
                         evalTrainingRepository.save(new EvalTraining("testEventType", LocalDate.now(), user));
@@ -109,7 +108,6 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "jerk", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "testNote", season, user));
                         personAwardRepository.save(new PersonAward("testComment", award, season, user));
-                        personAwardRepository.save(new PersonAward("testComment", award2, season, user));
 
                         Uniform uniform = new Uniform(true, false, user);
                         uniformRepository.save(uniform);
@@ -156,6 +154,11 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         disciplineRepository.save(testDiscipline);
                         OnSnowEval onSnowEval = new OnSnowEval(date1, testDiscipline, "branden", user);
                         this.onSnowEvalRepository.save(onSnowEval);
+                        Season season = seasonRepository.findByDescription("2023 - 2024").get();
+                        Award award2 = awardRepository.findByDescription("Mallard Award").get();
+                        personAwardRepository.save(new PersonAward("testComment", award2, season, user));
+
+
                 }
 
                 Optional<Event> eventLookup = this.eventRepository.findByEventName("testEventName");

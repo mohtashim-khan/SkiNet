@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form } from "react-bootstrap";
 import $ from "jquery";
 
-export default function ReportPatrolCommitment({ session, patComResult, setPatComResult }) {
+import FilterContext from "./ReportFilterContext";
+
+export default function ReportPatrolCommitment({
+  session,
+  patComResult,
+  setPatComResult,
+}) {
   const [seasons, setSeasons] = useState([]);
   const [sortedSeasons, setSortedSeasons] = useState([]);
+  const [state, setState] = useContext(FilterContext);
 
   function readValues() {
     let patCom = {};
@@ -13,22 +20,76 @@ export default function ReportPatrolCommitment({ session, patComResult, setPatCo
       const achieved = $("#selectCommitmentAchieved").val();
       const seasonFrom = $("#selectSeasonFrom").val();
       //const seasonTo = $("#selectSeasonTo").val();
-      // const notes = $("#selectNotes").val(); // || notes === "-1" 
+      // const notes = $("#selectNotes").val(); // || notes === "-1"
       const days = $("#selectDays").val();
 
-
       if (achieved === "-1" || seasonFrom === -1 || days === null) {
-        throw "incorrect input"
+        throw "incorrect input";
       }
 
-      console.log("Achieved: ", achieved, "season From: ", sortedSeasons[seasonFrom].description, "days: ", days,);
+      console.log(
+        "Achieved: ",
+        achieved,
+        "season From: ",
+        sortedSeasons[seasonFrom].description,
+        "days: ",
+        days
+      );
 
-      patCom = { commitmentAchieved: (achieved === "Yes" ? true : false), numberofCommitmentDays: parseInt(days), season: sortedSeasons[seasonFrom].description }
+      patCom = {
+        commitmentAchieved: achieved === "Yes" ? true : false,
+        numberofCommitmentDays: parseInt(days),
+        season: sortedSeasons[seasonFrom].description,
+      };
       setPatComResult(patCom);
     } catch (e) {
       console.log(e);
     }
   }
+
+  useEffect(() => {
+    $("#selectCommitmentAchieved").on("change", function (e) {
+      const selected = $(e.currentTarget).val();
+      // setState((state) => ({
+      //   ...state,
+      //   hasEmergencyContact: !state.hasEmergencyContact,
+      // }));
+      setState((state) => ({
+        ...state,
+        commitmentAchieved:
+          selected === "Yes" || selected === "No" ? selected === "Yes" : null,
+      }));
+    });
+
+    $("#selectSeasonFrom").on("change", function (e) {
+      const selected = $(e.currentTarget).val();
+      // setState((state) => ({
+      //   ...state,
+      //   hasEmergencyContact: !state.hasEmergencyContact,
+      // }));
+      // console.log("asdasda", selected);
+      setState((state) => ({
+        ...state,
+        //wont work- placeholder  ----- Should work now maybe?
+        season: selected === "-1" ? null : selected,
+      }));
+    });
+
+    $("#selectDays").on("change", function (e) {
+      const selected = $(e.currentTarget).val();
+      // setState((state) => ({
+      //   ...state,
+      //   hasEmergencyContact: !state.hasEmergencyContact,
+      // }));
+      // console.log("asdasda", selected);
+      setState((state) => ({
+        ...state,
+        //wont work- placeholder  ----- Should work now maybe?
+        numberofCommitmentDays:
+          selected === "-1" || selected === null ? null : selected,
+      }));
+    });
+  }, []);
 
   function OnChangeVal(event) {
     //setType(event.target.value);
@@ -49,6 +110,7 @@ export default function ReportPatrolCommitment({ session, patComResult, setPatCo
       return a.sequence - b.sequence;
     });
     setSortedSeasons(tempSeasons);
+    // console.log("asdasda", sortedSeasons);
   }, [seasons]);
 
   return (
@@ -75,7 +137,7 @@ export default function ReportPatrolCommitment({ session, patComResult, setPatCo
                   </label>
                 </div>
                 <Form.Control as="select" custom id="selectCommitmentAchieved">
-                  <option class="text-center" selected value="-1">
+                  <option class="text-center" value="-1" selected>
                     -
                   </option>
                   <option class="text-center" value="Yes">
@@ -100,7 +162,7 @@ export default function ReportPatrolCommitment({ session, patComResult, setPatCo
                   class="text-center form-control"
                   type="number"
                   id="selectDays"
-                  min="0"
+                  min="-1"
                   placeholder="-"
                   data-bind="value:selectDays"
                 ></input>
@@ -119,16 +181,12 @@ export default function ReportPatrolCommitment({ session, patComResult, setPatCo
                   custom
                   onChange={OnChangeVal.bind(this)}
                 >
-                  <option
-                    class="text-center"
-                    selected
-                    value={-1}
-                  >
+                  <option class="text-center" selected value={-1}>
                     -
                   </option>
 
-                  {sortedSeasons.map((row, index) => (
-                    <option class="text-center" value={index}>
+                  {sortedSeasons.map((row) => (
+                    <option class="text-center" value={row.description}>
                       {row.description}
                     </option>
                   ))}
@@ -175,7 +233,6 @@ export default function ReportPatrolCommitment({ session, patComResult, setPatCo
                   </option>
                 </Form.Control>
               </div> */}
-              <button onClick={readValues}>TEST</button>
             </div>
           </div>
         </div>

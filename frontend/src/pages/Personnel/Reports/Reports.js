@@ -25,7 +25,6 @@ import FilterContext from "./ReportFilterContext";
 //   const [state, setState] = useState({
 //     hasEmergencyContact: false
 //   });
-
 //   return <FilterContext.Provider value={[state, setState]}>
 //     <ReportsChild />
 //     <i>{JSON.stringify(state)}</i>
@@ -44,16 +43,127 @@ const Reports = ({ session }) => {
   const [generateNewReport, setGenerateNewReport] = useState(false);
 
   const [state, setState] = useState({
-    hasEmergencyContact: false
+    onSnowDisciplineType: null,
+    onSnowDateEvaluatedLower: null,
+    onSnowDateEvaluatedUpper: null,
+    onSnowEvaluatedBy: null,
+
+    evalEventType: null,
+    evalDateCompletedUpper: null,
+    evalDateCompletedLower: null,
+
+    patrollerEventType: null,
+    patrollerDateCompletedUpper: null,
+    patrollerDateCompletedLower: null,
+
+    commitmentAchieved: null,
+    numberofCommitmentDays: null,
+    season: null,
+
+    admin: null,
+    pl: null,
+    apl: null,
+    hl: null,
+    active: null,
+    newUser: null,
+    trainingEventLead: null,
+    newUser: null,
+    onSnowEvaluator: null,
+    orienteerer: null,
+    recruitmentLead: null,
+    p0Lead: null,
+
+    jacketBrand: null,
+    jacketSize: null,
+    jacketCondition: null,
+    jacketNumber: null,
+
+    vestNumber: null,
+    vestBrand: null,
+    vestSize: null,
+    vestCondition: null,
+
+    packNumber: null,
+    packBrand: null,
+    packSize: null,
+    packCondition: null,
+
+    uniformLeaseSigned: null,
+    uniformReturned: null,
+
+    awards: null,
+
+    hasEmergencyContact: null,
   });
+
+  function resetReportFields() {
+    setState({
+      onSnowDisciplineType: null,
+      onSnowDateEvaluatedLower: null,
+      onSnowDateEvaluatedUpper: null,
+      onSnowEvaluatedBy: null,
+
+      evalEventType: null,
+      evalDateCompletedUpper: null,
+      evalDateCompletedLower: null,
+
+      patrollerEventType: null,
+      patrollerDateCompletedUpper: null,
+      patrollerDateCompletedLower: null,
+
+      commitmentAchieved: null,
+      numberofCommitmentDays: null,
+      season: null,
+
+      admin: null,
+      pl: null,
+      apl: null,
+      hl: null,
+      active: null,
+      newUser: null,
+      trainingEventLead: null,
+      newUser: null,
+      orienteerer: null,
+      recruitmentLead: null,
+      p0Lead: null,
+
+      jacketBrand: null,
+      jacketSize: null,
+      jacketCondition: null,
+      jacketNumber: null,
+
+      vestNumber: null,
+      vestBrand: null,
+      vestSize: null,
+      vestCondition: null,
+
+      packNumber: null,
+      packBrand: null,
+      packSize: null,
+      packCondition: null,
+
+      uniformLeaseSigned: null,
+      uniformReturned: null,
+
+      awards: null,
+
+      hasEmergencyContact: null,
+    });
+  }
+
+  function generateReport() {
+    session.post("report/getReportData", state, {}, true).then((resp) => {
+      if (resp.status === 200) {
+        console.log("success");
+      }
+    });
+  }
 
   return (
     <FilterContext.Provider value={[state, setState]}>
       <div>
         <h2>Reports</h2>
-        <pre>
-          {JSON.stringify(state)}
-        </pre>
+        <pre>{JSON.stringify(state)}</pre>
         <div class="container-fluid">
           <div class="row justify-content-md-center">
             <div class="col col-lg-9">
@@ -85,9 +195,17 @@ const Reports = ({ session }) => {
             <div class="col col-sm" id="accordion">
               <div class="row">
                 <div class="col">
+                  {/* <button
+                    type="button"
+                    class="myButton btn btn-primary float-end d-flex-inline"
+                    onClick={resetReportFields}
+                  >
+                    Reset Fields
+                  </button> */}
                   <button
                     type="button"
-                    class="myButton btn btn-primary float-end"
+                    class="myButton btn btn-primary float-end d-flex-inline"
+                    onClick={generateReport}
                   >
                     Generate Report
                   </button>
@@ -100,17 +218,41 @@ const Reports = ({ session }) => {
                 </div>
               </div>
 
-              <ReportTrainingAndEval session={session} trainingResult={trainingResult} setTrainingResult={setTrainingResult} />
+              <ReportTrainingAndEval
+                session={session}
+                trainingResult={trainingResult}
+                setTrainingResult={setTrainingResult}
+              />
 
-              <ReportPatrolCommitment session={session} patComResult={patComResult} setPatComResult={setPatComResult} />
+              <ReportPatrolCommitment
+                session={session}
+                patComResult={patComResult}
+                setPatComResult={setPatComResult}
+              />
 
-              <ReportLakeLouiseRoles session={session} roleResult={roleResult} setRoleResult={setRoleResult} />
+              <ReportLakeLouiseRoles
+                session={session}
+                roleResult={roleResult}
+                setRoleResult={setRoleResult}
+              />
 
-              <ReportPatrolUniformAndEquipment session={session} uniformResult={uniformResult} setUniformResult={uniformResult} />
+              <ReportPatrolUniformAndEquipment
+                session={session}
+                uniformResult={uniformResult}
+                setUniformResult={uniformResult}
+              />
 
-              <ReportLakeLouiseAwards session={session} awardResult={awardResult} setAwardResult={setAwardResult} />
+              <ReportLakeLouiseAwards
+                session={session}
+                awardResult={awardResult}
+                setAwardResult={setAwardResult}
+              />
 
-              <ReportGeneral session={session} genResult={genResult} setGenResult={setGenResult} />
+              <ReportGeneral
+                session={session}
+                genResult={genResult}
+                setGenResult={setGenResult}
+              />
 
               <div class="row">
                 <div class="col">

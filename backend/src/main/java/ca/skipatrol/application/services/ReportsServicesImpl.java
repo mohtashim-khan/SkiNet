@@ -89,7 +89,7 @@ public class ReportsServicesImpl implements ReportsServices {
         Boolean active = gson.fromJson(inputDataJSON.get("active"), Boolean.class);
         Boolean newUser = gson.fromJson(inputDataJSON.get("newUser"), Boolean.class);
         Boolean trainingEventLead = gson.fromJson(inputDataJSON.get("trainingEventLead"), Boolean.class);
-        Boolean onSnowEvaluator = gson.fromJson(inputDataJSON.get("newUser"), Boolean.class);
+        Boolean onSnowEvaluator = gson.fromJson(inputDataJSON.get("onSnowEvaluator"), Boolean.class);
         Boolean orienteerer = gson.fromJson(inputDataJSON.get("orienteerer"), Boolean.class);
         Boolean recruitmentLead = gson.fromJson(inputDataJSON.get("recruitmentLead"), Boolean.class);
         Boolean p0Lead = gson.fromJson(inputDataJSON.get("p0Lead"), Boolean.class);
@@ -98,7 +98,7 @@ public class ReportsServicesImpl implements ReportsServices {
         String jacketBrand = gson.fromJson(inputDataJSON.get("jacketBrand"), String.class);
         String jacketSize = gson.fromJson(inputDataJSON.get("jacketSize"), String.class);
         String jacketCondition = gson.fromJson(inputDataJSON.get("jacketCondition"), String.class);
-        String jacketNumber = gson.fromJson(inputDataJSON.get("jacketCondition"), String.class);
+        String jacketNumber = gson.fromJson(inputDataJSON.get("jacketNumber"), String.class);
 
         String vestNumber = gson.fromJson(inputDataJSON.get("vestNumber"), String.class);
         String vestBrand = gson.fromJson(inputDataJSON.get("vestBrand"), String.class);
@@ -367,7 +367,7 @@ public class ReportsServicesImpl implements ReportsServices {
         List<User> results;
         ArrayList<User> returnResults = new ArrayList<User>();
 
-        if (conditions.isEmpty()) {
+        if (conditions.size() > 0) {
             TypedQuery<User> typedQuery = em.createQuery(query.select(user));
             results = typedQuery.getResultList();
             for (User result : results) {
@@ -391,7 +391,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
     }
 
-    //User Data Transfer Object - needed to avoid lazy loading errors
+    // User Data Transfer Object - needed to avoid lazy loading errors
     public User buildUserDTO(User user) {
         if (user != null) {
 

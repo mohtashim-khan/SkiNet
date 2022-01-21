@@ -1,8 +1,13 @@
 import { map } from "jquery";
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
+import FilterContext from "./ReportFilterContext";
 
-export default function ReportLakeLouiseRoles({ session, awardResult, setAwardResult }) {
+export default function ReportLakeLouiseRoles({
+  session,
+  awardResult,
+  setAwardResult,
+}) {
   const [allSelected, setAllSelected] = useState(false);
   const [checked, setChecked] = useState([]);
   const [awards, setAwards] = useState([]);
@@ -45,11 +50,11 @@ export default function ReportLakeLouiseRoles({ session, awardResult, setAwardRe
   }, [seasons]);
 
   useEffect(() => {
-    setChecked(Array(awards.length).fill(false));
+    setChecked(Array(awards.length).fill(true)); //
   }, [awards]);
 
   useEffect(() => {
-    console.log(checked);
+    //console.log(checked);
     let allChecked = true;
     for (const inputName in checked) {
       if (checked[inputName] === false) {
@@ -118,7 +123,7 @@ export default function ReportLakeLouiseRoles({ session, awardResult, setAwardRe
                 </div>
               </div>
             </form>
-            <div class="mt-3">
+            {/* <div class="mt-3">
               <h5>
                 <b>Season:</b>
               </h5>
@@ -170,7 +175,7 @@ export default function ReportLakeLouiseRoles({ session, awardResult, setAwardRe
                   ))}
                 </Form.Control>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

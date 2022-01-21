@@ -89,7 +89,7 @@ class Session {
     var payload = {
       headers: {
         authorization: this._get(this.SESSION_AUTH),
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
     };
 
@@ -107,7 +107,7 @@ class Session {
     var payload = {
       headers: {
         authorization: this._get(this.SESSION_AUTH),
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
     };
 

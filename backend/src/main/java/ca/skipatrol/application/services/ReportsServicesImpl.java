@@ -182,12 +182,12 @@ public class ReportsServicesImpl implements ReportsServices {
 
             else if(evalDateCompletedLowerJSON == null && evalDateCompletedUpperJSON != null){
                 LocalDate evalDateCompletedUpper = LocalDate.parse(evalDateCompletedUpperJSON);
-                conditions.add(builder.lessThanOrEqualTo(evalTrainingJoin.get("evaluationDate"), evalDateCompletedUpper));
+                conditions.add(builder.lessThanOrEqualTo(evalTrainingJoin.get("completedDate"), evalDateCompletedUpper));
             }
 
             else if(evalDateCompletedLowerJSON != null && evalDateCompletedUpperJSON == null){
                 LocalDate evalDateCompletedLower = LocalDate.parse(evalDateCompletedLowerJSON);
-                conditions.add(builder.greaterThanOrEqualTo(evalTrainingJoin.get("evaluationDate"), evalDateCompletedLower));
+                conditions.add(builder.greaterThanOrEqualTo(evalTrainingJoin.get("completedDate"), evalDateCompletedLower));
             }
         }
 
@@ -206,12 +206,12 @@ public class ReportsServicesImpl implements ReportsServices {
 
             else if(patrollerDateCompletedLowerJSON == null && patrollerDateCompletedUpperJSON != null){
                 LocalDate patrollerDateCompletedUpper = LocalDate.parse(patrollerDateCompletedUpperJSON);
-                conditions.add(builder.lessThanOrEqualTo(opTrainingJoin.get("evaluationDate"), patrollerDateCompletedUpper));
+                conditions.add(builder.lessThanOrEqualTo(opTrainingJoin.get("completedDate"), patrollerDateCompletedUpper));
             }
 
             else if(patrollerDateCompletedLowerJSON != null && patrollerDateCompletedUpperJSON == null){
                 LocalDate patrollerDateCompletedLower = LocalDate.parse(patrollerDateCompletedLowerJSON);
-                conditions.add(builder.greaterThanOrEqualTo(opTrainingJoin.get("evaluationDate"), patrollerDateCompletedLower));
+                conditions.add(builder.greaterThanOrEqualTo(opTrainingJoin.get("completedDate"), patrollerDateCompletedLower));
             }
 
             if (patrollerEventType != null) {

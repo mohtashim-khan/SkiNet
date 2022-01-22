@@ -82,6 +82,7 @@ public class ReportsServicesImpl implements ReportsServices {
         Integer commitmentDaysLower = gson.fromJson(inputDataJSON.get("commitmentDaysLower"), Integer.class);
         Integer commitmentDaysUpper = gson.fromJson(inputDataJSON.get("commitmentDaysUpper"), Integer.class);
         String season = gson.fromJson(inputDataJSON.get("season"), String.class);
+        Boolean hasNotes = gson.fromJson(inputDataJSON.get("hasNotes"), Boolean.class);
 
         // Roles
         Boolean admin = gson.fromJson(inputDataJSON.get("admin"), Boolean.class);
@@ -222,7 +223,7 @@ public class ReportsServicesImpl implements ReportsServices {
         }
 
         // Join Patrol Commitment
-        if (season != null || commitmentDaysLower != null || commitmentDaysUpper != null || commitmentAchieved != null) {
+        if (season != null || commitmentDaysLower != null || commitmentDaysUpper != null || commitmentAchieved != null || hasNotes != null) {
             Join<User, PatrolCommitment> patrolCommitJoin = user.join("patrolCommitments");
 
             if (commitmentDaysLower != null && commitmentDaysUpper !=null){
@@ -246,6 +247,15 @@ public class ReportsServicesImpl implements ReportsServices {
             if (season != null) {
                 Join<PatrolCommitment, Season> seasonJoin = patrolCommitJoin.join("season");
                 conditions.add(builder.equal(seasonJoin.get("description"), season));
+            }
+
+            if (hasNotes != null) {
+
+                if (hasNotes == true) {
+                    conditions.add(builder.isNotNull(patrolCommitJoin.get("notes")));
+                } else if (hasNotes == false) {
+                    conditions.add(builder.isNull(patrolCommitJoin.get("notes")));
+                }
             }
         }
 

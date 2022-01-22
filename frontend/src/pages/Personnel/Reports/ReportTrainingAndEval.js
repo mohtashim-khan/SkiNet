@@ -141,7 +141,7 @@ export default function ReportTrainingAndEval({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="OnSnowDisciplines">
+                    <select class="form-select w-auto" id="OnSnowDisciplines">
                       <option selected value={"-1"}>
                         -
                       </option>
@@ -270,7 +270,7 @@ export default function ReportTrainingAndEval({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="OperationalTrainingEvent">
+                    <select class="form-select" id="OperationalTrainingEvent">
                       <option selected value={"-1"}>
                         -
                       </option>

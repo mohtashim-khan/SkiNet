@@ -23,3 +23,12 @@
   margin-bottom: 10px;
   cursor: pointer;
 }
+
+.link {
+  text-decoration: none;
+  color: #000;
+}
+.link:hover {
+  text-decoration: underline;
+  color: #00f;
+}

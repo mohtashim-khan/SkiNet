@@ -75,7 +75,7 @@ export default function ReportPatrolCommitment({
       }));
     });
 
-    $("#selectDays").on("change", function (e) {
+    $("#selectDaysMin").on("change", function (e) {
       const selected = $(e.currentTarget).val();
       // setState((state) => ({
       //   ...state,
@@ -85,8 +85,33 @@ export default function ReportPatrolCommitment({
       setState((state) => ({
         ...state,
         //wont work- placeholder  ----- Should work now maybe?
-        numberofCommitmentDays:
+        commitmentDaysLower:
           selected === "-1" || selected === null ? null : selected,
+      }));
+    });
+
+    $("#selectDaysMax").on("change", function (e) {
+      const selected = $(e.currentTarget).val();
+      // setState((state) => ({
+      //   ...state,
+      //   hasEmergencyContact: !state.hasEmergencyContact,
+      // }));
+      // console.log("asdasda", selected);
+      setState((state) => ({
+        ...state,
+        //wont work- placeholder  ----- Should work now maybe?
+        commitmentDaysUpper:
+          selected === "-1" || selected === null ? null : selected,
+      }));
+    });
+
+    $("#hasNotes").on("change", function (e) {
+      const selected = $(e.currentTarget).val();
+
+      setState((state) => ({
+        ...state,
+        hasNotes:
+          selected === "Yes" || selected === "No" ? selected === "Yes" : null,
       }));
     });
   }, []);
@@ -161,17 +186,28 @@ export default function ReportPatrolCommitment({
                 <input
                   class="text-center form-control"
                   type="number"
-                  id="selectDays"
+                  id="selectDaysMin"
                   min="-1"
                   placeholder="-"
-                  data-bind="value:selectDays"
-                ></input>
+                  data-bind="value:selectDaysMin"
+                />
+                <label class="input-group-text" for="inputGroupSelect01">
+                  to
+                </label>
+                <input
+                  class="text-center form-control"
+                  type="number"
+                  id="selectDaysMax"
+                  min="-1"
+                  placeholder="-"
+                  data-bind="value:selectDaysMax"
+                />
               </div>
 
               <div class="input-group mb-2">
                 <div class="input-group-prepend">
                   <label class="input-group-text" for="inputGroupSelect01">
-                    From Season
+                    Season
                   </label>
                 </div>
 
@@ -233,6 +269,26 @@ export default function ReportPatrolCommitment({
                   </option>
                 </Form.Control>
               </div> */}
+              <div class="row">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Has Notes
+                    </label>
+                  </div>
+                  <select class="form-select" id="hasNotes">
+                    <option class="text-center selected" value="-1" selected>
+                      -
+                    </option>
+                    <option class="text-center" value="Yes">
+                      Yes
+                    </option>
+                    <option class="text-center" value="No">
+                      No
+                    </option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>

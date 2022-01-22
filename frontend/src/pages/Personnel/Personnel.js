@@ -14,12 +14,12 @@ const UsersListPage = ({ session }) => {
   console.log(users);
   return (
     <>
-      <table class="table" it="sortTable">
+      <table class="table table-bordered" it="sortTable">
         <thead>
           <tr>
             <th scope="col">Username</th>
             <th scope="col">Name</th>
-            <th scope="col">Role</th>
+            <th scope="col">Status</th>
             <th scope="col">Phone</th>
             <th scope="col">Email</th>
           </tr>
@@ -33,7 +33,7 @@ const UsersListPage = ({ session }) => {
                 </Link>
               </td>
               <td>{row.firstName + " " + row.lastName}</td>
-              <td>{row.role}</td>
+              <td>{row.userType}</td>
               <td>{row.phoneNumber}</td>
               <td>{row.email}</td>
             </tr>

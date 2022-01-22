@@ -159,7 +159,7 @@ const TrainingAndEval = ({ session, userID }) => {
               </label>
             </div>
 
-            <select class="custom-select" id="OnSnowDisciplines">
+            <select class="form-select" id="OnSnowDisciplines">
               <option selected value={-1}>
                 Choose...
               </option>
@@ -275,7 +275,7 @@ const TrainingAndEval = ({ session, userID }) => {
               </label>
             </div>
 
-            <select class="custom-select" id="OperationalTrainingEvent">
+            <select class="form-select" id="OperationalTrainingEvent">
               <option selected value={-1}>
                 Choose...
               </option>

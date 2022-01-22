@@ -60,7 +60,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
       const selected = $(e.currentTarget).val();
       setState((state) => ({
         ...state,
-        jacketNumber: selected === "-1" ? null : selected,
+        jacketNumber: selected === "" ? null : selected,
       }));
     });
 
@@ -114,11 +114,11 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
       }));
     });
 
-    $("#vestConditionSelect").on("change", function (e) {
+    $("#vestNumberSelect").on("change", function (e) {
       const selected = $(e.currentTarget).val();
       setState((state) => ({
         ...state,
-        vestNumber: selected === "-1" ? null : selected,
+        vestNumber: selected === "" ? null : selected,
       }));
     });
   }, []);
@@ -159,7 +159,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="jacketBrandSelect">
+                    <select class="form-select" id="jacketBrandSelect">
                       <option selected value="-1">
                         -
                       </option>
@@ -178,7 +178,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="jacketSizeSelect">
+                    <select class="form-select" id="jacketSizeSelect">
                       <option selected value="-1">
                         -
                       </option>
@@ -196,7 +196,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="jacketConditionSelect">
+                    <select class="form-select" id="jacketConditionSelect">
                       <option selected value="-1">
                         -
                       </option>
@@ -246,7 +246,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="packBrandSelect">
+                    <select class="form-select" id="packBrandSelect">
                       <option selected value="-1">
                         -
                       </option>
@@ -265,7 +265,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="packConditionSelect">
+                    <select class="form-select" id="packConditionSelect">
                       <option selected value="-1">
                         -
                       </option>
@@ -314,7 +314,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="vestBrandSelect">
+                    <select class="form-select" id="vestBrandSelect">
                       <option selected value="-1">
                         -
                       </option>
@@ -333,7 +333,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="vestSizeSelect">
+                    <select class="form-select" id="vestSizeSelect">
                       <option selected value="-1">
                         -
                       </option>
@@ -351,7 +351,7 @@ export default function ReportPatrolUniformAndEquipment({ session }) {
                       </label>
                     </div>
 
-                    <select class="custom-select" id="vestConditionSelect">
+                    <select class="form-select" id="vestConditionSelect">
                       <option selected value="-1">
                         -
                       </option>

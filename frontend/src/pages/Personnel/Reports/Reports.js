@@ -11,6 +11,7 @@ import $ from "jquery";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 import FilterContext from "./ReportFilterContext";
+import { Link } from "react-router-dom";
 
 // const ReportsChild = () => {
 //   const [state, setState] = useContext(FilterContext);
@@ -50,9 +51,11 @@ const Reports = ({ session }) => {
     patrollerEventType: null,
     patrollerDateCompletedUpper: null,
     patrollerDateCompletedLower: null,
+    hasNotes: null,
 
     commitmentAchieved: null,
-    numberofCommitmentDays: null,
+    commitmentDaysLower: null,
+    commitmentDaysUpper: null,
     season: null,
 
     admin: null,
@@ -91,61 +94,6 @@ const Reports = ({ session }) => {
     hasEmergencyContact: null,
   });
 
-  function resetReportFields() {
-    setState({
-      onSnowDisciplineType: null,
-      onSnowDateEvaluatedLower: null,
-      onSnowDateEvaluatedUpper: null,
-      onSnowEvaluatedBy: null,
-
-      evalEventType: null,
-      evalDateCompletedUpper: null,
-      evalDateCompletedLower: null,
-
-      patrollerEventType: null,
-      patrollerDateCompletedUpper: null,
-      patrollerDateCompletedLower: null,
-
-      commitmentAchieved: null,
-      numberofCommitmentDays: null,
-      season: null,
-
-      admin: null,
-      pl: null,
-      apl: null,
-      hl: null,
-      active: null,
-      newUser: null,
-      trainingEventLead: null,
-      newUser: null,
-      orienteerer: null,
-      recruitmentLead: null,
-      p0Lead: null,
-
-      jacketBrand: null,
-      jacketSize: null,
-      jacketCondition: null,
-      jacketNumber: null,
-
-      vestNumber: null,
-      vestBrand: null,
-      vestSize: null,
-      vestCondition: null,
-
-      packNumber: null,
-      packBrand: null,
-      packSize: null,
-      packCondition: null,
-
-      uniformLeaseSigned: null,
-      uniformReturned: null,
-
-      awards: null,
-
-      hasEmergencyContact: null,
-    });
-  }
-
   function generateReport() {
     session.post("report/getReportData", state, {}, true).then((resp) => {
       if (resp.status === 200) {
@@ -156,23 +104,19 @@ const Reports = ({ session }) => {
     });
   }
 
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
   return (
     <FilterContext.Provider value={[state, setState]}>
       <div>
         <h2 class="p-3">Reports</h2>
-        <pre>{JSON.stringify(state)}</pre>
+        {/* {<pre>{JSON.stringify(state)}</pre>} */}
         <div class="container-fluid">
           <div class="row justify-content-md-center">
             <div class="col col-lg-9">
-              <h4>Report Result:</h4>
-
-              {reportResult.length &&
-                reportResult.map((row) => (
-                  <p>
-                    {row.username + ", " + row.firstName + " " + row.lastName}
-                  </p>
-                ))}
-              <table class="table" id="table-to-xls">
+              <table class="table table-bordered" id="table-to-xls">
                 <thead>
                   <tr>
                     <th scope="col">Username</th>
@@ -180,45 +124,43 @@ const Reports = ({ session }) => {
                     <th scope="col">Last Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone Number</th>
-                    <th scope="col">User Type</th>
+                    <th scope="col">Status</th>
                   </tr>
                 </thead>
-                {/* <tbody>
-                {patrolCommit.map((row) => (
-                  <tr>
-                    <td>{row.season.description}</td>
-                    <td>{row.days}</td>
-                    <td>{row.achieved ? "Yes" : "No"}</td>
-                    <td>{row.notes}</td>
-                  </tr>
-                ))}
-              </tbody>*/}
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>This</td>
-                    <td>Is</td>
-                    <td>Filler</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Data</td>
-                    <td>Ok?</td>
-                    <td></td>
-                  </tr>
-                </tbody>
+                {
+                  <tbody>
+                    {reportResult.map((row) => (
+                      <tr>
+                        <td>
+                          <Link
+                            className="link"
+                            to={"/personnel/user/" + row.userID}
+                            // style={{ color: "#000" }}
+                          >
+                            {row.username}
+                          </Link>
+                        </td>
+                        <td>{row.firstName}</td>
+                        <td>{row.lastName}</td>
+                        <td>{row.email}</td>
+                        <td>{row.phoneNumber}</td>
+                        <td>{row.userType}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                }
               </table>
             </div>
             <div class="col col-sm" id="accordion">
               <div class="row">
                 <div class="col">
-                  {/* <button
+                  <button
                     type="button"
                     class="myButton btn btn-primary float-end d-flex-inline"
-                    onClick={resetReportFields}
+                    onClick={refreshPage}
                   >
-                    Reset Fields
-                  </button> */}
+                    Reset
+                  </button>
                   <button
                     type="button"
                     class="myButton btn btn-primary float-end d-flex-inline"

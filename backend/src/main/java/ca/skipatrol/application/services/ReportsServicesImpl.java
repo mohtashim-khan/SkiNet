@@ -419,7 +419,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
         } else {
             TypedQuery<User> typedQuery = em
-                    .createQuery(query.select(user).where(conditions.toArray(new Predicate[] {})));
+                    .createQuery(query.select(user).where(conditions.toArray(new Predicate[] {})).distinct(true));
             results = typedQuery.getResultList();
             for (User result : results) {
 

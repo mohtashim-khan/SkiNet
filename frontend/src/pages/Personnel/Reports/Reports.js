@@ -8,6 +8,7 @@ import ReportPatrolUniformAndEquipment from "./ReportPatrolUniformAndEquipment";
 import ReportTrainingAndEval from "./ReportTrainingAndEval";
 import "./Reports.css";
 import $ from "jquery";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 import FilterContext from "./ReportFilterContext";
 
@@ -165,20 +166,33 @@ const Reports = ({ session }) => {
             <div class="col col-lg-9">
               <h4>Report Result:</h4>
 
-              {reportResult.map((row) => (
-                <p>
-                  {row.username + ", " + row.firstName + " " + row.lastName}
-                </p>
-              ))}
-              <table class="table">
+              {reportResult.length &&
+                reportResult.map((row) => (
+                  <p>
+                    {row.username + ", " + row.firstName + " " + row.lastName}
+                  </p>
+                ))}
+              <table class="table" id="table-to-xls">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">User Type</th>
                   </tr>
                 </thead>
+                {/* <tbody>
+                {patrolCommit.map((row) => (
+                  <tr>
+                    <td>{row.season.description}</td>
+                    <td>{row.days}</td>
+                    <td>{row.achieved ? "Yes" : "No"}</td>
+                    <td>{row.notes}</td>
+                  </tr>
+                ))}
+              </tbody>*/}
                 <tbody>
                   <tr>
                     <th scope="row">1</th>
@@ -212,12 +226,14 @@ const Reports = ({ session }) => {
                   >
                     Generate Report
                   </button>
-                  <button
-                    type="button"
-                    class="myButton btn btn-success float-end d-flex-inline"
-                  >
-                    Export to Excel
-                  </button>
+                  <ReactHTMLTableToExcel
+                    id="test-table-xls-button"
+                    className="download-table-xls-button myButton btn btn-success float-end d-flex-inline"
+                    table="table-to-xls"
+                    filename="ReportOutput"
+                    sheet="tablexls"
+                    buttonText="Export to Excel"
+                  />
                 </div>
               </div>
 

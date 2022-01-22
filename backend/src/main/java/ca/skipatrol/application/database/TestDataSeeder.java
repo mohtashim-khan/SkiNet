@@ -114,7 +114,6 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         Brand spyder = new Brand("tempBrand");
                         brandRepository.save(spyder);
                         Conditions condition = new Conditions("Mediocre");
-
                         conditionsRepository.save(condition);
                         Size size = new Size("small", 999);
                         sizeRepository.save(size);

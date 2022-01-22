@@ -99,7 +99,7 @@ public class ReportsServicesImpl implements ReportsServices {
         String jacketBrand = gson.fromJson(inputDataJSON.get("jacketBrand"), String.class);
         String jacketSize = gson.fromJson(inputDataJSON.get("jacketSize"), String.class);
         String jacketCondition = gson.fromJson(inputDataJSON.get("jacketCondition"), String.class);
-        String jacketNumber = gson.fromJson(inputDataJSON.get("jacketCondition"), String.class);
+        String jacketNumber = gson.fromJson(inputDataJSON.get("jacketNumber"), String.class);
 
         String vestNumber = gson.fromJson(inputDataJSON.get("vestNumber"), String.class);
         String vestBrand = gson.fromJson(inputDataJSON.get("vestBrand"), String.class);

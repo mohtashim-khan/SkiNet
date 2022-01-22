@@ -33,7 +33,7 @@ const Header = ({ session }) => {
               {({ match }) => (
                 <li className={match ? "nav-item active" : "nav-item"}>
                   <Link className="nav-link" to="/personnel/users">
-                    Personnel
+                    Volunteers
                   </Link>
                 </li>
               )}
@@ -104,7 +104,9 @@ const Header = ({ session }) => {
           <img src={CSPLogo} width="32px" />
           <span> CSP</span>
         </a>
-        {session.logged_in() ? renderLoggedInNavigation() : renderLoggedOutNavigation()}
+        {session.logged_in()
+          ? renderLoggedInNavigation()
+          : renderLoggedOutNavigation()}
       </nav>
 
       <Route path="/personnel">

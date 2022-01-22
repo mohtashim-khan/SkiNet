@@ -108,7 +108,6 @@ public class ReportsServicesImpl implements ReportsServices {
 
         String packNumber = gson.fromJson(inputDataJSON.get("packNumber"), String.class);
         String packBrand = gson.fromJson(inputDataJSON.get("packBrand"), String.class);
-        String packSize = gson.fromJson(inputDataJSON.get("packSize"), String.class);
         String packCondition = gson.fromJson(inputDataJSON.get("packCondition"), String.class);
 
         Boolean uniformLeaseSigned = gson.fromJson(inputDataJSON.get("uniformLeaseSigned"), Boolean.class);
@@ -265,7 +264,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
         if (jacketBrand != null || jacketSize != null || jacketCondition != null || jacketNumber != null
                 || vestBrand != null || vestSize != null || vestCondition != null || vestNumber != null
-                || packBrand != null || packSize != null || packCondition != null || packNumber != null
+                || packBrand != null || packCondition != null || packNumber != null
                 || uniformLeaseSigned != null || uniformReturned != null) {
 
             Join<User, Uniform> uniformJoin = user.join("uniforms");
@@ -326,7 +325,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
             }
 
-            if (packBrand != null || packSize != null || packCondition != null || packNumber != null) {
+            if (packBrand != null || packCondition != null || packNumber != null) {
                 Join<Uniform, Pack> packJoin = uniformJoin.join("packs");
 
                 if (packBrand != null) {
@@ -393,7 +392,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
     }
 
-    //User Data Transfer Object - needed to avoid lazy loading errors
+    // User Data Transfer Object - needed to avoid lazy loading errors
     public User buildUserDTO(User user) {
         if (user != null) {
 

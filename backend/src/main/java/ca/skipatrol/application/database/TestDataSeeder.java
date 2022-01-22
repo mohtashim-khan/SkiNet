@@ -101,7 +101,6 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         Season season = seasonRepository.findByDescription("2023 - 2024").get();
                         Award award = awardRepository.findByDescription("The Lake Louise Family Award").get();
 
-
                         evalTrainingRepository.save(new EvalTraining("testEventType", LocalDate.now(), user));
                         operationalTrainingRepository
                                         .save(new OperationalTraining(LocalDate.now(), operationalEvent, user));
@@ -158,6 +157,180 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         Award award2 = awardRepository.findByDescription("Mallard Award").get();
                         personAwardRepository.save(new PersonAward("testComment", award2, season, user));
 
+                }
+
+                Optional<User> userLookup3 = this.userRepository.findByUsername("Franz_Ferdinand_Dead1");
+                if (userLookup3.isEmpty()) {
+                        User user = new User("Franz_Ferdinand_Dead1",
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Franz",
+                                        "Ferdinand",
+                                        "Archduke@email.com",
+                                        "028-006-01914",
+                                        EventRole.ROSTERED);
+                        this.userRepository.save(user);
+
+                        user = userRepository.findByUsername("Franz_Ferdinand_Dead1").get();
+                        userLookup = Optional.of(user);
+
+                        Role role = new Role(true, false, false, false,
+                                        false, true, false,
+                                        false, true, true, false, user);
+                        this.roleRepository.save(role);
+
+                        OperationalEvent operationalEvent = operationalEventRepository
+                                        .findByDescription("Lift Evacuation").get();
+                        OperationalEvent operationalEvent1 = operationalEventRepository
+                                        .findByDescription("STARS").get();
+                        Season season = seasonRepository.findByDescription("2032 - 2033").get();
+                        Award award = awardRepository.findByDescription("Silent Strike").get();
+
+                        evalTrainingRepository.save(
+                                        new EvalTraining("testEventType", LocalDate.of(1914, Month.JUNE, 28), user));
+                        operationalTrainingRepository
+                                        .save(new OperationalTraining(LocalDate.of(1914, Month.JUNE, 28),
+                                                        operationalEvent, user));
+
+                        operationalTrainingRepository
+                                        .save(new OperationalTraining(LocalDate.of(1914, Month.JUNE, 28),
+                                                        operationalEvent1, user));
+                        emergencyContactRepository
+                                        .save(new EmergencyContact("Spouse", "000-000-01900", "Sophie", user));
+                        patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "WW1", season, user));
+                        personAwardRepository.save(new PersonAward("WW2 thereafter", award, season, user));
+
+                        Uniform uniform = new Uniform(true, true, user);
+                        uniformRepository.save(uniform);
+
+                        Brand spyder = new Brand("Fancy Austrian suit thing");
+                        brandRepository.save(spyder);
+                        Conditions condition = new Conditions("Glorious");
+
+                        conditionsRepository.save(condition);
+                        Size size = sizeRepository.findByDescription("M").get();
+
+                        jacketRepository.save(new Jacket("2323", spyder, size, condition, uniform));
+                        vestRepository.save(new Vest("2323", spyder, size, condition, uniform));
+                        packRepository.save(new Pack("23232323", spyder, condition, uniform));
+
+                }
+                // NEW USER
+                Optional<User> userLookup4 = this.userRepository.findByUsername("AppleOverlord69");
+                if (userLookup4.isEmpty()) {
+                        User user = new User("AppleOverlord69",
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Tim",
+                                        "Apple",
+                                        "tim.apple@apple.com",
+                                        "291-321-1252",
+                                        EventRole.ROSTERED);
+                        this.userRepository.save(user);
+
+                        user = userRepository.findByUsername("AppleOverlord69").get();
+                        userLookup = Optional.of(user);
+
+                        Role role = new Role(true, true, true, true,
+                                        false, false, false,
+                                        false, false, false, false, user);
+                        this.roleRepository.save(role);
+
+                        OperationalEvent operationalEvent = operationalEventRepository
+                                        .findByDescription("Scenario Training").get();
+                        operationalTrainingRepository
+                                        .save(new OperationalTraining(LocalDate.now(), operationalEvent, user));
+
+                        OperationalEvent operationalEvent2 = operationalEventRepository
+                                        .findByDescription("STARS").get();
+                        operationalTrainingRepository
+                                        .save(new OperationalTraining(LocalDate.now(), operationalEvent2, user));
+
+                        Season season = seasonRepository.findByDescription("2025 - 2026").get();
+
+                        Award award = awardRepository.findByDescription("\"Triangle\" Operational Proficieny Award")
+                                        .get(); // Accomodation Award
+                        personAwardRepository.save(new PersonAward("Test Comment", award, season, user));
+
+                        Award award2 = awardRepository.findByDescription("Silent Strike").get();
+                        Season season2 = seasonRepository.findByDescription("2032 - 2033").get();
+                        personAwardRepository.save(new PersonAward("Another Test Comment", award2, season2, user));
+
+                        evalTrainingRepository
+                                        .save(new EvalTraining("sdssa", LocalDate.of(1914, Month.JUNE, 28), user));
+
+                        emergencyContactRepository
+                                        .save(new EmergencyContact("Mother", "403-603-2152", "Geraldine Cook", user));
+                        patrolCommitmentRepository
+                                        .save(new PatrolCommitment(true, 364,
+                                                        "This man worked 364 days out of the year!!!!", season, user));
+                        patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "not Achieved", season2, user));
+                        personAwardRepository.save(new PersonAward("testComment", award, season, user));
+
+                        Uniform uniform = new Uniform(false, true, user);
+                        uniformRepository.save(uniform);
+
+                        Brand northFace = brandRepository.findByDescription("North Face").get();
+                        Conditions condition = conditionsRepository.findByDescription("Poor").get();
+                        Conditions condition2 = conditionsRepository.findByDescription("Average").get();
+                        Brand spyder = brandRepository.findByDescription("North Face").get();
+
+                        Size size = sizeRepository.findByDescription("L").get();
+
+                        jacketRepository.save(new Jacket("12", northFace, size, condition, uniform));
+                        vestRepository.save(new Vest("13", spyder, size, condition2, uniform));
+                        packRepository.save(new Pack("166", spyder, condition, uniform));
+
+                }
+
+                // NEW USER
+                Optional<User> userLookup5 = this.userRepository.findByUsername("ScrantonStrangler");
+                if (userLookup5.isEmpty()) {
+                        User user = new User("ScrantonStrangler",
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Tobby",
+                                        "Flenderson",
+                                        "test@email.com",
+                                        "000-000-0000",
+                                        EventRole.ROSTERED);
+                        this.userRepository.save(user);
+
+                        user = userRepository.findByUsername("ScrantonStrangler").get();
+                        userLookup = Optional.of(user);
+
+                        Role role = new Role(true, true, false, false,
+                                        false, false, true,
+                                        false, true, false, false, user);
+                        this.roleRepository.save(role);
+
+                        OperationalEvent operationalEvent = operationalEventRepository
+                                        .findByDescription("STARS").get();
+                        Season season = seasonRepository.findByDescription("2025 - 2026").get();
+                        Award award = awardRepository.findByDescription("A over T").get();
+                        Award award2 = awardRepository.findByDescription("Accomodation Award").get();
+
+                        evalTrainingRepository.save(
+                                        new EvalTraining("Strangling", LocalDate.of(2015, Month.APRIL, 12), user));
+                        operationalTrainingRepository
+                                        .save(new OperationalTraining(LocalDate.of(2017, Month.OCTOBER, 15),
+                                                        operationalEvent, user));
+                        emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "Creed", user));
+                        patrolCommitmentRepository.save(new PatrolCommitment(true, 21, "testNote", season, user));
+                        personAwardRepository.save(new PersonAward("YAY", award, season, user));
+                        personAwardRepository.save(new PersonAward("YAY2", award2, season, user));
+
+                        Uniform uniform = new Uniform(true, true, user);
+                        uniformRepository.save(uniform);
+
+                        Brand mouse = new Brand("rattatoulie");
+                        brandRepository.save(mouse);
+                        Conditions condition = new Conditions("Mediocre");
+
+                        conditionsRepository.save(condition);
+                        Size size = new Size("Small-ish", 996);
+                        sizeRepository.save(size);
+
+                        jacketRepository.save(new Jacket("96", mouse, size, condition, uniform));
+                        vestRepository.save(new Vest("240", mouse, size, condition, uniform));
+                        packRepository.save(new Pack("999", mouse, condition, uniform));
 
                 }
 
@@ -180,19 +353,19 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                 userLookup = this.userRepository.findByUsername("username");
                 eventLookup = this.eventRepository.findByEventName("testEventName");
                 if (userLookup.isPresent() && eventLookup.isPresent()) {
-                        LocalDateTime test_TimestampSubRequest = LocalDateTime.of(1970,1,1,0,0);
+                        LocalDateTime test_TimestampSubRequest = LocalDateTime.of(1970, 1, 1, 0, 0);
                         EventLog testEventLog = new EventLog(eventLookup.get(),
-                                userLookup.get(),
-                                null,
-                                EventRole.ROSTERED,
-                                null,
-                                null,
-                                LocalDateTime.now(),
-                                test_TimestampSubRequest,
-                                "testComment",
-                                "testEmail",
-                                "123-123-1234",
-                                false);
+                                        userLookup.get(),
+                                        null,
+                                        EventRole.ROSTERED,
+                                        null,
+                                        null,
+                                        LocalDateTime.now(),
+                                        test_TimestampSubRequest,
+                                        "testComment",
+                                        "testEmail",
+                                        "123-123-1234",
+                                        false);
                         this.eventLogRepository.save(testEventLog);
                 }
 
@@ -265,7 +438,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
 
         void seedTestEventData() {
                 int[] days = {
-                        1, 3, 5, 11, 22, 23, 24, 27, 28
+                                1, 3, 5, 11, 22, 23, 24, 27, 28
                 };
                 int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
                 for (int day : days) {
@@ -284,17 +457,17 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                 LocalDateTime testTimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
                                 LocalDateTime testTimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
                                 EventLog testEventLog = new EventLog(eventLookup.get(),
-                                        userLookup.get(),
-                                        null,
-                                        EventRole.ROSTERED,
-                                        null,
-                                        null,
-                                        testTimestampRostered,
-                                        testTimestampRequest,
-                                        "testComment",
-                                        "testEmail",
-                                        "123-123-1234",
-                                        false);
+                                                userLookup.get(),
+                                                null,
+                                                EventRole.ROSTERED,
+                                                null,
+                                                null,
+                                                testTimestampRostered,
+                                                testTimestampRequest,
+                                                "testComment",
+                                                "testEmail",
+                                                "123-123-1234",
+                                                false);
                                 this.eventLogRepository.save(testEventLog);
                         }
                 }

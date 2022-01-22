@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import FilterContext from "./ReportFilterContext";
-export default function ReportLakeLouiseRoles({
-  session,
-  roleResult,
-  setRoleResult,
-}) {
+export default function ReportLakeLouiseRoles({ session }) {
   const [allSelected, setAllSelected] = useState(false);
   const [checked, setChecked] = useState([
     false, // 0 - Active
@@ -50,35 +46,19 @@ export default function ReportLakeLouiseRoles({
     "P0/Lead",
   ];
 
-  const toggleCheck = (inputName) => {
-    if (checked[inputName] === true) {
-      checked[inputName] = null;
-    }
-
-    if (checked[inputName] === null) {
-      checked[inputName] = true;
-    }
-
-    setChecked((prevState) => {
-      const newState = { ...prevState };
-      newState[inputName] = !prevState[inputName];
-      return newState;
-    });
-  };
-
-  useEffect(() => {
-    let allChecked = true;
-    for (const inputName in checked) {
-      if (checked[inputName] === false) {
-        allChecked = false;
-      }
-    }
-    if (allChecked) {
-      setAllSelected(true);
-    } else {
-      setAllSelected(false);
-    }
-  }, [checked]);
+  // useEffect(() => {
+  //   let allChecked = true;
+  //   for (const inputName in checked) {
+  //     if (checked[inputName] === false) {
+  //       allChecked = false;
+  //     }
+  //   }
+  //   if (allChecked) {
+  //     setAllSelected(true);
+  //   } else {
+  //     setAllSelected(false);
+  //   }
+  // }, [checked]);
 
   const selectAll = (value) => {
     setAllSelected(value);
@@ -133,18 +113,6 @@ export default function ReportLakeLouiseRoles({
                       <label>{prettyRoles[index]}</label>
                     </div>
                   ))}
-                  <div class="col">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      onChange={(event) => selectAll(event.target.checked)}
-                      checked={allSelected}
-                    />
-
-                    <label>
-                      <b>Select All</b>
-                    </label>
-                  </div>
                 </div>
               </div>
             </form>

@@ -89,7 +89,7 @@ const PatrolCommitment = ({ session, userID }) => {
             achieved: achievedBool,
             days: myDays,
             notes: myNotes,
-            season: seasons[mySeason]._links.self.href,
+            season: sortedSeasons[mySeason]._links.self.href,
             user: user._links.self.href,
           },
           {},

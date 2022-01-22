@@ -34,13 +34,7 @@ import FilterContext from "./ReportFilterContext";
 // };
 
 const Reports = ({ session }) => {
-  const [genResult, setGenResult] = useState({});
-  const [awardResult, setAwardResult] = useState({});
-  const [roleResult, setRoleResult] = useState({});
-  const [patComResult, setPatComResult] = useState({});
-  const [uniformResult, setUniformResult] = useState({});
-  const [trainingResult, setTrainingResult] = useState({});
-  const [generateNewReport, setGenerateNewReport] = useState(false);
+  const [reportResult, setReportResult] = useState([]);
 
   const [state, setState] = useState({
     onSnowDisciplineType: null,
@@ -155,6 +149,8 @@ const Reports = ({ session }) => {
     session.post("report/getReportData", state, {}, true).then((resp) => {
       if (resp.status === 200) {
         console.log("success");
+        console.log(resp.data);
+        setReportResult(resp.data);
       }
     });
   }
@@ -162,11 +158,18 @@ const Reports = ({ session }) => {
   return (
     <FilterContext.Provider value={[state, setState]}>
       <div>
-        <h2>Reports</h2>
+        <h2 class="p-3">Reports</h2>
         <pre>{JSON.stringify(state)}</pre>
         <div class="container-fluid">
           <div class="row justify-content-md-center">
             <div class="col col-lg-9">
+              <h4>Report Result:</h4>
+
+              {reportResult.map((row) => (
+                <p>
+                  {row.username + ", " + row.firstName + " " + row.lastName}
+                </p>
+              ))}
               <table class="table">
                 <thead>
                   <tr>
@@ -218,41 +221,17 @@ const Reports = ({ session }) => {
                 </div>
               </div>
 
-              <ReportTrainingAndEval
-                session={session}
-                trainingResult={trainingResult}
-                setTrainingResult={setTrainingResult}
-              />
+              <ReportTrainingAndEval session={session} />
 
-              <ReportPatrolCommitment
-                session={session}
-                patComResult={patComResult}
-                setPatComResult={setPatComResult}
-              />
+              <ReportPatrolCommitment session={session} />
 
-              <ReportLakeLouiseRoles
-                session={session}
-                roleResult={roleResult}
-                setRoleResult={setRoleResult}
-              />
+              <ReportLakeLouiseRoles session={session} />
 
-              <ReportPatrolUniformAndEquipment
-                session={session}
-                uniformResult={uniformResult}
-                setUniformResult={uniformResult}
-              />
+              <ReportPatrolUniformAndEquipment session={session} />
 
-              <ReportLakeLouiseAwards
-                session={session}
-                awardResult={awardResult}
-                setAwardResult={setAwardResult}
-              />
+              <ReportLakeLouiseAwards session={session} />
 
-              <ReportGeneral
-                session={session}
-                genResult={genResult}
-                setGenResult={setGenResult}
-              />
+              <ReportGeneral session={session} />
 
               <div class="row">
                 <div class="col">

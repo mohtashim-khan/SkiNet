@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { Form } from "react-bootstrap";
+import $ from "jquery";
+import { Link } from "react-router-dom";
+
+import FilterContext from "./ReportFilterContext";
 
 export default function ReportGeneral({ session }) {
+  const [state, setState] = useContext(FilterContext);
+
+  useEffect(() => {
+    $("#hasEmergencyContact").on("change", function (e) {
+      const selected = $(e.currentTarget).val();
+
+      setState((state) => ({
+        ...state,
+        hasEmergencyContact:
+          selected === "Yes" || selected === "No" ? selected === "Yes" : null,
+      }));
+      console.log("aaaaaa");
+    });
+  }, []);
+
   return (
     <>
       <div class="card">
@@ -25,17 +44,25 @@ export default function ReportGeneral({ session }) {
                     Has Emergency Contact:
                   </label>
                 </div>
-                <Form.Control as="select" custom>
-                  <option class="text-center" selected value="1">
+                <select class="form-select" id="hasEmergencyContact">
+                  <option class="text-center selected" value="-1" selected>
                     -
                   </option>
-                  <option class="text-center" value="2">
+                  <option
+                    class="text-center"
+                    value="Yes"
+                    // selected={state.hasEmergencyContact}
+                  >
                     Yes
                   </option>
-                  <option class="text-center" value="3">
+                  <option
+                    class="text-center"
+                    value="No"
+                    // selected={!state.hasEmergencyContact}
+                  >
                     No
                   </option>
-                </Form.Control>
+                </select>
               </div>
             </div>
           </div>

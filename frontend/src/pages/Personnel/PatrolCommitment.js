@@ -11,7 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 import $ from "jquery";
-import Alert from 'react-bootstrap/Alert'
+import Alert from "react-bootstrap/Alert";
 
 const PatrolCommitment = ({ session, userID }) => {
   const [discipline, setDisciplines] = useState([]);
@@ -22,10 +22,8 @@ const PatrolCommitment = ({ session, userID }) => {
 
   const [deletePrompted, setDeletePrompted] = useState(false);
 
-
   const [seasons, setSeasons] = useState([]);
   const [sortedSeasons, setSortedSeasons] = useState([]);
-
 
   function promptDeleteCancel() {
     setDeletePrompted(false);
@@ -40,15 +38,20 @@ const PatrolCommitment = ({ session, userID }) => {
     }
     for (const y in patrolCommit) {
       if (temp[y]) {
-        params.append("ids", patrolCommit[y].patrolCommitmentID)
+        params.append("ids", patrolCommit[y].patrolCommitmentID);
       }
     }
 
     session
-      .delete("profile/user/PatrolCommitments/deleteInBatch?" + params.toString(), {}, {}, true)
+      .delete(
+        "profile/user/PatrolCommitments/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
       .then((response) => {
         if (response.status == 200) {
-          readNewPatrolCommitments()
+          readNewPatrolCommitments();
         }
       })
       .catch((e) => {
@@ -64,35 +67,49 @@ const PatrolCommitment = ({ session, userID }) => {
 
   function addPatrolCommit() {
     try {
-
       const mySeason = $("#seasonSelect").val();
       const myNotes = $("#notesSelect").val();
       const myDays = $("#daysSelect").val();
       const achieved = $("#commitmentAchieved").val();
 
-      if (myDays.length === 0 || achieved < 0 || myDays === null || mySeason === -1) {
-        throw 'empty eval';
+      if (
+        myDays.length === 0 ||
+        achieved < 0 ||
+        myDays === null ||
+        mySeason === -1
+      ) {
+        throw "empty eval";
       }
-      const achievedBool = achieved === 1 ? true : false;
+      const achievedBool = achieved === "1" ? true : false;
 
-      session.post("patrolCommitments", {
-        achieved: achievedBool, days: myDays, notes: myNotes, season: seasons[mySeason]._links.self.href, user: user._links.self.href
-
-      }, {}, false).then(() => { readNewPatrolCommitments() })
-      promptAddCancel()
+      session
+        .post(
+          "patrolCommitments",
+          {
+            achieved: achievedBool,
+            days: myDays,
+            notes: myNotes.length === 0 ? null : myNotes,
+            season: sortedSeasons[mySeason]._links.self.href,
+            user: user._links.self.href,
+          },
+          {},
+          false
+        )
+        .then(() => {
+          readNewPatrolCommitments();
+        });
+      promptAddCancel();
     } catch (err) {
       console.log(err);
       setError(true);
     }
 
-    console.log("ASFASDFS", user._links.self.href)
+    console.log("ASFASDFS", user._links.self.href);
   }
 
   function readNewPatrolCommitments() {
     var id = userID;
-    var url =
-      "userID=" +
-      id;
+    var url = "userID=" + id;
 
     session
       .get("profile/user/PatrolCommitments?" + url, {}, {}, true)
@@ -102,11 +119,9 @@ const PatrolCommitment = ({ session, userID }) => {
           console.log(patrolCommit);
         }
       });
-
   }
 
   useEffect(() => {
-
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
         setUser(resp.data);
@@ -155,7 +170,6 @@ const PatrolCommitment = ({ session, userID }) => {
           </div>
 
           <div class="card-body">
-
             <table class="table table-bordered hover">
               <thead>
                 <tr>
@@ -174,7 +188,6 @@ const PatrolCommitment = ({ session, userID }) => {
                     <td>{row.notes}</td>
                   </tr>
                 ))}
-
               </tbody>
             </table>{" "}
             <button
@@ -184,7 +197,6 @@ const PatrolCommitment = ({ session, userID }) => {
             >
               Add
             </button>
-
             <button
               class="btn btn-primary m-1"
               type="button"
@@ -210,7 +222,12 @@ const PatrolCommitment = ({ session, userID }) => {
                   id={index}
                 />
                 <label class="form-check-label">
-                  {"Season: " + row.season.description + ", Days: " + row.days + ", Achieved: " + (row.achieved ? "Yes" : "No")}
+                  {"Season: " +
+                    row.season.description +
+                    ", Days: " +
+                    row.days +
+                    ", Achieved: " +
+                    (row.achieved ? "Yes" : "No")}
                 </label>
               </div>
             ))}
@@ -226,12 +243,14 @@ const PatrolCommitment = ({ session, userID }) => {
           <Modal.Title>Adding Patrol Commitment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-
-          <Alert variant="danger" show={error} onClose={() => setError(false)} dismissible={true}>
+          <Alert
+            variant="danger"
+            show={error}
+            onClose={() => setError(false)}
+            dismissible={true}
+          >
             <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>
-              Looks like you need glasses
-            </p>
+            <p>Looks like you need glasses</p>
           </Alert>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
@@ -278,17 +297,8 @@ const PatrolCommitment = ({ session, userID }) => {
               </label>
             </div>
 
-            <Form.Control
-              as="select"
-              custom
-
-              id="seasonSelect"
-            >
-              <option
-                class="text-center"
-                selected
-                value={-1}
-              >
+            <Form.Control as="select" custom id="seasonSelect">
+              <option class="text-center" selected value={-1}>
                 -
               </option>
 
@@ -302,14 +312,17 @@ const PatrolCommitment = ({ session, userID }) => {
 
           <div class="input-group mb-2">
             <span class="input-group-text">Notes</span>
-            <textarea class="form-control" aria-label="With textarea" id="notesSelect"></textarea>
+            <textarea
+              class="form-control"
+              aria-label="With textarea"
+              id="notesSelect"
+            ></textarea>
           </div>
 
           <Button variant="primary" onClick={addPatrolCommit}>
             Submit
           </Button>
         </Modal.Body>
-
       </Modal>
     </>
   );

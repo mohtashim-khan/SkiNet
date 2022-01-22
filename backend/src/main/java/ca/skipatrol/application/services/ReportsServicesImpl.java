@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -78,8 +79,10 @@ public class ReportsServicesImpl implements ReportsServices {
 
         // Patrol Commitment
         Boolean commitmentAchieved = gson.fromJson(inputDataJSON.get("commitmentAchieved"), Boolean.class);
-        Integer numberofCommitmentDays = gson.fromJson(inputDataJSON.get("numberofCommitmentDays"), Integer.class);
+        Integer commitmentDaysLower = gson.fromJson(inputDataJSON.get("commitmentDaysLower"), Integer.class);
+        Integer commitmentDaysUpper = gson.fromJson(inputDataJSON.get("commitmentDaysUpper"), Integer.class);
         String season = gson.fromJson(inputDataJSON.get("season"), String.class);
+        Boolean hasNotes = gson.fromJson(inputDataJSON.get("hasNotes"), Boolean.class);
 
         // Roles
         Boolean admin = gson.fromJson(inputDataJSON.get("admin"), Boolean.class);
@@ -98,7 +101,7 @@ public class ReportsServicesImpl implements ReportsServices {
         String jacketBrand = gson.fromJson(inputDataJSON.get("jacketBrand"), String.class);
         String jacketSize = gson.fromJson(inputDataJSON.get("jacketSize"), String.class);
         String jacketCondition = gson.fromJson(inputDataJSON.get("jacketCondition"), String.class);
-        String jacketNumber = gson.fromJson(inputDataJSON.get("jacketCondition"), String.class);
+        String jacketNumber = gson.fromJson(inputDataJSON.get("jacketNumber"), String.class);
 
         String vestNumber = gson.fromJson(inputDataJSON.get("vestNumber"), String.class);
         String vestBrand = gson.fromJson(inputDataJSON.get("vestBrand"), String.class);
@@ -107,7 +110,6 @@ public class ReportsServicesImpl implements ReportsServices {
 
         String packNumber = gson.fromJson(inputDataJSON.get("packNumber"), String.class);
         String packBrand = gson.fromJson(inputDataJSON.get("packBrand"), String.class);
-        String packSize = gson.fromJson(inputDataJSON.get("packSize"), String.class);
         String packCondition = gson.fromJson(inputDataJSON.get("packCondition"), String.class);
 
         Boolean uniformLeaseSigned = gson.fromJson(inputDataJSON.get("uniformLeaseSigned"), Boolean.class);
@@ -141,6 +143,16 @@ public class ReportsServicesImpl implements ReportsServices {
                         onSnowDateEvaluatedUpper));
             }
 
+            else if(onSnowDateEvaluatedLowerJSON == null && onSnowDateEvaluatedUpperJSON != null){
+                LocalDate onSnowDateEvaluatedUpper = LocalDate.parse(onSnowDateEvaluatedUpperJSON);
+                conditions.add(builder.lessThanOrEqualTo(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedUpper));
+            }
+
+            else if(onSnowDateEvaluatedLowerJSON != null && onSnowDateEvaluatedUpperJSON == null){
+                LocalDate onSnowDateEvaluatedLower = LocalDate.parse(onSnowDateEvaluatedLowerJSON);
+                conditions.add(builder.greaterThanOrEqualTo(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedLower));
+            }
+
             if (onSnowEvaluatedBy != null) {
                 conditions.add(builder.equal(onSnowEvalJoin.get("evaluatedBy"), onSnowEvaluatedBy));
             }
@@ -169,6 +181,16 @@ public class ReportsServicesImpl implements ReportsServices {
                 conditions.add(builder.between(evalTrainingJoin.get("completedDate"), evalDateCompletedLower,
                         evalDateCompletedUpper));
             }
+
+            else if(evalDateCompletedLowerJSON == null && evalDateCompletedUpperJSON != null){
+                LocalDate evalDateCompletedUpper = LocalDate.parse(evalDateCompletedUpperJSON);
+                conditions.add(builder.lessThanOrEqualTo(evalTrainingJoin.get("completedDate"), evalDateCompletedUpper));
+            }
+
+            else if(evalDateCompletedLowerJSON != null && evalDateCompletedUpperJSON == null){
+                LocalDate evalDateCompletedLower = LocalDate.parse(evalDateCompletedLowerJSON);
+                conditions.add(builder.greaterThanOrEqualTo(evalTrainingJoin.get("completedDate"), evalDateCompletedLower));
+            }
         }
 
         // Join OperationalTraining
@@ -184,6 +206,16 @@ public class ReportsServicesImpl implements ReportsServices {
                         patrollerDateCompletedUpper));
             }
 
+            else if(patrollerDateCompletedLowerJSON == null && patrollerDateCompletedUpperJSON != null){
+                LocalDate patrollerDateCompletedUpper = LocalDate.parse(patrollerDateCompletedUpperJSON);
+                conditions.add(builder.lessThanOrEqualTo(opTrainingJoin.get("completedDate"), patrollerDateCompletedUpper));
+            }
+
+            else if(patrollerDateCompletedLowerJSON != null && patrollerDateCompletedUpperJSON == null){
+                LocalDate patrollerDateCompletedLower = LocalDate.parse(patrollerDateCompletedLowerJSON);
+                conditions.add(builder.greaterThanOrEqualTo(opTrainingJoin.get("completedDate"), patrollerDateCompletedLower));
+            }
+
             if (patrollerEventType != null) {
                 Join<OperationalTraining, OperationalEvent> opEventJoin = opTrainingJoin.join("operationalEvent");
                 conditions.add(builder.equal(opEventJoin.get("description"), patrollerEventType));
@@ -191,11 +223,21 @@ public class ReportsServicesImpl implements ReportsServices {
         }
 
         // Join Patrol Commitment
-        if (season != null || numberofCommitmentDays != null || commitmentAchieved != null) {
+        if (season != null || commitmentDaysLower != null || commitmentDaysUpper != null || commitmentAchieved != null || hasNotes != null) {
             Join<User, PatrolCommitment> patrolCommitJoin = user.join("patrolCommitments");
 
-            if (numberofCommitmentDays != null) {
-                conditions.add(builder.equal(patrolCommitJoin.get("days"), numberofCommitmentDays));
+            if (commitmentDaysLower != null && commitmentDaysUpper !=null){
+                conditions.add(builder.between(patrolCommitJoin.get("days"), commitmentDaysLower, commitmentDaysUpper));
+            }
+
+            else if(commitmentDaysLower == null && commitmentDaysUpper != null)
+            {
+                conditions.add(builder.lessThanOrEqualTo(patrolCommitJoin.get("days"), commitmentDaysUpper));
+            }
+
+            else if(commitmentDaysLower != null && commitmentDaysUpper == null)
+            {
+                conditions.add(builder.greaterThanOrEqualTo(patrolCommitJoin.get("days"), commitmentDaysLower));
             }
 
             if (commitmentAchieved != null) {
@@ -205,6 +247,15 @@ public class ReportsServicesImpl implements ReportsServices {
             if (season != null) {
                 Join<PatrolCommitment, Season> seasonJoin = patrolCommitJoin.join("season");
                 conditions.add(builder.equal(seasonJoin.get("description"), season));
+            }
+
+            if (hasNotes != null) {
+
+                if (hasNotes == true) {
+                    conditions.add(builder.isNotNull(patrolCommitJoin.get("notes")));
+                } else if (hasNotes == false) {
+                    conditions.add(builder.isNull(patrolCommitJoin.get("notes")));
+                }
             }
         }
 
@@ -264,7 +315,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
         if (jacketBrand != null || jacketSize != null || jacketCondition != null || jacketNumber != null
                 || vestBrand != null || vestSize != null || vestCondition != null || vestNumber != null
-                || packBrand != null || packSize != null || packCondition != null || packNumber != null
+                || packBrand != null || packCondition != null || packNumber != null
                 || uniformLeaseSigned != null || uniformReturned != null) {
 
             Join<User, Uniform> uniformJoin = user.join("uniforms");
@@ -325,7 +376,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
             }
 
-            if (packBrand != null || packSize != null || packCondition != null || packNumber != null) {
+            if (packBrand != null || packCondition != null || packNumber != null) {
                 Join<Uniform, Pack> packJoin = uniformJoin.join("packs");
 
                 if (packBrand != null) {
@@ -347,9 +398,10 @@ public class ReportsServicesImpl implements ReportsServices {
 
         // Join Awards -- Only allowing a query by award Descriptions
         if (awards != null) {
+            List<String> awardsList = Arrays.asList(awards);
             Join<User, PersonAward> personAwardJoin = user.join("personAwards");
             Join<PersonAward, Award> awardJoin = personAwardJoin.join("award");
-            conditions.add(awardJoin.get("description").in((Object[]) awards));
+            conditions.add(awardJoin.get("description").in(awardsList));
 
         }
 
@@ -377,7 +429,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
         } else {
             TypedQuery<User> typedQuery = em
-                    .createQuery(query.select(user).where(conditions.toArray(new Predicate[] {})));
+                    .createQuery(query.select(user).where(conditions.toArray(new Predicate[] {})).distinct(true));
             results = typedQuery.getResultList();
             for (User result : results) {
 
@@ -391,7 +443,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
     }
 
-    //User Data Transfer Object - needed to avoid lazy loading errors
+    // User Data Transfer Object - needed to avoid lazy loading errors
     public User buildUserDTO(User user) {
         if (user != null) {
 

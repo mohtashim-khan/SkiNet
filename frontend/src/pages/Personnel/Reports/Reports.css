@@ -7,10 +7,28 @@
   margin-bottom: 10px;
 }
 
-
-
-.myButton{
-  margin-left: 5px;
-  margin-right: 5px;
+.myButton {
+  margin-left: 2px;
+  margin-right: 2px;
   margin-bottom: 10px;
+}
+.button {
+  background-color: rgb(56, 145, 5);
+  color: white;
+  font-size: 12px;
+  padding: 9px 9px;
+  border-radius: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.link {
+  text-decoration: none;
+  color: #000;
+}
+.link:hover {
+  text-decoration: underline;
+  color: #00f;
 }

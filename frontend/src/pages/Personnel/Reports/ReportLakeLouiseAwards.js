@@ -1,17 +1,30 @@
 import { map } from "jquery";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form } from "react-bootstrap";
+import FilterContext from "./ReportFilterContext";
 
 export default function ReportLakeLouiseRoles({ session }) {
-  const [allSelected, setAllSelected] = useState(false);
   const [checked, setChecked] = useState([]);
   const [awards, setAwards] = useState([]);
   const [seasons, setSeasons] = useState([]);
   const [sortedSeasons, setSortedSeasons] = useState([]);
 
-  function OnChangeVal(event) {
-    //setType(event.target.value);
-    console.log("fuck you");
+  const [state, setState] = useContext(FilterContext);
+
+  function updateAwards(awardsChecked) {
+    var reportedAwards = [];
+    for (let i = 0; i < Object.keys(awardsChecked).length; i++) {
+      if (awardsChecked[i] === true) {
+        reportedAwards.push(awards[i].description);
+      }
+    }
+
+    setState((state) => ({
+      ...state,
+      awards: Object.keys(reportedAwards).length === 0 ? null : reportedAwards,
+    }));
+
+    setChecked(awardsChecked);
   }
 
   const toggleCheck = (inputName) => {
@@ -45,30 +58,9 @@ export default function ReportLakeLouiseRoles({ session }) {
   }, [seasons]);
 
   useEffect(() => {
-    setChecked(Array(awards.length).fill(false));
+    setChecked(Array(awards.length).fill(false)); //
   }, [awards]);
 
-  useEffect(() => {
-    console.log(checked);
-    let allChecked = true;
-    for (const inputName in checked) {
-      if (checked[inputName] === false) {
-        allChecked = false;
-      }
-    }
-    setAllSelected(allChecked);
-  }, [checked]);
-
-  const selectAll = (value) => {
-    setAllSelected(value);
-    setChecked((prevState) => {
-      const newState = { ...prevState };
-      for (const inputName in newState) {
-        newState[inputName] = value;
-      }
-      return newState;
-    });
-  };
   return (
     <>
       <div class="card">
@@ -97,28 +89,23 @@ export default function ReportLakeLouiseRoles({ session }) {
                         class="form-check-input"
                         type="checkbox"
                         name="nr1"
-                        onChange={() => toggleCheck(index)}
+                        onChange={() => {
+                          /** On change, toggle checked array */
+
+                          const temp = { ...checked };
+                          temp[index] = !temp[index];
+                          updateAwards(temp);
+                        }}
                         checked={checked[index]}
+                        id="selectAwards"
                       />
                       <label>{row.description}</label>
                     </div>
                   ))}
-                  <div class="col">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      onChange={(event) => selectAll(event.target.checked)}
-                      checked={allSelected}
-                    />
-
-                    <label>
-                      <b>Select All</b>
-                    </label>
-                  </div>
                 </div>
               </div>
             </form>
-            <div class="mt-3">
+            {/* <div class="mt-3">
               <h5>
                 <b>Season:</b>
               </h5>
@@ -170,7 +157,7 @@ export default function ReportLakeLouiseRoles({ session }) {
                   ))}
                 </Form.Control>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

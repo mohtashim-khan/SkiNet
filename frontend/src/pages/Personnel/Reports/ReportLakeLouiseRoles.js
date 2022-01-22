@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect, useContext } from "react";
+import FilterContext from "./ReportFilterContext";
 export default function ReportLakeLouiseRoles({ session }) {
   const [allSelected, setAllSelected] = useState(false);
   const [checked, setChecked] = useState([
@@ -16,41 +16,49 @@ export default function ReportLakeLouiseRoles({ session }) {
     false, // 10 - Training Event Lead
   ]);
 
+  const [state, setState] = useContext(FilterContext);
+
   const roles = [
-    "Active",
-    "Admin",
-    "APL",
-    "HL",
-    "New_User",
-    "On-Snow Evaluator",
-    "Orienteer",
-    "P0/Lead",
-    "PL",
-    "Recruitment Lead",
-    "Training Event Lead",
+    "admin",
+    "pl",
+    "apl",
+    "hl",
+    "active",
+    "newUser",
+    "trainingEventLead",
+    "onSnowEvaluator",
+    "orienteerer",
+    "recruitmentLead",
+    "p0Lead",
   ];
 
-  const toggleCheck = (inputName) => {
-    setChecked((prevState) => {
-      const newState = { ...prevState };
-      newState[inputName] = !prevState[inputName];
-      return newState;
-    });
-  };
+  const prettyRoles = [
+    "Admin",
+    "Patrol Leader",
+    "Active Patrol Leader",
+    "HL",
+    "Active User",
+    "New User",
+    "Training Event Lead",
+    "On-Snow Evaluator",
+    "Orienteer",
+    "Recruitment Lead",
+    "P0/Lead",
+  ];
 
-  useEffect(() => {
-    let allChecked = true;
-    for (const inputName in checked) {
-      if (checked[inputName] === false) {
-        allChecked = false;
-      }
-    }
-    if (allChecked) {
-      setAllSelected(true);
-    } else {
-      setAllSelected(false);
-    }
-  }, [checked]);
+  // useEffect(() => {
+  //   let allChecked = true;
+  //   for (const inputName in checked) {
+  //     if (checked[inputName] === false) {
+  //       allChecked = false;
+  //     }
+  //   }
+  //   if (allChecked) {
+  //     setAllSelected(true);
+  //   } else {
+  //     setAllSelected(false);
+  //   }
+  // }, [checked]);
 
   const selectAll = (value) => {
     setAllSelected(value);
@@ -88,24 +96,23 @@ export default function ReportLakeLouiseRoles({ session }) {
                         class="form-check-input"
                         type="checkbox"
                         name="nr1"
-                        onChange={() => toggleCheck(index)}
-                        checked={checked[index]}
+                        onChange={() => {
+                          if (state[row]) {
+                            state[row] = null;
+                          } else if (state[row] === null) {
+                            state[row] = true;
+                          }
+                          setState((state) => ({
+                            ...state,
+                          }));
+                          console.log(state[row], row, "aqeqwrt");
+                        }}
+                        checked={state[row] === null ? false : true}
+                        id="selectRoles"
                       />
-                      <label>{roles[index]}</label>
+                      <label>{prettyRoles[index]}</label>
                     </div>
                   ))}
-                  <div class="col">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      onChange={(event) => selectAll(event.target.checked)}
-                      checked={allSelected}
-                    />
-
-                    <label>
-                      <b>Select All</b>
-                    </label>
-                  </div>
                 </div>
               </div>
             </form>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Route, Link, useHistory } from "react-router-dom";
 import CSPLogo from "../../images/CSP-logo.png";
+import "./Header.css";
 
 const Header = ({ session }) => {
   const history = useHistory();
@@ -33,7 +34,7 @@ const Header = ({ session }) => {
               {({ match }) => (
                 <li className={match ? "nav-item active" : "nav-item"}>
                   <Link className="nav-link" to="/personnel/users">
-                    Personnel
+                    Volunteers
                   </Link>
                 </li>
               )}
@@ -60,7 +61,10 @@ const Header = ({ session }) => {
         </div>
 
         <div>
-          <button className="btn btn-light my-2 my-sm-0" onClick={logOut}>
+          <button
+            className="btn btn-light my-2 my-sm-0 signOutButton"
+            onClick={logOut}
+          >
             Sign Out
           </button>
         </div>
@@ -101,10 +105,12 @@ const Header = ({ session }) => {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">
-          <img src={CSPLogo} width="32px" />
+          <img class="myImage" src={CSPLogo} width="32px" />
           <span> CSP</span>
         </a>
-        {session.logged_in() ? renderLoggedInNavigation() : renderLoggedOutNavigation()}
+        {session.logged_in()
+          ? renderLoggedInNavigation()
+          : renderLoggedOutNavigation()}
       </nav>
 
       <Route path="/personnel">

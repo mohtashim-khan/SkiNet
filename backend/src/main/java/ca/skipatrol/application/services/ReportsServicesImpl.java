@@ -141,6 +141,16 @@ public class ReportsServicesImpl implements ReportsServices {
                         onSnowDateEvaluatedUpper));
             }
 
+            else if(onSnowDateEvaluatedLowerJSON == null && onSnowDateEvaluatedUpperJSON != null){
+                LocalDate onSnowDateEvaluatedUpper = LocalDate.parse(onSnowDateEvaluatedUpperJSON);
+                conditions.add(builder.lessThanOrEqualTo(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedUpper));
+            }
+
+            else if(onSnowDateEvaluatedLowerJSON != null && onSnowDateEvaluatedUpperJSON == null){
+                LocalDate onSnowDateEvaluatedLower = LocalDate.parse(onSnowDateEvaluatedLowerJSON);
+                conditions.add(builder.greaterThanOrEqualTo(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedLower));
+            }
+
             if (onSnowEvaluatedBy != null) {
                 conditions.add(builder.equal(onSnowEvalJoin.get("evaluatedBy"), onSnowEvaluatedBy));
             }
@@ -169,6 +179,16 @@ public class ReportsServicesImpl implements ReportsServices {
                 conditions.add(builder.between(evalTrainingJoin.get("completedDate"), evalDateCompletedLower,
                         evalDateCompletedUpper));
             }
+
+            else if(evalDateCompletedLowerJSON == null && evalDateCompletedUpperJSON != null){
+                LocalDate evalDateCompletedUpper = LocalDate.parse(evalDateCompletedUpperJSON);
+                conditions.add(builder.lessThanOrEqualTo(evalTrainingJoin.get("evaluationDate"), evalDateCompletedUpper));
+            }
+
+            else if(evalDateCompletedLowerJSON != null && evalDateCompletedUpperJSON == null){
+                LocalDate evalDateCompletedLower = LocalDate.parse(evalDateCompletedLowerJSON);
+                conditions.add(builder.greaterThanOrEqualTo(evalTrainingJoin.get("evaluationDate"), evalDateCompletedLower));
+            }
         }
 
         // Join OperationalTraining
@@ -182,6 +202,16 @@ public class ReportsServicesImpl implements ReportsServices {
 
                 conditions.add(builder.between(opTrainingJoin.get("completedDate"), patrollerDateCompletedLower,
                         patrollerDateCompletedUpper));
+            }
+
+            else if(patrollerDateCompletedLowerJSON == null && patrollerDateCompletedUpperJSON != null){
+                LocalDate patrollerDateCompletedUpper = LocalDate.parse(patrollerDateCompletedUpperJSON);
+                conditions.add(builder.lessThanOrEqualTo(opTrainingJoin.get("evaluationDate"), patrollerDateCompletedUpper));
+            }
+
+            else if(patrollerDateCompletedLowerJSON != null && patrollerDateCompletedUpperJSON == null){
+                LocalDate patrollerDateCompletedLower = LocalDate.parse(patrollerDateCompletedLowerJSON);
+                conditions.add(builder.greaterThanOrEqualTo(opTrainingJoin.get("evaluationDate"), patrollerDateCompletedLower));
             }
 
             if (patrollerEventType != null) {

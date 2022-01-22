@@ -234,6 +234,12 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         false, false, false, false, user);
                         this.roleRepository.save(role);
 
+                        LocalDate date1 = LocalDate.of(2011, Month.AUGUST, 1);
+                        Discipline testDiscipline = new Discipline("Scamming");
+                        disciplineRepository.save(testDiscipline);
+                        OnSnowEval onSnowEval = new OnSnowEval(date1, testDiscipline, "Steve Jobs", user);
+                        this.onSnowEvalRepository.save(onSnowEval);
+
                         OperationalEvent operationalEvent = operationalEventRepository
                                         .findByDescription("Scenario Training").get();
                         operationalTrainingRepository
@@ -320,7 +326,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         Uniform uniform = new Uniform(true, true, user);
                         uniformRepository.save(uniform);
 
-                        Brand mouse = new Brand("rattatoulie");
+                        Brand mouse = new Brand("ratatouille");
                         brandRepository.save(mouse);
                         Conditions condition = new Conditions("Mediocre");
 
@@ -331,6 +337,12 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         jacketRepository.save(new Jacket("96", mouse, size, condition, uniform));
                         vestRepository.save(new Vest("240", mouse, size, condition, uniform));
                         packRepository.save(new Pack("999", mouse, condition, uniform));
+
+                        LocalDate onSnowDate = LocalDate.of(2019, Month.DECEMBER, 24);
+                        Discipline testDiscipline = new Discipline("Strangler");
+                        disciplineRepository.save(testDiscipline);
+                        OnSnowEval onSnowEval = new OnSnowEval(onSnowDate, testDiscipline, "Micheal Scott", user);
+                        this.onSnowEvalRepository.save(onSnowEval);
 
                 }
 

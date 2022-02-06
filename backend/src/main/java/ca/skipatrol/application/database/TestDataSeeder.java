@@ -130,14 +130,14 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         new BCryptPasswordEncoder().encode("password"),
                                         "Michael",
                                         "Scott",
-                                        "test@email.com",
+                                        "testMichael@email.com",
                                         "000-000-0000",
                                         EventRole.ROSTERED);
                         this.userRepository.save(new User("AAAAA",
                                         new BCryptPasswordEncoder().encode("password"),
                                         "Michael",
                                         "Scott",
-                                        "test@email.com",
+                                        "testMichael@email.com",
                                         "000-000-0000",
                                         EventRole.ROSTERED));
                         userLookup2 = Optional.of(user);
@@ -293,7 +293,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         new BCryptPasswordEncoder().encode("password"),
                                         "Tobey",
                                         "Flenderson",
-                                        "test@email.com",
+                                        "test_Tobey@email.com",
                                         "000-000-0000",
                                         EventRole.ROSTERED);
                         this.userRepository.save(user);

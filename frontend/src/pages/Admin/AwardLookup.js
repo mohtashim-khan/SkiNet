@@ -80,7 +80,7 @@ const AwardLookup = ({ session }) => {
 
   return (
     <div class="col-4 p-3">
-      <h5>Award Brand</h5>
+      <h5>Award</h5>
       <div class="overflow-auto" data-spy="scroll">
         <ul class="list-group scrollableList ">
           {Array.from(award).map((kv) => {

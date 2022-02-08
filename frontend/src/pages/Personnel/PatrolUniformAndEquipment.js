@@ -334,197 +334,254 @@ const PatrolUniformAndEquipment = ({ session, userID }) => {
             <Alert.Heading>Uh oh!</Alert.Heading>
             <p>Looks like you need glasses</p>
           </Alert>
-          <h5>Jacket</h5>
+          <div class="card">
+            <button
+              class="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#jacket"
+              aria-expanded="false"
+              aria-controls="jacket"
+            >
+              <h5>Jacket</h5>
+            </button>
+            <div class="collapse" id="jacket">
+              <div class="card-body">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Brand
+                    </label>
+                  </div>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
-                Brand
-              </label>
+                  <select class="form-select" id="jacketBrandSelect">
+                    <option selected value={-1}>
+                      -
+                    </option>
+                    {brands.map((row, index) => (
+                      <option value={index}>{row.description}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Size
+                    </label>
+                  </div>
+
+                  <select class="form-select" id="jacketSizeSelect">
+                    <option selected value={-1}>
+                      -
+                    </option>
+                    {sizes.map((row, index) => (
+                      <option value={index}>{row.description}</option>
+                    ))}
+                  </select>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Condition
+                    </label>
+                  </div>
+
+                  <select class="form-select" id="jacketConditionSelect">
+                    <option selected value={-1}>
+                      -
+                    </option>
+                    {conditions.map((row, index) => (
+                      <option value={index}>{row.description}</option>
+                    ))}
+                  </select>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="jacketNumberSelect">
+                      Number
+                    </label>
+                  </div>
+                  <input
+                    class="text-center form-control"
+                    type="number"
+                    id="jacketNumberSelect"
+                    min="0"
+                    placeholder={0}
+                    data-bind="value:numberSelect"
+                  ></input>
+                </div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  onClick={addNewJacket}
+                >
+                  Add
+                </button>
+              </div>
             </div>
-
-            <select class="form-select" id="jacketBrandSelect">
-              <option selected value={-1}>
-                -
-              </option>
-              {brands.map((row, index) => (
-                <option value={index}>{row.description}</option>
-              ))}
-            </select>
           </div>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
-                Size
-              </label>
+          <div class="card">
+            <button
+              class="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#vest"
+              aria-expanded="false"
+              aria-controls="vest"
+            >
+              <h5>Vest</h5>
+            </button>
+
+            <div class="collapse" id="vest">
+              <div class="card-body">
+                <div class="input-group mt-3 mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Brand
+                    </label>
+                  </div>
+
+                  <select class="form-select" id="vestBrandSelect">
+                    <option selected value={-1}>
+                      -
+                    </option>
+                    {brands.map((row, index) => (
+                      <option value={index}>{row.description}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Size
+                    </label>
+                  </div>
+
+                  <select class="form-select" id="vestSizeSelect">
+                    <option selected value={-1}>
+                      -
+                    </option>
+                    {sizes.map((row, index) => (
+                      <option value={index}>{row.description}</option>
+                    ))}
+                  </select>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Condition
+                    </label>
+                  </div>
+
+                  <select class="form-select" id="vestConditionSelect">
+                    <option selected value={-1}>
+                      -
+                    </option>
+                    {conditions.map((row, index) => (
+                      <option value={index}>{row.description}</option>
+                    ))}
+                  </select>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="vestNumberSelect">
+                      Number
+                    </label>
+                  </div>
+                  <input
+                    class="text-center form-control"
+                    type="number"
+                    id="vestNumberSelect"
+                    min="0"
+                    placeholder={0}
+                    data-bind="value:numberSelect"
+                  ></input>
+                </div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  onClick={addNewVest}
+                >
+                  Add
+                </button>
+              </div>
             </div>
-
-            <select class="form-select" id="jacketSizeSelect">
-              <option selected value={-1}>
-                -
-              </option>
-              {sizes.map((row, index) => (
-                <option value={index}>{row.description}</option>
-              ))}
-            </select>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
-                Condition
-              </label>
-            </div>
-
-            <select class="form-select" id="jacketConditionSelect">
-              <option selected value={-1}>
-                -
-              </option>
-              {conditions.map((row, index) => (
-                <option value={index}>{row.description}</option>
-              ))}
-            </select>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="jacketNumberSelect">
-                Number
-              </label>
-            </div>
-            <input
-              class="text-center form-control"
-              type="number"
-              id="jacketNumberSelect"
-              min="0"
-              placeholder={0}
-              data-bind="value:numberSelect"
-            ></input>
-          </div>
-          <button class="btn btn-primary" type="button" onClick={addNewJacket}>
-            Add
-          </button>
-          <h5>Vest</h5>
-
-          <div class="input-group mt-3 mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
-                Brand
-              </label>
-            </div>
-
-            <select class="form-select" id="vestBrandSelect">
-              <option selected value={-1}>
-                -
-              </option>
-              {brands.map((row, index) => (
-                <option value={index}>{row.description}</option>
-              ))}
-            </select>
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
-                Size
-              </label>
-            </div>
-
-            <select class="form-select" id="vestSizeSelect">
-              <option selected value={-1}>
-                -
-              </option>
-              {sizes.map((row, index) => (
-                <option value={index}>{row.description}</option>
-              ))}
-            </select>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
-                Condition
-              </label>
-            </div>
-
-            <select class="form-select" id="vestConditionSelect">
-              <option selected value={-1}>
-                -
-              </option>
-              {conditions.map((row, index) => (
-                <option value={index}>{row.description}</option>
-              ))}
-            </select>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="vestNumberSelect">
-                Number
-              </label>
-            </div>
-            <input
-              class="text-center form-control"
-              type="number"
-              id="vestNumberSelect"
-              min="0"
-              placeholder={0}
-              data-bind="value:numberSelect"
-            ></input>
-          </div>
-          <button class="btn btn-primary" type="button" onClick={addNewVest}>
-            Add
-          </button>
-          <h5>Pack</h5>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
-                Brand
-              </label>
-            </div>
-
-            <select class="form-select" id="packBrandSelect">
-              <option selected value={-1}>
-                -
-              </option>
-              {brands.map((row, index) => (
-                <option value={index}>{row.description}</option>
-              ))}
-            </select>
           </div>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
-                Condition
-              </label>
-            </div>
+          <div class="card">
+            <button
+              class="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#pack"
+              aria-expanded="false"
+              aria-controls="pack"
+            >
+              <h5>Pack</h5>
+            </button>
+            <div class="collapse" id="pack">
+              <div class="card-body">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Brand
+                    </label>
+                  </div>
 
-            <select class="form-select" id="packConditionSelect">
-              <option selected value={-1}>
-                -
-              </option>
-              {conditions.map((row, index) => (
-                <option value={index}>{row.description}</option>
-              ))}
-            </select>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="packNumberSelect">
-                Number
-              </label>
+                  <select class="form-select" id="packBrandSelect">
+                    <option selected value={-1}>
+                      -
+                    </option>
+                    {brands.map((row, index) => (
+                      <option value={index}>{row.description}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Condition
+                    </label>
+                  </div>
+
+                  <select class="form-select" id="packConditionSelect">
+                    <option selected value={-1}>
+                      -
+                    </option>
+                    {conditions.map((row, index) => (
+                      <option value={index}>{row.description}</option>
+                    ))}
+                  </select>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="packNumberSelect">
+                      Number
+                    </label>
+                  </div>
+                  <input
+                    class="text-center form-control"
+                    type="number"
+                    id="packNumberSelect"
+                    min="0"
+                    placeholder={0}
+                    data-bind="value:numberSelect"
+                  ></input>
+                </div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  onClick={addNewPack}
+                >
+                  Add
+                </button>
+              </div>
             </div>
-            <input
-              class="text-center form-control"
-              type="number"
-              id="packNumberSelect"
-              min="0"
-              placeholder={0}
-              data-bind="value:numberSelect"
-            ></input>
           </div>
-          <button class="btn btn-primary" type="button" onClick={addNewPack}>
-            Add
-          </button>
         </Modal.Body>
       </Modal>
     </>

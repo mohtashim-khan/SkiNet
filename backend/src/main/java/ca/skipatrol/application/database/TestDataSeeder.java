@@ -7,6 +7,7 @@ import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -76,6 +77,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
         private Optional<Area> areaLookup;
 
         @Override
+        @Order(value = 2)
         public void onApplicationEvent(ApplicationReadyEvent event) {
                 userLookup = this.userRepository.findByUsername("username");
                 if (userLookup.isEmpty()) {

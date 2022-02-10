@@ -7,6 +7,7 @@ import Alert from "react-bootstrap/Alert";
 
 const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
   const [editPrompted, setEditPrompted] = useState(false);
+  const [deletePrompted, setDeletePrompted] = useState(false);
   const [user, setUser] = useState([]);
   const [uniform, setUniform] = useState([]);
 
@@ -36,15 +37,118 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
   const [error, setError] = useState(false);
 
+  function deletePacks() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in packs) {
+      temp.push($("#" + packs[x].packID).is(":checked"));
+      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
+    }
+    console.log("size of packs var ", packs.length)
+    for (const y in packs) {
+      
+      if (temp[y]) {
+        console.log("DEBUG FUCK Ids", packs[y].packID)
+        params.append("ids", packs[y].packID);
+      }
+    }
+
+    session
+      .delete(
+        "profile/user/Packs/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          if (uniform) readNewUniform();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeletePrompted(false);
+  }
+
+  function deleteVests() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in vests) {
+      temp.push($("#" + vests[x].vestID).is(":checked"));
+      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
+    }
+    for (const y in vests) {
+      if (temp[y]) {
+        params.append("ids", vests[y].vestID);
+      }
+    }
+
+    session
+      .delete(
+        "profile/user/Vests/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          if (uniform) readNewUniform();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeletePrompted(false);
+  }
+
+  function deleteJackets() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in jackets) {
+      temp.push($("#" + jackets[x].jacketID).is(":checked"));
+      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
+    }
+    for (const y in jackets) {
+      if (temp[y]) {
+        params.append("ids", jackets[y].jacketID);
+      }
+    }
+
+    session
+      .delete(
+        "profile/user/Jackets/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          if (uniform) readNewUniform();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeletePrompted(false);
+  }
+
+  function promptDeleteOpen() {
+    setDeletePrompted(true);
+  }
+
+  function promptDeleteCancel() {
+    setDeletePrompted(false);
+  }
+
   function promptEditOpen() {
     setEditPrompted(true);
   }
 
   function promptEditCancel() {
-    setEditPrompted(false);
-  }
-
-  function promptEditExecute() {
     setEditPrompted(false);
   }
 
@@ -311,11 +415,21 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
             {allowed && (
               <button
-                class="btn btn-primary"
+                class="btn btn-primary m-1"
                 type="button"
                 onClick={promptEditOpen}
               >
                 Add
+              </button>
+            )}
+
+            {allowed && (
+              <button
+                class="btn btn-primary m-1"
+                type="button"
+                onClick={promptDeleteOpen}
+              >
+                Delete
               </button>
             )}
           </div>
@@ -580,6 +694,153 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                   onClick={addNewPack}
                 >
                   Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editing Patrol Uniform and Equipment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div class="card">
+            <button
+              class="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#jacketDel"
+              aria-expanded="false"
+              aria-controls="jacketDel"
+            >
+              <h5>Jacket</h5>
+            </button>
+            <div class="collapse" id="jacketDel">
+              <div class="card-body">
+                <div class="form-check mb-3">
+                  {jackets &&
+                    jackets.map((row, index) => (
+                      <div class="form-group">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          defaultChecked={false}
+                          id={row.jacketID}
+                        />
+                        <label class="form-check-label">
+                          {"Brand: " +
+                            row.brand.description +
+                            ", Size: " +
+                            row.size.description +
+                            ", Condition: " +
+                            row.condition.description +
+                            ", Number: " +
+                            row.number}
+                        </label>
+                      </div>
+                    ))}
+                </div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  onClick={deleteJackets}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <button
+              class="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#vestDel"
+              aria-expanded="false"
+              aria-controls="vestDel"
+            >
+              <h5>Vest</h5>
+            </button>
+
+            <div class="collapse" id="vestDel">
+              <div class="card-body">
+                <div class="form-check mb-3">
+                  {vests &&
+                    vests.map((row, index) => (
+                      <div class="form-group">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          defaultChecked={false}
+                          id={row.vestID}
+                        />
+                        <label class="form-check-label">
+                          {"Brand: " +
+                            row.brand.description +
+                            ", Size: " +
+                            row.size.description +
+                            ", Condition: " +
+                            row.condition.description +
+                            ", Number: " +
+                            row.number}
+                        </label>
+                      </div>
+                    ))}
+                </div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  onClick={deleteVests}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <button
+              class="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#packDel"
+              aria-expanded="false"
+              aria-controls="packDel"
+            >
+              <h5>Pack</h5>
+            </button>
+            <div class="collapse" id="packDel">
+              <div class="card-body">
+                <div class="form-check mb-3">
+                  {packs &&
+                    packs.map((row, index) => (
+                      <div class="form-group">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          defaultChecked={false}
+                          id={row.packID}
+                        />
+                        <label class="form-check-label">
+                          {"Brand: " +
+                            row.brand.description +
+                            ", Condition: " +
+                            row.condition.description +
+                            ", Number: " +
+                            row.number}
+                        </label>
+                      </div>
+                    ))}
+                </div>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  onClick={deletePacks}
+                >
+                  Delete
                 </button>
               </div>
             </div>

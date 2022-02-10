@@ -358,7 +358,53 @@ public class ProfileServicesImpl implements ProfileServices {
         }
     }
 
+    public boolean deletePacksInBatch(ArrayList<UUID> packIDs){
+        try {
+            packRepository.deleteAllByIdInBatch(packIDs);
+            for (UUID packID : packIDs) {
+                assert (packRepository.findById(packID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 
+    public boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs){
+        try {
+            jacketRepository.deleteAllByIdInBatch(jacketIDs);
+            for (UUID jacketID : jacketIDs) {
+                assert (jacketRepository.findById(jacketID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean deleteVestsInBatch(ArrayList<UUID> vestIDs){
+        try {
+            vestRepository.deleteAllByIdInBatch(vestIDs);
+            for (UUID vestID : vestIDs) {
+                assert (vestRepository.findById(vestID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs){
+        try {
+            roleRepository.deleteAllByIdInBatch(roleIDs);
+            for (UUID roleID : roleIDs) {
+                assert (roleRepository.findById(roleID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 }
 
 

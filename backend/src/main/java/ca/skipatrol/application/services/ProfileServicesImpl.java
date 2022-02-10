@@ -393,6 +393,18 @@ public class ProfileServicesImpl implements ProfileServices {
             return false;
         }
     }
+
+    public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs){
+        try {
+            roleRepository.deleteAllByIdInBatch(roleIDs);
+            for (UUID roleID : roleIDs) {
+                assert (roleRepository.findById(roleID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 }
 
 

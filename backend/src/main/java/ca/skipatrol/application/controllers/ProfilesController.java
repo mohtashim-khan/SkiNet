@@ -142,7 +142,7 @@ public class ProfilesController {
 
     @RequestMapping(value = "/customapi/profile/user/Packs/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deletePacksInBatch(@RequestParam ArrayList<UUID> ids) {
-        boolean returnVal = profileServices.deleteOnSnowEvalsInBatch(ids);
+        boolean returnVal = profileServices.deletePacksInBatch(ids);
 
         if (returnVal)
             return new ResponseEntity<>("Packs deleted correctly", HttpStatus.OK);
@@ -168,6 +168,16 @@ public class ProfilesController {
             return new ResponseEntity<>("Vests deleted correctly", HttpStatus.OK);
 
         return new ResponseEntity<>("Error deleting vests", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/Roles/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteRolesInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = profileServices.deleteRolesInBatch(ids);
+
+        if (returnVal)
+            return new ResponseEntity<>("Roles deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting roles", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

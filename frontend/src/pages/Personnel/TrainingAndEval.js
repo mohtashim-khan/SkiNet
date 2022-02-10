@@ -5,7 +5,7 @@ import $ from "jquery";
 import "./UserProfileEdit.css";
 import Alert from "react-bootstrap/Alert";
 
-const TrainingAndEval = ({ session, userID }) => {
+const TrainingAndEval = ({ session, userID, allowed }) => {
   const [discipline, setDisciplines] = useState([]);
 
   const [onSnowEvals, setOnSnowEvals] = useState([]);
@@ -431,9 +431,15 @@ const TrainingAndEval = ({ session, userID }) => {
             </div>
           )}
 
-          <button class="btn btn-primary" type="button" onClick={promptAddOpen}>
-            Add
-          </button>
+          {allowed && (
+            <button
+              class="btn btn-primary"
+              type="button"
+              onClick={promptAddOpen}
+            >
+              Add
+            </button>
+          )}
         </div>
 
         <Modal show={editPrompted} onHide={promptAddCancel}>

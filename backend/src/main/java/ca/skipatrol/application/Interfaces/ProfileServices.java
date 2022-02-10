@@ -20,5 +20,12 @@ public interface ProfileServices {
     public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);
     public boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs);
     public boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs);
+    
+    public boolean deletePacksInBatch(ArrayList<UUID> packIDs);
+    public boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs);
+    public boolean deleteVestsInBatch(ArrayList<UUID> vestIDs);
+    
+
+    
 
 }

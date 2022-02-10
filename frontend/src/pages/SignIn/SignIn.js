@@ -28,19 +28,22 @@ const SignIn = ({ session }) => {
     };
     const params = new URLSearchParams(payload);
     session.set_login(authorization);
+    console.log(params.toString());
 
     session
-      .get("users/search/findByUsername", {}, params)
+      .get("users/search/findByUsername?" + params.toString(), {}, {})
       .then((response) => {
         if (response.status === 200) {
           const basicUserDetails = {
             username: response.data.username,
             firstName: response.data.firstName,
             lastName: response.data.lastName,
-            user_type: response.data.role,
+            user_type: response.data.userType,
           };
+          console.log(response);
+          console.log(basicUserDetails);
           session.set_session_data(basicUserDetails);
-          history.push("/news")
+          history.push("/news");
           window.location.reload();
         }
       })
@@ -123,12 +126,13 @@ const SignIn = ({ session }) => {
                   fontBig
                   primary="true"
                   className="loginButton"
-                  onClick={() =>
+                  onClick={() => {
+                    console.log(document.getElementById("usernameInput").value);
                     verifyCredentials(
                       document.getElementById("usernameInput").value,
                       document.getElementById("passwordInput").value
-                    )
-                  }
+                    );
+                  }}
                 >
                   Sign In
                 </ButtonPadding>

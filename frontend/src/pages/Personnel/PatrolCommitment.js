@@ -13,7 +13,7 @@ import "./UserProfileEdit.css";
 import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
-const PatrolCommitment = ({ session, userID }) => {
+const PatrolCommitment = ({ session, userID, allowed }) => {
   const [discipline, setDisciplines] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
   const [patrolCommit, setPatrolCommit] = useState([]);
@@ -190,20 +190,24 @@ const PatrolCommitment = ({ session, userID }) => {
                 ))}
               </tbody>
             </table>{" "}
-            <button
-              class="btn btn-primary m-1"
-              type="button"
-              onClick={promptEditOpen}
-            >
-              Add
-            </button>
-            <button
-              class="btn btn-primary m-1"
-              type="button"
-              onClick={promptDeleteOpen}
-            >
-              Delete
-            </button>
+            {allowed && (
+              <button
+                class="btn btn-primary m-1"
+                type="button"
+                onClick={promptEditOpen}
+              >
+                Add
+              </button>
+            )}
+            {allowed && (
+              <button
+                class="btn btn-primary m-1"
+                type="button"
+                onClick={promptDeleteOpen}
+              >
+                Delete
+              </button>
+            )}
           </div>
         </form>
       </div>

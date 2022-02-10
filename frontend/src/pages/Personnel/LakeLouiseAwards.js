@@ -5,7 +5,7 @@ import "./UserProfileEdit.css";
 import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
-const LakeLouiseAwards = ({ session, userID }) => {
+const LakeLouiseAwards = ({ session, userID, allowed }) => {
   const [editPrompted, setEditPrompted] = useState(false);
   const [update, setUpdate] = useState(false);
   const [personAwards, setPersonAwards] = useState([]);
@@ -168,13 +168,15 @@ const LakeLouiseAwards = ({ session, userID }) => {
               </tbody>
             </table>
           </div>
-          <button
-            class="btn btn-primary"
-            type="button"
-            onClick={promptEditOpen}
-          >
-            Add Award
-          </button>
+          {allowed && (
+            <button
+              class="btn btn-primary"
+              type="button"
+              onClick={promptEditOpen}
+            >
+              Add
+            </button>
+          )}
         </div>
 
         <Modal show={editPrompted} onHide={promptEditCancel}>

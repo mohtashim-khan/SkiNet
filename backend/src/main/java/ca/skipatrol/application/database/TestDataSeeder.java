@@ -85,7 +85,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Newton",
                                         "test@email.com",
                                         "000-000-0000",
-                                        EventRole.ROSTERED);
+                                        EventRole.SYSTEM_ADMIN);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("username").get();
@@ -132,14 +132,14 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Scott",
                                         "testMichael@email.com",
                                         "000-000-0000",
-                                        EventRole.ROSTERED);
+                                        EventRole.SYSTEM_ADMIN);
                         this.userRepository.save(new User("AAAAA",
                                         new BCryptPasswordEncoder().encode("password"),
                                         "Michael",
                                         "Scott",
                                         "testMichael@email.com",
                                         "000-000-0000",
-                                        EventRole.ROSTERED));
+                                        EventRole.SYSTEM_ADMIN));
                         userLookup2 = Optional.of(user);
 
                         user = userRepository.findByUsername("AAAAA").get();

@@ -5,7 +5,7 @@ import "./UserProfileEdit.css";
 import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
-const PatrolUniformAndEquipment = ({ session, userID }) => {
+const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
   const [editPrompted, setEditPrompted] = useState(false);
   const [user, setUser] = useState([]);
   const [uniform, setUniform] = useState([]);
@@ -309,13 +309,15 @@ const PatrolUniformAndEquipment = ({ session, userID }) => {
               </table>
             </div>
 
-            <button
-              class="btn btn-primary"
-              type="button"
-              onClick={promptEditOpen}
-            >
-              Edit
-            </button>
+            {allowed && (
+              <button
+                class="btn btn-primary"
+                type="button"
+                onClick={promptEditOpen}
+              >
+                Add
+              </button>
+            )}
           </div>
         </form>
       </div>

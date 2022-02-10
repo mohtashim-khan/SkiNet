@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 import $ from "jquery";
 
-const General = ({ session, userID }) => {
+const General = ({ session, userID, allowed }) => {
   const [editPrompted, setEditPrompted] = useState(false);
   const [user, setUser] = useState([]);
   const [emergencyContact, setEmergencyContact] = useState({});
@@ -42,7 +42,7 @@ const General = ({ session, userID }) => {
   function readEmergencyContact() {
     session.get("users/" + userID + "/emergencyContacts").then((resp) => {
       if (resp.status === 200) {
-        console.log("emergency dconatct", resp.data._embedded);
+        console.log("emergency contact", resp.data._embedded);
         setEmergencyContact(resp.data._embedded.emergencyContacts[0]);
       }
     });
@@ -114,13 +114,16 @@ const General = ({ session, userID }) => {
                     disabled
                   ></input>
                 </div>
-                <button
-                  class="btn btn-primary"
-                  type="button"
-                  onClick={promptEditOpen}
-                >
-                  Add
-                </button>
+
+                {allowed && (
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onClick={promptEditOpen}
+                  >
+                    Add
+                  </button>
+                )}
               </div>
             </form>
           </div>
@@ -186,6 +189,7 @@ const General = ({ session, userID }) => {
                     placeholder={emergencyContact.phone}
                   />
                 </div>
+
                 <Button variant="primary" onClick={editEmergencyContact}>
                   Submit
                 </Button>

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 import $ from "jquery";
 
-const LakeLouiseRoles = ({ session, userID }) => {
+const LakeLouiseRoles = ({ session, userID, allowed }) => {
   // Change this to be roles, once the roles DB is set up.
   const [discipline, setDisciplines] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
@@ -14,19 +14,16 @@ const LakeLouiseRoles = ({ session, userID }) => {
   const [userRoles, setUserRoles] = useState([]);
   const [rolesArray, setRolesArray] = useState([]);
 
-
   function promptEditOpen() {
     setEditPrompted(true);
   }
 
   function promptEditCancel() {
     setEditPrompted(false);
-
   }
 
   function promptEditExecute() {
     setEditPrompted(false);
-
   }
   function editRoles() {
     let temp = role;
@@ -38,14 +35,12 @@ const LakeLouiseRoles = ({ session, userID }) => {
     console.log(temp);
     session.put("roles/" + role.roleID, temp, {}, false).then((resp) => {
       if (resp.status === 200 || resp.status === 201) {
-        setRoles(resp.data)
-
+        setRoles(resp.data);
 
         //console.log("This should be the roles", resp.data[fuck[0]], fuck[0].typeof);
-
       }
-    })
-    promptEditCancel()
+    });
+    promptEditCancel();
   }
 
   function readUserRoles() {
@@ -54,7 +49,7 @@ const LakeLouiseRoles = ({ session, userID }) => {
     tempArray.shift();
     tempArray.pop();
     setRolesArray(tempArray);
-    console.log("retard", tempArray)
+    console.log("retard", tempArray);
     const rolesVals = [];
     for (let i = 0; i < tempArray.length; ++i) {
       console.log("aaaa", role[tempArray[i]]);
@@ -66,37 +61,32 @@ const LakeLouiseRoles = ({ session, userID }) => {
   }
 
   useEffect(() => {
-
     session.get("disciplines").then((resp) => {
       if (resp.status === 200) {
         setDisciplines(resp.data._embedded.disciplines);
       }
 
-
       console.log("fucker", user);
-
     });
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
         setUsers(resp.data);
-
       }
-    })
+    });
 
     session.get("users/" + userID + "/role").then((resp) => {
       if (resp.status === 200) {
-        setRoles(resp.data)
+        setRoles(resp.data);
         const fuck = Object.keys(resp.data);
 
         //console.log("This should be the roles", resp.data[fuck[0]], fuck[0].typeof);
-
       }
-    })
-
+    });
   }, []);
 
-
-  useEffect(() => { readUserRoles() }, [role])
+  useEffect(() => {
+    readUserRoles();
+  }, [role]);
 
   return (
     <>
@@ -113,13 +103,15 @@ const LakeLouiseRoles = ({ session, userID }) => {
                 <li class="list-group-item">{row}</li>
               ))}
             </ul>
-            <button
-              class="btn btn-primary"
-              type="button"
-              onClick={promptEditOpen}
-            >
-              Add
-            </button>
+            {allowed && (
+              <button
+                class="btn btn-primary"
+                type="button"
+                onClick={promptEditOpen}
+              >
+                Add
+              </button>
+            )}
           </form>
         </div>
       </div>
@@ -138,9 +130,7 @@ const LakeLouiseRoles = ({ session, userID }) => {
                   defaultChecked={role[row]}
                   id={row}
                 />
-                <label class="form-check-label">
-                  {row}
-                </label>
+                <label class="form-check-label">{row}</label>
               </div>
             ))}
           </div>
@@ -149,7 +139,6 @@ const LakeLouiseRoles = ({ session, userID }) => {
             Submit
           </Button>
         </Modal.Body>
-
       </Modal>
     </>
   );

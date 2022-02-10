@@ -48,14 +48,17 @@ const Header = ({ session }) => {
                 </li>
               )}
             </Route>
+
             <Route path="/admin">
-              {({ match }) => (
-                <li className={match ? "nav-item active" : "nav-item"}>
-                  <Link className="nav-link" to="/admin/lookups">
-                    Admin
-                  </Link>
-                </li>
-              )}
+              {({ match }) =>
+                session.session_data().user_type === "SYSTEM_ADMIN" && (
+                  <li className={match ? "nav-item active" : "nav-item"}>
+                    <Link className="nav-link" to="/admin/lookups">
+                      Admin
+                    </Link>
+                  </li>
+                )
+              }
             </Route>
           </ul>
         </div>
@@ -131,9 +134,12 @@ const Header = ({ session }) => {
                   <Route path="/personnel/reports" exact>
                     {({ match }) => (
                       <li className={match ? "nav-item active" : "nav-item"}>
-                        <Link className="nav-link" to="/personnel/reports">
-                          Reports
-                        </Link>
+                        {session.session_data().user_type ===
+                          "SYSTEM_ADMIN" && (
+                          <Link className="nav-link" to="/personnel/reports">
+                            Reports
+                          </Link>
+                        )}
                       </li>
                     )}
                   </Route>

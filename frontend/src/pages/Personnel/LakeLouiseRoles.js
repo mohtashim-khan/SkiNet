@@ -109,7 +109,7 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
                 type="button"
                 onClick={promptEditOpen}
               >
-                Add
+                Edit
               </button>
             )}
           </form>

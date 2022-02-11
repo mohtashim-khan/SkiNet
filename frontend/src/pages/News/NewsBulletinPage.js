@@ -100,9 +100,9 @@ const NewsBulletinPage = ({ session }) => {
             </InputGroup>
           </form>
 
-          <Link to="/news/create" className="btn btn-secondary">
+          {session.session_data().user_type === "SYSTEM_ADMIN" && <Link to="/news/create" className="btn btn-secondary">
             Draft Post
-          </Link>
+          </Link>}
         </div>
       </nav>
       <Container className="p-3">

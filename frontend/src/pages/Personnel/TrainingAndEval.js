@@ -5,7 +5,7 @@ import $ from "jquery";
 import "./UserProfileEdit.css";
 import Alert from "react-bootstrap/Alert";
 
-const TrainingAndEval = ({ session, userID }) => {
+const TrainingAndEval = ({ session, userID, allowed }) => {
   const [discipline, setDisciplines] = useState([]);
 
   const [onSnowEvals, setOnSnowEvals] = useState([]);
@@ -13,6 +13,7 @@ const TrainingAndEval = ({ session, userID }) => {
   const [operationalEvent, setOperationalEvent] = useState([]);
   const [evaluationTraining, setEvaluationTraining] = useState([]);
   const [editPrompted, setEditPrompted] = useState(false);
+  const [deletePrompted, setDeletePrompted] = useState(false);
   const [user, setUser] = useState([]);
 
   const [date, setDate] = useState(null);
@@ -20,17 +21,116 @@ const TrainingAndEval = ({ session, userID }) => {
   const [error, setError] = useState(false);
   const [type, setType] = useState("1");
 
+  function deleteOnSnowEvals() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in onSnowEvals) {
+      temp.push($("#" + String(x)).is(":checked"));
+      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
+    }
+    for (const y in onSnowEvals) {
+      if (temp[y]) {
+        params.append("ids", onSnowEvals[y].onSnowEvalID);
+      }
+    }
+
+    session
+      .delete(
+        "profile/user/OnSnowEvals/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          readNewTrainingAndEvals();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeletePrompted(false);
+  }
+
+  function deleteOperationalTraining() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in operationalTraining) {
+      temp.push($("#" + String(x)).is(":checked"));
+      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
+    }
+    for (const y in operationalTraining) {
+      if (temp[y]) {
+        params.append("ids", operationalTraining[y].operationalTrainingID);
+      }
+    }
+
+    session
+      .delete(
+        "profile/user/OperationalTrainings/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          readNewTrainingAndEvals();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeletePrompted(false);
+  }
+
+  function deleteEvalTraining() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in evaluationTraining) {
+      temp.push($("#" + String(x)).is(":checked"));
+      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
+    }
+    for (const y in evaluationTraining) {
+      if (temp[y]) {
+        params.append("ids", evaluationTraining[y].evalTrainingID);
+      }
+    }
+
+    session
+      .delete(
+        "profile/user/EvalTrainings/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          readNewTrainingAndEvals();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeletePrompted(false);
+  }
+
+  function promptDeleteOpen() {
+    setDeletePrompted(true);
+  }
+
+  function promptDeleteCancel() {
+    setType("1");
+    setDeletePrompted(false);
+  }
+
   function promptAddOpen() {
     setEditPrompted(true);
   }
 
   function promptAddCancel() {
-    setType("1");
-    setEditPrompted(false);
-    setError(false);
-  }
-
-  function promptAddExecute() {
     setType("1");
     setEditPrompted(false);
     setError(false);
@@ -308,6 +408,93 @@ const TrainingAndEval = ({ session, userID }) => {
     }
   };
 
+  const DeleteEval = () => {
+    if (type === "1") {
+      return (
+        <>
+          <h5>Patroller On-Snow Evaluation</h5>
+          <div class="form-check mb-3">
+            {onSnowEvals.map((row, index) => (
+              <div class="form-group">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  defaultChecked={false}
+                  id={index}
+                />
+                <label class="form-check-label">
+                  {"Discipline: " +
+                    row.discipline.description +
+                    ", Date Completed: " +
+                    row.evaluationDate.substring(0, 10) +
+                    ", Evaluated By: " +
+                    row.evaluatedBy}
+                </label>
+              </div>
+            ))}
+          </div>
+          <Button variant="primary" onClick={deleteOnSnowEvals}>
+            Submit
+          </Button>
+        </>
+      );
+    } else if (type === "2") {
+      return (
+        <>
+          <h5>Evaluator Snow Training</h5>
+          <div class="form-check mb-3">
+            {evaluationTraining.map((row, index) => (
+              <div class="form-group">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  defaultChecked={false}
+                  id={index}
+                />
+                <label class="form-check-label">
+                  {"Event Type: " +
+                    row.eventType +
+                    ", Date Completed: " +
+                    row.completedDate}
+                </label>
+              </div>
+            ))}
+          </div>
+          <Button variant="primary" onClick={deleteEvalTraining}>
+            Submit
+          </Button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <h5>Patroller Operational Training</h5>
+          <div class="form-check mb-3">
+            {operationalTraining.map((row, index) => (
+              <div class="form-group">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  defaultChecked={false}
+                  id={index}
+                />
+                <label class="form-check-label">
+                  {"Season: " +
+                    row.operationalEvent.description +
+                    ", Date Completed: " +
+                    row.completedDate}
+                </label>
+              </div>
+            ))}
+          </div>
+          <Button variant="primary" onClick={deleteOperationalTraining}>
+            Submit
+          </Button>
+        </>
+      );
+    }
+  };
+
   function readNewTrainingAndEvals() {
     var id = userID;
     var url =
@@ -431,9 +618,25 @@ const TrainingAndEval = ({ session, userID }) => {
             </div>
           )}
 
-          <button class="btn btn-primary" type="button" onClick={promptAddOpen}>
-            Add
-          </button>
+          {allowed && (
+            <button
+              class="btn btn-primary m-1"
+              type="button"
+              onClick={promptAddOpen}
+            >
+              Add
+            </button>
+          )}
+
+          {allowed && (
+            <button
+              class="btn btn-primary m-1"
+              type="button"
+              onClick={promptDeleteOpen}
+            >
+              Delete
+            </button>
+          )}
         </div>
 
         <Modal show={editPrompted} onHide={promptAddCancel}>
@@ -460,8 +663,36 @@ const TrainingAndEval = ({ session, userID }) => {
                   <option value="3">Patroller Operational Training</option>
                 </Form.Control>
               </div>
-
               <AddEval />
+            </form>
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add New Training Evaluation Certification</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <form class="mb-2">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">
+                    Training Type
+                  </label>
+                </div>
+                <Form.Control
+                  as="select"
+                  custom
+                  onChange={OnChangeVal.bind(this)}
+                >
+                  <option selected value="1">
+                    Patroller On-Snow Evaluation
+                  </option>
+                  <option value="2">Evaluator Training</option>
+                  <option value="3">Patroller Operational Training</option>
+                </Form.Control>
+              </div>
+              <DeleteEval />
             </form>
           </Modal.Body>
         </Modal>

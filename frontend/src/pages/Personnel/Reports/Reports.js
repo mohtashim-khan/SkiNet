@@ -110,102 +110,104 @@ const Reports = ({ session }) => {
 
   return (
     <FilterContext.Provider value={[state, setState]}>
-      <div>
-        <h2 class="p-3">Reports</h2>
-        {/* {<pre>{JSON.stringify(state)}</pre>} */}
-        <div class="container-fluid">
-          <div class="row justify-content-md-center">
-            <div class="col col-lg-9">
-              <table class="table table-bordered" id="table-to-xls">
-                <thead>
-                  <tr>
-                    <th scope="col">Username</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                {
-                  <tbody>
-                    {reportResult.map((row) => (
-                      <tr>
-                        <td>
-                          <Link
-                            className="link"
-                            to={"/personnel/user/" + row.userID}
-                            // style={{ color: "#000" }}
-                          >
-                            {row.username}
-                          </Link>
-                        </td>
-                        <td>{row.firstName}</td>
-                        <td>{row.lastName}</td>
-                        <td>{row.email}</td>
-                        <td>{row.phoneNumber}</td>
-                        <td>{row.userType}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                }
-              </table>
-            </div>
-            <div class="col col-sm" id="accordion">
-              <div class="row">
-                <div class="col">
-                  <button
-                    type="button"
-                    class="myButton btn btn-primary float-end d-flex-inline"
-                    onClick={refreshPage}
-                  >
-                    Reset
-                  </button>
-                  <button
-                    type="button"
-                    class="myButton btn btn-primary float-end d-flex-inline"
-                    onClick={generateReport}
-                  >
-                    Generate Report
-                  </button>
-                  <ReactHTMLTableToExcel
-                    id="test-table-xls-button"
-                    className="download-table-xls-button myButton btn btn-success float-end d-flex-inline"
-                    table="table-to-xls"
-                    filename="ReportOutput"
-                    sheet="tablexls"
-                    buttonText="Export to Excel"
-                  />
-                </div>
+      {session.session_data().user_type === "SYSTEM_ADMIN" && (
+        <div>
+          <h2 class="p-3">Reports</h2>
+          {/* {<pre>{JSON.stringify(state)}</pre>} */}
+          <div class="container-fluid">
+            <div class="row justify-content-md-center">
+              <div class="col col-lg-9">
+                <table class="table table-bordered" id="table-to-xls">
+                  <thead>
+                    <tr>
+                      <th scope="col">Username</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Phone Number</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  {
+                    <tbody>
+                      {reportResult.map((row) => (
+                        <tr>
+                          <td>
+                            <Link
+                              className="link"
+                              to={"/personnel/user/" + row.userID}
+                              // style={{ color: "#000" }}
+                            >
+                              {row.username}
+                            </Link>
+                          </td>
+                          <td>{row.firstName}</td>
+                          <td>{row.lastName}</td>
+                          <td>{row.email}</td>
+                          <td>{row.phoneNumber}</td>
+                          <td>{row.userType}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  }
+                </table>
               </div>
+              <div class="col col-sm" id="accordion">
+                <div class="row">
+                  <div class="col">
+                    <button
+                      type="button"
+                      class="myButton btn btn-primary float-end d-flex-inline"
+                      onClick={refreshPage}
+                    >
+                      Reset
+                    </button>
+                    <button
+                      type="button"
+                      class="myButton btn btn-primary float-end d-flex-inline"
+                      onClick={generateReport}
+                    >
+                      Generate Report
+                    </button>
+                    <ReactHTMLTableToExcel
+                      id="test-table-xls-button"
+                      className="download-table-xls-button myButton btn btn-success float-end d-flex-inline"
+                      table="table-to-xls"
+                      filename="ReportOutput"
+                      sheet="tablexls"
+                      buttonText="Export to Excel"
+                    />
+                  </div>
+                </div>
 
-              <ReportTrainingAndEval session={session} />
+                <ReportTrainingAndEval session={session} />
 
-              <ReportPatrolCommitment session={session} />
+                <ReportPatrolCommitment session={session} />
 
-              <ReportLakeLouiseRoles session={session} />
+                <ReportLakeLouiseRoles session={session} />
 
-              <ReportPatrolUniformAndEquipment session={session} />
+                <ReportPatrolUniformAndEquipment session={session} />
 
-              <ReportLakeLouiseAwards session={session} />
+                <ReportLakeLouiseAwards session={session} />
 
-              <ReportGeneral session={session} />
+                <ReportGeneral session={session} />
 
-              <div class="row">
-                <div class="col">
-                  <button
-                    type="button"
-                    class="myButton btn btn-primary float-end"
-                    onClick={generateReport}
-                  >
-                    Generate Report
-                  </button>
+                <div class="row">
+                  <div class="col">
+                    <button
+                      type="button"
+                      class="myButton btn btn-primary float-end"
+                      onClick={generateReport}
+                    >
+                      Generate Report
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </FilterContext.Provider>
   );
 };

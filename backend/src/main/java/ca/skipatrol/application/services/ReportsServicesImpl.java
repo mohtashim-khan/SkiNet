@@ -5,6 +5,7 @@ import ca.skipatrol.application.models.Award;
 import ca.skipatrol.application.models.Brand;
 import ca.skipatrol.application.models.Discipline;
 import ca.skipatrol.application.models.EvalTraining;
+import ca.skipatrol.application.models.EventRole;
 import ca.skipatrol.application.models.Jacket;
 import ca.skipatrol.application.models.OnSnowEval;
 import ca.skipatrol.application.models.OperationalEvent;
@@ -259,14 +260,19 @@ public class ReportsServicesImpl implements ReportsServices {
             }
         }
 
+        //Check for admin role
+
+        if (admin != null) {
+            conditions.add(builder.equal(user.get("userType"), EventRole.SYSTEM_ADMIN));
+        }
+
+
         // Join Role
-        if (admin != null || pl != null || apl != null || hl != null || active != null || newUser != null
+        if (pl != null || apl != null || hl != null || active != null || newUser != null
                 || trainingEventLead != null || onSnowEvaluator != null || orienteerer != null
                 || recruitmentLead != null || p0Lead != null) {
             Join<User, Role> roleJoin = user.join("role");
-            if (admin != null) {
-                conditions.add(builder.equal(roleJoin.get("admin"), admin));
-            }
+            
 
             if (pl != null) {
                 conditions.add(builder.equal(roleJoin.get("pl"), pl));

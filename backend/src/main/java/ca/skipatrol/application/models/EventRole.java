@@ -9,4 +9,5 @@ public enum EventRole {
     HILL_ADMIN,
     SYSTEM_ADMIN,
     NOT_A_USER
+
 }

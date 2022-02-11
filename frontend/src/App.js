@@ -24,6 +24,7 @@ import NewsBulletinPage from "./pages/News/NewsBulletinPage";
 import CreateNewsPost from "./pages/News/CreateNewsPost";
 import SinglePostPage from "./pages/News/SinglePostPage";
 import NotFound from "./pages/NotFound";
+import SignUpPage from "./pages/SignUp/SignUpPage";
 
 
 
@@ -38,6 +39,9 @@ class App extends Component {
       <Router>
         <Header session={this.session} />
         <Switch>
+          <ProtectedRoute path="/roster/calendar" Component={RosterPlanner} session={this.session} />
+          
+
           <ProtectedRoute path="/roster/calendar" Component={RosterPlanner} session={this.session} />
 
           <ProtectedRoute path="/user" Component={UserPage} session={this.session} />
@@ -54,6 +58,8 @@ class App extends Component {
 
           <AdminProtectedRoute path="/admin/areas" Component={AreasPage} session={this.session} />
 
+          <AdminProtectedRoute path="/admin/newUser" Component={SignUpPage} session={this.session} />
+
           <ProtectedRoute path="/personnel/user/:id" Component={UserProfileEdit} session={this.session} />
 
           <AdminProtectedRoute path="/personnel/reports" Component={Reports} session={this.session} />
@@ -62,7 +68,7 @@ class App extends Component {
           <ProtectedLogin path="/sign-in" Component={SignIn} session={this.session} />
 
           {/* Unprotected Can Access by Anyone */}
-          <Route path="/sign-up" />
+          <Route path="/sign-up" component={SignUpPage} session={this.session}/>
           <HomeRoute exact path="/" Component={Home} session={this.session} />
           <Route component={NotFound} />
         </Switch>

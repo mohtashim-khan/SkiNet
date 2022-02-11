@@ -41,11 +41,14 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     const params = new URLSearchParams();
     let temp = [];
     for (const x in packs) {
-      temp.push($("#" + String(x)).is(":checked"));
+      temp.push($("#" + packs[x].packID).is(":checked"));
       console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
+    console.log("size of packs var ", packs.length)
     for (const y in packs) {
+      
       if (temp[y]) {
+        console.log("DEBUG FUCK Ids", packs[y].packID)
         params.append("ids", packs[y].packID);
       }
     }
@@ -73,7 +76,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     const params = new URLSearchParams();
     let temp = [];
     for (const x in vests) {
-      temp.push($("#" + String(x)).is(":checked"));
+      temp.push($("#" + vests[x].vestID).is(":checked"));
       console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
     for (const y in vests) {
@@ -105,7 +108,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     const params = new URLSearchParams();
     let temp = [];
     for (const x in jackets) {
-      temp.push($("#" + String(x)).is(":checked"));
+      temp.push($("#" + jackets[x].jacketID).is(":checked"));
       console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
     for (const y in jackets) {
@@ -724,7 +727,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                           class="form-check-input"
                           type="checkbox"
                           defaultChecked={false}
-                          id={index}
+                          id={row.jacketID}
                         />
                         <label class="form-check-label">
                           {"Brand: " +
@@ -772,7 +775,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                           class="form-check-input"
                           type="checkbox"
                           defaultChecked={false}
-                          id={index}
+                          id={row.vestID}
                         />
                         <label class="form-check-label">
                           {"Brand: " +
@@ -819,7 +822,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                           class="form-check-input"
                           type="checkbox"
                           defaultChecked={false}
-                          id={index}
+                          id={row.packID}
                         />
                         <label class="form-check-label">
                           {"Brand: " +

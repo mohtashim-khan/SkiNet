@@ -68,7 +68,6 @@ const RosterPlanner = ({ session }) => {
     }
 
     function onEventSelectEvent(eventCbStruct) {
-        console.log("event details", eventCbStruct.event);
         setCurrentEventDetails(eventCbStruct.event);
         setEventDetailsVisibility(true);
     }

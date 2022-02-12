@@ -74,54 +74,104 @@ const RosterPlanner = ({ session }) => {
 
     return (
         <>
+
             <Container className="p-3">
                 <Row>
                     <Col xl={12}>
+
+                        {/* Imported Over Old Calendar Setup From Previous Capstone */}
                         <FullCalendar
                             ref={calendarRef}
                             plugins={[dayGridPlugin, interactionPlugin]}
-                            initialView="dayGridMonth"
+                            headerToolbar={
+                                (window.innerWidth > 760) ?
+                                    {
+                                        left: 'prev,next',
+                                        center: 'title',
+                                        right: 'dayGridMonth,dayGridWeek'
+                                    }
+                                    :
+                                    {
+                                        left: 'title',
+                                        right: 'prev,next'
+                                    }
+
+                            }
+
+                            footerToolbar={
+                                (window.innerWidth > 760) ?
+                                    { /** Empty */ }
+                                    :
+                                    { center: 'dayGridMonth,dayGridWeek' }
+                            }
+
+                            initialView={
+                                (window.innerWidth > 760) ?
+                                    'dayGridMonth'
+                                    :
+                                    'dayGridWeek'
+                            }
+
+
+                            dayHeaderFormat={
+                                (window.innerWidth > 760) ?
+                                    {
+                                        weekday: 'short'
+
+                                    }
+                                    :
+                                    {
+                                        month: 'numeric',
+                                        day: 'numeric',
+                                    }
+
+                            }
+
+                            selectable={true} //Enables ability to select dates
+                            selectMirror={true} //To do: I couldn't figure out what this does. I tried changing it to false and nothing changed on the UI
+                            dayMaxEvents={true} //Enables it so that only 4 shifts can be fit in one date. Additional dates will be shown in "+# more", where # is the additional numbers of shifts
+                            eventResizableFromStart={true}
                             datesSet={onDateSetEvent}
                             events={(args, successCb, failureCb) => refreshEvents(args, successCb, failureCb)}
                             eventClick={onEventSelectEvent}
                         />
                     </Col>
                     {false && <Col xl={4}>
-                        <h5>Events in the month of <small class="text-muted">{activeDateTitle}</small></h5>
+                        <h5>Events in the month of <small className="text-muted">{activeDateTitle}</small></h5>
                         <ListGroup>
                             <ListGroupItem>...</ListGroupItem>
                         </ListGroup>
-                     </Col>}
+                    </Col>}
                 </Row>
                 <Modal show={eventDetailsVisibility} onHide={() => { setEventDetailsVisibility(false); }}>
                     <Modal.Header closeButton>
-                        <Modal.Title>{ currentEventDetails.title }</Modal.Title>
+                        <Modal.Title>{currentEventDetails.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <ul class="list-group">
-                            <li class="list-group-item" aria-current="true">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">All Day</h5>
+                        <ul className="list-group">
+                            <li className="list-group-item" aria-current="true">
+                                <div className="d-flex w-100 justify-content-between">
+                                    <h5 className="mb-1">All Day</h5>
                                 </div>
-                                <p class="mb-1">{currentEventDetails.allDay ? "Yes" : "No"}</p>
+                                <p className="mb-1">{currentEventDetails.allDay ? "Yes" : "No"}</p>
                             </li>
                             {currentEventDetails.extendedProps !== undefined && (
                                 <>
-                                    <li class="list-group-item" aria-current="true">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h5 class="mb-1">Maximum Patrollers</h5>
+                                    <li className="list-group-item" aria-current="true">
+                                        <div className="d-flex w-100 justify-content-between">
+                                            <h5 className="mb-1">Maximum Patrollers</h5>
                                         </div>
-                                        <p class="mb-1">{currentEventDetails.extendedProps.maxPatrollers}</p>
+                                        <p className="mb-1">{currentEventDetails.extendedProps.maxPatrollers}</p>
                                     </li>
-                                    <li class="list-group-item">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h5 class="mb-1">Minimum Patrollers</h5>
+                                    <li className="list-group-item">
+                                        <div className="d-flex w-100 justify-content-between">
+                                            <h5 className="mb-1">Minimum Patrollers</h5>
                                         </div>
-                                        <p class="mb-1">{currentEventDetails.extendedProps.minPatrollers}</p>
+                                        <p className="mb-1">{currentEventDetails.extendedProps.minPatrollers}</p>
                                     </li>
                                 </>
                             )}
-                        </ul>                                
+                        </ul>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={() => { setEventDetailsVisibility(false); }}>Close</Button>

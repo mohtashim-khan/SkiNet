@@ -58,6 +58,8 @@ class App extends Component {
 
           <AdminProtectedRoute path="/admin/areas" Component={AreasPage} session={this.session} />
 
+          <AdminProtectedRoute path="/admin/newUser" Component={SignUpPage} session={this.session} />
+
           <ProtectedRoute path="/personnel/user/:id" Component={UserProfileEdit} session={this.session} />
 
           <AdminProtectedRoute path="/personnel/reports" Component={Reports} session={this.session} />

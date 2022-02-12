@@ -6,10 +6,10 @@ import "./SignUpPage.css";
 import React from "react";
 
 export default function SignUpPage({ session }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [myUsername, setMyUsername] = useState("");
+  const [myPassword, setMyPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [myEmail, setMyEmail] = useState("");
 
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 
@@ -20,49 +20,90 @@ export default function SignUpPage({ session }) {
     // Check if email exists
     // ISSUE: CAN'T ACCESS THE API CALLS IF YOU'RE NOT A USER
     // NO AUTH
-    session.get("users/search/findByEmail?email=" + email).then((resp) => {
+    let localError = false;
+    session.get("users/search/findByEmail?email=" + myEmail).then((resp) => {
       if (resp.status === 200) {
-        console.log(resp.data);
+        let temp = resp.data;
+
+        if (temp.hasOwnProperty("email")) {
+          setError(true);
+          setErrorMsg("This email is already registered!");
+          localError = true;
+        }
       }
     });
-    if (true) {
-      setError(true);
-      setErrorMsg("This email is already registered!");
+    if (localError) {
+      return;
     }
 
-    // Check if username exists
-    if (true) {
-      setError(true);
-      setErrorMsg("This Username is already registered!");
+    session
+      .get("users/search/findByUsername?username=" + myUsername)
+      .then((resp) => {
+        if (resp.status === 200) {
+          let temp = resp.data;
+          console.log("wtf", temp);
+          if (temp.hasOwnProperty("username")) {
+            setError(true);
+            setErrorMsg("This Username is already registered!");
+            localError = true;
+          }
+        }
+      });
+    if (localError) {
+      return;
     }
+    let pNumber = String($("#phoneSelect").val());
+    let fName = String($("#firstNameInput").val());
+    let lName = String($("#lastNameInput").val());
+    let er = $("#isAdmin").is(":checked") ? "SYSTEM_ADMIN" : "ROSTERED";
+
+    session
+      .post(
+        "profile/user/CreateNewUser",
+        {
+          username: myUsername,
+          password: myPassword,
+          firstName: fName,
+          lastName: lName,
+          email: myEmail,
+          phoneNumber: pNumber,
+          eventRole: er,
+        },
+        {},
+        true
+      )
+      .then((resp) => {
+        window.location.href = "/personnel/user/" + resp.data.userID;
+        console.log(resp.data.userID);
+      });
   }
 
   useEffect(() => {
     $("#mainPW").on("change", function (e) {
-      setPassword($(e.currentTarget).val());
+      setMyPassword($(e.currentTarget).val());
     });
 
     $("#confirmedPW").on("change", function (e) {
       setConfirmedPassword($(e.currentTarget).val());
     });
 
-    $("#username").on("change", function (e) {
-      setUsername($(e.currentTarget).val());
+    $("#usernameInput").on("change", function (e) {
+      setMyUsername($(e.currentTarget).val());
     });
 
     $("#email").on("change", function (e) {
-      setEmail($(e.currentTarget).val());
+      setMyEmail($(e.currentTarget).val());
     });
   }, []);
 
   useEffect(() => {
-    if (confirmedPassword !== password) {
+    if (confirmedPassword !== myPassword) {
       setPasswordsMatch(false);
       console.log("not equal");
     } else {
       setPasswordsMatch(true);
     }
-  }, [password, confirmedPassword]);
+  }, [myPassword, confirmedPassword]);
 
   return (
     <div className="SignUpPage">
@@ -75,7 +116,7 @@ export default function SignUpPage({ session }) {
         dismissible={true}
       >
         <Alert.Heading>Uh oh!</Alert.Heading>
-        <p>Invalid Input</p>
+        <p>{errorMsg}</p>
       </Alert>
 
       <form>
@@ -89,6 +130,33 @@ export default function SignUpPage({ session }) {
             id="email"
             aria-describedby="emailHelp"
           />
+        </div>
+
+        <div class="mb-3">
+          <label class="tel" for="form-label">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            class="form-control"
+            id="phoneSelect"
+            name="myEvalInput"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="usernameInput" class="form-label">
+            Firstname
+          </label>
+          <input type="username" class="form-control" id="firstNameInput" />
+        </div>
+
+        <div class="mb-3">
+          <label for="usernameInput" class="form-label">
+            Lastname
+          </label>
+          <input type="username" class="form-control" id="lastNameInput" />
         </div>
 
         <div class="mb-3">
@@ -113,9 +181,9 @@ export default function SignUpPage({ session }) {
           <div className="text-danger">Passwords Don't Match!</div>
         )}
         <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-          <label class="form-check-label" for="exampleCheck1">
-            You agree that you are a cool person
+          <input type="checkbox" class="form-check-input" id="isAdmin" />
+          <label class="form-check-label" for="isAdmin">
+            Is Admin
           </label>
         </div>
 

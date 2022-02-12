@@ -42,6 +42,8 @@ public interface ProfileServices {
 
     public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
 
+    public boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
+
     public User createNewUser(String username,
             String password,
             String firstName,

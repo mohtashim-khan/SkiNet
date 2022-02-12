@@ -183,6 +183,16 @@ public class ProfilesController {
         return new ResponseEntity<>("Error deleting roles", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @RequestMapping(value = "/customapi/profile/user/Awards/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteAwardsInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = profileServices.deleteAwardsInBatch(ids);
+
+        if (returnVal)
+            return new ResponseEntity<>("Awards deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting awards", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @RequestMapping(value = "/customapi/profile/user/CreateNewUser", method = RequestMethod.POST)
     public ResponseEntity<Object> createNewUser(
             @RequestBody Map<String, String> userInfo) {

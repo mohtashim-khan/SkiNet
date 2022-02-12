@@ -9,12 +9,16 @@ export const ProtectedRoute = ({ Component, session, ...rest }) => {
   }
 };
 
-export const AdminProtectedRoute = ({Component, session, ...rest }) => {
+export const AdminProtectedRoute = ({ Component, session, ...rest }) => {
   return (
     <Route
       {...rest}
       render={() =>
-        session.session_data().user_type === "SYSTEM_ADMIN" ? <Component session={session} /> : <Route component={NotFound} />
+        session.session_data().user_type === "SYSTEM_ADMIN" ? (
+          <Component session={session} />
+        ) : (
+          <Route component={NotFound} />
+        )
       }
     />
   );
@@ -41,7 +45,13 @@ export const ProtectedLogin = ({ Component, session, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={() => ((() => session.logged_in()) ? <Component session={session} /> : <Redirect to="/roster/start" />)}
+      render={() =>
+        (() => session.logged_in()) ? (
+          <Component session={session} />
+        ) : (
+          <Redirect to="/roster/start" />
+        )
+      }
     />
   );
 };

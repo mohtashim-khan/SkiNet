@@ -38,6 +38,7 @@ const SignIn = ({ session }) => {
             username: response.data.username,
             firstName: response.data.firstName,
             lastName: response.data.lastName,
+            userID: response.data.userID,
             user_type: response.data.userType,
           };
           console.log(response);

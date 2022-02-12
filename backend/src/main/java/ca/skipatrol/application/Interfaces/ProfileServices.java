@@ -51,4 +51,6 @@ public interface ProfileServices {
             String email,
             String phoneNumber,
             String eventRole);
+
+    public boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
 }

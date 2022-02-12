@@ -144,18 +144,23 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
       const myDate = new Date($("#OnSnowTrainingDateEdit").val()).toISOString();
       const myDiscipline = $("#OnSnowDisciplinesEdit").val();
       const myEval = $("#OnSnowEvalByEdit").val();
-      if (myEval.length === 0 || myDiscipline === -1) {
-        throw "empty eval";
-      }
+
       let temp = onSnowEvals[parseInt(selectedVal)];
-      temp.evaluationDate = myDate;
-      temp.discipline = discipline[myDiscipline]._links.self.href;
-      temp.evaluatedBy = myEval;
+      temp.evaluationDate = myDate.substring(0, 10);
+      temp.discipline = discipline[myDiscipline].description;
+      if (myEval.length > 0) {
+        temp.evaluatedBy = myEval;
+      }
 
       console.log("Sent to put req...", JSON.stringify(temp));
 
       session
-        .put("onSnowEvals/" + temp.onSnowEvalID, temp, {}, false)
+        .put(
+          "profile/user/OnSnowEvals/Edit?id=" + temp.onSnowEvalID,
+          temp,
+          {},
+          true
+        )
         .then((resp) => {
           if (resp.status === 200 || resp.status === 201) {
             readNewTrainingAndEvals();

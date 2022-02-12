@@ -93,6 +93,7 @@ const Reports = ({ session }) => {
 
     hasEmergencyContact: null,
   });
+  const [reportString, setReportString] = useState("");
 
   function generateReport() {
     session.post("report/getReportData", state, {}, true).then((resp) => {
@@ -102,7 +103,26 @@ const Reports = ({ session }) => {
         setReportResult(resp.data);
       }
     });
+
+    printReportParams();
   }
+
+  function printReportParams() {
+    let result = JSON.stringify(state, (key, value) => {
+      if (value !== null) return value;
+    });
+    result = result.substring(1, result.length - 1);
+    result = result.replace(/[\:]/g, ": ");
+    result = result.replace(/\,/g, ", ");
+    result = result.replace(/["']/g, "");
+    console.log(result);
+
+    setReportString(result);
+  }
+
+  useEffect(() => {
+    generateReport();
+  }, []);
 
   function refreshPage() {
     window.location.reload(false);
@@ -118,6 +138,16 @@ const Reports = ({ session }) => {
             <div class="row justify-content-md-center">
               <div class="col col-lg-9">
                 <table class="table table-bordered" id="table-to-xls">
+                  <thead>
+                    <tr>
+                      <th colspan="6" class="table-active">
+                        Report Generated on:{" "}
+                        {new Date().toISOString().substring(0, 10)}
+                        {".   "}
+                        <br /> Parameters: {reportString}
+                      </th>
+                    </tr>
+                  </thead>
                   <thead>
                     <tr>
                       <th scope="col">Username</th>

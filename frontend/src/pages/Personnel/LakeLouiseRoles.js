@@ -105,7 +105,7 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
             </ul>
             {allowed && (
               <button
-                class="btn btn-primary"
+                class="btn btn-primary m-1"
                 type="button"
                 onClick={promptEditOpen}
               >
@@ -118,7 +118,7 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
 
       <Modal show={editPrompted} onHide={promptEditCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>Editing Lake Louise Awards</Modal.Title>
+          <Modal.Title>Editing Roles</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div class="form-check mb-3">

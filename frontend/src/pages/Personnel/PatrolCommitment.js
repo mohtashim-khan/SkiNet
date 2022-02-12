@@ -34,7 +34,6 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
     let temp = [];
     for (const x in patrolCommit) {
       temp.push($("#" + String(x)).is(":checked"));
-      console.log("THIS SHIT", $("#" + String(x)).is(":checked"));
     }
     for (const y in patrolCommit) {
       if (temp[y]) {
@@ -156,9 +155,6 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
     setEditPrompted(false);
   }
 
-  function promptEditExecute() {
-    setEditPrompted(false);
-  }
   return (
     <>
       <div class="card">

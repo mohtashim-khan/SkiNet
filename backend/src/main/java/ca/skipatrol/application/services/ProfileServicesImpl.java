@@ -376,6 +376,19 @@ public class ProfileServicesImpl implements ProfileServices {
         }
     }
 
+    public boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs) {
+        try {
+            personAwardRepository.deleteAllByIdInBatch(personAwardIDs);
+            for (UUID personAwardID : personAwardIDs) {
+                assert (personAwardRepository.findById(personAwardID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+
     public User createNewUser(String username,
             String password,
             String firstName,

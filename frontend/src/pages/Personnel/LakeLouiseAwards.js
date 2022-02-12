@@ -16,7 +16,48 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
   const [seasons, setSeasons] = useState([]);
   const [sortedSeasons, setSortedSeasons] = useState([]);
 
+  const [deletePrompted, setDeletePrompted] = useState(false);
+
   const [awards, setAwards] = useState([]);
+
+  function deleteAwards() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in personAwards) {
+      temp.push($("#" + String(x)).is(":checked"));
+    }
+    for (const y in personAwards) {
+      if (temp[y]) {
+        params.append("ids", personAwards[y].personAwardID);
+      }
+    }
+
+    session
+      .delete(
+        "profile/user/Awards/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          readNewAwards();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeletePrompted(false);
+  }
+
+  function promptDeleteOpen() {
+    setDeletePrompted(true);
+  }
+
+  function promptDeleteCancel() {
+    setDeletePrompted(false);
+  }
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -56,7 +97,6 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
         )
         .then((resp) => {
           readNewAwards();
-          readPersonAwards();
         });
       promptEditCancel();
       setUpdate(!update);
@@ -66,40 +106,15 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
     }
   }
 
-  function readPersonAwards() {
-    const tempAwardInfo = [];
-    personAwards.map(async (row) => {
-      const tempVal = { season: "", award: "" };
-      await session
-        .get("personAwards/" + row.personAwardID + "/season")
-        .then((resp) => {
-          if (resp.status === 200) {
-            tempVal.season = resp.data.description;
-          }
-        });
-
-      await session
-        .get("personAwards/" + row.personAwardID + "/award")
-        .then((resp) => {
-          if (resp.status === 200) {
-            tempVal.award = resp.data.description;
-          }
-        });
-
-      tempAwardInfo.push(tempVal);
-    });
-
-    // console.log("asdfasdf", tempAwardInfo);
-    setAwardInfo([...tempAwardInfo]);
-    setUpdate(!update);
-  }
-
   function readNewAwards() {
-    session.get("users/" + userID + "/personAwards").then((resp) => {
-      if (resp.status === 200) {
-        setPersonAwards(resp.data._embedded.personAwards);
-      }
-    });
+    session
+      .get("profile/user/Awards?userID=" + userID, {}, {}, true)
+      .then((resp) => {
+        if (resp.status === 200) {
+          setPersonAwards(resp.data.personAwards);
+          //console.log("PersonAwards", resp.data.personAwards);
+        }
+      });
   }
 
   useEffect(() => {
@@ -122,13 +137,11 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
         setAwards(resp.data._embedded.awards);
       }
     });
-
-    readPersonAwards();
   }, []);
 
-  useEffect(() => {
-    readPersonAwards();
-  }, [personAwards]);
+  // useEffect(() => {
+  //   readPersonAwards();
+  // }, [personAwards]);
 
   useEffect(() => {
     let tempSeasons = [...seasons];
@@ -157,12 +170,11 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
                 </tr>
               </thead>
               <tbody>
-                {console.log("rendertest", awardInfo)}
-                {awardInfo.map((row, index) => (
+                {personAwards.map((row, index) => (
                   <tr>
-                    <td>{row.season}</td>
-                    <td>{row.award}</td>
-                    <td>{personAwards[index].comments + " "}</td>
+                    <td>{row.season.description}</td>
+                    <td>{row.award.description}</td>
+                    <td>{row.comments + " "}</td>
                   </tr>
                 ))}
               </tbody>
@@ -170,11 +182,20 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
           </div>
           {allowed && (
             <button
-              class="btn btn-primary"
+              class="btn btn-primary m-1"
               type="button"
               onClick={promptEditOpen}
             >
               Add
+            </button>
+          )}
+          {allowed && (
+            <button
+              class="btn btn-primary m-1"
+              type="button"
+              onClick={promptDeleteOpen}
+            >
+              Delete
             </button>
           )}
         </div>
@@ -247,6 +268,35 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
             </div>
 
             <Button variant="primary" onClick={addLakeLouiseAward}>
+              Submit
+            </Button>
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+          <Modal.Header closeButton>
+            <Modal.Title>Remove Awards</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div class="form-check mb-3">
+              {personAwards.map((row, index) => (
+                <div class="form-group">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    defaultChecked={false}
+                    id={index}
+                  />
+                  <label class="form-check-label">
+                    {"Award: " +
+                      row.award.description +
+                      ", Season: " +
+                      row.season.description}
+                  </label>
+                </div>
+              ))}
+            </div>
+            <Button variant="primary" onClick={deleteAwards}>
               Submit
             </Button>
           </Modal.Body>

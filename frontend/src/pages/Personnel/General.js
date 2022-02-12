@@ -113,11 +113,11 @@ const General = ({ session, userID, allowed }) => {
 
               {allowed && (
                 <button
-                  class="btn btn-primary"
+                  class="btn btn-primary m-1"
                   type="button"
                   onClick={promptEditOpen}
                 >
-                  Add
+                  Edit
                 </button>
               )}
             </div>

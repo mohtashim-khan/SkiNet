@@ -29,15 +29,11 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
     let temp = role;
     for (const x in rolesArray) {
       temp[rolesArray[x]] = $("#" + String(rolesArray[x])).is(":checked");
-      console.log($("#" + String(rolesArray[x])).is(":checked"));
     }
     setRoles(temp);
-    console.log(temp);
     session.put("roles/" + role.roleID, temp, {}, false).then((resp) => {
       if (resp.status === 200 || resp.status === 201) {
         setRoles(resp.data);
-
-        //console.log("This should be the roles", resp.data[fuck[0]], fuck[0].typeof);
       }
     });
     promptEditCancel();
@@ -49,10 +45,8 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
     tempArray.shift();
     tempArray.pop();
     setRolesArray(tempArray);
-    console.log("retard", tempArray);
     const rolesVals = [];
     for (let i = 0; i < tempArray.length; ++i) {
-      console.log("aaaa", role[tempArray[i]]);
       if (role[tempArray[i]]) {
         rolesVals.push(tempArray[i]);
       }
@@ -65,8 +59,6 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
       if (resp.status === 200) {
         setDisciplines(resp.data._embedded.disciplines);
       }
-
-      console.log("fucker", user);
     });
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
@@ -78,8 +70,6 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
       if (resp.status === 200) {
         setRoles(resp.data);
         const fuck = Object.keys(resp.data);
-
-        //console.log("This should be the roles", resp.data[fuck[0]], fuck[0].typeof);
       }
     });
   }, []);
@@ -90,22 +80,22 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
 
   return (
     <>
-      <div class="card">
-        <div class="card-header">
+      <div className="card">
+        <div className="card-header">
           <h4>
             <b>Lake Louise Roles</b>
           </h4>
         </div>
-        <div class="card-body">
-          <form class="mb-0.5">
-            <ul class="list-group mb-3">
+        <div className="card-body">
+          <form className="mb-0.5">
+            <ul className="list-group mb-3">
               {userRoles.map((row) => (
-                <li class="list-group-item">{row}</li>
+                <li className="list-group-item">{row}</li>
               ))}
             </ul>
             {allowed && (
               <button
-                class="btn btn-primary m-1"
+                className="btn btn-primary m-1"
                 type="button"
                 onClick={promptEditOpen}
               >
@@ -121,16 +111,16 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
           <Modal.Title>Editing Roles</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="form-check mb-3">
+          <div className="form-check mb-3">
             {rolesArray.map((row) => (
-              <div class="form-group">
+              <div className="form-group">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   defaultChecked={role[row]}
                   id={row}
                 />
-                <label class="form-check-label">{row}</label>
+                <label className="form-check-label">{row}</label>
               </div>
             ))}
           </div>

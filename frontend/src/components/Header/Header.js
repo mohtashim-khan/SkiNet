@@ -125,7 +125,7 @@ const Header = ({ session }) => {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">
-          <img class="myImage" src={CSPLogo} width="32px" />
+          <img className="myImage" src={CSPLogo} width="32px" />
           <span> CSP</span>
         </a>
         {session.logged_in()

@@ -6,6 +6,7 @@ import ca.skipatrol.application.models.*;
 import ca.skipatrol.application.repositories.*;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Transactional
 public class ProfileServicesImpl implements ProfileServices {
 
-    //region Repository Declarations
+    // region Repository Declarations
     @Autowired
     UniformRepository uniformRepository;
     @Autowired
@@ -45,17 +46,15 @@ public class ProfileServicesImpl implements ProfileServices {
     EvalTrainingRepository evalTrainingRepository;
     @Autowired
     OperationalTrainingRepository operationalTrainingRepository;
-    //endregion
+    // endregion
 
-    //region Service Declarations
+    // region Service Declarations
     @Autowired
     LookupServices lookupServices;
-    //endregion
+    // endregion
 
-
-    //region Uniform-related API Calls
-    boolean createUniformAll(Uniform uniform)
-    {
+    // region Uniform-related API Calls
+    boolean createUniformAll(Uniform uniform) {
         // Add checks for vest, jacket, pack, user, etc. where needed
 
         uniformRepository.save(uniform);
@@ -63,8 +62,7 @@ public class ProfileServicesImpl implements ProfileServices {
         return true;
     }
 
-    public Uniform retrieveUniform(UUID uniformID, boolean getVests, boolean getJackets, boolean getPacks)
-    {
+    public Uniform retrieveUniform(UUID uniformID, boolean getVests, boolean getJackets, boolean getPacks) {
 
         Uniform uniform = uniformRepository.getById(uniformID);
 
@@ -74,26 +72,26 @@ public class ProfileServicesImpl implements ProfileServices {
                 uniform.getReturned(),
                 uniform.getUser());
 
-        if(getVests) {
+        if (getVests) {
             Hibernate.initialize(uniform.getVests().size());
             returnVal.setVests(uniform.getVests());
         }
-        if(getJackets) {
+        if (getJackets) {
             Hibernate.initialize(uniform.getJackets().size());
             returnVal.setJackets(uniform.getJackets());
         }
-        if(getPacks) {
+        if (getPacks) {
             Hibernate.initialize(uniform.getPacks().size());
             returnVal.setPacks(uniform.getPacks());
         }
 
         return returnVal;
     }
-    //endregion
+    // endregion
 
-    //region User-related API Calls
-    public User retrieveUserTrainingAndEvaluation(UUID userID, boolean getEvalTrainings, boolean getOpTrainings, boolean getOnSnowEvals)
-    {
+    // region User-related API Calls
+    public User retrieveUserTrainingAndEvaluation(UUID userID, boolean getEvalTrainings, boolean getOpTrainings,
+            boolean getOnSnowEvals) {
         Optional<User> userEntity = userRepository.findById(userID);
 
         if (userEntity.isPresent()) {
@@ -125,12 +123,10 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
-    public User retrieveUserEmergencyContacts(UUID userID)
-    {
+    public User retrieveUserEmergencyContacts(UUID userID) {
         Optional<User> userEntity = userRepository.findById(userID);
 
-        if (userEntity.isPresent())
-        {
+        if (userEntity.isPresent()) {
             User user = userEntity.get();
 
             User returnVal = new User(user.getUserID(),
@@ -150,12 +146,10 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
-    public User retrieveUserPatrolCommitments(UUID userID)
-    {
+    public User retrieveUserPatrolCommitments(UUID userID) {
         Optional<User> userEntity = userRepository.findById(userID);
 
-        if (userEntity.isPresent())
-        {
+        if (userEntity.isPresent()) {
             User user = userEntity.get();
 
             User returnVal = new User(user.getUserID(),
@@ -175,12 +169,10 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
-    public User retrieveUserAwards(UUID userID)
-    {
+    public User retrieveUserAwards(UUID userID) {
         Optional<User> userEntity = userRepository.findById(userID);
 
-        if (userEntity.isPresent())
-        {
+        if (userEntity.isPresent()) {
             User user = userEntity.get();
 
             User returnVal = new User(user.getUserID(),
@@ -200,12 +192,10 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
-    public User retrieveUserUniform(UUID userID)
-    {
+    public User retrieveUserUniform(UUID userID) {
         Optional<User> userEntity = userRepository.findById(userID);
 
-        if (userEntity.isPresent())
-        {
+        if (userEntity.isPresent()) {
             User user = userEntity.get();
 
             User returnVal = new User(user.getUserID(),
@@ -219,7 +209,7 @@ public class ProfileServicesImpl implements ProfileServices {
 
             List<Uniform> uniforms = new ArrayList<Uniform>();
 
-            if(user.getUniforms().size() > 0) {
+            if (user.getUniforms().size() > 0) {
                 for (Uniform uniform : user.getUniforms()) {
                     Uniform returnUniform = retrieveUniform(uniform.getUniformID(), true, true, true);
 
@@ -233,12 +223,10 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
-    public User retrieveUserRole(UUID userID)
-    {
+    public User retrieveUserRole(UUID userID) {
         Optional<User> userEntity = userRepository.findById(userID);
 
-        if (userEntity.isPresent())
-        {
+        if (userEntity.isPresent()) {
             User user = userEntity.get();
 
             User returnVal = new User(user.getUserID(),
@@ -257,12 +245,10 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
-    public User retrieveUserAll(UUID userID)
-    {
+    public User retrieveUserAll(UUID userID) {
         Optional<User> userEntity = userRepository.findById(userID);
 
-        if (userEntity.isPresent())
-        {
+        if (userEntity.isPresent()) {
             User user = userEntity.get();
 
             User returnVal = new User(user.getUserID(),
@@ -273,7 +259,6 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType());
-
 
             Hibernate.initialize(user.getEvalTrainings().size());
             returnVal.setEvalTrainings(user.getEvalTrainings());
@@ -294,87 +279,146 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
-    //endregion
-    public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs)
-    {
-        try
-        {
+    // endregion
+    public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs) {
+        try {
             patrolCommitmentRepository.deleteAllByIdInBatch(patrolCommitmentIDs);
             for (UUID patrolCommitmentID : patrolCommitmentIDs) {
                 assert (patrolCommitmentRepository.findById(patrolCommitmentID).isEmpty());
             }
             return true;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }
 
-    public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs)
-    {
-        try
-        {
+    public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs) {
+        try {
             evalTrainingRepository.deleteAllByIdInBatch(evalTrainingIDs);
             for (UUID evalTrainingID : evalTrainingIDs) {
                 assert (evalTrainingRepository.findById(evalTrainingID).isEmpty());
             }
             return true;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }
 
-    public boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs)
-    {
-        try
-        {
+    public boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs) {
+        try {
             operationalTrainingRepository.deleteAllByIdInBatch(operationalTrainingIDs);
             for (UUID operationalTrainingID : operationalTrainingIDs) {
                 assert (operationalTrainingRepository.findById(operationalTrainingID).isEmpty());
             }
             return true;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }
 
-    public boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs){
-        try
-        {
+    public boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs) {
+        try {
             onSnowEvalRepository.deleteAllByIdInBatch(onSnowEvalIDs);
             for (UUID onSnowEvalID : onSnowEvalIDs) {
                 assert (onSnowEvalRepository.findById(onSnowEvalID).isEmpty());
             }
             return true;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }
 
+    public boolean deletePacksInBatch(ArrayList<UUID> packIDs) {
+        try {
+            packRepository.deleteAllByIdInBatch(packIDs);
+            for (UUID packID : packIDs) {
+                assert (packRepository.findById(packID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 
+    public boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs) {
+        try {
+            jacketRepository.deleteAllByIdInBatch(jacketIDs);
+            for (UUID jacketID : jacketIDs) {
+                assert (jacketRepository.findById(jacketID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean deleteVestsInBatch(ArrayList<UUID> vestIDs) {
+        try {
+            vestRepository.deleteAllByIdInBatch(vestIDs);
+            for (UUID vestID : vestIDs) {
+                assert (vestRepository.findById(vestID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs) {
+        try {
+            roleRepository.deleteAllByIdInBatch(roleIDs);
+            for (UUID roleID : roleIDs) {
+                assert (roleRepository.findById(roleID).isEmpty());
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public User createNewUser(String username,
+            String password,
+            String firstName,
+            String lastName,
+            String email,
+            String phoneNumber,
+            String eventRole) {
+
+        Optional<User> userLookup = this.userRepository.findByUsername(username);
+        if (!userLookup.isEmpty()) {
+            return null;
+        }
+        userLookup = this.userRepository.findByEmail(email);
+        if (!userLookup.isEmpty()) {
+            return null;
+        }
+
+        User myUser = new User(username, new BCryptPasswordEncoder().encode(password), firstName, lastName, email,
+                phoneNumber, EventRole.valueOf(eventRole));
+
+        this.userRepository.save(myUser);
+        Optional<User> userEntity = userRepository.findByUsername(username);
+        User user = userEntity.get();
+
+        Uniform uniform = new Uniform(false, false, user);
+        uniformRepository.save(uniform);
+        emergencyContactRepository.save(new EmergencyContact("", "", "", user));
+        Role role = new Role(false, false, false, false,
+                false, true, false,
+                false, false, false, false, user);
+        this.roleRepository.save(role);
+        userEntity = userRepository.findByUsername(username);
+        user = userEntity.get();
+        User returnVal = new User(user.getUserID(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getUserType());
+
+        return returnVal;
+
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

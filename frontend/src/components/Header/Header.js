@@ -48,18 +48,38 @@ const Header = ({ session }) => {
                 </li>
               )}
             </Route>
+
             <Route path="/admin">
-              {({ match }) => (
-                <li className={match ? "nav-item active" : "nav-item"}>
-                  <Link className="nav-link" to="/admin/lookups">
-                    Admin
-                  </Link>
-                </li>
-              )}
+              {({ match }) =>
+                session.session_data() !== null &&
+                session.session_data().user_type === "SYSTEM_ADMIN" && (
+                  <li className={match ? "nav-item active" : "nav-item"}>
+                    <Link className="nav-link" to="/admin/lookups">
+                      Admin
+                    </Link>
+                  </li>
+                )
+              }
             </Route>
           </ul>
         </div>
 
+        <div>
+          <button
+            className="btn btn-outline-light my-2 my-sm-0 signOutButton"
+            onClick={() => {
+              if (session.session_data().userID) {
+                window.location.href =
+                  "/personnel/user/" + session.session_data().userID;
+              }
+            }}
+          >
+            {session.session_data() !== null &&
+              session.session_data().firstName +
+                " " +
+                session.session_data().lastName}
+          </button>
+        </div>
         <div>
           <button
             className="btn btn-light my-2 my-sm-0 signOutButton"
@@ -129,13 +149,18 @@ const Header = ({ session }) => {
                     )}
                   </Route>
                   <Route path="/personnel/reports" exact>
-                    {({ match }) => (
-                      <li className={match ? "nav-item active" : "nav-item"}>
-                        <Link className="nav-link" to="/personnel/reports">
-                          Reports
-                        </Link>
-                      </li>
-                    )}
+                    {({ match }) =>
+                      session.session_data() !== null &&
+                      session.session_data().user_type === "SYSTEM_ADMIN" && (
+                        <li className={match ? "nav-item active" : "nav-item"}>
+                          {
+                            <Link className="nav-link" to="/personnel/reports">
+                              Reports
+                            </Link>
+                          }
+                        </li>
+                      )
+                    }
                   </Route>
                 </ul>
               </div>
@@ -195,6 +220,15 @@ const Header = ({ session }) => {
                       <li className={match ? "nav-item active" : "nav-item"}>
                         <Link className="nav-link" to="/admin/areas">
                           Areas
+                        </Link>
+                      </li>
+                    )}
+                  </Route>
+                  <Route path="/admin/newUser" exact>
+                    {({ match }) => (
+                      <li className={match ? "nav-item active" : "nav-item"}>
+                        <Link className="nav-link" to="/admin/newUser">
+                          Create New User
                         </Link>
                       </li>
                     )}

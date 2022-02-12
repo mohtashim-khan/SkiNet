@@ -70,7 +70,7 @@ const NewsBulletinPage = ({ session }) => {
     if (text.length <= maximumLength) {
       return text;
     }
-    
+
     const subString = text.substr(0, maximumLength - 1);
     return subString.substr(0, subString.lastIndexOf(" ")) + "...";
   }
@@ -94,15 +94,21 @@ const NewsBulletinPage = ({ session }) => {
                   }
                 }}
               />
-              <Button variant="outline-secondary" id="search-btn" onClick={performSearch}>
+              <Button
+                variant="outline-secondary"
+                id="search-btn"
+                onClick={performSearch}
+              >
                 Search
               </Button>
             </InputGroup>
           </form>
 
-          <Link to="/news/create" className="btn btn-secondary">
-            Draft Post
-          </Link>
+          {session.session_data().user_type === "SYSTEM_ADMIN" && (
+            <Link to="/news/create" className="btn btn-secondary">
+              Draft Post
+            </Link>
+          )}
         </div>
       </nav>
       <Container className="p-3">
@@ -141,7 +147,9 @@ const NewsBulletinPage = ({ session }) => {
                   <Card.Title>
                     {post.title} <Badge bg="secondary">CSP LL Awards</Badge>
                   </Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">{post.publishedDate}</Card.Subtitle>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    {post.publishedDate}
+                  </Card.Subtitle>
                   <Card.Text>{truncateParagraph(post.body, 128)}</Card.Text>
                   <a
                     onClick={() => {
@@ -157,10 +165,17 @@ const NewsBulletinPage = ({ session }) => {
 
             {!searchState ? (
               <Pagination>
-                <Pagination.Prev disabled={currentPage == 0} onClick={() => setCurrentPage(currentPage - 1)} />
+                <Pagination.Prev
+                  disabled={currentPage == 0}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                />
                 {[...Array(pageCount).keys()].map((page) => {
                   return (
-                    <Pagination.Item key={page} active={currentPage == page} onClick={() => setCurrentPage(page)}>
+                    <Pagination.Item
+                      key={page}
+                      active={currentPage == page}
+                      onClick={() => setCurrentPage(page)}
+                    >
                       {page + 1}
                     </Pagination.Item>
                   );

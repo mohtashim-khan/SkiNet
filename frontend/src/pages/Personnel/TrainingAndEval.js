@@ -12,21 +12,25 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
   const [operationalTraining, setOperationalTraining] = useState([]);
   const [operationalEvent, setOperationalEvent] = useState([]);
   const [evaluationTraining, setEvaluationTraining] = useState([]);
+
+  const [user, setUser] = useState([]);
+
+  const [addPrompted, setAddPrompted] = useState(false);
   const [editPrompted, setEditPrompted] = useState(false);
   const [deletePrompted, setDeletePrompted] = useState(false);
-  const [user, setUser] = useState([]);
 
   const [date, setDate] = useState(null);
   const [theEventType, setTheEventType] = useState(null);
   const [error, setError] = useState(false);
   const [type, setType] = useState("1");
 
+  const [selectedVal, setSelectedVal] = useState("-1");
+
   function deleteOnSnowEvals() {
     const params = new URLSearchParams();
     let temp = [];
     for (const x in onSnowEvals) {
       temp.push($("#" + String(x)).is(":checked"));
-      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
     for (const y in onSnowEvals) {
       if (temp[y]) {
@@ -58,7 +62,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     let temp = [];
     for (const x in operationalTraining) {
       temp.push($("#" + String(x)).is(":checked"));
-      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
     for (const y in operationalTraining) {
       if (temp[y]) {
@@ -90,7 +93,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     let temp = [];
     for (const x in evaluationTraining) {
       temp.push($("#" + String(x)).is(":checked"));
-      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
     for (const y in evaluationTraining) {
       if (temp[y]) {
@@ -127,18 +129,83 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
   }
 
   function promptAddOpen() {
-    setEditPrompted(true);
+    setAddPrompted(true);
   }
 
   function promptAddCancel() {
     setType("1");
+    setAddPrompted(false);
+    setError(false);
+  }
+
+  function editOnSnowEvals() {
+    try {
+      if (selectedVal === "-1") throw "ERROR: No Value selected";
+      const myDate = new Date($("#OnSnowTrainingDateEdit").val()).toISOString();
+      const myDiscipline = $("#OnSnowDisciplinesEdit").val();
+      const myEval = $("#OnSnowEvalByEdit").val();
+
+      let temp = onSnowEvals[parseInt(selectedVal)];
+      temp.evaluationDate = myDate.substring(0, 10);
+      temp.discipline = discipline[myDiscipline].description;
+      if (myEval.length > 0) {
+        temp.evaluatedBy = myEval;
+      }
+
+      console.log("Sent to put req...", JSON.stringify(temp));
+
+      session
+        .put(
+          "profile/user/OnSnowEvals/Edit?id=" + temp.onSnowEvalID,
+          temp,
+          {},
+          true
+        )
+        .then((resp) => {
+          if (resp.status === 200 || resp.status === 201) {
+            readNewTrainingAndEvals();
+          }
+        });
+      promptEditCancel();
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
+  }
+
+  function editOperationalTraining() {}
+
+  function editEvalTraining() {}
+
+  function promptEditOpen() {
+    setEditPrompted(true);
+  }
+
+  function promptEditCancel() {
+    setType("1");
+    setSelectedVal("-1");
     setEditPrompted(false);
     setError(false);
   }
 
   function OnChangeVal(event) {
     setType(event.target.value);
-    console.log("fuck you");
+    setSelectedVal("-1");
+  }
+
+  function onSnowEvalEditEvent(event) {
+    let temp = event.target.value;
+    setSelectedVal(String(temp));
+  }
+
+  function evalTrainingEditEvent(event) {
+    let temp = event.target.value;
+    setSelectedVal(String(temp));
+  }
+
+  function operationalTrainingEditEvent(event) {
+    let temp = event.target.value;
+    setSelectedVal(String(temp));
   }
 
   function addOnSnowEval() {
@@ -169,8 +236,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
       console.log(err);
       setError(true);
     }
-
-    console.log("ASFASDFS", user._links.self.href);
   }
 
   function addEvalTraining() {
@@ -199,8 +264,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
       console.log(err);
       setError(true);
     }
-
-    console.log("ASFASDFS", user._links.self.href);
   }
 
   function addOperationalTraining() {
@@ -214,7 +277,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
         throw "empty operational";
       }
 
-      console.log(myOperationalIndex);
       session
         .post(
           "operationalTrainings",
@@ -252,14 +314,14 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           </Alert>
           <h5>Patroller On-Snow Evaluation</h5>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <label className="input-group-text" for="inputGroupSelect01">
                 Discipline:
               </label>
             </div>
 
-            <select class="form-select" id="OnSnowDisciplines">
+            <select className="form-select" id="OnSnowDisciplines">
               <option selected value={-1}>
                 Choose...
               </option>
@@ -269,9 +331,9 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
             </select>
           </div>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Date Completed</label>
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <label className="input-group-text">Date Completed</label>
             </div>
 
             <Form.Control
@@ -285,15 +347,15 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
             />
           </div>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <label className="input-group-text" for="inputGroupSelect01">
                 Evaluated by:
               </label>
             </div>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               id="OnSnowEvalBy"
               name="myEvalInput"
               aria-describedby="emailHelp"
@@ -319,24 +381,24 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           </Alert>
           <h5>Evaluator Snow Training</h5>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <label className="input-group-text" for="inputGroupSelect01">
                 Event Type
               </label>
             </div>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               id="EvalTrainingEvent"
               name="myEvalInput"
               aria-describedby="emailHelp"
             />
           </div>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Date Completed</label>
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <label className="input-group-text">Date Completed</label>
             </div>
 
             <Form.Control
@@ -368,14 +430,14 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           </Alert>
           <h5>Patroller Operational Training</h5>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <label className="input-group-text" for="inputGroupSelect01">
                 Event Type
               </label>
             </div>
 
-            <select class="form-select" id="OperationalTrainingEvent">
+            <select className="form-select" id="OperationalTrainingEvent">
               <option selected value={-1}>
                 Choose...
               </option>
@@ -385,9 +447,9 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
             </select>
           </div>
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Date Completed</label>
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <label className="input-group-text">Date Completed</label>
             </div>
 
             <Form.Control
@@ -413,16 +475,16 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
       return (
         <>
           <h5>Patroller On-Snow Evaluation</h5>
-          <div class="form-check mb-3">
+          <div className="form-check mb-3">
             {onSnowEvals.map((row, index) => (
-              <div class="form-group">
+              <div className="form-group">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   defaultChecked={false}
                   id={index}
                 />
-                <label class="form-check-label">
+                <label className="form-check-label">
                   {"Discipline: " +
                     row.discipline.description +
                     ", Date Completed: " +
@@ -442,16 +504,16 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
       return (
         <>
           <h5>Evaluator Snow Training</h5>
-          <div class="form-check mb-3">
+          <div className="form-check mb-3">
             {evaluationTraining.map((row, index) => (
-              <div class="form-group">
+              <div className="form-group">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   defaultChecked={false}
                   id={index}
                 />
-                <label class="form-check-label">
+                <label className="form-check-label">
                   {"Event Type: " +
                     row.eventType +
                     ", Date Completed: " +
@@ -469,16 +531,16 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
       return (
         <>
           <h5>Patroller Operational Training</h5>
-          <div class="form-check mb-3">
+          <div className="form-check mb-3">
             {operationalTraining.map((row, index) => (
-              <div class="form-group">
+              <div className="form-group">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   defaultChecked={false}
                   id={index}
                 />
-                <label class="form-check-label">
+                <label className="form-check-label">
                   {"Season: " +
                     row.operationalEvent.description +
                     ", Date Completed: " +
@@ -488,6 +550,289 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
             ))}
           </div>
           <Button variant="primary" onClick={deleteOperationalTraining}>
+            Submit
+          </Button>
+        </>
+      );
+    }
+  };
+
+  const EditEval = () => {
+    if (type === "1") {
+      return (
+        <>
+          <Alert
+            variant="danger"
+            show={error}
+            onClose={() => setError(false)}
+            dismissible={true}
+          >
+            <Alert.Heading>Uh oh!</Alert.Heading>
+            <p>Looks like you need glasses</p>
+          </Alert>
+          <h5>Patroller On-Snow Evaluation</h5>
+          <div className="form-check mb-3">
+            {onSnowEvals.map((row, index) => (
+              <div className="form-group">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="selectEdit"
+                  checked={selectedVal === String(index)}
+                  value={String(index)}
+                  onChange={onSnowEvalEditEvent}
+                />
+                <label className="form-check-label">
+                  {"Discipline: " +
+                    row.discipline.description +
+                    ", Date Completed: " +
+                    row.evaluationDate.substring(0, 10) +
+                    ", Evaluated By: " +
+                    row.evaluatedBy}
+                </label>
+              </div>
+            ))}
+          </div>
+
+          {selectedVal !== "-1" ? (
+            <>
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="inputGroupSelect01">
+                    Discipline:
+                  </label>
+                </div>
+
+                <select className="form-select" id="OnSnowDisciplinesEdit">
+                  {discipline.map((row, index) =>
+                    row.description ===
+                    onSnowEvals[parseInt(selectedVal)].discipline
+                      .description ? (
+                      <option selected value={index}>
+                        {row.description} (Current Value)
+                      </option>
+                    ) : (
+                      <option value={index}>{row.description}</option>
+                    )
+                  )}
+                </select>
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text">Date Completed</label>
+                </div>
+
+                <Form.Control
+                  type="date"
+                  name="date_of_birth"
+                  id="OnSnowTrainingDateEdit"
+                  defaultValue={
+                    onSnowEvals[parseInt(selectedVal)].evaluationDate
+                  }
+                />
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="inputGroupSelect01">
+                    Evaluated by:
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="OnSnowEvalByEdit"
+                  name="myEvalInput"
+                  placeholder={onSnowEvals[parseInt(selectedVal)].evaluatedBy}
+                  aria-describedby="emailHelp"
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <b>
+                  <i>Select an On-Snow Evaluation to Update</i>
+                </b>
+              </div>
+            </>
+          )}
+
+          <Button variant="primary" onClick={editOnSnowEvals}>
+            Submit
+          </Button>
+        </>
+      );
+    } else if (type === "2") {
+      return (
+        <>
+          <Alert
+            variant="danger"
+            show={error}
+            onClose={() => setError(false)}
+            dismissible={true}
+          >
+            <Alert.Heading>Uh oh!</Alert.Heading>
+            <p>Looks like you need glasses</p>
+          </Alert>
+          <h5>Evaluator Snow Training</h5>
+          <div className="form-check mb-3">
+            {evaluationTraining.map((row, index) => (
+              <div className="form-group">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="selectEdit"
+                  checked={selectedVal === String(index)}
+                  value={String(index)}
+                  onChange={evalTrainingEditEvent}
+                />
+                <label className="form-check-label">
+                  {"Event Type: " +
+                    row.eventType +
+                    ", Date Completed: " +
+                    row.completedDate}
+                </label>
+              </div>
+            ))}
+          </div>
+
+          {selectedVal !== "-1" ? (
+            <>
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="inputGroupSelect01">
+                    Event Type
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="EvalTrainingEventEdit"
+                  name="myEvalInput"
+                  placeholder={
+                    evaluationTraining[parseInt(selectedVal)].eventType
+                  }
+                  aria-describedby="emailHelp"
+                />
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text">Date Completed</label>
+                </div>
+
+                <Form.Control
+                  type="date"
+                  name="date_of_birth"
+                  id="OnSnowTrainingDateEdit"
+                  defaultValue={
+                    evaluationTraining[parseInt(selectedVal)].completedDate
+                  }
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <b>
+                  <i>Select an Evaluation Training to Update</i>
+                </b>
+              </div>
+            </>
+          )}
+
+          <Button variant="primary" onClick={editEvalTraining}>
+            Submit
+          </Button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Alert
+            variant="danger"
+            show={error}
+            onClose={() => setError(false)}
+            dismissible={true}
+          >
+            <Alert.Heading>Uh oh!</Alert.Heading>
+            <p>Looks like you need glasses</p>
+          </Alert>
+          <h5>Patroller Operational Training</h5>
+          <div className="form-check mb-3">
+            {operationalTraining.map((row, index) => (
+              <div className="form-group">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="selectEdit"
+                  checked={selectedVal === String(index)}
+                  value={String(index)}
+                  onChange={operationalTrainingEditEvent}
+                />
+                <label className="form-check-label">
+                  {"Season: " +
+                    row.operationalEvent.description +
+                    ", Date Completed: " +
+                    row.completedDate}
+                </label>
+              </div>
+            ))}
+          </div>
+
+          {selectedVal !== "-1" ? (
+            <>
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="inputGroupSelect01">
+                    Event Type
+                  </label>
+                </div>
+                <select
+                  className="form-select"
+                  id="OperationalTrainingEventEdit"
+                >
+                  {operationalEvent.map((row, index) =>
+                    row.description ===
+                    operationalTraining[parseInt(selectedVal)].operationalEvent
+                      .description ? (
+                      <option selected value={index}>
+                        {row.description} (Current Value){" "}
+                      </option>
+                    ) : (
+                      <option value={index}>{row.description}</option>
+                    )
+                  )}
+                </select>
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text">Date Completed</label>
+                </div>
+
+                <Form.Control
+                  type="date"
+                  name="date_of_birth"
+                  id="OnSnowTrainingDateEdit"
+                  defaultValue={
+                    operationalTraining[parseInt(selectedVal)].completedDate
+                  }
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <b>
+                  <i>Select an Operational Training to Update</i>
+                </b>
+              </div>
+            </>
+          )}
+          <Button variant="primary" onClick={editOperationalTraining}>
             Submit
           </Button>
         </>
@@ -508,7 +853,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           setOnSnowEvals(resp.data.onSnowEvals);
           setOperationalTraining(resp.data.operationalTrainings);
           setEvaluationTraining(resp.data.evalTrainings);
-          console.log(operationalTraining);
         }
       });
   }
@@ -536,20 +880,20 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
 
   return (
     <>
-      <div class="card">
-        <div class="card-header">
+      <div className="card">
+        <div className="card-header">
           <h4>
             <b>Training and Evaluation</b>
           </h4>
         </div>
 
-        <div class="card-body">
+        <div className="card-body">
           {onSnowEvals.length !== 0 && (
             <div>
               <h5>
                 <b>Patroller On-Snow Evaluations</b>
               </h5>
-              <table class="table table-bordered hover" it="sortTable">
+              <table className="table table-bordered hover" it="sortTable">
                 <thead>
                   <tr>
                     <th scope="col">Discipline</th>
@@ -575,7 +919,7 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
               <h5>
                 <b>Evaluator Training</b>
               </h5>
-              <table class="table table-bordered hover" it="sortTable">
+              <table className="table table-bordered hover" it="sortTable">
                 <thead>
                   <tr>
                     <th scope="col">Event Type</th>
@@ -599,7 +943,7 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
               <h5>
                 <b>Patroller Operational Training</b>
               </h5>
-              <table class="table table-bordered hover" it="sortTable">
+              <table className="table table-bordered hover" it="sortTable">
                 <thead>
                   <tr>
                     <th scope="col">Operational Event</th>
@@ -620,7 +964,7 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
 
           {allowed && (
             <button
-              class="btn btn-primary m-1"
+              className="btn btn-primary m-1"
               type="button"
               onClick={promptAddOpen}
             >
@@ -630,7 +974,17 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
 
           {allowed && (
             <button
-              class="btn btn-primary m-1"
+              className="btn btn-primary m-1"
+              type="button"
+              onClick={promptEditOpen}
+            >
+              Edit
+            </button>
+          )}
+
+          {allowed && (
+            <button
+              className="btn btn-primary m-1"
               type="button"
               onClick={promptDeleteOpen}
             >
@@ -639,15 +993,15 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           )}
         </div>
 
-        <Modal show={editPrompted} onHide={promptAddCancel}>
+        <Modal show={addPrompted} onHide={promptAddCancel}>
           <Modal.Header closeButton>
             <Modal.Title>Add New Training Evaluation Certification</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <form class="mb-2">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">
+            <form className="mb-2">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="inputGroupSelect01">
                     Training Type
                   </label>
                 </div>
@@ -668,15 +1022,44 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           </Modal.Body>
         </Modal>
 
-        <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+        <Modal show={editPrompted} onHide={promptEditCancel}>
           <Modal.Header closeButton>
-            <Modal.Title>Add New Training Evaluation Certification</Modal.Title>
+            <Modal.Title>Edit Training Evaluation Certification</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <form class="mb-2">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">
+            <form className="mb-2">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="inputGroupSelect01">
+                    Training Type
+                  </label>
+                </div>
+                <Form.Control
+                  as="select"
+                  custom
+                  onChange={OnChangeVal.bind(this)}
+                >
+                  <option selected value="1">
+                    Patroller On-Snow Evaluation
+                  </option>
+                  <option value="2">Evaluator Training</option>
+                  <option value="3">Patroller Operational Training</option>
+                </Form.Control>
+              </div>
+              <EditEval />
+            </form>
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+          <Modal.Header closeButton>
+            <Modal.Title>Delete Training Evaluation Certifications</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <form className="mb-2">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="inputGroupSelect01">
                     Training Type
                   </label>
                 </div>

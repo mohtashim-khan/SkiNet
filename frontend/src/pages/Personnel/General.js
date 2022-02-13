@@ -17,10 +17,6 @@ const General = ({ session, userID, allowed }) => {
     setEditPrompted(false);
   }
 
-  function promptEditExecute() {
-    setEditPrompted(false);
-  }
-
   function editEmergencyContact() {
     let temp = emergencyContact;
     temp.name = $("#nameSelect").val();
@@ -32,7 +28,6 @@ const General = ({ session, userID, allowed }) => {
       .put("emergencyContacts/" + emergencyContactsID, temp, {}, false)
       .then((resp) => {
         if (resp === 200 || resp === 201) {
-          console.log(resp.data);
           setEmergencyContact(resp.data);
         }
       });
@@ -42,7 +37,6 @@ const General = ({ session, userID, allowed }) => {
   function readEmergencyContact() {
     session.get("users/" + userID + "/emergencyContacts").then((resp) => {
       if (resp.status === 200) {
-        console.log("emergency contact", resp.data._embedded);
         setEmergencyContact(resp.data._embedded.emergencyContacts[0]);
       }
     });
@@ -52,8 +46,6 @@ const General = ({ session, userID, allowed }) => {
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
         setUser(resp.data);
-        console.log("test", resp.data);
-        //http://localhost:8080/api/users/87d58f27-0b2d-4a14-9309-9873dbc4dd2a/emergencyContacts
       }
       readEmergencyContact();
     });
@@ -62,50 +54,61 @@ const General = ({ session, userID, allowed }) => {
   return (
     <>
       <>
-        <div class="card">
-          <form class="mb-0.5">
-            <div class="card-header">
+        <div className="card">
+          <form className="mb-0.5">
+            <div className="card-header">
               <h4>
                 <b>General</b>
               </h4>
             </div>
-
-            <div class="card-body">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">
+            <div className="card-body">
+              <h5>
+                <b>Emergency Contact Information</b>
+              </h5>
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="inputGroupSelect01"
+                  >
                     <b>Name</b>
                   </label>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   value={emergencyContact && emergencyContact.name}
                   disabled
                 ></input>
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="inputGroupSelect01"
+                  >
                     <b>Relationship</b>
                   </label>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   value={emergencyContact && emergencyContact.relationship} //this is not a good solution
                   disabled
                 ></input>
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="inputGroupSelect01"
+                  >
                     <b>Phone Number</b>
                   </label>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   value={emergencyContact && emergencyContact.phone}
                   disabled
                 ></input>
@@ -113,11 +116,11 @@ const General = ({ session, userID, allowed }) => {
 
               {allowed && (
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary m-1"
                   type="button"
                   onClick={promptEditOpen}
                 >
-                  Add
+                  Edit
                 </button>
               )}
             </div>
@@ -129,24 +132,24 @@ const General = ({ session, userID, allowed }) => {
             <Modal.Title>Editing General Information</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* <div class="form-group">
+            {/* <div className="form-group">
             <h4>
               <b>User Information</b>
             </h4>
           </div> */}
-            <div class="form-group">
+            <div className="form-group">
               <h5>
                 <b>Emergency Contact Information</b>
               </h5>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="nameSelect">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" htmlFor="nameSelect">
                     Name
                   </label>
                 </div>
                 <input
                   type="tel"
-                  class="form-control"
+                  className="form-control"
                   id="nameSelect"
                   name="myEvalInput"
                   aria-describedby="emailHelp"
@@ -154,15 +157,18 @@ const General = ({ session, userID, allowed }) => {
                 />
               </div>
 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="relationshipSelect">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="relationshipSelect"
+                  >
                     Relationship
                   </label>
                 </div>
                 <input
                   type="tel"
-                  class="form-control"
+                  className="form-control"
                   id="relationshipSelect"
                   name="myEvalInput"
                   aria-describedby="emailHelp"
@@ -172,15 +178,15 @@ const General = ({ session, userID, allowed }) => {
                 />
               </div>
 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="phoneSelect">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" htmlFor="phoneSelect">
                     Phone Number
                   </label>
                 </div>
                 <input
                   type="tel"
-                  class="form-control"
+                  className="form-control"
                   id="phoneSelect"
                   name="myEvalInput"
                   aria-describedby="emailHelp"

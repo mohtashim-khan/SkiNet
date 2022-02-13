@@ -25,7 +25,7 @@ const Header = ({ session }) => {
               {({ match }) => (
                 <li className={match ? "nav-item active" : "nav-item"}>
                   <Link className="nav-link" to="/news">
-                    News
+                    Information
                   </Link>
                 </li>
               )}
@@ -34,7 +34,7 @@ const Header = ({ session }) => {
               {({ match }) => (
                 <li className={match ? "nav-item active" : "nav-item"}>
                   <Link className="nav-link" to="/personnel/users">
-                    Volunteers
+                    Membership
                   </Link>
                 </li>
               )}
@@ -43,7 +43,7 @@ const Header = ({ session }) => {
               {({ match }) => (
                 <li className={match ? "nav-item active" : "nav-item"}>
                   <Link className="nav-link" to="/roster/calendar">
-                    Roster
+                    Schedule
                   </Link>
                 </li>
               )}
@@ -51,6 +51,7 @@ const Header = ({ session }) => {
 
             <Route path="/admin">
               {({ match }) =>
+                session.session_data() !== null &&
                 session.session_data().user_type === "SYSTEM_ADMIN" && (
                   <li className={match ? "nav-item active" : "nav-item"}>
                     <Link className="nav-link" to="/admin/lookups">
@@ -63,6 +64,22 @@ const Header = ({ session }) => {
           </ul>
         </div>
 
+        <div>
+          <button
+            className="btn btn-outline-light my-2 my-sm-0 signOutButton"
+            onClick={() => {
+              if (session.session_data().userID) {
+                window.location.href =
+                  "/personnel/user/" + session.session_data().userID;
+              }
+            }}
+          >
+            {session.session_data() !== null &&
+              session.session_data().firstName +
+                " " +
+                session.session_data().lastName}
+          </button>
+        </div>
         <div>
           <button
             className="btn btn-light my-2 my-sm-0 signOutButton"
@@ -108,8 +125,8 @@ const Header = ({ session }) => {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">
-          <img class="myImage" src={CSPLogo} width="32px" />
-          <span> CSP</span>
+          <img className="myImage" src={CSPLogo} width="32px" />
+          <span> CSP - Lake Louise </span>
         </a>
         {session.logged_in()
           ? renderLoggedInNavigation()
@@ -133,6 +150,7 @@ const Header = ({ session }) => {
                   </Route>
                   <Route path="/personnel/reports" exact>
                     {({ match }) =>
+                      session.session_data() !== null &&
                       session.session_data().user_type === "SYSTEM_ADMIN" && (
                         <li className={match ? "nav-item active" : "nav-item"}>
                           {
@@ -166,7 +184,7 @@ const Header = ({ session }) => {
                       </li>
                     )}
                   </Route>
-                  <Route path="/roster/reports" exact>
+                  {/* <Route path="/roster/reports" exact>
                     {({ match }) => (
                       <li className={match ? "nav-item active" : "nav-item"}>
                         <Link className="nav-link" to="/roster/reports">
@@ -174,7 +192,7 @@ const Header = ({ session }) => {
                         </Link>
                       </li>
                     )}
-                  </Route>
+                  </Route> */}
                 </ul>
               </div>
             </nav>

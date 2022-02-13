@@ -42,6 +42,8 @@ public interface ProfileServices {
 
     public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
 
+    public boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
+
     public User createNewUser(String username,
             String password,
             String firstName,
@@ -49,4 +51,6 @@ public interface ProfileServices {
             String email,
             String phoneNumber,
             String eventRole);
+
+    public boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
 }

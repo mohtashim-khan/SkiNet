@@ -6,17 +6,58 @@ import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
 const LakeLouiseAwards = ({ session, userID, allowed }) => {
-  const [editPrompted, setEditPrompted] = useState(false);
   const [update, setUpdate] = useState(false);
   const [personAwards, setPersonAwards] = useState([]);
-  const [awardInfo, setAwardInfo] = useState([]);
   const [user, setUsers] = useState([]);
   const [error, setError] = useState(false);
 
   const [seasons, setSeasons] = useState([]);
   const [sortedSeasons, setSortedSeasons] = useState([]);
 
+  const [addPrompted, setAddPrompted] = useState(false);
+  const [editPrompted, setEditPrompted] = useState(false);
+  const [deletePrompted, setDeletePrompted] = useState(false);
+
   const [awards, setAwards] = useState([]);
+
+  function deleteAwards() {
+    const params = new URLSearchParams();
+    let temp = [];
+    for (const x in personAwards) {
+      temp.push($("#" + String(x)).is(":checked"));
+    }
+    for (const y in personAwards) {
+      if (temp[y]) {
+        params.append("ids", personAwards[y].personAwardID);
+      }
+    }
+
+    session
+      .delete(
+        "profile/user/Awards/deleteInBatch?" + params.toString(),
+        {},
+        {},
+        true
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          readNewAwards();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeletePrompted(false);
+  }
+
+  function promptDeleteOpen() {
+    setDeletePrompted(true);
+  }
+
+  function promptDeleteCancel() {
+    setDeletePrompted(false);
+  }
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -27,8 +68,12 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
     setError(false);
   }
 
-  function promptEditExecute() {
-    setEditPrompted(false);
+  function promptAddOpen() {
+    setAddPrompted(true);
+  }
+
+  function promptAddCancel() {
+    setAddPrompted(false);
     setError(false);
   }
 
@@ -56,9 +101,8 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
         )
         .then((resp) => {
           readNewAwards();
-          readPersonAwards();
         });
-      promptEditCancel();
+      promptAddCancel();
       setUpdate(!update);
     } catch (err) {
       console.log(err);
@@ -66,40 +110,14 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
     }
   }
 
-  function readPersonAwards() {
-    const tempAwardInfo = [];
-    personAwards.map(async (row) => {
-      const tempVal = { season: "", award: "" };
-      await session
-        .get("personAwards/" + row.personAwardID + "/season")
-        .then((resp) => {
-          if (resp.status === 200) {
-            tempVal.season = resp.data.description;
-          }
-        });
-
-      await session
-        .get("personAwards/" + row.personAwardID + "/award")
-        .then((resp) => {
-          if (resp.status === 200) {
-            tempVal.award = resp.data.description;
-          }
-        });
-
-      tempAwardInfo.push(tempVal);
-    });
-
-    // console.log("asdfasdf", tempAwardInfo);
-    setAwardInfo([...tempAwardInfo]);
-    setUpdate(!update);
-  }
-
   function readNewAwards() {
-    session.get("users/" + userID + "/personAwards").then((resp) => {
-      if (resp.status === 200) {
-        setPersonAwards(resp.data._embedded.personAwards);
-      }
-    });
+    session
+      .get("profile/user/Awards?userID=" + userID, {}, {}, true)
+      .then((resp) => {
+        if (resp.status === 200) {
+          setPersonAwards(resp.data.personAwards);
+        }
+      });
   }
 
   useEffect(() => {
@@ -122,13 +140,11 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
         setAwards(resp.data._embedded.awards);
       }
     });
-
-    readPersonAwards();
   }, []);
 
-  useEffect(() => {
-    readPersonAwards();
-  }, [personAwards]);
+  // useEffect(() => {
+  //   readPersonAwards();
+  // }, [personAwards]);
 
   useEffect(() => {
     let tempSeasons = [...seasons];
@@ -140,15 +156,15 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
 
   return (
     <>
-      <div class="card">
-        <div class="card-header">
+      <div className="card">
+        <div className="card-header">
           <h4>
             <b>Lake Louise Awards</b>
           </h4>
         </div>
-        <div class="card-body">
+        <div className="card-body">
           <div>
-            <table class="table table-bordered hover" it="sortTable">
+            <table className="table table-bordered hover">
               <thead>
                 <tr>
                   <th scope="col">Season</th>
@@ -157,12 +173,11 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
                 </tr>
               </thead>
               <tbody>
-                {console.log("rendertest", awardInfo)}
-                {awardInfo.map((row, index) => (
+                {personAwards.map((row, index) => (
                   <tr>
-                    <td>{row.season}</td>
-                    <td>{row.award}</td>
-                    <td>{personAwards[index].comments + " "}</td>
+                    <td>{row.season.description}</td>
+                    <td>{row.award.description}</td>
+                    <td>{row.comments + " "}</td>
                   </tr>
                 ))}
               </tbody>
@@ -170,18 +185,37 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
           </div>
           {allowed && (
             <button
-              class="btn btn-primary"
+              className="btn btn-primary m-1"
               type="button"
-              onClick={promptEditOpen}
+              onClick={promptAddOpen}
             >
               Add
             </button>
           )}
+
+          {allowed && (
+            <button
+              className="btn btn-primary m-1"
+              type="button"
+              onClick={promptEditOpen}
+            >
+              Edit
+            </button>
+          )}
+          {allowed && (
+            <button
+              className="btn btn-primary m-1"
+              type="button"
+              onClick={promptDeleteOpen}
+            >
+              Delete
+            </button>
+          )}
         </div>
 
-        <Modal show={editPrompted} onHide={promptEditCancel}>
+        <Modal show={addPrompted} onHide={promptAddCancel}>
           <Modal.Header closeButton>
-            <Modal.Title>Editing Lake Louise Awards</Modal.Title>
+            <Modal.Title>Add New Lake Louise Award</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Alert
@@ -193,28 +227,28 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
               <Alert.Heading>Uh oh!</Alert.Heading>
               <p>Looks like you need glasses</p>
             </Alert>
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">
+            <div className="input-group mb-2">
+              <div className="input-group-prepend">
+                <label className="input-group-text" for="inputGroupSelect01">
                   Award:
                 </label>
               </div>
               <Form.Control as="select" custom id="awardSelect">
-                <option class="text-center" selected value={-1}>
+                <option className="text-center" selected value={-1}>
                   -
                 </option>
 
                 {awards.map((row, index) => (
-                  <option class="text-center" value={index}>
+                  <option className="text-center" value={index}>
                     {row.description}
                   </option>
                 ))}
               </Form.Control>
             </div>
 
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="seasonSelect">
+            <div className="input-group mb-2">
+              <div className="input-group-prepend">
+                <label className="input-group-text" for="seasonSelect">
                   Season:
                 </label>
               </div>
@@ -225,22 +259,22 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
                 //onChange={OnChangeVal.bind(this)}
                 id="awardSeasonSelect"
               >
-                <option class="text-center" selected value={-1}>
+                <option className="text-center" selected value={-1}>
                   -
                 </option>
 
                 {sortedSeasons.map((row, index) => (
-                  <option class="text-center" value={index}>
+                  <option className="text-center" value={index}>
                     {row.description}
                   </option>
                 ))}
               </Form.Control>
             </div>
 
-            <div class="input-group mb-2">
-              <span class="input-group-text">Notes</span>
+            <div className="input-group mb-2">
+              <span className="input-group-text">Notes</span>
               <textarea
-                class="form-control"
+                className="form-control"
                 aria-label="With textarea"
                 id="awardNotes"
               ></textarea>
@@ -252,7 +286,34 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
           </Modal.Body>
         </Modal>
 
-        <div class="collapse" id="collapseAwardEdit"></div>
+        <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+          <Modal.Header closeButton>
+            <Modal.Title>Remove Awards</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="form-check mb-3">
+              {personAwards.map((row, index) => (
+                <div className="form-group">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    defaultChecked={false}
+                    id={index}
+                  />
+                  <label className="form-check-label">
+                    {"Award: " +
+                      row.award.description +
+                      ", Season: " +
+                      row.season.description}
+                  </label>
+                </div>
+              ))}
+            </div>
+            <Button variant="primary" onClick={deleteAwards}>
+              Submit
+            </Button>
+          </Modal.Body>
+        </Modal>
       </div>
     </>
   );

@@ -15,15 +15,11 @@ const UserProfileEdit = ({ session }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    console.log("FUCK YOU - 1");
     session.get("users/" + id).then((resp) => {
-      console.log("FUCK YOU - 2", resp.data);
       if (resp.status === 200) {
         setUsers(resp.data);
       }
     });
-
-    console.log("user type is: ", session.session_data().user_type);
     setIsAdmin(session.session_data().user_type === "SYSTEM_ADMIN");
   }, []);
 

@@ -25,8 +25,6 @@ const SeasonLookup = ({ session }) => {
     });
   }
 
-
-
   useEffect(() => {
     getSeasons();
   }, []);
@@ -83,49 +81,47 @@ const SeasonLookup = ({ session }) => {
   }
 
   return (
-    <div class="col-4 p-3">
+    <div className="col-4 p-3">
       <h5>Season</h5>
-      <div class="overflow-auto" data-spy="scroll">
-        <ul class="list-group scrollableList ">
-          {
-
-            Array.from(season).map((kv) => {
-              const k = kv[0];
-              const v = kv[1].description;
-              const l = kv[1].sequence;
-              const selected = kv[1].selected;
-              return (
-                <li
-                  key={k}
-                  onClick={() => {
-                    var selectedSeasonItem = season.get(k);
-                    season.set(k, {
-                      description: selectedSeasonItem.description,
-                      selected: !selectedSeasonItem.selected,
-                    });
-                    setSeason(new Map(season));
-                  }}
-                  className={"list-group-item " + (selected ? "active" : "")}
-                >
-                  {v}
-                </li>
-              );
-            })}
+      <div className="overflow-auto" data-spy="scroll">
+        <ul className="list-group scrollableList ">
+          {Array.from(season).map((kv) => {
+            const k = kv[0];
+            const v = kv[1].description;
+            const l = kv[1].sequence;
+            const selected = kv[1].selected;
+            return (
+              <li
+                key={k}
+                onClick={() => {
+                  var selectedSeasonItem = season.get(k);
+                  season.set(k, {
+                    description: selectedSeasonItem.description,
+                    selected: !selectedSeasonItem.selected,
+                  });
+                  setSeason(new Map(season));
+                }}
+                className={"list-group-item " + (selected ? "active" : "")}
+              >
+                {v}
+              </li>
+            );
+          })}
         </ul>
       </div>
-      <div class="d-flex flex-row-reverse mt-1">
-        <div class="btn-group" role="group" aria-label="Basic example">
+      <div className="d-flex flex-row-reverse mt-1">
+        <div className="btn-group" role="group" aria-label="Basic example">
           <button
             type="button"
             onClick={promptDeleteOpen}
-            class="btn btn-danger"
+            className="btn btn-danger"
           >
             Delete
           </button>
           <button
             type="button"
             onClick={promptCreateOpen}
-            class="btn btn-primary"
+            className="btn btn-primary"
           >
             Add
           </button>
@@ -167,11 +163,11 @@ const SeasonLookup = ({ session }) => {
         </Modal.Header>
         <Modal.Body>
           <form>
-            <div class="form-group">
-              <label for="season-name" class="col-form-label">
+            <div className="form-group">
+              <label htmlFor="season-name" className="col-form-label">
                 Season Name:
               </label>
-              <input type="text" class="form-control" id="season-name" />
+              <input type="text" className="form-control" id="season-name" />
             </div>
           </form>
         </Modal.Body>

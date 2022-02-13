@@ -11,10 +11,9 @@ const UsersListPage = ({ session }) => {
       }
     });
   }, []);
-  console.log(users);
   return (
     <>
-      <table class="table table-bordered" it="sortTable">
+      <table className="table table-bordered" it="sortTable">
         <thead>
           <tr>
             <th scope="col">Username</th>

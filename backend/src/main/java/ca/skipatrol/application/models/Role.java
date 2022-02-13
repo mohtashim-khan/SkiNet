@@ -20,7 +20,7 @@ public class Role {
     @Getter
     @Setter
     @Column(nullable = false)
-    private Boolean admin;
+    private Boolean CISMTeamMember;
 
     @Getter
     @Setter
@@ -72,6 +72,7 @@ public class Role {
     @Column(nullable = false)
     private Boolean p0Lead;
 
+
     @Getter
     @Setter
     @JoinColumn(nullable = false)
@@ -82,7 +83,7 @@ public class Role {
     public Role() {
     }
 
-    public Role(Boolean admin,
+    public Role(Boolean CISMTeamMember,
                 Boolean pl,
                 Boolean apl,
                 Boolean hl,
@@ -94,7 +95,7 @@ public class Role {
                 Boolean recruitmentLead,
                 Boolean p0Lead,
                 User user) {
-        this.admin = admin;
+        this.CISMTeamMember = CISMTeamMember;
         this.pl = pl;
         this.apl = apl;
         this.hl = hl;
@@ -109,7 +110,7 @@ public class Role {
     }
 
     public Role(UUID roleID,
-                Boolean admin,
+                Boolean CISMTeamMember,
                 Boolean pl,
                 Boolean apl,
                 Boolean hl,
@@ -122,7 +123,7 @@ public class Role {
                 Boolean p0Lead,
                 User user) {
         this.roleID = roleID;
-        this.admin = admin;
+        this.CISMTeamMember = CISMTeamMember;
         this.pl = pl;
         this.apl = apl;
         this.hl = hl;

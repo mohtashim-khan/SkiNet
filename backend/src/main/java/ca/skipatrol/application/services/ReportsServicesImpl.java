@@ -4,7 +4,9 @@ import ca.skipatrol.application.Interfaces.ReportsServices;
 import ca.skipatrol.application.models.Award;
 import ca.skipatrol.application.models.Brand;
 import ca.skipatrol.application.models.Discipline;
+import ca.skipatrol.application.models.EmergencyContact;
 import ca.skipatrol.application.models.EvalTraining;
+import ca.skipatrol.application.models.EventRole;
 import ca.skipatrol.application.models.Jacket;
 import ca.skipatrol.application.models.OnSnowEval;
 import ca.skipatrol.application.models.OperationalEvent;
@@ -34,6 +36,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
@@ -96,6 +99,7 @@ public class ReportsServicesImpl implements ReportsServices {
         Boolean orienteerer = gson.fromJson(inputDataJSON.get("orienteerer"), Boolean.class);
         Boolean recruitmentLead = gson.fromJson(inputDataJSON.get("recruitmentLead"), Boolean.class);
         Boolean p0Lead = gson.fromJson(inputDataJSON.get("p0Lead"), Boolean.class);
+        Boolean CISMTeamMember = gson.fromJson(inputDataJSON.get("CISMTeamMember"), Boolean.class);
 
         // Uniform and Equipment
         String jacketBrand = gson.fromJson(inputDataJSON.get("jacketBrand"), String.class);
@@ -143,14 +147,16 @@ public class ReportsServicesImpl implements ReportsServices {
                         onSnowDateEvaluatedUpper));
             }
 
-            else if(onSnowDateEvaluatedLowerJSON == null && onSnowDateEvaluatedUpperJSON != null){
+            else if (onSnowDateEvaluatedLowerJSON == null && onSnowDateEvaluatedUpperJSON != null) {
                 LocalDate onSnowDateEvaluatedUpper = LocalDate.parse(onSnowDateEvaluatedUpperJSON);
-                conditions.add(builder.lessThanOrEqualTo(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedUpper));
+                conditions
+                        .add(builder.lessThanOrEqualTo(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedUpper));
             }
 
-            else if(onSnowDateEvaluatedLowerJSON != null && onSnowDateEvaluatedUpperJSON == null){
+            else if (onSnowDateEvaluatedLowerJSON != null && onSnowDateEvaluatedUpperJSON == null) {
                 LocalDate onSnowDateEvaluatedLower = LocalDate.parse(onSnowDateEvaluatedLowerJSON);
-                conditions.add(builder.greaterThanOrEqualTo(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedLower));
+                conditions.add(
+                        builder.greaterThanOrEqualTo(onSnowEvalJoin.get("evaluationDate"), onSnowDateEvaluatedLower));
             }
 
             if (onSnowEvaluatedBy != null) {
@@ -182,14 +188,16 @@ public class ReportsServicesImpl implements ReportsServices {
                         evalDateCompletedUpper));
             }
 
-            else if(evalDateCompletedLowerJSON == null && evalDateCompletedUpperJSON != null){
+            else if (evalDateCompletedLowerJSON == null && evalDateCompletedUpperJSON != null) {
                 LocalDate evalDateCompletedUpper = LocalDate.parse(evalDateCompletedUpperJSON);
-                conditions.add(builder.lessThanOrEqualTo(evalTrainingJoin.get("completedDate"), evalDateCompletedUpper));
+                conditions
+                        .add(builder.lessThanOrEqualTo(evalTrainingJoin.get("completedDate"), evalDateCompletedUpper));
             }
 
-            else if(evalDateCompletedLowerJSON != null && evalDateCompletedUpperJSON == null){
+            else if (evalDateCompletedLowerJSON != null && evalDateCompletedUpperJSON == null) {
                 LocalDate evalDateCompletedLower = LocalDate.parse(evalDateCompletedLowerJSON);
-                conditions.add(builder.greaterThanOrEqualTo(evalTrainingJoin.get("completedDate"), evalDateCompletedLower));
+                conditions.add(
+                        builder.greaterThanOrEqualTo(evalTrainingJoin.get("completedDate"), evalDateCompletedLower));
             }
         }
 
@@ -206,14 +214,16 @@ public class ReportsServicesImpl implements ReportsServices {
                         patrollerDateCompletedUpper));
             }
 
-            else if(patrollerDateCompletedLowerJSON == null && patrollerDateCompletedUpperJSON != null){
+            else if (patrollerDateCompletedLowerJSON == null && patrollerDateCompletedUpperJSON != null) {
                 LocalDate patrollerDateCompletedUpper = LocalDate.parse(patrollerDateCompletedUpperJSON);
-                conditions.add(builder.lessThanOrEqualTo(opTrainingJoin.get("completedDate"), patrollerDateCompletedUpper));
+                conditions.add(
+                        builder.lessThanOrEqualTo(opTrainingJoin.get("completedDate"), patrollerDateCompletedUpper));
             }
 
-            else if(patrollerDateCompletedLowerJSON != null && patrollerDateCompletedUpperJSON == null){
+            else if (patrollerDateCompletedLowerJSON != null && patrollerDateCompletedUpperJSON == null) {
                 LocalDate patrollerDateCompletedLower = LocalDate.parse(patrollerDateCompletedLowerJSON);
-                conditions.add(builder.greaterThanOrEqualTo(opTrainingJoin.get("completedDate"), patrollerDateCompletedLower));
+                conditions.add(
+                        builder.greaterThanOrEqualTo(opTrainingJoin.get("completedDate"), patrollerDateCompletedLower));
             }
 
             if (patrollerEventType != null) {
@@ -223,20 +233,19 @@ public class ReportsServicesImpl implements ReportsServices {
         }
 
         // Join Patrol Commitment
-        if (season != null || commitmentDaysLower != null || commitmentDaysUpper != null || commitmentAchieved != null || hasNotes != null) {
+        if (season != null || commitmentDaysLower != null || commitmentDaysUpper != null || commitmentAchieved != null
+                || hasNotes != null) {
             Join<User, PatrolCommitment> patrolCommitJoin = user.join("patrolCommitments");
 
-            if (commitmentDaysLower != null && commitmentDaysUpper !=null){
+            if (commitmentDaysLower != null && commitmentDaysUpper != null) {
                 conditions.add(builder.between(patrolCommitJoin.get("days"), commitmentDaysLower, commitmentDaysUpper));
             }
 
-            else if(commitmentDaysLower == null && commitmentDaysUpper != null)
-            {
+            else if (commitmentDaysLower == null && commitmentDaysUpper != null) {
                 conditions.add(builder.lessThanOrEqualTo(patrolCommitJoin.get("days"), commitmentDaysUpper));
             }
 
-            else if(commitmentDaysLower != null && commitmentDaysUpper == null)
-            {
+            else if (commitmentDaysLower != null && commitmentDaysUpper == null) {
                 conditions.add(builder.greaterThanOrEqualTo(patrolCommitJoin.get("days"), commitmentDaysLower));
             }
 
@@ -259,55 +268,68 @@ public class ReportsServicesImpl implements ReportsServices {
             }
         }
 
+        // Check for admin role
+
+        if (admin != null) {
+            conditions.add(builder.equal(user.get("userType"), EventRole.SYSTEM_ADMIN));
+        }
+
         // Join Role
-        if (admin != null || pl != null || apl != null || hl != null || active != null || newUser != null
+        if (pl != null || apl != null || hl != null || active != null || newUser != null
                 || trainingEventLead != null || onSnowEvaluator != null || orienteerer != null
                 || recruitmentLead != null || p0Lead != null) {
             Join<User, Role> roleJoin = user.join("role");
-            if (admin != null) {
-                conditions.add(builder.equal(roleJoin.get("admin"), admin));
-            }
+            ArrayList<Predicate> orRoles = new ArrayList<>(); // Needed to perform OR instead of AND operation for
+                                                              // roles.
 
             if (pl != null) {
-                conditions.add(builder.equal(roleJoin.get("pl"), pl));
+                orRoles.add(builder.equal(roleJoin.get("pl"), pl));
             }
 
             if (apl != null) {
-                conditions.add(builder.equal(roleJoin.get("apl"), apl));
+                orRoles.add(builder.equal(roleJoin.get("apl"), apl));
             }
 
             if (hl != null) {
-                conditions.add(builder.equal(roleJoin.get("hl"), hl));
+                orRoles.add(builder.equal(roleJoin.get("hl"), hl));
             }
 
             if (active != null) {
-                conditions.add(builder.equal(roleJoin.get("active"), active));
+                orRoles.add(builder.equal(roleJoin.get("active"), active));
             }
 
             if (newUser != null) {
-                conditions.add(builder.equal(roleJoin.get("newUser"), newUser));
+                orRoles.add(builder.equal(roleJoin.get("newUser"), newUser));
             }
 
             if (trainingEventLead != null) {
-                conditions.add(builder.equal(roleJoin.get("trainingEventLead"), trainingEventLead));
+                orRoles.add(builder.equal(roleJoin.get("trainingEventLead"), trainingEventLead));
             }
 
             if (onSnowEvaluator != null) {
-                conditions.add(builder.equal(roleJoin.get("onSnowEvaluator"), onSnowEvaluator));
+                orRoles.add(builder.equal(roleJoin.get("onSnowEvaluator"), onSnowEvaluator));
             }
 
             if (orienteerer != null) {
-                conditions.add(builder.equal(roleJoin.get("orienteerer"), orienteerer));
+                orRoles.add(builder.equal(roleJoin.get("orienteerer"), orienteerer));
             }
             if (recruitmentLead != null) {
-                conditions.add(builder.equal(roleJoin.get("recruitmentLead"), recruitmentLead));
+                orRoles.add(builder.equal(roleJoin.get("recruitmentLead"), recruitmentLead));
             }
             if (trainingEventLead != null) {
-                conditions.add(builder.equal(roleJoin.get("trainingEventLead"), trainingEventLead));
+                orRoles.add(builder.equal(roleJoin.get("trainingEventLead"), trainingEventLead));
             }
             if (p0Lead != null) {
-                conditions.add(builder.equal(roleJoin.get("p0Lead"), p0Lead));
+                orRoles.add(builder.equal(roleJoin.get("p0Lead"), p0Lead));
             }
+
+            if (CISMTeamMember != null) {
+                orRoles.add(builder.equal(roleJoin.get("CISMTeamMember"), CISMTeamMember));
+            }
+
+    
+
+            conditions.add(builder.or(orRoles.toArray(new Predicate[] {})));
 
         }
 
@@ -407,11 +429,22 @@ public class ReportsServicesImpl implements ReportsServices {
 
         // Join Emergency Contacts
         if (hasEmergencyContact != null) {
+            Join<User, EmergencyContact> emergencyContactJoin = user.join("emergencyContacts", JoinType.LEFT);
+            ArrayList<Predicate> emergContactArray = new ArrayList<>(); // Needed to perform OR operation for false
 
             if (hasEmergencyContact == true) {
-                conditions.add(builder.isNotEmpty(user.get("emergencyContacts")));
+                conditions.add(builder.notEqual(emergencyContactJoin.get("name"), ""));
+                conditions.add(builder.notEqual(emergencyContactJoin.get("phone"), ""));
+                conditions.add(builder.notEqual(emergencyContactJoin.get("relationship"), ""));
+
             } else if (hasEmergencyContact == false) {
-                conditions.add(builder.isEmpty(user.get("emergencyContacts")));
+                emergContactArray.add(builder.isEmpty(user.get("emergencyContacts")));
+                emergContactArray.add(builder.equal(emergencyContactJoin.get("name"), ""));
+                emergContactArray.add(builder.equal(emergencyContactJoin.get("phone"), ""));
+                emergContactArray.add(builder.equal(emergencyContactJoin.get("relationship"), ""));
+
+                conditions.add(builder.or(emergContactArray.toArray(new Predicate[] {})));
+
             }
         }
 

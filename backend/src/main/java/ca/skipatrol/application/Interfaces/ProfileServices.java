@@ -1,5 +1,6 @@
 package ca.skipatrol.application.Interfaces;
 
+import ca.skipatrol.application.models.EventRole;
 import ca.skipatrol.application.models.Uniform;
 import ca.skipatrol.application.models.User;
 
@@ -41,4 +42,13 @@ public interface ProfileServices {
 
     public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
 
+    public boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
+
+    public User createNewUser(String username,
+            String password,
+            String firstName,
+            String lastName,
+            String email,
+            String phoneNumber,
+            String eventRole);
 }

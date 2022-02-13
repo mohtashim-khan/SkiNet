@@ -3,12 +3,15 @@ package ca.skipatrol.application.controllers;
 import ca.skipatrol.application.Interfaces.ProfileServices;
 import ca.skipatrol.application.models.Uniform;
 import ca.skipatrol.application.models.User;
+import ca.skipatrol.application.models.EventRole;
+import ca.skipatrol.application.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -178,6 +181,45 @@ public class ProfilesController {
             return new ResponseEntity<>("Roles deleted correctly", HttpStatus.OK);
 
         return new ResponseEntity<>("Error deleting roles", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/Awards/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteAwardsInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = profileServices.deleteAwardsInBatch(ids);
+
+        if (returnVal)
+            return new ResponseEntity<>("Awards deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting awards", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/CreateNewUser", method = RequestMethod.POST)
+    public ResponseEntity<Object> createNewUser(
+            @RequestBody Map<String, String> userInfo) {
+
+        /*
+         * @RequestBody String username,
+         * 
+         * @RequestBody String password,
+         * 
+         * @RequestBody String firstName,
+         * 
+         * @RequestBody String lastName,
+         * 
+         * @RequestBody String email,
+         * 
+         * @RequestBody String phoneNumber,
+         * 
+         * @RequestBody EventRole userType
+         */
+        User user = profileServices.createNewUser(userInfo.get("username"), userInfo.get("password"),
+                userInfo.get("firstName"), userInfo.get("lastName"), userInfo.get("email"), userInfo.get("phoneNumber"),
+                userInfo.get("eventRole"));
+
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+
+        return new ResponseEntity<>("Error Creating User", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

@@ -14,6 +14,33 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
   const [userRoles, setUserRoles] = useState([]);
   const [rolesArray, setRolesArray] = useState([]);
 
+  const prettyRoles = {
+    admin: "Admin",
+    pl: "Patrol Leader",
+    apl: "Active Patrol Leader",
+    hl: "HL",
+    active: "Active User",
+    newUser: "New User",
+    trainingEventLead: "Training Event Lead",
+    onSnowEvaluator: "On-Snow Evaluator",
+    orienteerer: "Orienteer",
+    recruitmentLead: "Recruitment Lead",
+    p0Lead: "P0/Lead",
+  };
+  const roles = [
+    "admin",
+    "pl",
+    "apl",
+    "hl",
+    "active",
+    "newUser",
+    "trainingEventLead",
+    "onSnowEvaluator",
+    "orienteerer",
+    "recruitmentLead",
+    "p0Lead",
+  ];
+
   function promptEditOpen() {
     setEditPrompted(true);
   }
@@ -22,9 +49,6 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
     setEditPrompted(false);
   }
 
-  function promptEditExecute() {
-    setEditPrompted(false);
-  }
   function editRoles() {
     let temp = role;
     for (const x in rolesArray) {
@@ -89,8 +113,8 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
         <div className="card-body">
           <form className="mb-0.5">
             <ul className="list-group mb-3">
-              {userRoles.map((row) => (
-                <li className="list-group-item">{row}</li>
+              {userRoles.map((row, index) => (
+                <li className="list-group-item">{prettyRoles[row]}</li>
               ))}
             </ul>
             {allowed && (
@@ -112,7 +136,7 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
         </Modal.Header>
         <Modal.Body>
           <div className="form-check mb-3">
-            {rolesArray.map((row) => (
+            {rolesArray.map((row, index) => (
               <div className="form-group">
                 <input
                   className="form-check-input"
@@ -120,7 +144,7 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
                   defaultChecked={role[row]}
                   id={row}
                 />
-                <label className="form-check-label">{row}</label>
+                <label className="form-check-label">{prettyRoles[row]}</label>
               </div>
             ))}
           </div>

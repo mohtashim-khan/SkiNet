@@ -61,8 +61,10 @@ const General = ({ session, userID, allowed }) => {
                 <b>General</b>
               </h4>
             </div>
-
             <div className="card-body">
+              <h5>
+                <b>Emergency Contact Information</b>
+              </h5>
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
                   <label

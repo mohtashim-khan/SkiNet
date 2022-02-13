@@ -99,6 +99,7 @@ public class ReportsServicesImpl implements ReportsServices {
         Boolean orienteerer = gson.fromJson(inputDataJSON.get("orienteerer"), Boolean.class);
         Boolean recruitmentLead = gson.fromJson(inputDataJSON.get("recruitmentLead"), Boolean.class);
         Boolean p0Lead = gson.fromJson(inputDataJSON.get("p0Lead"), Boolean.class);
+        Boolean CISMTeamMember = gson.fromJson(inputDataJSON.get("CISMTeamMember"), Boolean.class);
 
         // Uniform and Equipment
         String jacketBrand = gson.fromJson(inputDataJSON.get("jacketBrand"), String.class);
@@ -322,6 +323,12 @@ public class ReportsServicesImpl implements ReportsServices {
                 orRoles.add(builder.equal(roleJoin.get("p0Lead"), p0Lead));
             }
 
+            if (CISMTeamMember != null) {
+                orRoles.add(builder.equal(roleJoin.get("CISMTeamMember"), CISMTeamMember));
+            }
+
+    
+
             conditions.add(builder.or(orRoles.toArray(new Predicate[] {})));
 
         }
@@ -435,7 +442,7 @@ public class ReportsServicesImpl implements ReportsServices {
                 emergContactArray.add(builder.equal(emergencyContactJoin.get("name"), ""));
                 emergContactArray.add(builder.equal(emergencyContactJoin.get("phone"), ""));
                 emergContactArray.add(builder.equal(emergencyContactJoin.get("relationship"), ""));
-                
+
                 conditions.add(builder.or(emergContactArray.toArray(new Predicate[] {})));
 
             }

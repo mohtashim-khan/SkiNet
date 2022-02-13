@@ -13,6 +13,10 @@ const RosterPlanner = ({ session }) => {
     const [eventDetailsVisibility, setEventDetailsVisibility] = useState(false);
     const [currentEventDetails, setCurrentEventDetails] = useState({});
 
+
+    const [AddEventDetailsVisibility, setAddEventDetailsVisibility] = useState(false);
+
+
     const calendarRef = React.createRef();
 
     function getCalendarApi() {
@@ -44,7 +48,7 @@ const RosterPlanner = ({ session }) => {
         });
 
         session.get("events/search/findByStartDateBetween", {}, params.toString()).then((response) => {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 var events = [];
                 const newKeyNames = { startDate: "start", endDate: "end", eventName: "title" };
 
@@ -52,7 +56,7 @@ const RosterPlanner = ({ session }) => {
                     events = [...events, renameKeys(event, newKeyNames)];
                 });
 
-                successCb(events)
+                successCb(events);
             } else {
                 failureCb(response.status);
             }
@@ -70,6 +74,11 @@ const RosterPlanner = ({ session }) => {
     function onEventSelectEvent(eventCbStruct) {
         setCurrentEventDetails(eventCbStruct.event);
         setEventDetailsVisibility(true);
+    }
+
+    function onAddEvent (addEventStruct){
+        setAddEventDetailsVisibility(true);
+
     }
 
     return (
@@ -127,6 +136,8 @@ const RosterPlanner = ({ session }) => {
 
                             }
 
+                            editable = {true}
+                            eventStartEditable = {true}
                             selectable={true} //Enables ability to select dates
                             selectMirror={true} //To do: I couldn't figure out what this does. I tried changing it to false and nothing changed on the UI
                             dayMaxEvents={true} //Enables it so that only 4 shifts can be fit in one date. Additional dates will be shown in "+# more", where # is the additional numbers of shifts
@@ -134,6 +145,8 @@ const RosterPlanner = ({ session }) => {
                             datesSet={onDateSetEvent}
                             events={(args, successCb, failureCb) => refreshEvents(args, successCb, failureCb)}
                             eventClick={onEventSelectEvent}
+
+                            select = {onAddEvent}
                         />
                     </Col>
                     {false && <Col xl={4}>
@@ -143,6 +156,44 @@ const RosterPlanner = ({ session }) => {
                         </ListGroup>
                     </Col>}
                 </Row>
+
+
+                <Modal show={AddEventDetailsVisibility} onHide={() => { setAddEventDetailsVisibility(false); }}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{currentEventDetails.title}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <ul className="list-group">
+                            <li className="list-group-item" aria-current="true">
+                                <div className="d-flex w-100 justify-content-between">
+                                    <h5 className="mb-1">All Day</h5>
+                                </div>
+                                <p className="mb-1">{currentEventDetails.allDay ? "Yes" : "No"}</p>
+                            </li>
+                            {currentEventDetails.extendedProps !== undefined && (
+                                <>
+                                    <li className="list-group-item" aria-current="true">
+                                        <div className="d-flex w-100 justify-content-between">
+                                            <h5 className="mb-1">Maximum Patrollers</h5>
+                                        </div>
+                                        <p className="mb-1">{currentEventDetails.extendedProps.maxPatrollers}</p>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <div className="d-flex w-100 justify-content-between">
+                                            <h5 className="mb-1">Minimum Patrollers</h5>
+                                        </div>
+                                        <p className="mb-1">{currentEventDetails.extendedProps.minPatrollers}</p>
+                                    </li>
+                                </>
+                            )}
+                        </ul>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={() => { setAddEventDetailsVisibility(false); }}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
+                
+                
                 <Modal show={eventDetailsVisibility} onHide={() => { setEventDetailsVisibility(false); }}>
                     <Modal.Header closeButton>
                         <Modal.Title>{currentEventDetails.title}</Modal.Title>
@@ -177,6 +228,8 @@ const RosterPlanner = ({ session }) => {
                         <Button variant="primary" onClick={() => { setEventDetailsVisibility(false); }}>Close</Button>
                     </Modal.Footer>
                 </Modal>
+
+
             </Container>
         </>
     );

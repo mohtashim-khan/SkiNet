@@ -5,6 +5,7 @@ import ca.skipatrol.application.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -29,6 +30,7 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
     private ConditionsRepository conditionsRepository;
 
     @Override
+    @Order(value = 1)
     public void onApplicationEvent(ApplicationReadyEvent event) {
         Optional<Award> awardLookup;
         for(String name : awardDefaults) {

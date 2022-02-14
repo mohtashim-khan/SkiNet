@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,8 @@ public class ProfileServicesImpl implements ProfileServices {
     EvalTrainingRepository evalTrainingRepository;
     @Autowired
     OperationalTrainingRepository operationalTrainingRepository;
+    @Autowired
+    DisciplineRepository disciplineRepository;
     // endregion
 
     // region Service Declarations
@@ -433,5 +436,27 @@ public class ProfileServicesImpl implements ProfileServices {
 
         return returnVal;
 
+    }
+
+    public boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate){
+        LocalDate theDate = LocalDate.parse(evaluationDate);
+
+        Optional<Discipline> disciplineSearch = disciplineRepository.findByDescription(discipline);
+
+        if(disciplineSearch.isEmpty()){
+            return false;
+        }
+
+        Optional<OnSnowEval> onSnowEvalSearch = onSnowEvalRepository.findById(evalID);
+        if(onSnowEvalSearch.isEmpty()){
+            return false;
+        }
+
+        OnSnowEval myEval = onSnowEvalSearch.get();
+        myEval.setDiscipline(disciplineSearch.get());
+        myEval.setEvaluationDate(theDate);
+        myEval.setEvaluatedBy(evaluatedBy);
+
+        return true;
     }
 }

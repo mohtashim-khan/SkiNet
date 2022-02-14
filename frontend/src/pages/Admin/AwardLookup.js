@@ -79,10 +79,10 @@ const AwardLookup = ({ session }) => {
   }
 
   return (
-    <div class="col-4 p-3">
+    <div className="col-4 p-3">
       <h5>Award</h5>
-      <div class="overflow-auto" data-spy="scroll">
-        <ul class="list-group scrollableList ">
+      <div className="overflow-auto" data-spy="scroll">
+        <ul className="list-group scrollableList ">
           {Array.from(award).map((kv) => {
             const k = kv[0];
             const v = kv[1].description;
@@ -106,19 +106,19 @@ const AwardLookup = ({ session }) => {
           })}
         </ul>
       </div>
-      <div class="d-flex flex-row-reverse mt-1">
-        <div class="btn-group" role="group" aria-label="Basic example">
+      <div className="d-flex flex-row-reverse mt-1">
+        <div className="btn-group" role="group" aria-label="Basic example">
           <button
             type="button"
             onClick={promptDeleteOpen}
-            class="btn btn-danger"
+            className="btn btn-danger"
           >
             Delete
           </button>
           <button
             type="button"
             onClick={promptCreateOpen}
-            class="btn btn-primary"
+            className="btn btn-primary"
           >
             Add
           </button>
@@ -160,11 +160,11 @@ const AwardLookup = ({ session }) => {
         </Modal.Header>
         <Modal.Body>
           <form>
-            <div class="form-group">
-              <label for="award-name" class="col-form-label">
+            <div className="form-group">
+              <label htmlFor="award-name" className="col-form-label">
                 Award Name:
               </label>
-              <input type="text" class="form-control" id="award-name" />
+              <input type="text" className="form-control" id="award-name" />
             </div>
           </form>
         </Modal.Body>

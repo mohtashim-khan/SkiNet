@@ -6,8 +6,6 @@ import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
 const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
-  const [editPrompted, setEditPrompted] = useState(false);
-  const [deletePrompted, setDeletePrompted] = useState(false);
   const [user, setUser] = useState([]);
   const [uniform, setUniform] = useState([]);
 
@@ -15,25 +13,15 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
   const [sizes, setSizes] = useState([]);
   const [conditions, setConditions] = useState([]);
 
-  const [jacketBrand, setJacketBrand] = useState([]);
-  const [jacketSize, setJacketSize] = useState([]);
-  const [jacketCondition, setJacketCondition] = useState([]);
-  const [jacketNumber, setJacketNumber] = useState([]);
-
-  const [packBrand, setPackBrand] = useState([]);
-  const [packCondition, setPackCondition] = useState([]);
-  const [packNumber, setPackNumber] = useState([]);
-
-  const [vestBrand, setVestBrand] = useState([]);
-  const [vestSize, setVestSize] = useState([]);
-  const [vestCondition, setVestCondition] = useState([]);
-  const [vestNumber, setVestNumber] = useState([]);
-
   const [jackets, setJackets] = useState([]);
   const [vests, setVests] = useState([]);
   const [packs, setPacks] = useState([]);
   const [signed, setSigned] = useState(false);
   const [returned, setReturned] = useState(false);
+
+  const [addPrompted, setAddPrompted] = useState(false);
+  const [editPrompted, setEditPrompted] = useState(false);
+  const [deletePrompted, setDeletePrompted] = useState(false);
 
   const [error, setError] = useState(false);
 
@@ -42,13 +30,9 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     let temp = [];
     for (const x in packs) {
       temp.push($("#" + packs[x].packID).is(":checked"));
-      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
-    console.log("size of packs var ", packs.length)
     for (const y in packs) {
-      
       if (temp[y]) {
-        console.log("DEBUG FUCK Ids", packs[y].packID)
         params.append("ids", packs[y].packID);
       }
     }
@@ -77,7 +61,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     let temp = [];
     for (const x in vests) {
       temp.push($("#" + vests[x].vestID).is(":checked"));
-      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
     for (const y in vests) {
       if (temp[y]) {
@@ -109,7 +92,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     let temp = [];
     for (const x in jackets) {
       temp.push($("#" + jackets[x].jacketID).is(":checked"));
-      console.log("THIS OTHER SHIT", $("#" + String(x)).is(":checked"));
     }
     for (const y in jackets) {
       if (temp[y]) {
@@ -144,12 +126,21 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     setDeletePrompted(false);
   }
 
+  function promptAddOpen() {
+    setAddPrompted(true);
+  }
+
+  function promptAddCancel() {
+    setAddPrompted(false);
+  }
+
   function promptEditOpen() {
     setEditPrompted(true);
   }
 
   function promptEditCancel() {
     setEditPrompted(false);
+    setError(false);
   }
 
   function addNewJacket() {
@@ -167,7 +158,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
       ) {
         throw "empty eval";
       }
-      console.log("brand", uniform);
       session
         .post(
           "jackets",
@@ -270,7 +260,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
   function readNewUniform() {
     var id = uniform.uniformID;
-    console.log("id = ", id);
     var url =
       "uniformID=" + id + "&getVests=true&getJackets=true&getPacks=true";
     session.get("profile/uniform?" + url, {}, {}, true).then((resp) => {
@@ -280,8 +269,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         setPacks(resp.data.packs);
         setSigned(resp.data.leaseSigned);
         setReturned(resp.data.returned);
-
-        console.log("HERE", resp.data);
       }
     });
   }
@@ -294,7 +281,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     session.get("users/" + userID + "/uniforms").then((resp) => {
       if (resp.status === 200) {
         setUniform(resp.data._embedded.uniforms[0]);
-        console.log("uniform object", resp.data._embedded.uniforms[0]);
       }
     });
 
@@ -326,19 +312,19 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
   return (
     <>
-      <div class="card">
-        <form class="mb-0.5">
-          <div class="card-header">
+      <div className="card">
+        <form className="mb-0.5">
+          <div className="card-header">
             <h4>
               <b>Patrol Uniform and Equipment</b>
             </h4>
           </div>
-          <div class="card-body">
+          <div className="card-body">
             <div>
               <h5>
                 <b>Jacket</b>
               </h5>
-              <table class="table table-bordered hover" it="sortTable">
+              <table className="table table-bordered hover" it="sortTable">
                 <thead>
                   <tr>
                     <th scope="col">Brand</th>
@@ -365,7 +351,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
               <h5>
                 <b>Pack</b>
               </h5>
-              <table class="table table-bordered hover" it="sortTable">
+              <table className="table table-bordered hover" it="sortTable">
                 <thead>
                   <tr>
                     <th scope="col">Brand</th>
@@ -390,7 +376,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
               <h5>
                 <b>Vest</b>
               </h5>
-              <table class="table table-bordered hover" it="sortTable">
+              <table className="table table-bordered hover" it="sortTable">
                 <thead>
                   <tr>
                     <th scope="col">Brand</th>
@@ -412,12 +398,18 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                 </tbody>
               </table>
             </div>
+            <div>
+              <b>Lease Signed:</b> <i>{signed ? "Yes" : "No"}</i>
+            </div>
+            <div>
+              <b>Lease Returned:</b> <i>{returned ? "Yes" : "No"}</i>
+            </div>
 
             {allowed && (
               <button
-                class="btn btn-primary m-1"
+                className="btn btn-primary m-1"
                 type="button"
-                onClick={promptEditOpen}
+                onClick={promptAddOpen}
               >
                 Add
               </button>
@@ -425,7 +417,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
             {allowed && (
               <button
-                class="btn btn-primary m-1"
+                className="btn btn-primary m-1"
+                type="button"
+                onClick={promptEditOpen}
+              >
+                Edit
+              </button>
+            )}
+
+            {allowed && (
+              <button
+                className="btn btn-primary m-1"
                 type="button"
                 onClick={promptDeleteOpen}
               >
@@ -436,7 +438,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         </form>
       </div>
 
-      <Modal show={editPrompted} onHide={promptEditCancel}>
+      <Modal show={addPrompted} onHide={promptAddCancel}>
         <Modal.Header closeButton>
           <Modal.Title>Editing Patrol Uniform and Equipment</Modal.Title>
         </Modal.Header>
@@ -450,9 +452,9 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             <Alert.Heading>Uh oh!</Alert.Heading>
             <p>Looks like you need glasses</p>
           </Alert>
-          <div class="card">
+          <div className="card">
             <button
-              class="card-header btn"
+              className="card-header btn"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#jacket"
@@ -461,16 +463,19 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             >
               <h5>Jacket</h5>
             </button>
-            <div class="collapse" id="jacket">
-              <div class="card-body">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">
+            <div className="collapse" id="jacket">
+              <div className="card-body">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
                       Brand
                     </label>
                   </div>
 
-                  <select class="form-select" id="jacketBrandSelect">
+                  <select className="form-select" id="jacketBrandSelect">
                     <option selected value={-1}>
                       -
                     </option>
@@ -480,14 +485,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                   </select>
                 </div>
 
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
                       Size
                     </label>
                   </div>
 
-                  <select class="form-select" id="jacketSizeSelect">
+                  <select className="form-select" id="jacketSizeSelect">
                     <option selected value={-1}>
                       -
                     </option>
@@ -496,14 +504,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                     ))}
                   </select>
                 </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
                       Condition
                     </label>
                   </div>
 
-                  <select class="form-select" id="jacketConditionSelect">
+                  <select className="form-select" id="jacketConditionSelect">
                     <option selected value={-1}>
                       -
                     </option>
@@ -512,14 +523,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                     ))}
                   </select>
                 </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="jacketNumberSelect">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="jacketNumberSelect"
+                    >
                       Number
                     </label>
                   </div>
                   <input
-                    class="text-center form-control"
+                    className="text-center form-control"
                     type="number"
                     id="jacketNumberSelect"
                     min="0"
@@ -528,7 +542,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                   ></input>
                 </div>
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   type="button"
                   onClick={addNewJacket}
                 >
@@ -538,9 +552,9 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             </div>
           </div>
 
-          <div class="card">
+          <div className="card">
             <button
-              class="card-header btn"
+              className="card-header btn"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#vest"
@@ -550,16 +564,19 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
               <h5>Vest</h5>
             </button>
 
-            <div class="collapse" id="vest">
-              <div class="card-body">
-                <div class="input-group mt-3 mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">
+            <div className="collapse" id="vest">
+              <div className="card-body">
+                <div className="input-group mt-3 mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
                       Brand
                     </label>
                   </div>
 
-                  <select class="form-select" id="vestBrandSelect">
+                  <select className="form-select" id="vestBrandSelect">
                     <option selected value={-1}>
                       -
                     </option>
@@ -569,14 +586,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                   </select>
                 </div>
 
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
                       Size
                     </label>
                   </div>
 
-                  <select class="form-select" id="vestSizeSelect">
+                  <select className="form-select" id="vestSizeSelect">
                     <option selected value={-1}>
                       -
                     </option>
@@ -585,14 +605,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                     ))}
                   </select>
                 </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
                       Condition
                     </label>
                   </div>
 
-                  <select class="form-select" id="vestConditionSelect">
+                  <select className="form-select" id="vestConditionSelect">
                     <option selected value={-1}>
                       -
                     </option>
@@ -601,14 +624,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                     ))}
                   </select>
                 </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="vestNumberSelect">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="vestNumberSelect"
+                    >
                       Number
                     </label>
                   </div>
                   <input
-                    class="text-center form-control"
+                    className="text-center form-control"
                     type="number"
                     id="vestNumberSelect"
                     min="0"
@@ -617,7 +643,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                   ></input>
                 </div>
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   type="button"
                   onClick={addNewVest}
                 >
@@ -627,9 +653,9 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             </div>
           </div>
 
-          <div class="card">
+          <div className="card">
             <button
-              class="card-header btn"
+              className="card-header btn"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#pack"
@@ -638,16 +664,19 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             >
               <h5>Pack</h5>
             </button>
-            <div class="collapse" id="pack">
-              <div class="card-body">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">
+            <div className="collapse" id="pack">
+              <div className="card-body">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
                       Brand
                     </label>
                   </div>
 
-                  <select class="form-select" id="packBrandSelect">
+                  <select className="form-select" id="packBrandSelect">
                     <option selected value={-1}>
                       -
                     </option>
@@ -657,14 +686,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                   </select>
                 </div>
 
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
                       Condition
                     </label>
                   </div>
 
-                  <select class="form-select" id="packConditionSelect">
+                  <select className="form-select" id="packConditionSelect">
                     <option selected value={-1}>
                       -
                     </option>
@@ -673,14 +705,17 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                     ))}
                   </select>
                 </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="packNumberSelect">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="packNumberSelect"
+                    >
                       Number
                     </label>
                   </div>
                   <input
-                    class="text-center form-control"
+                    className="text-center form-control"
                     type="number"
                     id="packNumberSelect"
                     min="0"
@@ -689,7 +724,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                   ></input>
                 </div>
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   type="button"
                   onClick={addNewPack}
                 >
@@ -706,9 +741,9 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
           <Modal.Title>Editing Patrol Uniform and Equipment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="card">
+          <div className="card">
             <button
-              class="card-header btn"
+              className="card-header btn"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#jacketDel"
@@ -717,19 +752,19 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             >
               <h5>Jacket</h5>
             </button>
-            <div class="collapse" id="jacketDel">
-              <div class="card-body">
-                <div class="form-check mb-3">
+            <div className="collapse" id="jacketDel">
+              <div className="card-body">
+                <div className="form-check mb-3">
                   {jackets &&
                     jackets.map((row, index) => (
-                      <div class="form-group">
+                      <div className="form-group">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           defaultChecked={false}
                           id={row.jacketID}
                         />
-                        <label class="form-check-label">
+                        <label className="form-check-label">
                           {"Brand: " +
                             row.brand.description +
                             ", Size: " +
@@ -743,7 +778,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                     ))}
                 </div>
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   type="button"
                   onClick={deleteJackets}
                 >
@@ -753,9 +788,9 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             </div>
           </div>
 
-          <div class="card">
+          <div className="card">
             <button
-              class="card-header btn"
+              className="card-header btn"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#vestDel"
@@ -765,19 +800,19 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
               <h5>Vest</h5>
             </button>
 
-            <div class="collapse" id="vestDel">
-              <div class="card-body">
-                <div class="form-check mb-3">
+            <div className="collapse" id="vestDel">
+              <div className="card-body">
+                <div className="form-check mb-3">
                   {vests &&
                     vests.map((row, index) => (
-                      <div class="form-group">
+                      <div className="form-group">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           defaultChecked={false}
                           id={row.vestID}
                         />
-                        <label class="form-check-label">
+                        <label className="form-check-label">
                           {"Brand: " +
                             row.brand.description +
                             ", Size: " +
@@ -791,7 +826,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                     ))}
                 </div>
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   type="button"
                   onClick={deleteVests}
                 >
@@ -801,9 +836,9 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             </div>
           </div>
 
-          <div class="card">
+          <div className="card">
             <button
-              class="card-header btn"
+              className="card-header btn"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#packDel"
@@ -812,19 +847,19 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             >
               <h5>Pack</h5>
             </button>
-            <div class="collapse" id="packDel">
-              <div class="card-body">
-                <div class="form-check mb-3">
+            <div className="collapse" id="packDel">
+              <div className="card-body">
+                <div className="form-check mb-3">
                   {packs &&
                     packs.map((row, index) => (
-                      <div class="form-group">
+                      <div className="form-group">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           defaultChecked={false}
                           id={row.packID}
                         />
-                        <label class="form-check-label">
+                        <label className="form-check-label">
                           {"Brand: " +
                             row.brand.description +
                             ", Condition: " +
@@ -836,7 +871,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                     ))}
                 </div>
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   type="button"
                   onClick={deletePacks}
                 >

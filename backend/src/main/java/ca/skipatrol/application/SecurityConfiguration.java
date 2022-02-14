@@ -57,6 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // Include production origin once that is finalized
         configuration.setAllowedOrigins(List.of(
+		"http://52.14.159.206",
                 "http://localhost:3000",
                 "http://localhost:80",
                 "http://localhost:5000",

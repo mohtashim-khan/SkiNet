@@ -15,11 +15,12 @@ import Alert from "react-bootstrap/Alert";
 
 const PatrolCommitment = ({ session, userID, allowed }) => {
   const [discipline, setDisciplines] = useState([]);
-  const [editPrompted, setEditPrompted] = useState(false);
   const [patrolCommit, setPatrolCommit] = useState([]);
   const [user, setUser] = useState([]);
   const [error, setError] = useState(false);
 
+  const [AddPrompted, setAddPrompted] = useState(false);
+  const [editPrompted, setEditPrompted] = useState(false);
   const [deletePrompted, setDeletePrompted] = useState(false);
 
   const [seasons, setSeasons] = useState([]);
@@ -60,7 +61,7 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
   }
 
   function promptAddCancel() {
-    setEditPrompted(false);
+    setAddPrompted(false);
     setError(false);
   }
 
@@ -102,8 +103,6 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
       console.log(err);
       setError(true);
     }
-
-    console.log("ASFASDFS", user._links.self.href);
   }
 
   function readNewPatrolCommitments() {
@@ -115,7 +114,6 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
       .then((resp) => {
         if (resp.status === 200) {
           setPatrolCommit(resp.data.patrolCommitments);
-          console.log(patrolCommit);
         }
       });
   }
@@ -143,30 +141,39 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
     setSortedSeasons(tempSeasons);
   }, [seasons]);
 
-  function promptEditOpen() {
-    setEditPrompted(true);
+  function promptAddOpen() {
+    setAddPrompted(true);
   }
 
   function promptDeleteOpen() {
     setDeletePrompted(true);
   }
 
+  function promptAddCancel() {
+    setAddPrompted(false);
+  }
+
+  function promptEditOpen() {
+    setEditPrompted(true);
+  }
+
   function promptEditCancel() {
     setEditPrompted(false);
+    setError(false);
   }
 
   return (
     <>
-      <div class="card">
-        <form class="mb-0.5">
-          <div class="card-header">
+      <div className="card">
+        <form className="mb-0.5">
+          <div className="card-header">
             <h4>
               <b>Commitment Achieved</b>
             </h4>
           </div>
 
-          <div class="card-body">
-            <table class="table table-bordered hover">
+          <div className="card-body">
+            <table className="table table-bordered hover">
               <thead>
                 <tr>
                   <th>Season</th>
@@ -188,16 +195,25 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
             </table>{" "}
             {allowed && (
               <button
-                class="btn btn-primary m-1"
+                className="btn btn-primary m-1"
                 type="button"
-                onClick={promptEditOpen}
+                onClick={promptAddOpen}
               >
                 Add
               </button>
             )}
             {allowed && (
               <button
-                class="btn btn-primary m-1"
+                className="btn btn-primary m-1"
+                type="button"
+                onClick={promptEditOpen}
+              >
+                Edit
+              </button>
+            )}
+            {allowed && (
+              <button
+                className="btn btn-primary m-1"
                 type="button"
                 onClick={promptDeleteOpen}
               >
@@ -212,16 +228,16 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
           <Modal.Title>Deleting Patrol Commitment(s)</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="form-check mb-3">
+          <div className="form-check mb-3">
             {patrolCommit.map((row, index) => (
-              <div class="form-group">
+              <div className="form-group">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   type="checkbox"
                   defaultChecked={false}
                   id={index}
                 />
-                <label class="form-check-label">
+                <label className="form-check-label">
                   {"Season: " +
                     row.season.description +
                     ", Days: " +
@@ -238,7 +254,7 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={editPrompted} onHide={promptEditCancel}>
+      <Modal show={AddPrompted} onHide={promptAddCancel}>
         <Modal.Header closeButton>
           <Modal.Title>Adding Patrol Commitment</Modal.Title>
         </Modal.Header>
@@ -252,36 +268,36 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
             <Alert.Heading>Uh oh!</Alert.Heading>
             <p>Looks like you need glasses</p>
           </Alert>
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">
+          <div className="input-group mb-2">
+            <div className="input-group-prepend">
+              <label className="input-group-text" for="inputGroupSelect01">
                 Commitment Achieved:
               </label>
             </div>
             <Form.Control as="select" custom id="commitmentAchieved">
-              <option class="text-center" selected value={-1}>
+              <option className="text-center" selected value={-1}>
                 -
               </option>
-              <option class="text-center" value={1}>
+              <option className="text-center" value={1}>
                 Yes
               </option>
-              <option class="text-center" value={0}>
+              <option className="text-center" value={0}>
                 No
               </option>
-              <option class="text-center" value={-2}>
+              <option className="text-center" value={-2}>
                 Inactive
               </option>
             </Form.Control>
           </div>
 
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="daysSelect">
+          <div className="input-group mb-2">
+            <div className="input-group-prepend">
+              <label className="input-group-text" for="daysSelect">
                 Commitment Days
               </label>
             </div>
             <input
-              class="text-center form-control"
+              className="text-center form-control"
               type="number"
               id="daysSelect"
               min="0"
@@ -290,30 +306,30 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
             ></input>
           </div>
 
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="seasonSelect">
+          <div className="input-group mb-2">
+            <div className="input-group-prepend">
+              <label className="input-group-text" for="seasonSelect">
                 Season:
               </label>
             </div>
 
             <Form.Control as="select" custom id="seasonSelect">
-              <option class="text-center" selected value={-1}>
+              <option className="text-center" selected value={-1}>
                 -
               </option>
 
               {sortedSeasons.map((row, index) => (
-                <option class="text-center" value={index}>
+                <option className="text-center" value={index}>
                   {row.description}
                 </option>
               ))}
             </Form.Control>
           </div>
 
-          <div class="input-group mb-2">
-            <span class="input-group-text">Notes</span>
+          <div className="input-group mb-2">
+            <span className="input-group-text">Notes</span>
             <textarea
-              class="form-control"
+              className="form-control"
               aria-label="With textarea"
               id="notesSelect"
             ></textarea>

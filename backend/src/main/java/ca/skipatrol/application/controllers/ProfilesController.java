@@ -196,22 +196,6 @@ public class ProfilesController {
     @RequestMapping(value = "/customapi/profile/user/CreateNewUser", method = RequestMethod.POST)
     public ResponseEntity<Object> createNewUser(
             @RequestBody Map<String, String> userInfo) {
-
-        /*
-         * @RequestBody String username,
-         * 
-         * @RequestBody String password,
-         * 
-         * @RequestBody String firstName,
-         * 
-         * @RequestBody String lastName,
-         * 
-         * @RequestBody String email,
-         * 
-         * @RequestBody String phoneNumber,
-         * 
-         * @RequestBody EventRole userType
-         */
         User user = profileServices.createNewUser(userInfo.get("username"), userInfo.get("password"),
                 userInfo.get("firstName"), userInfo.get("lastName"), userInfo.get("email"), userInfo.get("phoneNumber"),
                 userInfo.get("eventRole"));
@@ -220,6 +204,16 @@ public class ProfilesController {
             return new ResponseEntity<>(user, HttpStatus.OK);
 
         return new ResponseEntity<>("Error Creating User", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/customapi/profile/user/OnSnowEvals/Edit", method = RequestMethod.PUT)
+    public ResponseEntity<Object> editOnSnowEvals(@RequestParam UUID id, @RequestBody Map<String, String> evalInfo){
+        boolean returnVal = profileServices.editOnSnowEvals(id, evalInfo.get("discipline"), evalInfo.get("evaluatedBy"), evalInfo.get("evaluationDate"));
+
+        if (returnVal)
+            return new ResponseEntity<>("On-Snow evaluation updated successfully", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error Editing On Snow Evaluation", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

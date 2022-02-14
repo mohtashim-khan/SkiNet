@@ -22,6 +22,7 @@ import ca.skipatrol.application.models.User;
 import ca.skipatrol.application.models.Vest;
 import ch.qos.logback.core.joran.conditional.Condition;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -99,7 +100,7 @@ public class ReportsServicesImpl implements ReportsServices {
         Boolean orienteerer = gson.fromJson(inputDataJSON.get("orienteerer"), Boolean.class);
         Boolean recruitmentLead = gson.fromJson(inputDataJSON.get("recruitmentLead"), Boolean.class);
         Boolean p0Lead = gson.fromJson(inputDataJSON.get("p0Lead"), Boolean.class);
-        Boolean CISMTeamMember = gson.fromJson(inputDataJSON.get("CISMTeamMember"), Boolean.class);
+        Boolean cISMTeamMember = gson.fromJson(inputDataJSON.get("cISMTeamMember"), Boolean.class);
 
         // Uniform and Equipment
         String jacketBrand = gson.fromJson(inputDataJSON.get("jacketBrand"), String.class);
@@ -135,10 +136,21 @@ public class ReportsServicesImpl implements ReportsServices {
         // Predicate (Conditions) Array List
         ArrayList<Predicate> conditions = new ArrayList<>();
 
+        // Booleans for DTO
+        Boolean onSnowEval = false;
+        Boolean evalTraining = false;
+        Boolean operationalTraining = false;
+        Boolean patrolCommitment = false;
+        Boolean role = false;
+        Boolean uniformAndEquip = false;
+        Boolean awardsBool = false;
+        Boolean emergencyContact = false;
+
         // Join OnSnow Eval tables
         if (onSnowDisciplineType != null || onSnowDateEvaluatedLowerJSON != null || onSnowDateEvaluatedUpperJSON != null
                 || onSnowEvaluatedBy != null) {
             Join<User, OnSnowEval> onSnowEvalJoin = user.join("onSnowEvals");
+            onSnowEval = true;
 
             if (onSnowDateEvaluatedLowerJSON != null && onSnowDateEvaluatedUpperJSON != null) {
                 LocalDate onSnowDateEvaluatedLower = LocalDate.parse(onSnowDateEvaluatedLowerJSON);
@@ -175,6 +187,7 @@ public class ReportsServicesImpl implements ReportsServices {
         if (evalEventType != null
                 || evalDateCompletedUpperJSON != null || evalDateCompletedLowerJSON != null) {
             Join<User, EvalTraining> evalTrainingJoin = user.join("evalTrainings");
+            evalTraining = true;
 
             if (evalEventType != null) {
                 conditions.add(builder.equal(evalTrainingJoin.get("eventType"), evalEventType));
@@ -205,6 +218,7 @@ public class ReportsServicesImpl implements ReportsServices {
         if (patrollerDateCompletedLowerJSON != null || patrollerDateCompletedUpperJSON != null
                 || patrollerEventType != null) {
             Join<User, OperationalTraining> opTrainingJoin = user.join("operationalTrainings");
+            operationalTraining = true;
 
             if (patrollerDateCompletedLowerJSON != null && patrollerDateCompletedUpperJSON != null) {
                 LocalDate patrollerDateCompletedLower = LocalDate.parse(patrollerDateCompletedLowerJSON);
@@ -236,6 +250,7 @@ public class ReportsServicesImpl implements ReportsServices {
         if (season != null || commitmentDaysLower != null || commitmentDaysUpper != null || commitmentAchieved != null
                 || hasNotes != null) {
             Join<User, PatrolCommitment> patrolCommitJoin = user.join("patrolCommitments");
+            patrolCommitment = true;
 
             if (commitmentDaysLower != null && commitmentDaysUpper != null) {
                 conditions.add(builder.between(patrolCommitJoin.get("days"), commitmentDaysLower, commitmentDaysUpper));
@@ -279,6 +294,7 @@ public class ReportsServicesImpl implements ReportsServices {
                 || trainingEventLead != null || onSnowEvaluator != null || orienteerer != null
                 || recruitmentLead != null || p0Lead != null) {
             Join<User, Role> roleJoin = user.join("role");
+            role = true;
             ArrayList<Predicate> orRoles = new ArrayList<>(); // Needed to perform OR instead of AND operation for
                                                               // roles.
 
@@ -323,11 +339,9 @@ public class ReportsServicesImpl implements ReportsServices {
                 orRoles.add(builder.equal(roleJoin.get("p0Lead"), p0Lead));
             }
 
-            if (CISMTeamMember != null) {
-                orRoles.add(builder.equal(roleJoin.get("CISMTeamMember"), CISMTeamMember));
+            if (cISMTeamMember != null) {
+                orRoles.add(builder.equal(roleJoin.get("cISMTeamMember"), cISMTeamMember));
             }
-
-    
 
             conditions.add(builder.or(orRoles.toArray(new Predicate[] {})));
 
@@ -341,6 +355,7 @@ public class ReportsServicesImpl implements ReportsServices {
                 || uniformLeaseSigned != null || uniformReturned != null) {
 
             Join<User, Uniform> uniformJoin = user.join("uniforms");
+            uniformAndEquip = true;
 
             if (uniformLeaseSigned != null) {
                 conditions.add(builder.equal(uniformJoin.get("leaseSigned"), uniformLeaseSigned));
@@ -423,6 +438,7 @@ public class ReportsServicesImpl implements ReportsServices {
             List<String> awardsList = Arrays.asList(awards);
             Join<User, PersonAward> personAwardJoin = user.join("personAwards");
             Join<PersonAward, Award> awardJoin = personAwardJoin.join("award");
+            awardsBool = true;
             conditions.add(awardJoin.get("description").in(awardsList));
 
         }
@@ -430,6 +446,7 @@ public class ReportsServicesImpl implements ReportsServices {
         // Join Emergency Contacts
         if (hasEmergencyContact != null) {
             Join<User, EmergencyContact> emergencyContactJoin = user.join("emergencyContacts", JoinType.LEFT);
+            emergencyContact = true;
             ArrayList<Predicate> emergContactArray = new ArrayList<>(); // Needed to perform OR operation for false
 
             if (hasEmergencyContact == true) {
@@ -457,7 +474,14 @@ public class ReportsServicesImpl implements ReportsServices {
             results = typedQuery.getResultList();
             for (User result : results) {
 
-                returnResults.add(buildUserDTO(result));
+                returnResults.add(buildUserDTO(result, onSnowEval,
+                        evalTraining,
+                        operationalTraining,
+                        patrolCommitment,
+                        role,
+                        uniformAndEquip,
+                        awardsBool,
+                        emergencyContact));
             }
 
         } else {
@@ -466,7 +490,14 @@ public class ReportsServicesImpl implements ReportsServices {
             results = typedQuery.getResultList();
             for (User result : results) {
 
-                returnResults.add(buildUserDTO(result));
+                returnResults.add(buildUserDTO(result, onSnowEval,
+                        evalTraining,
+                        operationalTraining,
+                        patrolCommitment,
+                        role,
+                        uniformAndEquip,
+                        awardsBool,
+                        emergencyContact));
             }
 
         }
@@ -477,7 +508,14 @@ public class ReportsServicesImpl implements ReportsServices {
     }
 
     // User Data Transfer Object - needed to avoid lazy loading errors
-    public User buildUserDTO(User user) {
+    public User buildUserDTO(User user, Boolean onSnowEval,
+            Boolean evalTraining,
+            Boolean operationalTraining,
+            Boolean patrolCommitment,
+            Boolean role,
+            Boolean uniformAndEquip,
+            Boolean awardsBool,
+            Boolean emergencyContact) {
         if (user != null) {
 
             User returnVal = new User(user.getUserID(),
@@ -488,6 +526,51 @@ public class ReportsServicesImpl implements ReportsServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType());
+
+            if (onSnowEval) {
+                Hibernate.initialize(user.getOnSnowEvals().size());
+                returnVal.setOnSnowEvals(user.getOnSnowEvals());
+            }
+
+            if (evalTraining) {
+                Hibernate.initialize(user.getEvalTrainings().size());
+                returnVal.setEvalTrainings(user.getEvalTrainings());
+
+            }
+
+            if (operationalTraining) {
+                Hibernate.initialize(user.getOperationalTrainings().size());
+                returnVal.setOperationalTrainings(user.getOperationalTrainings());
+
+            }
+
+            if (patrolCommitment) {
+                Hibernate.initialize(user.getPatrolCommitments().size());
+                returnVal.setPatrolCommitments(user.getPatrolCommitments());
+
+            }
+
+            if (role) {
+                returnVal.setRole(user.getRole());
+            }
+
+            if (uniformAndEquip) {
+                Hibernate.initialize(user.getUniforms().size());
+                returnVal.setUniforms(user.getUniforms());
+
+            }
+
+            if (awardsBool) {
+
+                Hibernate.initialize(user.getPersonAwards().size());
+                returnVal.setPersonAwards(user.getPersonAwards());
+            }
+
+            if (emergencyContact) {
+                Hibernate.initialize(user.getEmergencyContacts().size());
+                returnVal.setEmergencyContacts(user.getEmergencyContacts());
+
+            }
 
             return returnVal;
         }

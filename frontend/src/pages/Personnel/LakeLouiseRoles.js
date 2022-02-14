@@ -15,7 +15,6 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
   const [rolesArray, setRolesArray] = useState([]);
 
   const prettyRoles = {
-    admin: "Admin",
     pl: "Patrol Leader",
     apl: "Active Patrol Leader",
     hl: "HL",
@@ -26,20 +25,8 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
     orienteerer: "Orienteer",
     recruitmentLead: "Recruitment Lead",
     p0Lead: "P0/Lead",
+    cismteamMember: "CISM Team Member",
   };
-  const roles = [
-    "admin",
-    "pl",
-    "apl",
-    "hl",
-    "active",
-    "newUser",
-    "trainingEventLead",
-    "onSnowEvaluator",
-    "orienteerer",
-    "recruitmentLead",
-    "p0Lead",
-  ];
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -68,6 +55,8 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
 
     tempArray.shift();
     tempArray.pop();
+    console.log("Aasdfs", tempArray);
+    console.log("here", role);
     setRolesArray(tempArray);
     const rolesVals = [];
     for (let i = 0; i < tempArray.length; ++i) {

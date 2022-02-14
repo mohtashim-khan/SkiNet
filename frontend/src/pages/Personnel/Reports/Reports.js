@@ -58,7 +58,7 @@ const Reports = ({ session }) => {
     commitmentDaysUpper: null,
     season: null,
 
-    admin: null,
+    cismteamMember: null,
     pl: null,
     apl: null,
     hl: null,
@@ -136,15 +136,21 @@ const Reports = ({ session }) => {
           {/* {<pre>{JSON.stringify(state)}</pre>} */}
           <div class="container-fluid">
             <div class="row justify-content-md-center">
-              <div class="col col-lg-9">
-                <table class="table table-bordered" id="table-to-xls">
+              <div class="col col-lg-9 mw-75">
+                <table class="table table-bordered mw-1" id="table-to-xls">
                   <thead>
                     <tr>
-                      <th colspan="6" class="table-active">
+                      <th
+                        colspan="6"
+                        className="table-active text-justify text-align"
+                      >
                         Report Generated on:{" "}
                         {new Date().toISOString().substring(0, 10)}
                         {".   "}
-                        <br /> Parameters: {reportString}
+                        <p className="text-justify">
+                          {" "}
+                          Parameters: {reportString}
+                        </p>
                       </th>
                     </tr>
                   </thead>

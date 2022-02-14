@@ -173,9 +173,61 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     }
   }
 
-  function editOperationalTraining() {}
+  function editOperationalTraining() {
+    try {
+      if (selectedVal === "-1") throw "ERROR: No Value selected";
+      const myDate = new Date($("#EvalTrainingDateEdit").val()).toISOString();
+      const myEval = $("#OperationalTrainingEvent").val();
 
-  function editEvalTraining() {}
+      let temp = onSnowEvals[parseInt(selectedVal)];
+      temp.operationalEvent = myDate;
+      if (myEval.length > 0) {
+        temp.evaluatedBy = myEval;
+      }
+
+      console.log("Sent to put req...", JSON.stringify(temp));
+
+      session
+        .put("operationalTrainings/" + temp.evaluationTraining, temp, {}, false)
+        .then((resp) => {
+          if (resp.status === 200 || resp.status === 201) {
+            readNewTrainingAndEvals();
+          }
+        });
+      promptEditCancel();
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
+  }
+
+  function editEvalTraining() {
+    try {
+      if (selectedVal === "-1") throw "ERROR: No Value selected";
+      const myDate = new Date($("#EvalTrainingDateEdit").val()).toISOString();
+      const myEval = $("#EvalTrainingEventEdit").val();
+
+      let temp = evaluationTraining[parseInt(selectedVal)];
+      temp.completedDate = myDate.substring(0, 10);
+      if (myEval.length > 0) {
+        temp.eventType = myEval;
+      }
+
+      console.log("Sent to put req...", JSON.stringify(temp));
+
+      session
+        .put("evalTrainings/" + temp.evalTrainingID, temp, {}, false)
+        .then((resp) => {
+          if (resp.status === 200 || resp.status === 201) {
+            readNewTrainingAndEvals();
+          }
+        });
+      promptEditCancel();
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
+  }
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -726,7 +778,7 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
                 <Form.Control
                   type="date"
                   name="date_of_birth"
-                  id="OnSnowTrainingDateEdit"
+                  id="EvalTrainingDateEdit"
                   defaultValue={
                     evaluationTraining[parseInt(selectedVal)].completedDate
                   }

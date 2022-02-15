@@ -19,7 +19,7 @@ export default function ReportLakeLouiseRoles({ session }) {
   const [state, setState] = useContext(FilterContext);
 
   const roles = [
-    "admin",
+    "cismTeamMember",
     "pl",
     "apl",
     "hl",
@@ -33,7 +33,7 @@ export default function ReportLakeLouiseRoles({ session }) {
   ];
 
   const prettyRoles = [
-    "Admin",
+    "CISM Team Member",
     "Patrol Leader",
     "Active Patrol Leader",
     "HL",

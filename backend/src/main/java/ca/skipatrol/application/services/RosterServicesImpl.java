@@ -227,6 +227,56 @@ public class RosterServicesImpl implements RosterServices {
         return 500;
     }
 
+    public int RemoveUserEventLog(EventLog eventLog, User actionUser)
+    {
+        List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
+        Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser().getUserID() == eventLog.getUser().getUserID()).findFirst();
+        Event event = eventRepository.getById(eventLog.getEvent().getEventID());
+
+        if (userEventLogReturn.isEmpty())
+            return 404;
+        else
+        {
+            eventLogRepository.deleteById(userEventLogReturn.get().getEventLogID());
+            AddActionToActionLog(eventLog.getUser().getUsername() + "removed by " + actionUser.getUsername(),
+                    actionUser,
+                    event);
+
+            if (!eventLog.getRole().equals(EventRole.SHADOW) && !eventLog.getRole().equals(EventRole.WAITLIST))
+            {
+                int maxVal = (eventLog.getRole() == EventRole.TRAINEE) ? event.getMaxTrainees() : event.getMaxPatrollers();
+                long currentVal = existingEventLogs.stream().filter(x -> x.getRole() == eventLog.getRole()).count();
+
+                if(currentVal < maxVal)
+                {
+                    Optional<EventLog> transfer = null;
+                    if (eventLog.getRole() == EventRole.TRAINEE)
+                        transfer = existingEventLogs.stream().filter(x -> x.getRole() == EventRole.WAITLIST &&
+                                x.getUser().getUserType() == EventRole.TRAINEE).findFirst();
+                    else if (eventLog.getRole() == EventRole.ROSTERED)
+                        transfer = existingEventLogs.stream().filter(x -> x.getRole().equals(EventRole.WAITLIST) &&
+                                x.getUser().getUserType() != EventRole.ROSTERED).findFirst();
+
+                    if (transfer.isPresent())
+                    {
+                        EventLog transferEventLog = transfer.get();
+                        transferEventLog.setTimestampRostered(LocalDateTime.now());
+                        transferEventLog.setRole(transferEventLog.getUser().getUserType());
+                        AddActionToActionLog("Replaced from Waitlist" + transferEventLog.getUser().getUsername(), actionUser, event);
+
+                        return 204;
+                    }
+
+                    return 204;
+                }
+
+            }
+
+        }
+
+        return 500;
+    }
+
     private void AddActionToActionLog(String actionString, User actionUser, Event event)
     {
         ActionLog actionLog = new ActionLog(event, actionUser.getUsername(), actionUser.getUserID().toString(), actionString, LocalDateTime.now());

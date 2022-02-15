@@ -19,7 +19,9 @@ const Header = ({ session }) => {
   const renderLoggedInNavigation = () => {
     return (
       <>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <div className="navbar-collapse" id="navbarSupportedContent">
+          {" "}
+          {/* Used to be className="collapse navbar-collapse" BTW */}
           <ul className="navbar-nav mr-auto">
             <Route path="/news">
               {({ match }) => (

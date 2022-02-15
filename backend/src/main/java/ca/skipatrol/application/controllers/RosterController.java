@@ -41,4 +41,21 @@ public class RosterController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @RequestMapping(value = "customapi/roster/addSubRequest", method = RequestMethod.PUT)
+    public ResponseEntity<Object> AddSubRequest(@RequestBody String subRequestString, Principal principal) {
+
+        int code = 500;
+
+        JsonObject eventLogJSON = JsonParser.parseString(subRequestString).getAsJsonObject();
+        EventLog eventLog = rosterServices.ParseEventLogJson(eventLogJSON);
+
+        if (principal != null)
+            code = rosterServices.AddSubRequest(eventLog, userRepository.findByUsername(principal.getName()).get());
+
+        if (code == 204)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
 }

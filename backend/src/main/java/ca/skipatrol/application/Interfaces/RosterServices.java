@@ -9,5 +9,5 @@ public interface RosterServices {
 
     EventLog ParseEventLogJson(JsonObject eventLogJSON);
     int AddToEventLog(EventLog eventLog, User actionUser);
-
+    int AddSubRequest(EventLog eventLog, User actionUser);
 }

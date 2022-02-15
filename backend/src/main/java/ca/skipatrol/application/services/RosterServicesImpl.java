@@ -3,10 +3,7 @@ package ca.skipatrol.application.services;
 import ca.skipatrol.application.Interfaces.ProfileServices;
 import ca.skipatrol.application.Interfaces.RosterServices;
 import ca.skipatrol.application.models.*;
-import ca.skipatrol.application.repositories.AreaRepository;
-import ca.skipatrol.application.repositories.EventLogRepository;
-import ca.skipatrol.application.repositories.EventRepository;
-import ca.skipatrol.application.repositories.UserRepository;
+import ca.skipatrol.application.repositories.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.hibernate.Hibernate;
@@ -33,7 +30,7 @@ public class RosterServicesImpl implements RosterServices {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    ProfileServices profileServices;
+    ActionLogRepository actionLogRepository;
 
     static LocalDateTime minDate = LocalDateTime.of(1970,1,1,0,0);
 
@@ -72,6 +69,7 @@ public class RosterServicesImpl implements RosterServices {
         eventLog.setTimestampRostered(LocalDateTime.now());
         eventLog.setTimestampSubrequest(minDate);
         List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
+        Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         //check if user exists and await result
         if (existingEventLogs.stream().anyMatch(x -> x.getUser().getUserID() == eventLog.getUser().getUserID()))
@@ -84,8 +82,6 @@ public class RosterServicesImpl implements RosterServices {
         }
         else //need to insert
         {
-            Event event = eventRepository.getById(eventLog.getEvent().getEventID());
-
             //get current Assigned Count
             int maxVal = (eventLog.getRole() == EventRole.TRAINEE)?event.getMaxTrainees():event.getMaxPatrollers();
             long currentCount = existingEventLogs.stream().filter(x -> x.getRole() == eventLog.getRole()).count();
@@ -145,6 +141,96 @@ public class RosterServicesImpl implements RosterServices {
         }
 
         return 204;
+    }
+
+    @Override
+    public int AddSubRequest(EventLog eventLog, User actionUser)
+    {
+        List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
+        Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser().getUserID() == eventLog.getUser().getUserID()).findFirst();
+        Event event = eventRepository.getById(eventLog.getEvent().getEventID());
+
+        //check if user exists and await result
+        if (userEventLogReturn.isEmpty())
+            return 404;
+        else
+        {
+            EventLog userEventLog = userEventLogReturn.get();
+
+            // if already sub request they have to be de sub requested
+            if (!userEventLog.getTimestampRostered().equals(minDate))
+            {
+                userEventLog.setTimestampRostered(minDate);
+                eventLogRepository.save(userEventLog);
+            }
+            // add sub-request
+            else
+            {
+                if (!eventLog.getRole().equals(EventRole.SHADOW) && !eventLog.getRole().equals(EventRole.WAITLIST))
+                {
+                    int maxVal = (eventLog.getRole() == EventRole.TRAINEE)?event.getMaxTrainees():event.getMaxPatrollers();
+                    long currentCount = existingEventLogs.stream().filter(x -> x.getRole() == eventLog.getRole()).count();
+
+                    //-1 is if the person potentially was removed from the table
+                    if(currentCount - 1 < maxVal)
+                    {
+                        if (eventLog.getRole().equals(EventRole.ROSTERED) || eventLog.getRole().equals(EventRole.TRAINEE))
+                        {
+                            Optional<EventLog> transfer;
+                            if (eventLog.getRole() == EventRole.TRAINEE)
+                                transfer = existingEventLogs.stream().filter(x -> x.getRole() == EventRole.WAITLIST &&
+                                        x.getUser().getUserType() == EventRole.TRAINEE).findFirst();
+                            else
+                                transfer = existingEventLogs.stream().filter(x -> x.getRole() == EventRole.WAITLIST &&
+                                        x.getUser().getUserType() != EventRole.TRAINEE).findFirst();
+
+                            if(transfer.isPresent())
+                            {
+                                EventLog transferEventLog = transfer.get();
+                                transferEventLog.setTimestampRostered(LocalDateTime.now());
+                                eventLogRepository.save(transferEventLog);
+
+
+                                eventLogRepository.deleteById(existingEventLogs.stream().filter(x ->
+                                        x.getUser().equals(eventLog.getUser()) &&
+                                        x.getRole().equals(eventLog.getRole())).findFirst().get().getEventLogID());
+
+                                AddActionToActionLog("Sub Requested by"
+                                        + actionUser.getUsername().toString()
+                                        + ". Replaced from Waitlist: "
+                                        + transfer.get().getUser().getUsername(),
+                                        actionUser,
+                                        event);
+
+                                return 204;
+                            }
+                            else //check if user exists and await result
+                            {
+                                EventLog updateToSub = existingEventLogs.stream().filter(x -> x.getUser().equals(eventLog.getUser())).findFirst().get();
+                                updateToSub.setTimestampSubrequest(LocalDateTime.now());
+
+                                AddActionToActionLog("Sub Requested by " + actionUser.getUsername().toString(), actionUser, event);
+                                return 204;
+                            }
+
+                        }
+
+                    }
+                    AddActionToActionLog("Sub Requested by Shadow or Waitlist: Not supported", actionUser, event);
+                    return 204;
+                }
+
+            }
+
+        }
+
+        return 500;
+    }
+
+    private void AddActionToActionLog(String actionString, User actionUser, Event event)
+    {
+        ActionLog actionLog = new ActionLog(event, actionUser.getUsername(), actionUser.getUserID().toString(), actionString, LocalDateTime.now());
+        actionLogRepository.save(actionLog);
     }
 
     private UUID ParseLastURIPartToUUID(String uri)

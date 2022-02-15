@@ -1,21 +1,25 @@
 package ca.skipatrol.application.services;
 
+import ca.skipatrol.application.Interfaces.ProfileServices;
 import ca.skipatrol.application.Interfaces.RosterServices;
-import ca.skipatrol.application.models.Event;
-import ca.skipatrol.application.models.EventLog;
-import ca.skipatrol.application.models.EventRole;
-import ca.skipatrol.application.models.User;
+import ca.skipatrol.application.models.*;
 import ca.skipatrol.application.repositories.AreaRepository;
 import ca.skipatrol.application.repositories.EventLogRepository;
 import ca.skipatrol.application.repositories.EventRepository;
 import ca.skipatrol.application.repositories.UserRepository;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriBuilder;
 
 import javax.transaction.Transactional;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -28,12 +32,45 @@ public class RosterServicesImpl implements RosterServices {
     EventRepository eventRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ProfileServices profileServices;
 
     static LocalDateTime minDate = LocalDateTime.of(1970,1,1,0,0);
 
     @Override
+    public EventLog ParseEventLogJson(JsonObject eventLogJSON)
+    {
+        Gson gson = new Gson();
+        EventLog eventLog = new EventLog();
+
+        eventLog.setComment(gson.fromJson(eventLogJSON.get("comment"), String.class));
+        eventLog.setEmail(gson.fromJson(eventLogJSON.get("email"), String.class));
+        eventLog.setPhoneNumber(gson.fromJson(eventLogJSON.get("phoneNumber"), String.class));
+        eventLog.setTrainer(gson.fromJson(eventLogJSON.get("trainer"), Boolean.class));
+        eventLog.setRole(gson.fromJson(eventLogJSON.get("role"), EventRole.class));
+        eventLog.setAttendance(gson.fromJson(eventLogJSON.get("attendance"), EventAttendance.class));
+
+        UUID eventID = ParseLastURIPartToUUID(gson.fromJson(eventLogJSON.get("event"), String.class));
+        eventLog.setEvent((Event) Hibernate.unproxy(eventRepository.getById(eventID)));
+        UUID userID = ParseLastURIPartToUUID(gson.fromJson(eventLogJSON.get("user"), String.class));
+        eventLog.setUser((User) Hibernate.unproxy(userRepository.getById(userID)));
+
+        String areaURI = gson.fromJson(eventLogJSON.get("shadowing"), String.class);
+        if(areaURI != null && !areaURI.isEmpty())
+            eventLog.setArea((Area) Hibernate.unproxy(areaRepository.getById(ParseLastURIPartToUUID(areaURI))));
+
+        String shadowingURI = gson.fromJson(eventLogJSON.get("shadowing"), String.class);
+        if(shadowingURI != null && !shadowingURI.isEmpty())
+            eventLog.setUser((User) Hibernate.unproxy(userRepository.getById(ParseLastURIPartToUUID(shadowingURI))));
+
+        return eventLog;
+    }
+
+    @Override
     public int AddToEventLog(EventLog eventLog, User actionUser)
     {
+        eventLog.setTimestampRostered(LocalDateTime.now());
+        eventLog.setTimestampSubrequest(minDate);
         List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
 
         //check if user exists and await result
@@ -108,6 +145,12 @@ public class RosterServicesImpl implements RosterServices {
         }
 
         return 204;
+    }
+
+    private UUID ParseLastURIPartToUUID(String uri)
+    {
+        String[] uriParts = uri.split("/");
+        return UUID.fromString(uriParts[uriParts.length - 1]);
     }
 
 }

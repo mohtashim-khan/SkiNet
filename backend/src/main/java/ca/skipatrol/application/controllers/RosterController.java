@@ -3,6 +3,8 @@ package ca.skipatrol.application.controllers;
 import ca.skipatrol.application.Interfaces.RosterServices;
 import ca.skipatrol.application.models.EventLog;
 import ca.skipatrol.application.repositories.UserRepository;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,9 +25,13 @@ public class RosterController {
     UserRepository userRepository;
 
     @RequestMapping(value = "customapi/roster/addToEventLog", method = RequestMethod.PUT)
-    public ResponseEntity<Object> AddToEventLog(@RequestBody EventLog eventLog, Principal principal) {
+    public ResponseEntity<Object> AddToEventLog(@RequestBody String eventLogString, Principal principal) {
 
         int code = 500;
+
+        JsonObject eventLogJSON = JsonParser.parseString(eventLogString).getAsJsonObject();
+        EventLog eventLog = rosterServices.ParseEventLogJson(eventLogJSON);
+
         if (principal != null)
             code = rosterServices.AddToEventLog(eventLog, userRepository.findByUsername(principal.getName()).get());
 

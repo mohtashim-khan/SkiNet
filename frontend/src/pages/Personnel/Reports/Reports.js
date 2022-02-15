@@ -194,7 +194,7 @@ const Reports = ({ session }) => {
                     </button>
                     <button
                       type="button"
-                      class="myButton btn btn-primary float-end d-flex-inline"
+                      className="myButton btn btn-primary float-end d-flex-inline"
                       onClick={generateReport}
                     >
                       Generate Report

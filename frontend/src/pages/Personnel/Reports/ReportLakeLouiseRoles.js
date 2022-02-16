@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import FilterContext from "./ReportFilterContext";
 export default function ReportLakeLouiseRoles({ session }) {
-  const [allSelected, setAllSelected] = useState(false);
-  const [checked, setChecked] = useState([
-    false, // 0 - Active
-    false, // 1 - Admin
-    false, // 2 - APL
-    false, // 3 - HL
-    false, // 4 - New_User
-    false, // 5 - On-Snow Evaluator
-    false, // 6 - Orienteer
-    false, // 7 - P0 Lead
-    false, // 8 - PL
-    false, // 9 - Recruitment Lead
-    false, // 10 - Training Event Lead
-  ]);
+  // const [allSelected, setAllSelected] = useState(false);
+  // const [checked, setChecked] = useState([
+  //   false, // 0 - Active
+  //   false, // 1 - CISMTeamMember
+  //   false, // 2 - APL
+  //   false, // 3 - HL
+  //   false, // 4 - New_User
+  //   false, // 5 - On-Snow Evaluator
+  //   false, // 6 - Orienteer
+  //   false, // 7 - P0 Lead
+  //   false, // 8 - PL
+  //   false, // 9 - Recruitment Lead
+  //   false, // 10 - Training Event Lead
+  // ]);
 
   const [state, setState] = useContext(FilterContext);
 

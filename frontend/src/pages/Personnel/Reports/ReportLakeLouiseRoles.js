@@ -60,16 +60,6 @@ export default function ReportLakeLouiseRoles({ session }) {
   //   }
   // }, [checked]);
 
-  const selectAll = (value) => {
-    setAllSelected(value);
-    setChecked((prevState) => {
-      const newState = { ...prevState };
-      for (const inputName in newState) {
-        newState[inputName] = value;
-      }
-      return newState;
-    });
-  };
   return (
     <>
       <div class="card">

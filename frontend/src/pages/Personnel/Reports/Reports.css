@@ -23,8 +23,11 @@
   margin-bottom: 10px;
   cursor: pointer;
 }
-
+td {
+  white-space: pre;
+}
 .myTable {
+  white-space: pre;
   display: block;
   white-space: nowrap;
   overflow-x: scroll;

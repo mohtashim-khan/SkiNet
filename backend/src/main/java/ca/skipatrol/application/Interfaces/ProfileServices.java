@@ -53,4 +53,6 @@ public interface ProfileServices {
             String eventRole);
 
     public boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
+
+    public boolean editOperationalTrainings(UUID evalID, String operationalEvent, String evaluationDate );
 }

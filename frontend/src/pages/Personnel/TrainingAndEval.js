@@ -176,19 +176,25 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
   function editOperationalTraining() {
     try {
       if (selectedVal === "-1") throw "ERROR: No Value selected";
-      const myDate = new Date($("#EvalTrainingDateEdit").val()).toISOString();
-      const myEval = $("#OperationalTrainingEvent").val();
+      const myDate = new Date(
+        $("#OperationalTrainingDateEdit").val()
+      ).toISOString();
+      const myEvent = $("#OperationalTrainingEventEdit").val();
 
-      let temp = onSnowEvals[parseInt(selectedVal)];
-      temp.operationalEvent = myDate;
-      if (myEval.length > 0) {
-        temp.evaluatedBy = myEval;
-      }
+      let temp = operationalTraining[parseInt(selectedVal)];
+      temp.completedDate = myDate.substring(0, 10);
+      temp.operationalEvent = operationalEvent[myEvent].description;
 
       console.log("Sent to put req...", JSON.stringify(temp));
 
       session
-        .put("operationalTrainings/" + temp.evaluationTraining, temp, {}, false)
+        .put(
+          "profile/user/OperationalTraining/Edit?id=" +
+            temp.operationalTrainingID,
+          temp,
+          {},
+          true
+        )
         .then((resp) => {
           if (resp.status === 200 || resp.status === 201) {
             readNewTrainingAndEvals();
@@ -868,7 +874,7 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
                 <Form.Control
                   type="date"
                   name="date_of_birth"
-                  id="OnSnowTrainingDateEdit"
+                  id="OperationalTrainingDateEdit"
                   defaultValue={
                     operationalTraining[parseInt(selectedVal)].completedDate
                   }

@@ -20,7 +20,7 @@ public class Role {
     @Getter
     @Setter
     @Column(nullable = false)
-    private Boolean admin;
+    private Boolean cismTeamMember;
 
     @Getter
     @Setter
@@ -82,19 +82,19 @@ public class Role {
     public Role() {
     }
 
-    public Role(Boolean admin,
-                Boolean pl,
-                Boolean apl,
-                Boolean hl,
-                Boolean active,
-                Boolean newUser,
-                Boolean trainingEventLead,
-                Boolean onSnowEvaluator,
-                Boolean orienteerer,
-                Boolean recruitmentLead,
-                Boolean p0Lead,
-                User user) {
-        this.admin = admin;
+    public Role(Boolean cismTeamMember,
+            Boolean pl,
+            Boolean apl,
+            Boolean hl,
+            Boolean active,
+            Boolean newUser,
+            Boolean trainingEventLead,
+            Boolean onSnowEvaluator,
+            Boolean orienteerer,
+            Boolean recruitmentLead,
+            Boolean p0Lead,
+            User user) {
+        this.cismTeamMember = cismTeamMember;
         this.pl = pl;
         this.apl = apl;
         this.hl = hl;
@@ -109,20 +109,20 @@ public class Role {
     }
 
     public Role(UUID roleID,
-                Boolean admin,
-                Boolean pl,
-                Boolean apl,
-                Boolean hl,
-                Boolean active,
-                Boolean newUser,
-                Boolean trainingEventLead,
-                Boolean onSnowEvaluator,
-                Boolean orienteerer,
-                Boolean recruitmentLead,
-                Boolean p0Lead,
-                User user) {
+            Boolean cismTeamMember,
+            Boolean pl,
+            Boolean apl,
+            Boolean hl,
+            Boolean active,
+            Boolean newUser,
+            Boolean trainingEventLead,
+            Boolean onSnowEvaluator,
+            Boolean orienteerer,
+            Boolean recruitmentLead,
+            Boolean p0Lead,
+            User user) {
         this.roleID = roleID;
-        this.admin = admin;
+        this.cismTeamMember = cismTeamMember;
         this.pl = pl;
         this.apl = apl;
         this.hl = hl;

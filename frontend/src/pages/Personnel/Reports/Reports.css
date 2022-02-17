@@ -23,6 +23,21 @@
   margin-bottom: 10px;
   cursor: pointer;
 }
+td {
+  white-space: pre;
+}
+.myTable {
+  white-space: pre;
+  display: block;
+  white-space: nowrap;
+  overflow-x: scroll;
+  /* width: 100rem; */
+  display: block;
+}
+.myPanel {
+  max-width: 89rem;
+  word-wrap: break-word;
+}
 
 .link {
   text-decoration: none;

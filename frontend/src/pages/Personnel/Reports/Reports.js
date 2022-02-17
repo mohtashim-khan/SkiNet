@@ -9,7 +9,6 @@ import ReportTrainingAndEval from "./ReportTrainingAndEval";
 import "./Reports.css";
 import $ from "jquery";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-
 import FilterContext from "./ReportFilterContext";
 import { Link } from "react-router-dom";
 
@@ -38,6 +37,19 @@ import { Link } from "react-router-dom";
 const Reports = ({ session }) => {
   const [reportResult, setReportResult] = useState([]);
 
+  const prettyRoles = {
+    cismTeamMember: "CISM Team Member",
+    pl: "Patrol Leader",
+    apl: "Active Patrol Leader",
+    hl: "HL",
+    active: "Active User",
+    newUser: "New User",
+    trainingEventLead: "Training Event Lead",
+    onSnowEvaluator: "On-Snow Evaluator",
+    orienteerer: "Orienteer",
+    recruitmentLead: "Recruitment Lead",
+    p0Lead: "P0/Lead",
+  };
   const [state, setState] = useState({
     onSnowDisciplineType: null,
     onSnowDateEvaluatedLower: null,
@@ -58,7 +70,7 @@ const Reports = ({ session }) => {
     commitmentDaysUpper: null,
     season: null,
 
-    admin: null,
+    cismTeamMember: null,
     pl: null,
     apl: null,
     hl: null,
@@ -136,18 +148,31 @@ const Reports = ({ session }) => {
           {/* {<pre>{JSON.stringify(state)}</pre>} */}
           <div class="container-fluid">
             <div class="row justify-content-md-center">
-              <div class="col col-lg-9">
-                <table class="table table-bordered" id="table-to-xls">
-                  <thead>
+              <div class="col col-lg-9 myPanel">
+                <table
+                  class="table myTable table-bordered myPanel"
+                  id="table-to-xls"
+                >
+                  <thead class="myPanel">
                     <tr>
-                      <th colspan="6" class="table-active">
+                      <th
+                        colspan="5"
+                        class="table-active myPanel w-25 text-start text-wrap"
+                      >
                         Report Generated on:{" "}
                         {new Date().toISOString().substring(0, 10)}
-                        {".   "}
-                        <br /> Parameters: {reportString}
+                        <br />
+                        <div class="">Parameters: {reportString}</div>
                       </th>
+                      {/* <th
+                        colspan="100"
+                        class="table-active w-1 myPanel text-start text-wrap"
+                      >
+                        <br />
+                      </th> */}
                     </tr>
                   </thead>
+
                   <thead>
                     <tr>
                       <th scope="col">Username</th>
@@ -155,7 +180,51 @@ const Reports = ({ session }) => {
                       <th scope="col">Last Name</th>
                       <th scope="col">Email</th>
                       <th scope="col">Phone Number</th>
-                      <th scope="col">Status</th>
+                      {/* <th scope="col">Status</th> */}
+                      {reportResult.length > 0 && reportResult[0].onSnowEvals && (
+                        <th scope="col" className=" text-start text-wrap">
+                          On-Snow Evaluations
+                        </th>
+                      )}
+                      {reportResult.length > 0 &&
+                        reportResult[0].evalTrainings && (
+                          <th scope="col" className="text-start text-wrap">
+                            Evaluator Trainings
+                          </th>
+                        )}
+                      {reportResult.length > 0 &&
+                        reportResult[0].operationalTrainings && (
+                          <th scope="col" className="text-start text-wrap">
+                            Operational Training
+                          </th>
+                        )}
+                      {reportResult.length > 0 &&
+                        reportResult[0].patrolCommitments && (
+                          <th scope="col" className="text-start text-wrap">
+                            Patrol Commitments
+                          </th>
+                        )}
+                      {reportResult.length > 0 && reportResult[0].role && (
+                        <th scope="col" className="text-start text-wrap">
+                          Roles
+                        </th>
+                      )}
+                      {reportResult.length > 0 && reportResult[0].uniforms && (
+                        <th scope="col" className="text-start text-wrap">
+                          Uniform
+                        </th>
+                      )}
+                      {reportResult.length > 0 && reportResult[0].personAwards && (
+                        <th scope="col" className="text-start text-wrap">
+                          Awards
+                        </th>
+                      )}
+                      {reportResult.length > 0 &&
+                        reportResult[0].emergencyContacts && (
+                          <th scope="col" className="text-start text-wrap">
+                            Emergency Contacts
+                          </th>
+                        )}
                     </tr>
                   </thead>
                   {
@@ -175,7 +244,74 @@ const Reports = ({ session }) => {
                           <td>{row.lastName}</td>
                           <td>{row.email}</td>
                           <td>{row.phoneNumber}</td>
-                          <td>{row.userType}</td>
+                          {/* <td>{row.userType}</td> */}
+                          {reportResult.length > 0 &&
+                            reportResult[0].onSnowEvals && (
+                              <td className="text-start text-wrap">
+                                {JSON.stringify(row.onSnowEvals, null, 2)}
+                              </td>
+                            )}
+                          {reportResult.length > 0 &&
+                            reportResult[0].evalTrainings && (
+                              <td className="text-start text-wrap">
+                                {JSON.stringify(row.evalTrainings, null, 2)}
+                              </td>
+                            )}
+                          {reportResult.length > 0 &&
+                            reportResult[0].operationalTrainings && (
+                              <td className="text-start text-wrap">
+                                {JSON.stringify(
+                                  row.operationalTrainings,
+                                  null,
+                                  2
+                                )}
+                              </td>
+                            )}
+                          {reportResult.length > 0 &&
+                            reportResult[0].patrolCommitments && (
+                              <td className="text-start text-wrap">
+                                {/* {JSON.stringify(row.patrolCommitments, null, 2)} */}
+                                {row.patrolCommitments.map(
+                                  (item) =>
+                                    item.days +
+                                    " days for " +
+                                    item.season.description +
+                                    " ( " +
+                                    (item.commitmentAchieved
+                                      ? "achieved ), "
+                                      : "not achieved ), ")
+                                )}
+                              </td>
+                            )}
+                          {reportResult.length > 0 && reportResult[0].role && (
+                            <td className="text-start text-wrap">
+                              {/* {JSON.stringify(row.role, null, 2)} */}
+                              {Object.keys(row.role).map((item) =>
+                                row.role[item] === true
+                                  ? prettyRoles[item] + ", "
+                                  : ""
+                              )}
+                            </td>
+                          )}
+                          {reportResult.length > 0 &&
+                            reportResult[0].uniforms && (
+                              <td>{JSON.stringify(row.uniforms, null, 2)}</td>
+                            )}
+                          {reportResult.length > 0 &&
+                            reportResult[0].personAwards && (
+                              <td className="text-start text-wrap">
+                                {/* {JSON.stringify(row.personAwards, null, 2)} */}
+                                {row.personAwards.map(
+                                  (info) => info.award.description + ", "
+                                )}
+                              </td>
+                            )}
+                          {reportResult.length > 0 &&
+                            reportResult[0].emergencyContacts && (
+                              <td className="text-start text-wrap">
+                                {row.emergencyContacts[0].name}
+                              </td>
+                            )}
                         </tr>
                       ))}
                     </tbody>
@@ -194,7 +330,7 @@ const Reports = ({ session }) => {
                     </button>
                     <button
                       type="button"
-                      class="myButton btn btn-primary float-end d-flex-inline"
+                      className="myButton btn btn-primary float-end d-flex-inline"
                       onClick={generateReport}
                     >
                       Generate Report

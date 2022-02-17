@@ -31,25 +31,49 @@ const UserProfileEdit = ({ session }) => {
         </h1>
         <Row>
           <Col>
-            <TrainingAndEval session={session} userID={id} allowed={isAdmin} />
-            <PatrolCommitment session={session} userID={id} allowed={isAdmin} />
-            <LakeLouiseRoles session={session} userID={id} allowed={isAdmin} />
+            <div>
+              <TrainingAndEval
+                session={session}
+                userID={id}
+                allowed={isAdmin}
+              />
+
+              <PatrolCommitment
+                session={session}
+                userID={id}
+                allowed={isAdmin}
+              />
+
+              <LakeLouiseRoles
+                session={session}
+                userID={id}
+                allowed={isAdmin}
+              />
+            </div>
           </Col>
 
           <Col>
-            <PatrolUniformAndEquipment
-              session={session}
-              userID={id}
-              allowed={isAdmin}
-            />
-            <LakeLouiseAwards session={session} userID={id} allowed={isAdmin} />
-            <General
-              session={session}
-              userID={id}
-              allowed={
-                isAdmin || session.session_data().username === user.username
-              }
-            />
+            <div>
+              <PatrolUniformAndEquipment
+                session={session}
+                userID={id}
+                allowed={isAdmin}
+              />
+
+              <LakeLouiseAwards
+                session={session}
+                userID={id}
+                allowed={isAdmin}
+              />
+
+              <General
+                session={session}
+                userID={id}
+                allowed={
+                  isAdmin || session.session_data().username === user.username
+                }
+              />
+            </div>
           </Col>
         </Row>
       </Container>

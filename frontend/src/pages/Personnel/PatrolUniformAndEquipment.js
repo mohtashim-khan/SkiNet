@@ -24,6 +24,29 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
   const [deletePrompted, setDeletePrompted] = useState(false);
 
   const [error, setError] = useState(false);
+  const [jacketSelectedVal, setJacketSelectedVal] = useState("-1");
+  const [packSelectedVal, setPackSelectedVal] = useState("-1");
+  const [vestSelectedVal, setVestSelectedVal] = useState("-1");
+
+  function jacketEditEvent(event) {
+    let temp = event.target.value;
+    setJacketSelectedVal(String(temp));
+  }
+
+  function packEditEvent(event) {
+    let temp = event.target.value;
+    setPackSelectedVal(String(temp));
+  }
+
+  function vestEditEvent(event) {
+    let temp = event.target.value;
+    setVestSelectedVal(String(temp));
+  }
+  function editJackets() {}
+
+  function editPacks() {}
+
+  function editVests() {}
 
   function deletePacks() {
     const params = new URLSearchParams();
@@ -138,7 +161,14 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     setEditPrompted(true);
   }
 
+  function promptEditOpen() {
+    setEditPrompted(true);
+  }
+
   function promptEditCancel() {
+    setJacketSelectedVal("-1");
+    setPackSelectedVal("-1");
+    setVestSelectedVal("-1");
     setEditPrompted(false);
     setError(false);
   }
@@ -440,7 +470,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
       <Modal show={addPrompted} onHide={promptAddCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>Editing Patrol Uniform and Equipment</Modal.Title>
+          <Modal.Title>Add New Patrol Uniform and Equipment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Alert
@@ -736,9 +766,480 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+      <Modal show={editPrompted} onHide={promptEditCancel}>
         <Modal.Header closeButton>
           <Modal.Title>Editing Patrol Uniform and Equipment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="card">
+            <button
+              className="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#jacketEdit"
+              aria-expanded="false"
+              aria-controls="jacketEdit"
+            >
+              <h5>Jacket</h5>
+            </button>
+            <div className="collapse" id="jacketEdit">
+              <div className="card-body">
+                <Alert
+                  variant="danger"
+                  show={error}
+                  onClose={() => setError(false)}
+                  dismissible={true}
+                >
+                  <Alert.Heading>Uh oh!</Alert.Heading>
+                  <p>Looks like you need glasses</p>
+                </Alert>
+                <div className="form-check mb-3">
+                  {jackets &&
+                    jackets.map((row, index) => (
+                      <div className="form-group">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="selectJacketEdit"
+                          checked={jacketSelectedVal === String(index)}
+                          value={String(index)}
+                          onChange={jacketEditEvent}
+                        />
+                        <label className="form-check-label">
+                          {"Brand: " +
+                            row.brand.description +
+                            ", Size: " +
+                            row.size.description +
+                            ", Condition: " +
+                            row.condition.description +
+                            ", Number: " +
+                            row.number}
+                        </label>
+                      </div>
+                    ))}
+                </div>
+                {jacketSelectedVal !== "-1" ? (
+                  <>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="inputGroupSelect01"
+                        >
+                          Brand
+                        </label>
+                      </div>
+
+                      <select
+                        className="form-select"
+                        id="jacketBrandSelectEdit"
+                      >
+                        {brands.map((row, index) =>
+                          row.description ===
+                          jackets[parseInt(jacketSelectedVal)].brand
+                            .description ? (
+                            <option selected value={index}>
+                              {row.description} (Current Value)
+                            </option>
+                          ) : (
+                            <option value={index}>{row.description}</option>
+                          )
+                        )}
+                      </select>
+                    </div>
+
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="inputGroupSelect01"
+                        >
+                          Size
+                        </label>
+                      </div>
+
+                      <select className="form-select" id="jacketSizeSelectEdit">
+                        {sizes.map((row, index) =>
+                          row.description ===
+                          jackets[parseInt(jacketSelectedVal)].size
+                            .description ? (
+                            <option selected value={index}>
+                              {row.description} (Current Value)
+                            </option>
+                          ) : (
+                            <option value={index}>{row.description}</option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="inputGroupSelect01"
+                        >
+                          Condition
+                        </label>
+                      </div>
+
+                      <select
+                        className="form-select"
+                        id="jacketConditionSelectEdit"
+                      >
+                        {conditions.map((row, index) =>
+                          row.description ===
+                          jackets[parseInt(jacketSelectedVal)].condition
+                            .description ? (
+                            <option selected value={index}>
+                              {row.description} (Current Value)
+                            </option>
+                          ) : (
+                            <option value={index}>{row.description}</option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="jacketNumberSelectEdit"
+                        >
+                          Number
+                        </label>
+                      </div>
+                      <input
+                        className="text-center form-control"
+                        type="number"
+                        id="jacketNumberSelectEdit"
+                        min="0"
+                        placeholder={
+                          jackets[parseInt(jacketSelectedVal)].number
+                        }
+                        data-bind="value:numberSelect"
+                      ></input>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <b>
+                      <i>Select a Jacket to Update</i>
+                    </b>
+                  </div>
+                )}
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={editJackets}
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <button
+              className="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#vestEdit"
+              aria-expanded="false"
+              aria-controls="vestEdit"
+            >
+              <h5>Vest</h5>
+            </button>
+
+            <div className="collapse" id="vestEdit">
+              <div className="card-body">
+                <Alert
+                  variant="danger"
+                  show={error}
+                  onClose={() => setError(false)}
+                  dismissible={true}
+                >
+                  <Alert.Heading>Uh oh!</Alert.Heading>
+                  <p>Looks like you need glasses</p>
+                </Alert>
+                <div className="form-check mb-3">
+                  {vests &&
+                    vests.map((row, index) => (
+                      <div className="form-group">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="selectVestEdit"
+                          checked={vestSelectedVal === String(index)}
+                          value={String(index)}
+                          onChange={vestEditEvent}
+                        />
+                        <label className="form-check-label">
+                          {"Brand: " +
+                            row.brand.description +
+                            ", Size: " +
+                            row.size.description +
+                            ", Condition: " +
+                            row.condition.description +
+                            ", Number: " +
+                            row.number}
+                        </label>
+                      </div>
+                    ))}
+                </div>
+                {vestSelectedVal !== "-1" ? (
+                  <>
+                    <div className="input-group mt-3 mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="inputGroupSelect01"
+                        >
+                          Brand
+                        </label>
+                      </div>
+
+                      <select className="form-select" id="vestBrandSelectEdit">
+                        {brands.map((row, index) =>
+                          row.description ===
+                          vests[parseInt(vestSelectedVal)].brand.description ? (
+                            <option selected value={index}>
+                              {row.description} (Current Value)
+                            </option>
+                          ) : (
+                            <option value={index}>{row.description}</option>
+                          )
+                        )}
+                      </select>
+                    </div>
+
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="inputGroupSelect01"
+                        >
+                          Size
+                        </label>
+                      </div>
+
+                      <select className="form-select" id="vestSizeSelectEdit">
+                        {sizes.map((row, index) =>
+                          row.description ===
+                          vests[parseInt(vestSelectedVal)].size.description ? (
+                            <option selected value={index}>
+                              {row.description} (Current Value)
+                            </option>
+                          ) : (
+                            <option value={index}>{row.description}</option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="inputGroupSelect01"
+                        >
+                          Condition
+                        </label>
+                      </div>
+
+                      <select
+                        className="form-select"
+                        id="vestConditionSelectEdit"
+                      >
+                        {conditions.map((row, index) =>
+                          row.description ===
+                          vests[parseInt(vestSelectedVal)].condition
+                            .description ? (
+                            <option selected value={index}>
+                              {row.description} (Current Value)
+                            </option>
+                          ) : (
+                            <option value={index}>{row.description}</option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="vestNumberSelectEdit"
+                        >
+                          Number
+                        </label>
+                      </div>
+                      <input
+                        className="text-center form-control"
+                        type="number"
+                        id="vestNumberSelectEdit"
+                        min="0"
+                        placeholder={vests[parseInt(vestSelectedVal)].number}
+                        data-bind="value:numberSelect"
+                      ></input>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <b>
+                      <i>Select a Vest to Update</i>
+                    </b>
+                  </div>
+                )}
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={editVests}
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <button
+              className="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#packEdit"
+              aria-expanded="false"
+              aria-controls="packEdit"
+            >
+              <h5>Pack</h5>
+            </button>
+            <div className="collapse" id="packEdit">
+              <div className="card-body">
+                <Alert
+                  variant="danger"
+                  show={error}
+                  onClose={() => setError(false)}
+                  dismissible={true}
+                >
+                  <Alert.Heading>Uh oh!</Alert.Heading>
+                  <p>Looks like you need glasses</p>
+                </Alert>
+                <div className="form-check mb-3">
+                  {packs &&
+                    packs.map((row, index) => (
+                      <div className="form-group">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="selectPackEdit"
+                          checked={packSelectedVal === String(index)}
+                          value={String(index)}
+                          onChange={packEditEvent}
+                        />
+                        <label className="form-check-label">
+                          {"Brand: " +
+                            row.brand.description +
+                            ", Condition: " +
+                            row.condition.description +
+                            ", Number: " +
+                            row.number}
+                        </label>
+                      </div>
+                    ))}
+                </div>
+
+                {packSelectedVal !== "-1" ? (
+                  <>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="inputGroupSelect01"
+                        >
+                          Brand
+                        </label>
+                      </div>
+
+                      <select className="form-select" id="packBrandSelectEdit">
+                        {brands.map((row, index) =>
+                          row.description ===
+                          packs[parseInt(packSelectedVal)].brand.description ? (
+                            <option selected value={index}>
+                              {row.description} (Current Value)
+                            </option>
+                          ) : (
+                            <option value={index}>{row.description}</option>
+                          )
+                        )}
+                      </select>
+                    </div>
+
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="inputGroupSelect01"
+                        >
+                          Condition
+                        </label>
+                      </div>
+
+                      <select
+                        className="form-select"
+                        id="packConditionSelectEdit"
+                      >
+                        {conditions.map((row, index) =>
+                          row.description ===
+                          packs[parseInt(packSelectedVal)].condition
+                            .description ? (
+                            <option selected value={index}>
+                              {row.description} (Current Value)
+                            </option>
+                          ) : (
+                            <option value={index}>{row.description}</option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className="input-group mb-3">
+                      <div className="input-group-prepend">
+                        <label
+                          className="input-group-text"
+                          htmlFor="packNumberSelect"
+                        >
+                          Number
+                        </label>
+                      </div>
+                      <input
+                        className="text-center form-control"
+                        type="number"
+                        id="packNumberSelectEdit"
+                        min="0"
+                        placeholder={packs[parseInt(packSelectedVal)].number}
+                        data-bind="value:numberSelect"
+                      ></input>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <b>
+                      <i>Select a Pack to Update</i>
+                    </b>
+                  </div>
+                )}
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={editPacks}
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Deleting Patrol Uniform and Equipment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="card">

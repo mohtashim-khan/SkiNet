@@ -173,22 +173,22 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
           </div>
 
           <div className="card-body">
-            <table className="table table-bordered hover">
+            <table className="table table-bordered hover myMiniTable">
               <thead>
                 <tr>
-                  <th>Season</th>
-                  <th>Days Committed</th>
-                  <th>Commitment Achieved</th>
-                  <th>Notes</th>
+                  <th className="tdbreak">Season</th>
+                  <th className="tdbreak">Days Committed</th>
+                  <th className="tdbreak">Commitment Achieved</th>
+                  <th className="tdbreak">Notes</th>
                 </tr>
               </thead>
               <tbody>
                 {patrolCommit.map((row) => (
                   <tr>
-                    <td>{row.season.description}</td>
-                    <td>{row.days}</td>
-                    <td>{row.achieved ? "Yes" : "No"}</td>
-                    <td>{row.notes}</td>
+                    <td className="tdbreak">{row.season.description}</td>
+                    <td className="tdbreak">{row.days}</td>
+                    <td className="tdbreak">{row.achieved ? "Yes" : "No"}</td>
+                    <td className="tdbreak">{row.notes}</td>
                   </tr>
                 ))}
               </tbody>

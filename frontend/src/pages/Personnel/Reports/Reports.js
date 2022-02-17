@@ -9,7 +9,6 @@ import ReportTrainingAndEval from "./ReportTrainingAndEval";
 import "./Reports.css";
 import $ from "jquery";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-
 import FilterContext from "./ReportFilterContext";
 import { Link } from "react-router-dom";
 
@@ -38,6 +37,19 @@ import { Link } from "react-router-dom";
 const Reports = ({ session }) => {
   const [reportResult, setReportResult] = useState([]);
 
+  const prettyRoles = {
+    cismTeamMember: "CISM Team Member",
+    pl: "Patrol Leader",
+    apl: "Active Patrol Leader",
+    hl: "HL",
+    active: "Active User",
+    newUser: "New User",
+    trainingEventLead: "Training Event Lead",
+    onSnowEvaluator: "On-Snow Evaluator",
+    orienteerer: "Orienteer",
+    recruitmentLead: "Recruitment Lead",
+    p0Lead: "P0/Lead",
+  };
   const [state, setState] = useState({
     onSnowDisciplineType: null,
     onSnowDateEvaluatedLower: null,
@@ -152,12 +164,12 @@ const Reports = ({ session }) => {
                         <br />
                         <div class="">Parameters: {reportString}</div>
                       </th>
-                      <th
+                      {/* <th
                         colspan="100"
                         class="table-active w-1 myPanel text-start text-wrap"
                       >
                         <br />
-                      </th>
+                      </th> */}
                     </tr>
                   </thead>
 
@@ -168,7 +180,7 @@ const Reports = ({ session }) => {
                       <th scope="col">Last Name</th>
                       <th scope="col">Email</th>
                       <th scope="col">Phone Number</th>
-                      <th scope="col">Status</th>
+                      {/* <th scope="col">Status</th> */}
                       {reportResult.length > 0 && reportResult[0].onSnowEvals && (
                         <th scope="col" className=" text-start text-wrap">
                           On-Snow Evaluations
@@ -232,7 +244,7 @@ const Reports = ({ session }) => {
                           <td>{row.lastName}</td>
                           <td>{row.email}</td>
                           <td>{row.phoneNumber}</td>
-                          <td>{row.userType}</td>
+                          {/* <td>{row.userType}</td> */}
                           {reportResult.length > 0 &&
                             reportResult[0].onSnowEvals && (
                               <td className="text-start text-wrap">
@@ -258,12 +270,27 @@ const Reports = ({ session }) => {
                           {reportResult.length > 0 &&
                             reportResult[0].patrolCommitments && (
                               <td className="text-start text-wrap">
-                                {JSON.stringify(row.patrolCommitments, null, 2)}
+                                {/* {JSON.stringify(row.patrolCommitments, null, 2)} */}
+                                {row.patrolCommitments.map(
+                                  (item) =>
+                                    item.days +
+                                    " days for " +
+                                    item.season.description +
+                                    " ( " +
+                                    (item.commitmentAchieved
+                                      ? "achieved ), "
+                                      : "not achieved ), ")
+                                )}
                               </td>
                             )}
                           {reportResult.length > 0 && reportResult[0].role && (
                             <td className="text-start text-wrap">
-                              {JSON.stringify(row.role, null, 2)}
+                              {/* {JSON.stringify(row.role, null, 2)} */}
+                              {Object.keys(row.role).map((item) =>
+                                row.role[item] === true
+                                  ? prettyRoles[item] + ", "
+                                  : ""
+                              )}
                             </td>
                           )}
                           {reportResult.length > 0 &&
@@ -273,13 +300,16 @@ const Reports = ({ session }) => {
                           {reportResult.length > 0 &&
                             reportResult[0].personAwards && (
                               <td className="text-start text-wrap">
-                                {JSON.stringify(row.personAwards, null, 2)}
+                                {/* {JSON.stringify(row.personAwards, null, 2)} */}
+                                {row.personAwards.map(
+                                  (info) => info.award.description + ", "
+                                )}
                               </td>
                             )}
                           {reportResult.length > 0 &&
                             reportResult[0].emergencyContacts && (
                               <td className="text-start text-wrap">
-                                {JSON.stringify(row.emergencyContacts, null, 2)}
+                                {row.emergencyContacts[0].name}
                               </td>
                             )}
                         </tr>

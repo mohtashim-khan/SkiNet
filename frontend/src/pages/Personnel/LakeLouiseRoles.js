@@ -27,19 +27,6 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
     recruitmentLead: "Recruitment Lead",
     p0Lead: "P0/Lead",
   };
-  const roles = [
-    "admin",
-    "pl",
-    "apl",
-    "hl",
-    "active",
-    "newUser",
-    "trainingEventLead",
-    "onSnowEvaluator",
-    "orienteerer",
-    "recruitmentLead",
-    "p0Lead",
-  ];
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -74,6 +61,8 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
 
     tempArray.shift();
     tempArray.pop();
+    console.log("Aasdfs", tempArray);
+    console.log("here", role);
     setRolesArray(tempArray);
     const rolesVals = [];
     for (let i = 0; i < tempArray.length; ++i) {

@@ -164,20 +164,26 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
         </div>
         <div className="card-body">
           <div>
-            <table className="table table-bordered hover">
+            <table className="table table-bordered hover myMiniTable">
               <thead>
                 <tr>
-                  <th scope="col">Season</th>
-                  <th scope="col">Award</th>
-                  <th scope="col">Comment</th>
+                  <th className="tdbreak" scope="col">
+                    Season
+                  </th>
+                  <th className="tdbreak" scope="col">
+                    Award
+                  </th>
+                  <th className="tdbreak" scope="col">
+                    Comment
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {personAwards.map((row, index) => (
                   <tr>
-                    <td>{row.season.description}</td>
-                    <td>{row.award.description}</td>
-                    <td>{row.comments + " "}</td>
+                    <td className="tdbreak">{row.season.description}</td>
+                    <td className="tdbreak">{row.award.description}</td>
+                    <td className="tdbreak">{row.comments + " "}</td>
                   </tr>
                 ))}
               </tbody>

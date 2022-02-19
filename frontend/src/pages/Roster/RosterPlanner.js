@@ -174,9 +174,6 @@ const RosterPlanner = ({ session }) => {
     setEventDetailsVisibility(true);
   }
 
-  function onAddEvent(addEventStruct) {
-    setEventAddModal(true);
-  }
 
   return (
     <>
@@ -186,7 +183,7 @@ const RosterPlanner = ({ session }) => {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         setUpdater={setUpdater}
-        username={session.session_data().username}
+        session={session}
       />
 
       <Container fluid className="p-3 w-70">

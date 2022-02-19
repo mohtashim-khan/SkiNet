@@ -72,8 +72,10 @@ public class RosterServicesImpl implements RosterServices {
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         //check if user exists and await result
-        if (existingEventLogs.stream().anyMatch(x -> x.getUser().getUserID() == eventLog.getUser().getUserID()))
+        if (existingEventLogs.stream().anyMatch(x -> x.getUser().getUserID() == eventLog.getUser().getUserID())){
+            AddActionToActionLog(actionUser.getUsername() + " already in table. No action.", actionUser, event);
             return 204;
+        }
 
         //adding a shadow or unavailable no questions
         if (eventLog.getRole().equals(EventRole.SHADOW) || eventLog.getRole() == EventRole.UNAVAILABLE) {
@@ -86,8 +88,12 @@ public class RosterServicesImpl implements RosterServices {
             int maxVal = (eventLog.getRole() == EventRole.TRAINEE)?event.getMaxTrainees():event.getMaxPatrollers();
             long currentCount = existingEventLogs.stream().filter(x -> x.getRole() == eventLog.getRole()).count();
 
-            if (currentCount < maxVal)
+            if (currentCount < maxVal) {
                 eventLogRepository.save(eventLog);
+                AddActionToActionLog(eventLog.getUser().getUsername() + " inserted into " +
+                    eventLog.getRole() + " table by " + actionUser.getUsername(),
+                    actionUser, event);
+            }
             else
             {
                 //see if there are any people that request sub
@@ -123,6 +129,9 @@ public class RosterServicesImpl implements RosterServices {
 
                         //deleting person we got that has sub request
                         eventLogRepository.delete(transfer.get());
+                        AddActionToActionLog("Sub Requested by " + transfer.get().getUser().getUsername() +
+                                ". Replaced from Waitlist: " + waitPerson.get().getUser().getUsername(),
+                                actionUser, event);
                     }
                     else // no one in waitlist so insert current person that wants to go as replacement
                     {
@@ -130,12 +139,16 @@ public class RosterServicesImpl implements RosterServices {
 
                         //deleting person we got that has sub request
                         eventLogRepository.delete(transfer.get());
+                        AddActionToActionLog("Sub Requested by " + transfer.get().getUser().getUsername() +
+                                ". Replaced with: " + eventLog.getUser().getUsername(),
+                                actionUser, event);
                     }
                 }
                 else // put into waitlist
                 {
                     eventLog.setRole(EventRole.WAITLIST);
                     eventLogRepository.save(eventLog);
+                    AddActionToActionLog(eventLog.getUser().getUsername() + " inserted into Waitlist by " + actionUser.getUsername(), actionUser, event);
                 }
             }
         }

@@ -45,6 +45,8 @@ public interface ProfileServices {
 
     int UpdatePersonAward(PersonAward personAward);
 
+    int UpdateUniformReturnedLeaseSigned(JsonObject uniformJSON);
+
     public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
 
     public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);

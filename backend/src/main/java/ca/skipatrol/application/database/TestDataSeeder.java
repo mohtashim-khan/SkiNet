@@ -82,30 +82,30 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                 userLookup = this.userRepository.findByUsername("username");
                 if (userLookup.isEmpty()) {
                         User user = new User("username",
-                                new BCryptPasswordEncoder().encode("password"),
-                                "Isaac",
-                                "Newton",
-                                "test@email.com",
-                                "000-000-0000",
-                                EventRole.SYSTEM_ADMIN);
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Isaac",
+                                        "Newton",
+                                        "test@email.com",
+                                        "000-000-0000",
+                                        EventRole.SYSTEM_ADMIN);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("username").get();
                         userLookup = Optional.of(user);
 
                         Role role = new Role(false, false, false, false,
-                                false, false, false,
-                                false, true, true, false, user);
+                                        false, false, false,
+                                        false, true, true, false, user);
                         this.roleRepository.save(role);
 
                         OperationalEvent operationalEvent = operationalEventRepository
-                                .findByDescription("Lift Evacuation").get();
+                                        .findByDescription("Lift Evacuation").get();
                         Season season = seasonRepository.findByDescription("2023 - 2024").get();
                         Award award = awardRepository.findByDescription("The Lake Louise Family Award").get();
 
                         evalTrainingRepository.save(new EvalTraining("testEventType", LocalDate.now(), user));
                         operationalTrainingRepository
-                                .save(new OperationalTraining(LocalDate.now(), operationalEvent, user));
+                                        .save(new OperationalTraining(LocalDate.now(), operationalEvent, user));
                         emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "jerk", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "testNote", season, user));
                         personAwardRepository.save(new PersonAward("testComment", award, season, user));
@@ -129,25 +129,25 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                 Optional<User> userLookup2 = this.userRepository.findByUsername("AAAAA");
                 if (userLookup2.isEmpty()) {
                         User user = new User("AAAAA",
-                                new BCryptPasswordEncoder().encode("password"),
-                                "Michael",
-                                "Scott",
-                                "testMichael@email.com",
-                                "000-000-0000",
-                                EventRole.SYSTEM_ADMIN);
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Michael",
+                                        "Scott",
+                                        "testMichael@email.com",
+                                        "000-000-0000",
+                                        EventRole.SYSTEM_ADMIN);
                         this.userRepository.save(new User("AAAAA",
-                                new BCryptPasswordEncoder().encode("password"),
-                                "Michael",
-                                "Scott",
-                                "testMichael@email.com",
-                                "000-000-0000",
-                                EventRole.SYSTEM_ADMIN));
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Michael",
+                                        "Scott",
+                                        "testMichael@email.com",
+                                        "000-000-0000",
+                                        EventRole.SYSTEM_ADMIN));
                         userLookup2 = Optional.of(user);
 
                         user = userRepository.findByUsername("AAAAA").get();
                         Role role = new Role(false, false, false, false,
-                                false, true, false,
-                                false, false, false, false, user);
+                                        false, true, false,
+                                        false, false, false, false, user);
                         this.roleRepository.save(role);
                         LocalDate date1 = LocalDate.of(2021, Month.JANUARY, 12);
                         Discipline testDiscipline = new Discipline("testDiscipline");
@@ -163,40 +163,40 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                 Optional<User> userLookup3 = this.userRepository.findByUsername("Really_Fast_Skier_324");
                 if (userLookup3.isEmpty()) {
                         User user = new User("Really_Fast_Skier_324",
-                                new BCryptPasswordEncoder().encode("password"),
-                                "Steve",
-                                "Bob",
-                                "Really_Fast_Skier_324@email.com",
-                                "028-006-01914",
-                                EventRole.ROSTERED);
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Steve",
+                                        "Bob",
+                                        "Really_Fast_Skier_324@email.com",
+                                        "028-006-01914",
+                                        EventRole.ROSTERED);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("Really_Fast_Skier_324").get();
                         userLookup = Optional.of(user);
 
                         Role role = new Role(true, false, false, false,
-                                false, true, false,
-                                false, true, true, false, user);
+                                        false, true, false,
+                                        false, true, true, false, user);
                         this.roleRepository.save(role);
 
                         OperationalEvent operationalEvent = operationalEventRepository
-                                .findByDescription("Lift Evacuation").get();
+                                        .findByDescription("Lift Evacuation").get();
                         OperationalEvent operationalEvent1 = operationalEventRepository
-                                .findByDescription("STARS").get();
+                                        .findByDescription("STARS").get();
                         Season season = seasonRepository.findByDescription("2032 - 2033").get();
                         Award award = awardRepository.findByDescription("Silent Strike").get();
 
                         evalTrainingRepository.save(
-                                new EvalTraining("testEventType", LocalDate.of(1914, Month.JUNE, 28), user));
+                                        new EvalTraining("testEventType", LocalDate.of(1914, Month.JUNE, 28), user));
                         operationalTrainingRepository
-                                .save(new OperationalTraining(LocalDate.of(1914, Month.JUNE, 28),
-                                        operationalEvent, user));
+                                        .save(new OperationalTraining(LocalDate.of(1914, Month.JUNE, 28),
+                                                        operationalEvent, user));
 
                         operationalTrainingRepository
-                                .save(new OperationalTraining(LocalDate.of(1914, Month.JUNE, 28),
-                                        operationalEvent1, user));
+                                        .save(new OperationalTraining(LocalDate.of(1914, Month.JUNE, 28),
+                                                        operationalEvent1, user));
                         emergencyContactRepository
-                                .save(new EmergencyContact("Spouse", "000-000-01900", "Sophie", user));
+                                        .save(new EmergencyContact("Spouse", "000-000-01900", "Sophie", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "Fast", season, user));
                         personAwardRepository.save(new PersonAward("Really Fast", award, season, user));
 
@@ -219,20 +219,20 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                 Optional<User> userLookup4 = this.userRepository.findByUsername("AppleOverlord241");
                 if (userLookup4.isEmpty()) {
                         User user = new User("AppleOverlord241",
-                                new BCryptPasswordEncoder().encode("password"),
-                                "Tim",
-                                "Apple",
-                                "tim.apple@apple.com",
-                                "291-321-1252",
-                                EventRole.ROSTERED);
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Tim",
+                                        "Apple",
+                                        "tim.apple@apple.com",
+                                        "291-321-1252",
+                                        EventRole.ROSTERED);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("AppleOverlord241").get();
                         userLookup = Optional.of(user);
 
                         Role role = new Role(true, true, true, true,
-                                false, false, false,
-                                false, false, false, false, user);
+                                        false, false, false,
+                                        false, false, false, false, user);
                         this.roleRepository.save(role);
 
                         LocalDate date1 = LocalDate.of(2011, Month.AUGUST, 1);
@@ -242,19 +242,19 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         this.onSnowEvalRepository.save(onSnowEval);
 
                         OperationalEvent operationalEvent = operationalEventRepository
-                                .findByDescription("Scenario Training").get();
+                                        .findByDescription("Scenario Training").get();
                         operationalTrainingRepository
-                                .save(new OperationalTraining(LocalDate.now(), operationalEvent, user));
+                                        .save(new OperationalTraining(LocalDate.now(), operationalEvent, user));
 
                         OperationalEvent operationalEvent2 = operationalEventRepository
-                                .findByDescription("STARS").get();
+                                        .findByDescription("STARS").get();
                         operationalTrainingRepository
-                                .save(new OperationalTraining(LocalDate.now(), operationalEvent2, user));
+                                        .save(new OperationalTraining(LocalDate.now(), operationalEvent2, user));
 
                         Season season = seasonRepository.findByDescription("2025 - 2026").get();
 
                         Award award = awardRepository.findByDescription("\"Triangle\" Operational Proficieny Award")
-                                .get(); // Accomodation Award
+                                        .get(); // Accomodation Award
                         personAwardRepository.save(new PersonAward("Test Comment", award, season, user));
 
                         Award award2 = awardRepository.findByDescription("Silent Strike").get();
@@ -262,13 +262,13 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         personAwardRepository.save(new PersonAward("Another Test Comment", award2, season2, user));
 
                         evalTrainingRepository
-                                .save(new EvalTraining("sdssa", LocalDate.of(1914, Month.JUNE, 28), user));
+                                        .save(new EvalTraining("sdssa", LocalDate.of(1914, Month.JUNE, 28), user));
 
                         emergencyContactRepository
-                                .save(new EmergencyContact("Mother", "403-603-2152", "Geraldine Cook", user));
+                                        .save(new EmergencyContact("Mother", "403-603-2152", "Geraldine Cook", user));
                         patrolCommitmentRepository
-                                .save(new PatrolCommitment(true, 364,
-                                        "This man worked 364 days out of the year!!!!", season, user));
+                                        .save(new PatrolCommitment(true, 364,
+                                                        "This man worked 364 days out of the year!!!!", season, user));
                         patrolCommitmentRepository.save(new PatrolCommitment(false, 30, "not Achieved", season2, user));
                         personAwardRepository.save(new PersonAward("testComment", award, season, user));
 
@@ -292,33 +292,33 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                 Optional<User> userLookup5 = this.userRepository.findByUsername("HRisTheBest");
                 if (userLookup5.isEmpty()) {
                         User user = new User("HRisTheBest",
-                                new BCryptPasswordEncoder().encode("password"),
-                                "Tobey",
-                                "Flenderson",
-                                "test_Tobey@email.com",
-                                "000-000-0000",
-                                EventRole.ROSTERED);
+                                        new BCryptPasswordEncoder().encode("password"),
+                                        "Tobey",
+                                        "Flenderson",
+                                        "test_Tobey@email.com",
+                                        "000-000-0000",
+                                        EventRole.ROSTERED);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("HRisTheBest").get();
                         userLookup = Optional.of(user);
 
                         Role role = new Role(true, true, false, false,
-                                false, false, true,
-                                false, true, false, false, user);
+                                        false, false, true,
+                                        false, true, false, false, user);
                         this.roleRepository.save(role);
 
                         OperationalEvent operationalEvent = operationalEventRepository
-                                .findByDescription("STARS").get();
+                                        .findByDescription("STARS").get();
                         Season season = seasonRepository.findByDescription("2025 - 2026").get();
                         Award award = awardRepository.findByDescription("A over T").get();
                         Award award2 = awardRepository.findByDescription("Accomodation Award").get();
 
                         evalTrainingRepository.save(
-                                new EvalTraining("HR Training", LocalDate.of(2015, Month.APRIL, 12), user));
+                                        new EvalTraining("HR Training", LocalDate.of(2015, Month.APRIL, 12), user));
                         operationalTrainingRepository
-                                .save(new OperationalTraining(LocalDate.of(2017, Month.OCTOBER, 15),
-                                        operationalEvent, user));
+                                        .save(new OperationalTraining(LocalDate.of(2017, Month.OCTOBER, 15),
+                                                        operationalEvent, user));
                         emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "Creed", user));
                         patrolCommitmentRepository.save(new PatrolCommitment(true, 21, "testNote", season, user));
                         personAwardRepository.save(new PersonAward("YAY", award, season, user));
@@ -368,17 +368,17 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                 if (userLookup.isPresent() && eventLookup.isPresent()) {
                         LocalDateTime test_TimestampSubRequest = LocalDateTime.of(1970, 1, 1, 0, 0);
                         EventLog testEventLog = new EventLog(eventLookup.get(),
-                                userLookup.get(),
-                                null,
-                                EventRole.ROSTERED,
-                                null,
-                                null,
-                                LocalDateTime.now(),
-                                test_TimestampSubRequest,
-                                "testComment",
-                                "testEmail",
-                                "123-123-1234",
-                                false);
+                                        userLookup.get(),
+                                        null,
+                                        EventRole.ROSTERED,
+                                        null,
+                                        null,
+                                        LocalDateTime.now(),
+                                        test_TimestampSubRequest,
+                                        "testComment",
+                                        "testEmail",
+                                        "123-123-1234",
+                                        false);
                         this.eventLogRepository.save(testEventLog);
                 }
 
@@ -396,7 +396,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                 Post newTestPost = new Post();
                                 newTestPost.setTitle(title);
                                 newTestPost.setBody(
-                                        "According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyways. Because bees don't care what humans think is impossible.");
+                                                "According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyways. Because bees don't care what humans think is impossible.");
                                 this.postRepository.save(newTestPost);
                         }
                 }
@@ -409,26 +409,26 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                 Post newTestPost = new Post();
                                 newTestPost.setTitle(title);
                                 newTestPost.setBody("The Turks pay me a golden treasure. Yet, I am poor, \n" +
-                                        " because I am a river to my people! Is \n" +
-                                        " that service?" + "\n\n" +
-                                        " There's nothing further here for a \n" +
-                                        " warrior. We drive bargains. Old men's \n" +
-                                        " work. Young men make wars and the virtues \n" +
-                                        " of war are the virtues of young men; \n" +
-                                        " courage and hope for the future. Then, \n" +
-                                        " old men make the peace. And the vices of \n" +
-                                        " peace are the vices of old men; mistrust \n" +
-                                        " and caution. It must be so. What I owe \n" +
-                                        " you is beyond evaluation. The power-\n" +
-                                        " house, the telephone exchange - these I \n" +
-                                        " concede; the pumping plant I must retain.");
+                                                " because I am a river to my people! Is \n" +
+                                                " that service?" + "\n\n" +
+                                                " There's nothing further here for a \n" +
+                                                " warrior. We drive bargains. Old men's \n" +
+                                                " work. Young men make wars and the virtues \n" +
+                                                " of war are the virtues of young men; \n" +
+                                                " courage and hope for the future. Then, \n" +
+                                                " old men make the peace. And the vices of \n" +
+                                                " peace are the vices of old men; mistrust \n" +
+                                                " and caution. It must be so. What I owe \n" +
+                                                " you is beyond evaluation. The power-\n" +
+                                                " house, the telephone exchange - these I \n" +
+                                                " concede; the pumping plant I must retain.");
                                 this.postRepository.save(newTestPost);
                         }
                 }
 
                 int requiredTestPostCount = 20;
                 for (long currentPostCount = this.postRepository
-                        .count(); currentPostCount < requiredTestPostCount; currentPostCount++) {
+                                .count(); currentPostCount < requiredTestPostCount; currentPostCount++) {
                         int titleLength = 6;
                         int bodyLength = 20;
                         int defaultWordLength = 5;
@@ -451,7 +451,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
 
         void seedTestEventData() {
                 int[] days = {
-                        1, 3, 5, 11, 22, 23, 24, 27, 28
+                                1, 3, 5, 11, 22, 23, 24, 27, 28
                 };
                 int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
                 for (int day : days) {
@@ -470,17 +470,17 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                 LocalDateTime testTimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
                                 LocalDateTime testTimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
                                 EventLog testEventLog = new EventLog(eventLookup.get(),
-                                        userLookup.get(),
-                                        null,
-                                        EventRole.ROSTERED,
-                                        null,
-                                        null,
-                                        testTimestampRostered,
-                                        testTimestampRequest,
-                                        "testComment",
-                                        "testEmail",
-                                        "123-123-1234",
-                                        false);
+                                                userLookup.get(),
+                                                null,
+                                                EventRole.ROSTERED,
+                                                null,
+                                                null,
+                                                testTimestampRostered,
+                                                testTimestampRequest,
+                                                "testComment",
+                                                "testEmail",
+                                                "123-123-1234",
+                                                false);
                                 this.eventLogRepository.save(testEventLog);
                         }
                 }

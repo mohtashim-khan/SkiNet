@@ -1,29 +1,31 @@
-const AdminLookupsPage = () => {
+import React, { useState, useEffect } from "react";
+import "./Lookups.css";
+import JacketBrandLookup from "./JacketBrandLookup.js";
+import JacketSizeLookup from "./JacketSizeLookup.js";
+import AwardLookup from "./AwardLookup.js";
+import DisciplineLookup from "./DisciplineLookup.js";
+import SeasonLookup from "./SeasonLookup.js";
+import OperationalEventLookup from "./OperationalEventLookup";
+import ConditionsLookup from "./ConditionsLookup";
+
+const AdminLookupsPage = ({ session }) => {
   return (
     <>
-      <div class="container">
-        <div class="row">
-          <div class="col-4 p-3">
-            <div class="container" data-spy="scroll">
-              <h5>External - Instruction/Coaching</h5>
-              <ul class="list-group">
-                <li class="list-group-item">CSIA - Level I</li>
-                <li class="list-group-item">CSIA - Level II</li>
-                <li class="list-group-item">CSIA - Level III</li>
-                <li class="list-group-item">CSIA - Level IV</li>
-                <li class="list-group-item">CASI - Level 1</li>
-                <li class="list-group-item">CASI - Level 1</li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-4 p-3">.col-4</div>
-          <div class="col-4 p-3">.col-4</div>
+      <div className="container">
+        <div className="row">
+          <JacketBrandLookup session={session} />
+          <AwardLookup session={session} />
+          <DisciplineLookup session={session} />
         </div>
 
-        <div class="row">
-          <div class="col-4 p-3">.col-4</div>
-          <div class="col-4 p-3">.col-4</div>
-          <div class="col-4 p-3">.col-4</div>
+        <div className="row">
+          <SeasonLookup session={session} />
+          <JacketSizeLookup session={session} />
+          <OperationalEventLookup session={session} />
+        </div>
+
+        <div className="row">
+          <ConditionsLookup session={session} />
         </div>
       </div>
     </>

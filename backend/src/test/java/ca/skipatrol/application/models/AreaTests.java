@@ -19,16 +19,26 @@ public class AreaTests {
     AreaRepository areaRepository;
 
     String areaName = RandomString.make(12);
+    String areaName2 = "test";
+
 
     Area testArea = new Area(areaName);
+    Area testArea2 = new Area(areaName2);
 
     @BeforeAll
-    public void setup() { areaRepository.save(testArea);
+    public void setup() {areaRepository.save(testArea);
     }
 
     @Test
     void testFindAreaByAreaname() {
         assertTrue(areaRepository.findByAreaname(areaName).isPresent());
+    }
+
+    void testSave() {
+        areaRepository.save(testArea2);
+        areaRepository.save(testArea);
+        assertTrue(areaRepository.findByAreaname(areaName).isPresent());
+        assertTrue(areaRepository.findByAreaname(areaName2).isPresent());
     }
 
     @AfterAll

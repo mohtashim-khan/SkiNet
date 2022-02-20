@@ -1,5 +1,6 @@
 package ca.skipatrol.application.services;
 
+import ca.skipatrol.application.models.EventRole;
 import ca.skipatrol.application.models.User;
 import ca.skipatrol.application.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -22,13 +23,29 @@ class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+    
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Failed username lookup"));
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(retrieveUserRole(user.getUserType())));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+    }
+
+    private String retrieveUserRole(EventRole eventRole)
+    {
+        try
+        {
+            if (eventRole == EventRole.SYSTEM_ADMIN)
+                return "ADMIN";
+            else
+                return "USER";
+        }
+        catch(Exception ex)
+        {
+            return "USER";
+        }
     }
 
 }

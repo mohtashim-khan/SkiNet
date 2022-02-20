@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Route, Link, useHistory } from "react-router-dom";
 import CSPLogo from "../../images/CSP-logo.png";
+import "./Header.css";
 
 const Header = ({ session }) => {
   const history = useHistory();
@@ -18,13 +19,15 @@ const Header = ({ session }) => {
   const renderLoggedInNavigation = () => {
     return (
       <>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <div className="navbar-collapse" id="navbarSupportedContent">
+          {" "}
+          {/* Used to be className="collapse navbar-collapse" BTW */}
           <ul className="navbar-nav mr-auto">
             <Route path="/news">
               {({ match }) => (
                 <li className={match ? "nav-item active" : "nav-item"}>
                   <Link className="nav-link" to="/news">
-                    News
+                    Information
                   </Link>
                 </li>
               )}
@@ -33,7 +36,7 @@ const Header = ({ session }) => {
               {({ match }) => (
                 <li className={match ? "nav-item active" : "nav-item"}>
                   <Link className="nav-link" to="/personnel/users">
-                    Personnel
+                    Membership
                   </Link>
                 </li>
               )}
@@ -42,25 +45,48 @@ const Header = ({ session }) => {
               {({ match }) => (
                 <li className={match ? "nav-item active" : "nav-item"}>
                   <Link className="nav-link" to="/roster/calendar">
-                    Roster
+                    Schedule
                   </Link>
                 </li>
               )}
             </Route>
+
             <Route path="/admin">
-              {({ match }) => (
-                <li className={match ? "nav-item active" : "nav-item"}>
-                  <Link className="nav-link" to="/admin/lookups">
-                    Admin
-                  </Link>
-                </li>
-              )}
+              {({ match }) =>
+                session.session_data() !== null &&
+                session.session_data().user_type === "SYSTEM_ADMIN" && (
+                  <li className={match ? "nav-item active" : "nav-item"}>
+                    <Link className="nav-link" to="/admin/lookups">
+                      Admin
+                    </Link>
+                  </li>
+                )
+              }
             </Route>
           </ul>
         </div>
 
         <div>
-          <button className="btn btn-light my-2 my-sm-0" onClick={logOut}>
+          <button
+            className="btn btn-outline-light my-2 my-sm-0 signOutButton"
+            onClick={() => {
+              if (session.session_data().userID) {
+                window.location.href =
+                  "/personnel/user/" + session.session_data().userID;
+              }
+            }}
+          >
+            {session.session_data() !== null &&
+              session.session_data().firstName +
+                " " +
+                session.session_data().lastName}
+          </button>
+        </div>
+        <div>
+          <button
+            className="btn btn-light my-2 my-sm-0 signOutButton"
+            onClick={logOut}
+          >
             Sign Out
           </button>
         </div>
@@ -101,10 +127,12 @@ const Header = ({ session }) => {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">
-          <img src={CSPLogo} width="32px" />
-          <span> CSP</span>
+          <img className="myImage" src={CSPLogo} width="32px" />
+          <span> CSP - Lake Louise </span>
         </a>
-        {session.logged_in() ? renderLoggedInNavigation() : renderLoggedOutNavigation()}
+        {session.logged_in()
+          ? renderLoggedInNavigation()
+          : renderLoggedOutNavigation()}
       </nav>
 
       <Route path="/personnel">
@@ -123,18 +151,23 @@ const Header = ({ session }) => {
                     )}
                   </Route>
                   <Route path="/personnel/reports" exact>
-                    {({ match }) => (
-                      <li className={match ? "nav-item active" : "nav-item"}>
-                        <Link className="nav-link" to="/personnel/reports">
-                          Reports
-                        </Link>
-                      </li>
-                    )}
+                    {({ match }) =>
+                      session.session_data() !== null &&
+                      session.session_data().user_type === "SYSTEM_ADMIN" && (
+                        <li className={match ? "nav-item active" : "nav-item"}>
+                          {
+                            <Link className="nav-link" to="/personnel/reports">
+                              Reports
+                            </Link>
+                          }
+                        </li>
+                      )
+                    }
                   </Route>
                 </ul>
               </div>
             </nav>
-          ) : undefined
+          ) : null
         }
       </Route>
 
@@ -153,7 +186,7 @@ const Header = ({ session }) => {
                       </li>
                     )}
                   </Route>
-                  <Route path="/roster/reports" exact>
+                  {/* <Route path="/roster/reports" exact>
                     {({ match }) => (
                       <li className={match ? "nav-item active" : "nav-item"}>
                         <Link className="nav-link" to="/roster/reports">
@@ -161,11 +194,11 @@ const Header = ({ session }) => {
                         </Link>
                       </li>
                     )}
-                  </Route>
+                  </Route> */}
                 </ul>
               </div>
             </nav>
-          ) : undefined
+          ) : null
         }
       </Route>
 
@@ -193,10 +226,19 @@ const Header = ({ session }) => {
                       </li>
                     )}
                   </Route>
+                  <Route path="/admin/newUser" exact>
+                    {({ match }) => (
+                      <li className={match ? "nav-item active" : "nav-item"}>
+                        <Link className="nav-link" to="/admin/newUser">
+                          Create New User
+                        </Link>
+                      </li>
+                    )}
+                  </Route>
                 </ul>
               </div>
             </nav>
-          ) : undefined
+          ) : null
         }
       </Route>
     </>

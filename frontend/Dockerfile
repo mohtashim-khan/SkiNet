@@ -7,8 +7,11 @@ COPY ./package.json /application/frontend/package.json
 WORKDIR application/frontend
 
 RUN npm install --legacy-peer-deps
+RUN npm install -g serve
 
 COPY ./src ./src
 COPY ./public ./public
 
-ENTRYPOINT ["npm", "start"]
+RUN npm run build
+
+ENTRYPOINT ["serve", "-s", "build"]

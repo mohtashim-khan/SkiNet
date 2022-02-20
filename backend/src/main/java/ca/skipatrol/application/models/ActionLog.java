@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 public class ActionLog {
@@ -13,13 +14,13 @@ public class ActionLog {
     @GeneratedValue
     @Getter
     @Setter
-    @Column(nullable = false)
-    private Long actionLog_id;
+    @Column(columnDefinition = "binary(16)")
+    private UUID actionLogID;
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "event_id", unique = true, nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(unique = true, nullable = false)
     private Event event;
 
 
@@ -43,7 +44,7 @@ public class ActionLog {
     @Column(nullable = false)
     private LocalDateTime timeStamp_action;
 
-    private ActionLog(){}
+    public ActionLog(){}
 
     public ActionLog(Event event, String username, String action_user, String result, LocalDateTime timeStamp_action){
         this.event = event;

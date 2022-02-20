@@ -7,17 +7,20 @@ import javax.persistence.*;
 
 import java.time.*;
 import java.lang.Object;
+import java.util.UUID;
 
 @Entity(name = "event")
 public class Event {
 
     @Id
     @GeneratedValue
-    @Column(name = "event_id", nullable = false, columnDefinition = "int(11)")
     @Getter
-    private int event_id;
+    @Setter
+    @Column(columnDefinition = "binary(16)")
+    private UUID eventID;
 
     @Column(name = "event_name", nullable = false, columnDefinition = "varchar(255)")
+    @Getter
     @Setter
     private String eventName;
 
@@ -74,7 +77,7 @@ public class Event {
         this.groupID = groupID;
     }
 
-    private Event() {
+    public Event() {
     }
 
     /*
@@ -87,7 +90,7 @@ public class Event {
         int result = 1;
         result = prime * result + ((allDay == null) ? 0 : allDay.hashCode());
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-        result = (prime * result + event_id);
+        result = (prime * result + eventID.hashCode());
         result = prime * result + ((eventName == null) ? 0 : eventName.hashCode());
         result = prime * result + groupID;
         result = prime * result + ((hlUser == null) ? 0 : hlUser.hashCode());

@@ -4,6 +4,7 @@ import ca.skipatrol.application.Interfaces.ProfileServices;
 import ca.skipatrol.application.Interfaces.RosterServices;
 import ca.skipatrol.application.models.*;
 import ca.skipatrol.application.repositories.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.hibernate.Hibernate;
@@ -13,10 +14,9 @@ import org.springframework.web.util.UriBuilder;
 
 import javax.transaction.Transactional;
 import java.net.URI;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -72,8 +72,10 @@ public class RosterServicesImpl implements RosterServices {
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         //check if user exists and await result
-        if (existingEventLogs.stream().anyMatch(x -> x.getUser().getUserID() == eventLog.getUser().getUserID()))
+        if (existingEventLogs.stream().anyMatch(x -> x.getUser().getUserID() == eventLog.getUser().getUserID())){
+            AddActionToActionLog(actionUser.getUsername() + " already in table. No action.", actionUser, event);
             return 204;
+        }
 
         //adding a shadow or unavailable no questions
         if (eventLog.getRole().equals(EventRole.SHADOW) || eventLog.getRole() == EventRole.UNAVAILABLE) {
@@ -86,8 +88,12 @@ public class RosterServicesImpl implements RosterServices {
             int maxVal = (eventLog.getRole() == EventRole.TRAINEE)?event.getMaxTrainees():event.getMaxPatrollers();
             long currentCount = existingEventLogs.stream().filter(x -> x.getRole() == eventLog.getRole()).count();
 
-            if (currentCount < maxVal)
+            if (currentCount < maxVal) {
                 eventLogRepository.save(eventLog);
+                AddActionToActionLog(eventLog.getUser().getUsername() + " inserted into " +
+                    eventLog.getRole() + " table by " + actionUser.getUsername(),
+                    actionUser, event);
+            }
             else
             {
                 //see if there are any people that request sub
@@ -123,6 +129,9 @@ public class RosterServicesImpl implements RosterServices {
 
                         //deleting person we got that has sub request
                         eventLogRepository.delete(transfer.get());
+                        AddActionToActionLog("Sub Requested by " + transfer.get().getUser().getUsername() +
+                                ". Replaced from Waitlist: " + waitPerson.get().getUser().getUsername(),
+                                actionUser, event);
                     }
                     else // no one in waitlist so insert current person that wants to go as replacement
                     {
@@ -130,12 +139,16 @@ public class RosterServicesImpl implements RosterServices {
 
                         //deleting person we got that has sub request
                         eventLogRepository.delete(transfer.get());
+                        AddActionToActionLog("Sub Requested by " + transfer.get().getUser().getUsername() +
+                                ". Replaced with: " + eventLog.getUser().getUsername(),
+                                actionUser, event);
                     }
                 }
                 else // put into waitlist
                 {
                     eventLog.setRole(EventRole.WAITLIST);
                     eventLogRepository.save(eventLog);
+                    AddActionToActionLog(eventLog.getUser().getUsername() + " inserted into Waitlist by " + actionUser.getUsername(), actionUser, event);
                 }
             }
         }
@@ -275,6 +288,28 @@ public class RosterServicesImpl implements RosterServices {
         }
 
         return 500;
+    }
+
+    public List<Event> RetrieveEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject weekDays)
+    {
+        Gson gson = new Gson();
+        List<Event> eventsReturn = new ArrayList();
+
+        List<String> weekDaysString = gson.fromJson(weekDays.get("weekDays"), List.class);
+
+        List<DayOfWeek> dayOfWeeks = new ArrayList();
+        for (String weekDay: weekDaysString)
+            dayOfWeeks.add(DayOfWeek.valueOf(weekDay.toUpperCase(Locale.ROOT)));
+
+        List<Event> events = eventRepository.findByStartDateBetween(startDate, endDate);
+
+        for (Event event: events)
+        {
+            if (dayOfWeeks.contains(event.getStartDate().getDayOfWeek()))
+                eventsReturn.add(event);
+        }
+
+        return eventsReturn;
     }
 
     private void AddActionToActionLog(String actionString, User actionUser, Event event)

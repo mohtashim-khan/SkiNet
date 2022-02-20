@@ -22,12 +22,18 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
   const [AddPrompted, setAddPrompted] = useState(false);
   const [editPrompted, setEditPrompted] = useState(false);
   const [deletePrompted, setDeletePrompted] = useState(false);
+  const [selectedVal, setSelectedVal] = useState("-1");
 
   const [seasons, setSeasons] = useState([]);
   const [sortedSeasons, setSortedSeasons] = useState([]);
 
   function promptDeleteCancel() {
     setDeletePrompted(false);
+  }
+
+  function editEvent(event) {
+    let temp = event.target.value;
+    setSelectedVal(String(temp));
   }
 
   function deletePatrolCommit() {
@@ -58,6 +64,48 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
         console.log(e);
       });
     setDeletePrompted(false);
+  }
+
+  function editPatrolCommitment() {
+    try {
+      if (setSelectedVal === "-1") throw "ERROR: No Value selected";
+
+      const mySeason = $("#seasonSelectEdit").val();
+      const myNotes = $("#notesSelectEdit").val();
+      const myDays = $("#daysSelectEdit").val();
+      const achieved = $("#commitmentAchievedEdit").val();
+
+      let temp = {
+        patrolCommitmentID:
+          patrolCommit[parseInt(selectedVal)].patrolCommitmentID,
+        achieved: achieved,
+        days: myDays,
+        notes:
+          myNotes.length === 0
+            ? patrolCommit[parseInt(selectedVal)].notes
+            : myNotes,
+        season: sortedSeasons[parseInt(mySeason)].seasonID,
+        user: userID,
+      };
+
+      if (myDays.length == 0) {
+        temp.days = patrolCommit[parseInt(selectedVal)].days.toString();
+      }
+
+      console.log("Sent to put req...", JSON.stringify(temp));
+
+      session.put("profile/patrolCommitment", temp, {}, true).then((resp) => {
+        if (resp.status === 200 || resp.status === 201) {
+          console.log(resp);
+          //if (uniform) readNewUniform();
+          readNewPatrolCommitments();
+        }
+      });
+      promptEditCancel();
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
   }
 
   function promptAddCancel() {
@@ -338,6 +386,137 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
           <Button variant="primary" onClick={addPatrolCommit}>
             Submit
           </Button>
+        </Modal.Body>
+      </Modal>
+      <Modal show={editPrompted} onHide={promptEditCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editing Patrol Commitments</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Alert
+            variant="danger"
+            show={error}
+            onClose={() => setError(false)}
+            dismissible={true}
+          >
+            <Alert.Heading>Uh oh!</Alert.Heading>
+            <p>Looks like you need glasses</p>
+          </Alert>
+          <div className="form-check mb-3">
+            {patrolCommit.map((row, index) => (
+              <div className="form-group">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="selectJacketEdit"
+                  checked={selectedVal === String(index)}
+                  value={String(index)}
+                  onChange={editEvent}
+                />
+                <label className="form-check-label">
+                  {"Season: " +
+                    row.season.description +
+                    ", Days: " +
+                    row.days +
+                    ", Achieved: " +
+                    (row.achieved ? "Yes" : "No")}
+                </label>
+              </div>
+            ))}
+          </div>
+          {selectedVal !== "-1" ? (
+            <>
+              <div className="input-group mb-2">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="inputGroupSelect01">
+                    Commitment Achieved:
+                  </label>
+                </div>
+                <Form.Control as="select" custom id="commitmentAchievedEdit">
+                  {patrolCommit[parseInt(selectedVal)].achieved ? (
+                    <>
+                      <option selected className="text-center" value={true}>
+                        Yes
+                      </option>
+                      <option className="text-center" value={false}>
+                        No
+                      </option>
+                    </>
+                  ) : (
+                    <>
+                      <option className="text-center" value={true}>
+                        Yes
+                      </option>
+                      <option selected className="text-center" value={false}>
+                        No
+                      </option>
+                    </>
+                  )}
+                </Form.Control>
+              </div>
+
+              <div className="input-group mb-2">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" for="daysSelectEdit">
+                    Commitment Days
+                  </label>
+                </div>
+                <input
+                  className="text-center form-control"
+                  type="number"
+                  id="daysSelectEdit"
+                  min="0"
+                  placeholder={patrolCommit[parseInt(selectedVal)].days}
+                  data-bind="value:daysSelect"
+                ></input>
+              </div>
+              <div className="input-group mb-2">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="inputGroupSelect01"
+                  >
+                    Season
+                  </label>
+                </div>
+
+                <select className="form-select" id="seasonSelectEdit">
+                  {sortedSeasons.map((row, index) =>
+                    row.description ===
+                    patrolCommit[parseInt(selectedVal)].season.description ? (
+                      <option selected value={index}>
+                        {row.description} (Current Value)
+                      </option>
+                    ) : (
+                      <option value={index}>{row.description}</option>
+                    )
+                  )}
+                </select>
+              </div>
+              <div className="input-group mb-2">
+                <span className="input-group-text">Notes</span>
+                <textarea
+                  className="form-control"
+                  aria-label="With textarea"
+                  id="notesSelectEdit"
+                  placeholder={patrolCommit[parseInt(selectedVal)].notes}
+                ></textarea>
+              </div>
+            </>
+          ) : (
+            <div>
+              <b>
+                <i>Select a Patrol Commitment to Update</i>
+              </b>
+            </div>
+          )}
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={editPatrolCommitment}
+          >
+            Edit
+          </button>
         </Modal.Body>
       </Modal>
     </>

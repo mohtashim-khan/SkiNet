@@ -1,15 +1,15 @@
 package ca.skipatrol.application.controllers;
 
 import ca.skipatrol.application.Interfaces.ProfileServices;
-import ca.skipatrol.application.models.Uniform;
-import ca.skipatrol.application.models.User;
-import ca.skipatrol.application.models.EventRole;
-import ca.skipatrol.application.models.Role;
+import ca.skipatrol.application.models.*;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
@@ -101,6 +101,101 @@ public class ProfilesController {
         if (user != null)
             return new ResponseEntity<>(user, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "customapi/profile/vest", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdateVest(@RequestBody String vestString) {
+
+        int code = 500;
+        JsonObject vestJSON = JsonParser.parseString(vestString).getAsJsonObject();
+        Vest vest = profileServices.ParseVestJson(vestJSON);
+
+        if (vest != null)
+            code = profileServices.UpdateVest(vest);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/profile/jacket", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdateJacket(@RequestBody String jacketString) {
+
+        int code = 500;
+        JsonObject jacketJSON = JsonParser.parseString(jacketString).getAsJsonObject();
+        Jacket jacket = profileServices.ParseJacketJson(jacketJSON);
+
+        if (jacket != null)
+            code = profileServices.UpdateJacket(jacket);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/profile/pack", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdatePack(@RequestBody String packString) {
+
+        int code = 500;
+        JsonObject packJSON = JsonParser.parseString(packString).getAsJsonObject();
+        Pack pack = profileServices.ParsePackJson(packJSON);
+
+        if (pack != null)
+            code = profileServices.UpdatePack(pack);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/profile/patrolCommitment", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdatePatrolCommitment(@RequestBody String patrolCommitmentString) {
+
+        int code = 500;
+        JsonObject patrolCommitmentJSON = JsonParser.parseString(patrolCommitmentString).getAsJsonObject();
+        PatrolCommitment patrolCommitment = profileServices.ParsePatrolCommitmentJson(patrolCommitmentJSON);
+
+        if (patrolCommitment != null)
+            code = profileServices.UpdatePatrolCommitment(patrolCommitment);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/profile/personAward", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdatePersonAward(@RequestBody String personAwardString) {
+
+        int code = 500;
+        JsonObject personAwardJSON = JsonParser.parseString(personAwardString).getAsJsonObject();
+        PersonAward personAward = profileServices.ParsePersonAwardJson(personAwardJSON);
+
+        if (personAward != null)
+            code = profileServices.UpdatePersonAward(personAward);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/profile/uniform/returnedLeaseSigned", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdateUniformReturnedLeaseSigned(@RequestBody String uniformString) {
+
+        int code = 500;
+        JsonObject personAwardJSON = JsonParser.parseString(uniformString).getAsJsonObject();
+
+        if (personAwardJSON != null)
+            code = profileServices.UpdateUniformReturnedLeaseSigned(personAwardJSON);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @RequestMapping(value = "/customapi/profile/user/PatrolCommitments/deleteInBatch", method = RequestMethod.DELETE)

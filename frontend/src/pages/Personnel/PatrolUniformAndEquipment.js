@@ -42,11 +42,115 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     let temp = event.target.value;
     setVestSelectedVal(String(temp));
   }
-  function editJackets() {}
 
-  function editPacks() {}
+  function editJackets() {
+    try {
+      if (setJacketSelectedVal === "-1") throw "ERROR: No Value selected";
 
-  function editVests() {}
+      const myBrand = $("#jacketBrandSelectEdit").val();
+      const mySize = $("#jacketSizeSelectEdit").val();
+      const myCond = $("#jacketConditionSelectEdit").val();
+      const myNum = $("#jacketNumberSelectEdit").val();
+
+      let temp = {
+        jacketID: jackets[parseInt(jacketSelectedVal)].jacketID,
+        number: myNum,
+        brand: brands[myBrand].description,
+        condition: conditions[myCond].description,
+        size: sizes[mySize].description,
+        uniform: uniform.uniformID,
+      };
+
+      if (myNum.length == 0) {
+        temp.number = jackets[parseInt(jacketSelectedVal)].number.toString();
+      }
+
+      console.log("Sent to put req...", JSON.stringify(temp));
+
+      session.put("profile/jacket", temp, {}, true).then((resp) => {
+        if (resp.status === 200 || resp.status === 201) {
+          console.log(resp);
+          if (uniform) readNewUniform();
+        }
+      });
+      promptEditCancel();
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
+  }
+
+  function editPacks() {
+    try {
+      if (setJacketSelectedVal === "-1") throw "ERROR: No Value selected";
+
+      const myBrand = $("#packBrandSelectEdit").val();
+      const myCond = $("#packConditionSelectEdit").val();
+      const myNum = $("#packNumberSelectEdit").val();
+
+      let temp = {
+        packID: packs[parseInt(packSelectedVal)].packID,
+        number: myNum,
+        brand: brands[myBrand].description,
+        condition: conditions[myCond].description,
+        uniform: uniform.uniformID,
+      };
+
+      if (myNum.length == 0) {
+        temp.number = packs[parseInt(packSelectedVal)].number.toString();
+      }
+
+      console.log("Sent to put req...", JSON.stringify(temp));
+
+      session.put("profile/pack", temp, {}, true).then((resp) => {
+        if (resp.status === 200 || resp.status === 201) {
+          console.log(resp);
+          if (uniform) readNewUniform();
+        }
+      });
+      promptEditCancel();
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
+  }
+
+  function editVests() {
+    try {
+      if (setVestSelectedVal === "-1") throw "ERROR: No Value selected";
+
+      const myBrand = $("#vestBrandSelectEdit").val();
+      const mySize = $("#vestSizeSelectEdit").val();
+      const myCond = $("#vestConditionSelectEdit").val();
+      const myNum = $("#vestNumberSelectEdit").val();
+
+      let temp = {
+        vestID: vests[parseInt(vestSelectedVal)].vestID,
+        number: myNum,
+        brand: brands[myBrand].description,
+        condition: conditions[myCond].description,
+        size: sizes[mySize].description,
+        uniform: uniform.uniformID,
+      };
+
+      if (myNum.length == 0) {
+        temp.number = vests[parseInt(vestSelectedVal)].number.toString();
+      }
+
+      console.log("Sent to put req...", JSON.stringify(temp));
+
+      session.put("profile/vest", temp, {}, true).then((resp) => {
+        if (resp.status === 200 || resp.status === 201) {
+          console.log(resp);
+          if (uniform) readNewUniform();
+        }
+      });
+      promptEditCancel();
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
+  }
 
   function deletePacks() {
     const params = new URLSearchParams();
@@ -171,6 +275,22 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
     setVestSelectedVal("-1");
     setEditPrompted(false);
     setError(false);
+  }
+
+  function editLease() {
+    let temp = { uniformID: uniform.uniformID };
+
+    temp.returned = $("#LeaseReturnedEdit").is(":checked") ? "True" : "False";
+    temp.leaseSigned = $("#LeaseSignedEdit").is(":checked") ? "True" : "False";
+
+    session
+      .put("profile/uniform/returnedLeaseSigned", temp, {}, true)
+      .then((resp) => {
+        if (resp.status === 200 || resp.status === 201) {
+          if (uniform) readNewUniform();
+        }
+      });
+    promptEditCancel();
   }
 
   function addNewJacket() {
@@ -463,7 +583,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
               <b>Lease Signed:</b> <i>{signed ? "Yes" : "No"}</i>
             </div>
             <div>
-              <b>Lease Returned:</b> <i>{returned ? "Yes" : "No"}</i>
+              <b>Returned:</b> <i>{returned ? "Yes" : "No"}</i>
             </div>
 
             {allowed && (
@@ -1259,6 +1379,48 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
                   className="btn btn-primary"
                   type="button"
                   onClick={editPacks}
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <button
+              className="card-header btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#leaseEdit"
+              aria-expanded="false"
+              aria-controls="leaseEdit"
+            >
+              <h5>Lease Status</h5>
+            </button>
+
+            <div className="collapse" id="leaseEdit">
+              <div className="card-body">
+                <div className="form-group">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    defaultChecked={signed}
+                    id="LeaseSignedEdit"
+                  />
+                  <label className="form-check-label">Lease Signed</label>
+                </div>
+                <div className="form-group">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    defaultChecked={returned}
+                    id="LeaseReturnedEdit"
+                  />
+                  <label className="form-check-label">Returned</label>
+                </div>
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={editLease}
                 >
                   Edit
                 </button>

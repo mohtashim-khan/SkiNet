@@ -1,8 +1,7 @@
 package ca.skipatrol.application.Interfaces;
 
-import ca.skipatrol.application.models.EventRole;
-import ca.skipatrol.application.models.Uniform;
-import ca.skipatrol.application.models.User;
+import ca.skipatrol.application.models.*;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -25,6 +24,18 @@ public interface ProfileServices {
     User retrieveUserRole(UUID userID);
 
     User retrieveUserAll(UUID userID);
+
+    Vest ParseVestJson(JsonObject vestJSON);
+
+    Jacket ParseJacketJson(JsonObject vestJSON);
+
+    Pack ParsePackJson(JsonObject vestJSON);
+
+    int updateVest(Vest vest);
+
+    int updateJacket(Jacket jacket);
+
+    int updatePack(Pack pack);
 
     public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
 

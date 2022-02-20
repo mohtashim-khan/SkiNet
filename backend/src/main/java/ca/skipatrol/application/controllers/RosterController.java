@@ -1,19 +1,25 @@
 package ca.skipatrol.application.controllers;
 
 import ca.skipatrol.application.Interfaces.RosterServices;
+import ca.skipatrol.application.models.Event;
 import ca.skipatrol.application.models.EventLog;
 import ca.skipatrol.application.repositories.UserRepository;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
 import java.security.Principal;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.List;
+import java.util.Locale;
 
 @RestController
 public class RosterController {
@@ -73,6 +79,21 @@ public class RosterController {
             return ResponseEntity.status(HttpStatus.OK).build();
         else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/roster/retrieveEventsByWeekday", method = RequestMethod.PUT)
+    public ResponseEntity<Object> RetrieveEventsByDateFull(@RequestParam
+                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                                           @RequestParam
+                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                                                           @RequestBody String weekDays)
+    {
+        JsonObject weekDaysJson = JsonParser.parseString(weekDays).getAsJsonObject();
+
+        List<Event> events =  rosterServices.RetrieveEventsByDateFull(startDate, endDate, weekDaysJson);
+
+        return new ResponseEntity(events, HttpStatus.OK);
+
     }
 
 }

@@ -37,25 +37,25 @@ public interface ProfileServices {
 
     int updatePack(Pack pack);
 
-    boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
+    public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
 
-    boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);
+    public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);
 
-    boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs);
+    public boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs);
 
-    boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs);
+    public boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs);
 
-    boolean deletePacksInBatch(ArrayList<UUID> packIDs);
+    public boolean deletePacksInBatch(ArrayList<UUID> packIDs);
 
-    boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs);
+    public boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs);
 
-    boolean deleteVestsInBatch(ArrayList<UUID> vestIDs);
+    public boolean deleteVestsInBatch(ArrayList<UUID> vestIDs);
 
-    boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
+    public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
 
-    boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
+    public boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
 
-    User createNewUser(String username,
+    public User createNewUser(String username,
             String password,
             String firstName,
             String lastName,
@@ -63,5 +63,7 @@ public interface ProfileServices {
             String phoneNumber,
             String eventRole);
 
-    boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
+    public boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
+
+    public boolean editOperationalTrainings(UUID evalID, String operationalEvent, String evaluationDate );
 }

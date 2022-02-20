@@ -20,7 +20,7 @@ public class Role {
     @Getter
     @Setter
     @Column(nullable = false)
-    private Boolean cISMTeamMember;
+    private Boolean cismTeamMember;
 
     @Getter
     @Setter
@@ -72,7 +72,6 @@ public class Role {
     @Column(nullable = false)
     private Boolean p0Lead;
 
-
     @Getter
     @Setter
     @JoinColumn(nullable = false)
@@ -83,19 +82,19 @@ public class Role {
     public Role() {
     }
 
-    public Role(Boolean cISMTeamMember,
-                Boolean pl,
-                Boolean apl,
-                Boolean hl,
-                Boolean active,
-                Boolean newUser,
-                Boolean trainingEventLead,
-                Boolean onSnowEvaluator,
-                Boolean orienteerer,
-                Boolean recruitmentLead,
-                Boolean p0Lead,
-                User user) {
-        this.cISMTeamMember = cISMTeamMember;
+    public Role(Boolean cismTeamMember,
+            Boolean pl,
+            Boolean apl,
+            Boolean hl,
+            Boolean active,
+            Boolean newUser,
+            Boolean trainingEventLead,
+            Boolean onSnowEvaluator,
+            Boolean orienteerer,
+            Boolean recruitmentLead,
+            Boolean p0Lead,
+            User user) {
+        this.cismTeamMember = cismTeamMember;
         this.pl = pl;
         this.apl = apl;
         this.hl = hl;
@@ -110,20 +109,20 @@ public class Role {
     }
 
     public Role(UUID roleID,
-                Boolean cISMTeamMember,
-                Boolean pl,
-                Boolean apl,
-                Boolean hl,
-                Boolean active,
-                Boolean newUser,
-                Boolean trainingEventLead,
-                Boolean onSnowEvaluator,
-                Boolean orienteerer,
-                Boolean recruitmentLead,
-                Boolean p0Lead,
-                User user) {
+            Boolean cismTeamMember,
+            Boolean pl,
+            Boolean apl,
+            Boolean hl,
+            Boolean active,
+            Boolean newUser,
+            Boolean trainingEventLead,
+            Boolean onSnowEvaluator,
+            Boolean orienteerer,
+            Boolean recruitmentLead,
+            Boolean p0Lead,
+            User user) {
         this.roleID = roleID;
-        this.cISMTeamMember = cISMTeamMember;
+        this.cismTeamMember = cismTeamMember;
         this.pl = pl;
         this.apl = apl;
         this.hl = hl;

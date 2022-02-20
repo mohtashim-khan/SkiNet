@@ -15,7 +15,7 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
   const [rolesArray, setRolesArray] = useState([]);
 
   const prettyRoles = {
-    admin: "Admin",
+    cismTeamMember: "CISM Team Member",
     pl: "Patrol Leader",
     apl: "Active Patrol Leader",
     hl: "HL",
@@ -27,19 +27,6 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
     recruitmentLead: "Recruitment Lead",
     p0Lead: "P0/Lead",
   };
-  const roles = [
-    "admin",
-    "pl",
-    "apl",
-    "hl",
-    "active",
-    "newUser",
-    "trainingEventLead",
-    "onSnowEvaluator",
-    "orienteerer",
-    "recruitmentLead",
-    "p0Lead",
-  ];
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -51,12 +38,18 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
 
   function editRoles() {
     let temp = role;
-    for (const x in rolesArray) {
-      temp[rolesArray[x]] = $("#" + String(rolesArray[x])).is(":checked");
+    const tempArray = Object.keys(prettyRoles);
+    for (const x in tempArray) {
+      temp[tempArray[x]] = $("#" + String(tempArray[x])).is(":checked");
     }
+    // for (const x in rolesArray) {
+    //   temp[rolesArray[x]] = $("#" + String(rolesArray[x])).is(":checked");
+    // }
+    console.log("Tx", temp);
     setRoles(temp);
     session.put("roles/" + role.roleID, temp, {}, false).then((resp) => {
       if (resp.status === 200 || resp.status === 201) {
+        console.log("Rx", resp.data);
         setRoles(resp.data);
       }
     });
@@ -68,6 +61,8 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
 
     tempArray.shift();
     tempArray.pop();
+    console.log("Aasdfs", tempArray);
+    console.log("here", role);
     setRolesArray(tempArray);
     const rolesVals = [];
     for (let i = 0; i < tempArray.length; ++i) {
@@ -94,6 +89,7 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
       if (resp.status === 200) {
         setRoles(resp.data);
         const fuck = Object.keys(resp.data);
+        console.log("fuck", fuck);
       }
     });
   }, []);

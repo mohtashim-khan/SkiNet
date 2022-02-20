@@ -569,4 +569,24 @@ public class ProfileServicesImpl implements ProfileServices {
 
         return true;
     }
+
+    public boolean editOperationalTrainings(UUID evalID, String operationalEvent, String evaluationDate ){
+        LocalDate theDate = LocalDate.parse(evaluationDate);
+
+        Optional<OperationalEvent> opEventSearch = operationalEventRepository.findByDescription(operationalEvent);
+
+        if(opEventSearch.isEmpty()){
+            return false;
+        }
+
+        Optional<OperationalTraining> opTrainingSearch = operationalTrainingRepository.findById(evalID);
+        if(opTrainingSearch.isEmpty()){
+            return false;
+        }
+
+        OperationalTraining myTraining = opTrainingSearch.get();
+        myTraining.setOperationalEvent(opEventSearch.get());
+        myTraining.setCompletedDate(theDate);
+        return true;
+    }
 }

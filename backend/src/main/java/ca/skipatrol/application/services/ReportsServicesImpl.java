@@ -100,7 +100,7 @@ public class ReportsServicesImpl implements ReportsServices {
         Boolean orienteerer = gson.fromJson(inputDataJSON.get("orienteerer"), Boolean.class);
         Boolean recruitmentLead = gson.fromJson(inputDataJSON.get("recruitmentLead"), Boolean.class);
         Boolean p0Lead = gson.fromJson(inputDataJSON.get("p0Lead"), Boolean.class);
-        Boolean cISMTeamMember = gson.fromJson(inputDataJSON.get("cISMTeamMember"), Boolean.class);
+        Boolean cismTeamMember = gson.fromJson(inputDataJSON.get("cismTeamMember"), Boolean.class);
 
         // Uniform and Equipment
         String jacketBrand = gson.fromJson(inputDataJSON.get("jacketBrand"), String.class);
@@ -292,7 +292,7 @@ public class ReportsServicesImpl implements ReportsServices {
         // Join Role
         if (pl != null || apl != null || hl != null || active != null || newUser != null
                 || trainingEventLead != null || onSnowEvaluator != null || orienteerer != null
-                || recruitmentLead != null || p0Lead != null) {
+                || recruitmentLead != null || p0Lead != null || cismTeamMember != null) {
             Join<User, Role> roleJoin = user.join("role");
             role = true;
             ArrayList<Predicate> orRoles = new ArrayList<>(); // Needed to perform OR instead of AND operation for
@@ -339,8 +339,8 @@ public class ReportsServicesImpl implements ReportsServices {
                 orRoles.add(builder.equal(roleJoin.get("p0Lead"), p0Lead));
             }
 
-            if (cISMTeamMember != null) {
-                orRoles.add(builder.equal(roleJoin.get("cISMTeamMember"), cISMTeamMember));
+            if (cismTeamMember != null) {
+                orRoles.add(builder.equal(roleJoin.get("cismTeamMember"), cismTeamMember));
             }
 
             conditions.add(builder.or(orRoles.toArray(new Predicate[] {})));

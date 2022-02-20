@@ -264,4 +264,14 @@ public class ProfilesController {
         return new ResponseEntity<>("Error Editing On Snow Evaluation", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @RequestMapping(value = "/customapi/profile/user/OperationalTraining/Edit", method = RequestMethod.PUT)
+    public ResponseEntity<Object> editOperationalTraining(@RequestParam UUID id, @RequestBody Map<String, String> evalInfo){
+        boolean returnVal = profileServices.editOperationalTrainings(id, evalInfo.get("operationalEvent"), evalInfo.get("completedDate"));
+
+        if (returnVal)
+            return new ResponseEntity<>("Operational Training updated successfully", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error Editing Operational Training", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

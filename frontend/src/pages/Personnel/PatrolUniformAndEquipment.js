@@ -278,16 +278,16 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
   }
 
   function editLease() {
-    let temp = uniform;
-    console.log(uniform);
-    temp.returned = $("#LeaseReturnedEdit").is(":checked");
-    temp.leaseSigned = $("#LeaseSignedEdit").is(":checked");
+    let temp = { uniformID: uniform.uniformID };
+
+    temp.returned = $("#LeaseReturnedEdit").is(":checked") ? "True" : "False";
+    temp.leaseSigned = $("#LeaseSignedEdit").is(":checked") ? "True" : "False";
 
     session
-      .put("uniforms/" + uniform.uniformID, temp, {}, false)
+      .put("profile/uniform/returnedLeaseSigned", temp, {}, true)
       .then((resp) => {
-        if (resp === 200 || resp === 201) {
-          readNewUniform();
+        if (resp.status === 200 || resp.status === 201) {
+          if (uniform) readNewUniform();
         }
       });
     promptEditCancel();

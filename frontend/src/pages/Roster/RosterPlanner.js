@@ -169,10 +169,6 @@ const RosterPlanner = ({ session }) => {
     }
   }
 
-  function onEventSelectEvent(eventCbStruct) {
-    setCurrentEventDetails(eventCbStruct.event);
-    setEventDetailsVisibility(true);
-  }
 
 
   return (
@@ -235,11 +231,14 @@ const RosterPlanner = ({ session }) => {
               events={(args, successCb, failureCb) =>
                 refreshEvents(args, successCb, failureCb)
               }
-              eventClick={onEventSelectEvent}
+              eventClick={ (e) =>{
+                selectShiftHandler(e, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session) //Specifies the handler that is called when an shift is clicked//Specifies the handler that is called when an shift is clicked
+               // history.push('/roster/' + e.event.id) - TODO: MAY HAVE TO UNCOMMENT
+              }}
               select={(e) =>
                 createShiftHandler(
                   e,
-                  "Admin",
+                  session.session_data(),
                   setSelectedDate,
                   setEventAddModal,
                   setCurrentShift,
@@ -248,17 +247,7 @@ const RosterPlanner = ({ session }) => {
               }
             />
           </Col>
-          {false && (
-            <Col xl={4}>
-              <h5>
-                Events in the month of{" "}
-                <small className="text-muted">{activeDateTitle}</small>
-              </h5>
-              <ListGroup>
-                <ListGroupItem>...</ListGroupItem>
-              </ListGroup>
-            </Col>
-          )}
+          
           <Col sm={4}>
             <div className="card w-auto">
               <div class="card-body">
@@ -283,84 +272,26 @@ const RosterPlanner = ({ session }) => {
                       )}
                   </div>
                 </div>
-                <div className="p-2">
-                  <div className="Bullet">
-                    <img
-                      className="Shift_info_image"
-                      src={ClockIcon}
-                      alt="ClockImage"
-                    />
-                    <b>Date:</b>
-                  </div>
-                  <div className="Bullet">
-                    <img
-                      className="Shift_info_image"
-                      src={ClockIcon}
-                      alt="ClockImage"
-                    />
-                    <b>Title:</b>
-                  </div>
-                  <div className="Bullet">
-                    <img
-                      className="Shift_info_image"
-                      src={OneAvatarIcon}
-                      alt="OneAvatarImage"
-                    />
-                    <b>Min Patrollers Required:</b>
-                  </div>
-                  <div className="Bullet">
-                    <img
-                      className="Shift_info_image"
-                      src={LetterPMultipleAvatarsIcon}
-                      alt="LetterPMultipleAvatarsImage"
-                    />
-                    <b>Max Patrollers Allowed:</b>
-                  </div>
-                  <div className="Bullet">
-                    <img
-                      className="Shift_info_image"
-                      src={LetterTMultipleAvatarsIcon}
-                      alt="LetterTMultipleAvatarsImage"
-                    />
-                    <b>Max Trainees Allowed:</b>
-                  </div>
-                </div>
-
+                <ShiftInfo currentShift={currentShift} shiftInfo={shiftInfo} />
                 {/* <ShiftInfo /> */}
                 <div className="ShiftButtons">
-                  <button
-                    type="button"
-                    className="myButton btn btn-primary float-start d-flex-inline"
-                  >
-                    Sign Up
-                  </button>
-                  <button
-                    type="button"
-                    className="myButton btn btn-warning float-start d-flex-inline"
-                  >
-                    Unavailable
-                  </button>
+                <SignUpShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName+" "+session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} trainer={session.session_data().firstName+" "+session.session_data().lastName} phone_number={session.session_data().phoneNumber} setCurrentShift={setCurrentShift} />
+
+                <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName+" "+session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} />
+
                   <button
                     type="button"
                     className="myButton btn btn-secondary float-start d-flex-inline"
+                    onClick={() => printSignInSheet(currentShift, list)}
                   >
                     Attendance(PDF)
                   </button>
                   {session.session_data() !== null &&
-                    session.session_data().user_type === "SYSTEM_ADMIN" && (
+                    (session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") && (
                       <>
-                        <button
-                          type="button"
-                          className="myButton btn btn-info float-start d-flex-inline"
-                        >
-                          Edit Shift
-                        </button>
-                        <button
-                          type="button"
-                          className="myButton btn btn-danger float-start d-flex-inline"
-                        >
-                          Delete Shift
-                        </button>
+                        <EditShift currentShift={currentShift} EditShiftModal={EditShiftModal} setEditShiftModal={setEditShiftModal} setProxySelect={setProxySelect} setUpdater={setUpdater} currentShift={currentShift} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session={session} />
+                        <DeleteShift EventDeleteModal={EventDeleteModal} setEventDeleteModal={setEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} setResetter={setResetter} />
+
                       </>
                     )}
                 </div>
@@ -462,7 +393,7 @@ const RosterPlanner = ({ session }) => {
                           setAssignAreaModal={setAssignAreaModal}
                           setProxySelect={setProxySelect}
                           rosteredList={rosteredList}
-                          userAuth={session.session_data().username}
+                          userAuth={session.session_data()}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {true ? (
@@ -472,7 +403,7 @@ const RosterPlanner = ({ session }) => {
                             AddRosterModal={AddRosterModal}
                             setAddRosterModal={setAddRosterModal}
                             setProxySelect={setProxySelect}
-                            userAuth={session.session_data().username}
+                            userAuth={session.session_data()}
                           />
                         ) : (
                           <></>
@@ -493,17 +424,17 @@ const RosterPlanner = ({ session }) => {
                           setCurrentShift={setCurrentShift}
                           setProxySelect={setProxySelect}
                           traineeList={traineeList}
-                          userAuth={session.session_data().username}
+                          userAuth={session.session_data()}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
-                        {true ? (
+                        {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (
                           <AddTrainee
                             currentShift={currentShift}
                             setCurrentShift={setCurrentShift}
                             AddTraineeModal={AddTraineeModal}
                             setAddTraineeModal={setAddTraineeModal}
                             setProxySelect={setProxySelect}
-                            userAuth={session.session_data().username}
+                            userAuth={session.session_data()}
                           />
                         ) : (
                           <></>
@@ -524,7 +455,7 @@ const RosterPlanner = ({ session }) => {
                           userlist={waitlist}
                           setProxySelect={setProxySelect}
                           name="Waitlist"
-                          userAuth={session.session_data().username}
+                          userAuth={session.session_data()}
                         />
                       </Col>
                     </Row>
@@ -541,7 +472,7 @@ const RosterPlanner = ({ session }) => {
                         userlist={unavailList}
                         setProxySelect={setProxySelect}
                         name="Unavaiable"
-                        userAuth={session.session_data().username}
+                        userAuth={session.session_data()}
                       />
                       {/** ACCESS FOR ADMINS ONLY */}
                       {true ? (
@@ -570,17 +501,17 @@ const RosterPlanner = ({ session }) => {
                           setCurrentShift={setCurrentShift}
                           setProxySelect={setProxySelect}
                           shadowList={shadowList}
-                          userAuth={session.session_data().username}
+                          userAuth={session.session_data()}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
-                        {true ? (
+                        {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (
                           <AddShadow
                             currentShift={currentShift}
                             setCurrentShift={setCurrentShift}
                             AddShadowModal={AddShadowModal}
                             setAddShadowModal={setAddShadowModal}
                             setProxySelect={setProxySelect}
-                            userAuth={session.session_data().username}
+                            userAuth={session.session_data()}
                           />
                         ) : (
                           <></>

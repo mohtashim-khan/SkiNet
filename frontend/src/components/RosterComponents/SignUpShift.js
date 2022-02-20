@@ -8,23 +8,23 @@ import { Button} from 'reactstrap'
 
 const SignUpShift = ({currentShift, setProxySelect, name, username, user_type, trainer, phone_number, setCurrentShift}) => {
     //state template
-
+    
     const signUp = async (e) => {
         if(currentShift)
         {
           console.log(name, username, user_type, trainer);
             const article = {
-                event_id: currentShift.event.id,
+                event_id: currentShift.event.extendedProps.eventID,
                 event_name: currentShift.event.title,
                 username: username,
                 name: name,
                 user_type: user_type,
                 phone_number: phone_number,
                 trainer: trainer,
-                role: (user_type === "Trainee") ? "Trainee": "Rostered",
+                role: (user_type === "TRAINEE") ? "TRAINEE": "ROSTERED",
                 comment: "",
                 action_user: username,
-            }
+            };
 
             axios.put('/addToEventLog', article)
             .then(response => {

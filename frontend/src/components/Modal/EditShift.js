@@ -4,7 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, Dropdown, DropdownItem, Dropdown
 import { CustomInput, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 
 
-const EditShift = ({EditShiftModal , setEditShiftModal, currentShift, setProxySelect, shiftInfo, setUpdater, setCurrentShift, username}) => {
+const EditShift = ({EditShiftModal , setEditShiftModal, currentShift, setProxySelect, shiftInfo, setUpdater, setCurrentShift, session}) => {
     //state template
 
     const [eventInfo, setEventInfo] = useState(
@@ -85,7 +85,7 @@ const EditShift = ({EditShiftModal , setEditShiftModal, currentShift, setProxySe
             max_patrollers: eventInfo.max_patrollers,
             max_trainees: eventInfo.max_trainees,
             selectUser: eventInfo.selectUser,
-            action_user: username,
+            action_user: session.session_data().username,
         };
         axios.put('/editEvent', article)
         .then(response => {

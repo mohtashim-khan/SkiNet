@@ -1,8 +1,8 @@
-import React, {useState, useEffect}  from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody, Form } from 'reactstrap'
 
-const DeleteShift = ({EventDeleteModal, setEventDeleteModal, currentShift, setUpdater, setResetter}) => {
+const DeleteShift = ({ EventDeleteModal, setEventDeleteModal, currentShift, setUpdater, setResetter }) => {
     //state template
     const [eventInfo, setEventInfo] = useState(
         {
@@ -11,8 +11,7 @@ const DeleteShift = ({EventDeleteModal, setEventDeleteModal, currentShift, setUp
     );
 
     const toggle = (e) => {
-        if(currentShift)
-        {
+        if (currentShift) {
             setEventInfo(
                 {
 
@@ -23,27 +22,26 @@ const DeleteShift = ({EventDeleteModal, setEventDeleteModal, currentShift, setUp
         }
     }
 
-    const DeleteEvent = async (e) =>  {
+    const DeleteEvent = async (e) => {
         // //Refer to
         // //https://www.w3schools.com/sql/sql_autoincrement.asp
         e.preventDefault();
 
         axios.delete('/deleteEvent/' + currentShift.event.id)
-        .then(response => {
-            //if error from database
-            if(response.status === 204)
-            {
-                //shift info reset
-                setResetter(true);
-                //Rerender the Calendar
-                setUpdater(true);
-                //Setting on and off of pop up
-                toggle(false);
-            }
-            else{
-                console.log("Error in DB")
-            }
-        })
+            .then(response => {
+                //if error from database
+                if (response.status === 204) {
+                    //shift info reset
+                    setResetter(true);
+                    //Rerender the Calendar
+                    setUpdater(true);
+                    //Setting on and off of pop up
+                    toggle(false);
+                }
+                else {
+                    console.log("Error in DB")
+                }
+            })
 
     }
 
@@ -52,7 +50,7 @@ const DeleteShift = ({EventDeleteModal, setEventDeleteModal, currentShift, setUp
     }, []);
 
     const openBtn = <Button color="danger" onClick={() => toggle(true)}>Delete Shift</Button>
-    const closeBtn = <Button className="close" onClick = {() =>toggle(false)}>Close</Button>;
+    const closeBtn = <Button className="close" onClick={() => toggle(false)}>Close</Button>;
     //<Form onSubmit={}>
 
     return (
@@ -60,10 +58,10 @@ const DeleteShift = ({EventDeleteModal, setEventDeleteModal, currentShift, setUp
         //put UI objects here
         <>
             {openBtn}
-            <Modal isOpen={EventDeleteModal} toggle={() => toggle(false)} className= "">
-                <ModalHeader  close={closeBtn}> DELETE Event Name: {(currentShift)?currentShift.event.title:""} </ModalHeader>
+            <Modal isOpen={EventDeleteModal} toggle={() => toggle(false)} className="">
+                <ModalHeader close={closeBtn}> DELETE Event Name: {(currentShift) ? currentShift.event.title : ""} </ModalHeader>
                 <ModalBody>
-                    <Form onSubmit= {(e) => DeleteEvent(e)}>
+                    <Form onSubmit={(e) => DeleteEvent(e)}>
                         <Button>Delete Shift(s)?</Button>
                     </Form>
                 </ModalBody>

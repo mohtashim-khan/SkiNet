@@ -4,6 +4,8 @@ import ca.skipatrol.application.Interfaces.LookupServices;
 import ca.skipatrol.application.Interfaces.ProfileServices;
 import ca.skipatrol.application.models.*;
 import ca.skipatrol.application.repositories.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,6 +51,12 @@ public class ProfileServicesImpl implements ProfileServices {
     OperationalTrainingRepository operationalTrainingRepository;
     @Autowired
     DisciplineRepository disciplineRepository;
+    @Autowired
+    BrandRepository brandRepository;
+    @Autowired
+    ConditionsRepository conditionsRepository;
+    @Autowired
+    SizeRepository sizeRepository;
     // endregion
 
     // region Service Declarations
@@ -283,6 +291,108 @@ public class ProfileServicesImpl implements ProfileServices {
     }
 
     // endregion
+
+    @Override
+    public Vest ParseVestJson(JsonObject vestJSON)
+    {
+        Gson gson = new Gson();
+        Vest vest = new Vest();
+
+        vest.setVestID(gson.fromJson(vestJSON.get("vestID"), UUID.class));
+        vest.setNumber(gson.fromJson(vestJSON.get("number"), String.class));
+
+        String brandDescription = gson.fromJson(vestJSON.get("brand"), String.class);
+        if(brandDescription != null && !brandDescription.isEmpty())
+            vest.setBrand(brandRepository.findByDescription(brandDescription).get());
+
+        String sizeDescription = gson.fromJson(vestJSON.get("size"), String.class);
+        if(sizeDescription != null && !sizeDescription.isEmpty())
+            vest.setSize(sizeRepository.findByDescription(sizeDescription).get());
+
+        String conditionDescription = gson.fromJson(vestJSON.get("condition"), String.class);
+        if(conditionDescription != null && !conditionDescription.isEmpty())
+            vest.setCondition(conditionsRepository.findByDescription(conditionDescription).get());
+
+        UUID uniformID = gson.fromJson(vestJSON.get("uniform"), UUID.class);
+        if(uniformID != null)
+            vest.setUniform(uniformRepository.findById(uniformID).get());
+
+        return vest;
+    }
+
+    @Override
+    public Jacket ParseJacketJson(JsonObject vestJSON)
+    {
+        Gson gson = new Gson();
+        Jacket jacket = new Jacket();
+
+        jacket.setJacketID(gson.fromJson(vestJSON.get("jacketID"), UUID.class));
+        jacket.setNumber(gson.fromJson(vestJSON.get("number"), String.class));
+
+        String brandDescription = gson.fromJson(vestJSON.get("brand"), String.class);
+        if(brandDescription != null && !brandDescription.isEmpty())
+            jacket.setBrand(brandRepository.findByDescription(brandDescription).get());
+
+        String sizeDescription = gson.fromJson(vestJSON.get("size"), String.class);
+        if(sizeDescription != null && !sizeDescription.isEmpty())
+            jacket.setSize(sizeRepository.findByDescription(sizeDescription).get());
+
+        String conditionDescription = gson.fromJson(vestJSON.get("condition"), String.class);
+        if(conditionDescription != null && !conditionDescription.isEmpty())
+            jacket.setCondition(conditionsRepository.findByDescription(conditionDescription).get());
+
+        UUID uniformID = gson.fromJson(vestJSON.get("uniform"), UUID.class);
+        if(uniformID != null)
+            jacket.setUniform(uniformRepository.findById(uniformID).get());
+
+        return jacket;
+    }
+
+    @Override
+    public Pack ParsePackJson(JsonObject vestJSON)
+    {
+        Gson gson = new Gson();
+        Pack pack = new Pack();
+
+        pack.setPackID(gson.fromJson(vestJSON.get("packID"), UUID.class));
+        pack.setNumber(gson.fromJson(vestJSON.get("number"), String.class));
+
+        String brandDescription = gson.fromJson(vestJSON.get("brand"), String.class);
+        if(brandDescription != null && !brandDescription.isEmpty())
+            pack.setBrand(brandRepository.findByDescription(brandDescription).get());
+
+        String conditionDescription = gson.fromJson(vestJSON.get("condition"), String.class);
+        if(conditionDescription != null && !conditionDescription.isEmpty())
+            pack.setCondition(conditionsRepository.findByDescription(conditionDescription).get());
+
+        UUID uniformID = gson.fromJson(vestJSON.get("uniform"), UUID.class);
+        if(uniformID != null)
+            pack.setUniform(uniformRepository.findById(uniformID).get());
+
+        return pack;
+    }
+
+    @Override
+    public int updateVest(Vest vest)
+    {
+        vestRepository.save(vest);
+        return 200;
+    }
+
+    @Override
+    public int updateJacket(Jacket jacket)
+    {
+        jacketRepository.save(jacket);
+        return 200;
+    }
+
+    @Override
+    public int updatePack(Pack pack)
+    {
+        packRepository.save(pack);
+        return 200;
+    }
+
     public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs) {
         try {
             patrolCommitmentRepository.deleteAllByIdInBatch(patrolCommitmentIDs);

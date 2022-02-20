@@ -298,14 +298,17 @@ public class RosterServicesImpl implements RosterServices {
         List<String> weekDaysString = gson.fromJson(weekDays.get("weekDays"), List.class);
 
         List<DayOfWeek> dayOfWeeks = new ArrayList();
-        for (String weekDay: weekDaysString)
-            dayOfWeeks.add(DayOfWeek.valueOf(weekDay.toUpperCase(Locale.ROOT)));
+        if(weekDaysString != null)
+        {
+            for (String weekDay : weekDaysString)
+                dayOfWeeks.add(DayOfWeek.valueOf(weekDay.toUpperCase(Locale.ROOT)));
+        }
 
         List<Event> events = eventRepository.findByStartDateBetween(startDate, endDate);
 
         for (Event event: events)
         {
-            if (dayOfWeeks.contains(event.getStartDate().getDayOfWeek()))
+            if (dayOfWeeks.isEmpty() || dayOfWeeks.contains(event.getStartDate().getDayOfWeek()))
                 eventsReturn.add(event);
         }
 

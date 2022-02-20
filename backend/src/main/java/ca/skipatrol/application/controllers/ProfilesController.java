@@ -183,6 +183,21 @@ public class ProfilesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @RequestMapping(value = "customapi/profile/uniform/returnedLeaseSigned", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdateUniformReturnedLeaseSigned(@RequestBody String uniformString) {
+
+        int code = 500;
+        JsonObject personAwardJSON = JsonParser.parseString(uniformString).getAsJsonObject();
+
+        if (personAwardJSON != null)
+            code = profileServices.UpdateUniformReturnedLeaseSigned(personAwardJSON);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
     @RequestMapping(value = "/customapi/profile/user/PatrolCommitments/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deletePatrolCommitmentsInBatch(@RequestParam ArrayList<UUID> ids) {
         boolean returnVal = profileServices.deletePatrolCommitmentsInBatch(ids);

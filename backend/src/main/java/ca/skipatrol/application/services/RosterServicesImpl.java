@@ -4,6 +4,7 @@ import ca.skipatrol.application.Interfaces.ProfileServices;
 import ca.skipatrol.application.Interfaces.RosterServices;
 import ca.skipatrol.application.models.*;
 import ca.skipatrol.application.repositories.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.hibernate.Hibernate;
@@ -13,10 +14,9 @@ import org.springframework.web.util.UriBuilder;
 
 import javax.transaction.Transactional;
 import java.net.URI;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -288,6 +288,28 @@ public class RosterServicesImpl implements RosterServices {
         }
 
         return 500;
+    }
+
+    public List<Event> RetrieveEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject weekDays)
+    {
+        Gson gson = new Gson();
+        List<Event> eventsReturn = new ArrayList();
+
+        List<String> weekDaysString = gson.fromJson(weekDays.get("weekDays"), List.class);
+
+        List<DayOfWeek> dayOfWeeks = new ArrayList();
+        for (String weekDay: weekDaysString)
+            dayOfWeeks.add(DayOfWeek.valueOf(weekDay.toUpperCase(Locale.ROOT)));
+
+        List<Event> events = eventRepository.findByStartDateBetween(startDate, endDate);
+
+        for (Event event: events)
+        {
+            if (dayOfWeeks.contains(event.getStartDate().getDayOfWeek()))
+                eventsReturn.add(event);
+        }
+
+        return eventsReturn;
     }
 
     private void AddActionToActionLog(String actionString, User actionUser, Event event)

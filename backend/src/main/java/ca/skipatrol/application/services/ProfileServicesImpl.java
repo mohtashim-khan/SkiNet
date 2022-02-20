@@ -57,6 +57,10 @@ public class ProfileServicesImpl implements ProfileServices {
     ConditionsRepository conditionsRepository;
     @Autowired
     SizeRepository sizeRepository;
+    @Autowired
+    SeasonRepository seasonRepository;
+    @Autowired
+    AwardRepository awardRepository;
     // endregion
 
     // region Service Declarations
@@ -292,6 +296,7 @@ public class ProfileServicesImpl implements ProfileServices {
 
     // endregion
 
+
     @Override
     public Vest ParseVestJson(JsonObject vestJSON)
     {
@@ -373,23 +378,83 @@ public class ProfileServicesImpl implements ProfileServices {
     }
 
     @Override
-    public int updateVest(Vest vest)
+    public PatrolCommitment ParsePatrolCommitmentJson(JsonObject patrolCommitmentJSON)
+    {
+        Gson gson = new Gson();
+        PatrolCommitment patrolCommitment = new PatrolCommitment();
+
+        patrolCommitment.setPatrolCommitmentID(gson.fromJson(patrolCommitmentJSON.get("patrolCommitmentID"), UUID.class));
+        patrolCommitment.setAchieved(gson.fromJson(patrolCommitmentJSON.get("achieved"), Boolean.class));
+        patrolCommitment.setDays(gson.fromJson(patrolCommitmentJSON.get("days"), Integer.class));
+        patrolCommitment.setNotes(gson.fromJson(patrolCommitmentJSON.get("notes"), String.class));
+
+        UUID seasonID = gson.fromJson(patrolCommitmentJSON.get("brand"), UUID.class);
+        if(seasonID != null)
+            patrolCommitment.setSeason(seasonRepository.getById(seasonID));
+
+        UUID userID = gson.fromJson(patrolCommitmentJSON.get("user"), UUID.class);
+        if(userID != null)
+            patrolCommitment.setUser(userRepository.getById(userID));
+
+        return patrolCommitment;
+    }
+
+    @Override
+    public PersonAward ParsePersonAwardJson(JsonObject personAwardJSON)
+    {
+        Gson gson = new Gson();
+        PersonAward personAward = new PersonAward();
+
+        personAward.setPersonAwardID(gson.fromJson(personAwardJSON.get("personAwardID"), UUID.class));
+        personAward.setComments(gson.fromJson(personAwardJSON.get("comments"), String.class));
+
+        UUID awardID = gson.fromJson(personAwardJSON.get("award"), UUID.class);
+        if(awardID != null)
+            personAward.setAward(awardRepository.getById(awardID));
+
+        UUID seasonID = gson.fromJson(personAwardJSON.get("season"), UUID.class);
+        if(seasonID != null)
+            personAward.setSeason(seasonRepository.getById(seasonID));
+
+        UUID userID = gson.fromJson(personAwardJSON.get("user"), UUID.class);
+        if(seasonID != null)
+            personAward.setUser(userRepository.getById(userID));
+
+        return personAward;
+    }
+
+    @Override
+    public int UpdateVest(Vest vest)
     {
         vestRepository.save(vest);
         return 200;
     }
 
     @Override
-    public int updateJacket(Jacket jacket)
+    public int UpdateJacket(Jacket jacket)
     {
         jacketRepository.save(jacket);
         return 200;
     }
 
     @Override
-    public int updatePack(Pack pack)
+    public int UpdatePack(Pack pack)
     {
         packRepository.save(pack);
+        return 200;
+    }
+
+    @Override
+    public int UpdatePatrolCommitment(PatrolCommitment patrolCommitment)
+    {
+        patrolCommitmentRepository.save(patrolCommitment);
+        return 200;
+    }
+
+    @Override
+    public int UpdatePersonAward(PersonAward personAward)
+    {
+        personAwardRepository.save(personAward);
         return 200;
     }
 
@@ -500,7 +565,6 @@ public class ProfileServicesImpl implements ProfileServices {
             return false;
         }
     }
-
 
     public User createNewUser(String username,
             String password,

@@ -111,7 +111,7 @@ public class ProfilesController {
         Vest vest = profileServices.ParseVestJson(vestJSON);
 
         if (vest != null)
-            code = profileServices.updateVest(vest);
+            code = profileServices.UpdateVest(vest);
 
         if (code == 200)
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -127,7 +127,7 @@ public class ProfilesController {
         Jacket jacket = profileServices.ParseJacketJson(jacketJSON);
 
         if (jacket != null)
-            code = profileServices.updateJacket(jacket);
+            code = profileServices.UpdateJacket(jacket);
 
         if (code == 200)
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -143,7 +143,39 @@ public class ProfilesController {
         Pack pack = profileServices.ParsePackJson(packJSON);
 
         if (pack != null)
-            code = profileServices.updatePack(pack);
+            code = profileServices.UpdatePack(pack);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/profile/patrolCommitment", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdatePatrolCommitment(@RequestBody String patrolCommitmentString) {
+
+        int code = 500;
+        JsonObject patrolCommitmentJSON = JsonParser.parseString(patrolCommitmentString).getAsJsonObject();
+        PatrolCommitment patrolCommitment = profileServices.ParsePatrolCommitmentJson(patrolCommitmentJSON);
+
+        if (patrolCommitment != null)
+            code = profileServices.UpdatePatrolCommitment(patrolCommitment);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/profile/personAward", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdatePersonAward(@RequestBody String personAwardString) {
+
+        int code = 500;
+        JsonObject personAwardJSON = JsonParser.parseString(personAwardString).getAsJsonObject();
+        PersonAward personAward = profileServices.ParsePersonAwardJson(personAwardJSON);
+
+        if (personAward != null)
+            code = profileServices.UpdatePersonAward(personAward);
 
         if (code == 200)
             return ResponseEntity.status(HttpStatus.OK).build();

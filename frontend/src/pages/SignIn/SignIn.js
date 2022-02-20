@@ -117,11 +117,11 @@ const SignIn = ({ session }) => {
                   onKeyPress={(e) => handleKeyPress(e, "Password")}
                 />
                 <p className="loginMessage" id="loginMessageID"></p>
-                <Link to="/sign-up">
+                {/* <Link to="/sign-up">
                   <Button big fontBig primary="true">
                     {"Sign Up"}
                   </Button>
-                </Link>
+                </Link> */}
                 <ButtonPadding
                   big
                   fontBig

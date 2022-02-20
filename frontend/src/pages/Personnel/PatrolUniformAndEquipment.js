@@ -354,23 +354,34 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
               <h5>
                 <b>Jacket</b>
               </h5>
-              <table className="table table-bordered hover" it="sortTable">
+              <table
+                className="table table-bordered hover myMiniTable"
+                it="sortTable"
+              >
                 <thead>
                   <tr>
-                    <th scope="col">Brand</th>
-                    <th scope="col">Size</th>
-                    <th scope="col">Condition</th>
-                    <th scope="col">Number</th>
+                    <th className="tdbreak" scope="col">
+                      Brand
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Size
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Condition
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Number
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {jackets &&
                     jackets.map((row, index) => (
                       <tr>
-                        <td>{row.brand.description}</td>
-                        <td>{row.size.description}</td>
-                        <td>{row.condition.description}</td>
-                        <td>{row.number}</td>
+                        <td className="tdbreak">{row.brand.description}</td>
+                        <td className="tdbreak">{row.size.description}</td>
+                        <td className="tdbreak">{row.condition.description}</td>
+                        <td className="tdbreak">{row.number}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -381,21 +392,30 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
               <h5>
                 <b>Pack</b>
               </h5>
-              <table className="table table-bordered hover" it="sortTable">
+              <table
+                className="table table-bordered hover myMiniTable"
+                it="sortTable"
+              >
                 <thead>
                   <tr>
-                    <th scope="col">Brand</th>
-                    <th scope="col">Condition</th>
-                    <th scope="col">Number</th>
+                    <th className="tdbreak" scope="col">
+                      Brand
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Condition
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Number
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {packs &&
                     packs.map((row, index) => (
                       <tr>
-                        <td>{row.brand.description}</td>
-                        <td>{row.condition.description}</td>
-                        <td>{row.number}</td>
+                        <td className="tdbreak">{row.brand.description}</td>
+                        <td className="tdbreak">{row.condition.description}</td>
+                        <td className="tdbreak">{row.number}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -406,23 +426,34 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
               <h5>
                 <b>Vest</b>
               </h5>
-              <table className="table table-bordered hover" it="sortTable">
+              <table
+                className="table table-bordered hover myMiniTable"
+                it="sortTable"
+              >
                 <thead>
                   <tr>
-                    <th scope="col">Brand</th>
-                    <th scope="col">Size</th>
-                    <th scope="col">Condition</th>
-                    <th scope="col">Number</th>
+                    <th className="tdbreak" scope="col">
+                      Brand
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Size
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Condition
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Number
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {vests &&
                     vests.map((row, index) => (
                       <tr>
-                        <td>{row.brand.description}</td>
-                        <td>{row.size.description}</td>
-                        <td>{row.condition.description}</td>
-                        <td>{row.number}</td>
+                        <td className="tdbreak">{row.brand.description}</td>
+                        <td className="tdbreak">{row.size.description}</td>
+                        <td className="tdbreak">{row.condition.description}</td>
+                        <td className="tdbreak">{row.number}</td>
                       </tr>
                     ))}
                 </tbody>

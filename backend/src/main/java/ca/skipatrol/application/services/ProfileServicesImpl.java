@@ -388,7 +388,7 @@ public class ProfileServicesImpl implements ProfileServices {
         patrolCommitment.setDays(gson.fromJson(patrolCommitmentJSON.get("days"), Integer.class));
         patrolCommitment.setNotes(gson.fromJson(patrolCommitmentJSON.get("notes"), String.class));
 
-        UUID seasonID = gson.fromJson(patrolCommitmentJSON.get("brand"), UUID.class);
+        UUID seasonID = gson.fromJson(patrolCommitmentJSON.get("season"), UUID.class);
         if(seasonID != null)
             patrolCommitment.setSeason(seasonRepository.getById(seasonID));
 

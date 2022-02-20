@@ -31,11 +31,19 @@ public interface ProfileServices {
 
     Pack ParsePackJson(JsonObject vestJSON);
 
-    int updateVest(Vest vest);
+    PatrolCommitment ParsePatrolCommitmentJson(JsonObject patrolCommitmentJSON);
 
-    int updateJacket(Jacket jacket);
+    PersonAward ParsePersonAwardJson(JsonObject personAwardJSON);
 
-    int updatePack(Pack pack);
+    int UpdateVest(Vest vest);
+
+    int UpdateJacket(Jacket jacket);
+
+    int UpdatePack(Pack pack);
+
+    int UpdatePatrolCommitment(PatrolCommitment patrolCommitment);
+
+    int UpdatePersonAward(PersonAward personAward);
 
     public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
 

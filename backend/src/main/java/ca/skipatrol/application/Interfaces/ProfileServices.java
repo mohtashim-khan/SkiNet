@@ -1,8 +1,7 @@
 package ca.skipatrol.application.Interfaces;
 
-import ca.skipatrol.application.models.EventRole;
-import ca.skipatrol.application.models.Uniform;
-import ca.skipatrol.application.models.User;
+import ca.skipatrol.application.models.*;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -26,25 +25,37 @@ public interface ProfileServices {
 
     User retrieveUserAll(UUID userID);
 
-    public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
+    Vest ParseVestJson(JsonObject vestJSON);
 
-    public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);
+    Jacket ParseJacketJson(JsonObject vestJSON);
 
-    public boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs);
+    Pack ParsePackJson(JsonObject vestJSON);
 
-    public boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs);
+    int updateVest(Vest vest);
 
-    public boolean deletePacksInBatch(ArrayList<UUID> packIDs);
+    int updateJacket(Jacket jacket);
 
-    public boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs);
+    int updatePack(Pack pack);
 
-    public boolean deleteVestsInBatch(ArrayList<UUID> vestIDs);
+    boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
 
-    public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
+    boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);
 
-    public boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
+    boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs);
 
-    public User createNewUser(String username,
+    boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs);
+
+    boolean deletePacksInBatch(ArrayList<UUID> packIDs);
+
+    boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs);
+
+    boolean deleteVestsInBatch(ArrayList<UUID> vestIDs);
+
+    boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
+
+    boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
+
+    User createNewUser(String username,
             String password,
             String firstName,
             String lastName,
@@ -52,5 +63,5 @@ public interface ProfileServices {
             String phoneNumber,
             String eventRole);
 
-    public boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
+    boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
 }

@@ -458,6 +458,22 @@ public class ProfileServicesImpl implements ProfileServices {
         return 200;
     }
 
+    @Override
+    public int UpdateUniformReturnedLeaseSigned(JsonObject uniformJSON)
+    {
+        Gson gson = new Gson();
+
+        UUID uniformID = gson.fromJson(uniformJSON.get("uniformID"), UUID.class);
+        Boolean leaseSigned = gson.fromJson(uniformJSON.get("leaseSigned"), Boolean.class);
+        Boolean returned = gson.fromJson(uniformJSON.get("returned"), Boolean.class);
+
+        Uniform uniform = uniformRepository.getById(uniformID);
+        uniform.setLeaseSigned(leaseSigned);
+        uniform.setReturned(returned);
+
+        return 200;
+    }
+
     public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs) {
         try {
             patrolCommitmentRepository.deleteAllByIdInBatch(patrolCommitmentIDs);

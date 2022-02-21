@@ -1,12 +1,13 @@
 import React, {useEffect}  from 'react';
 import axios from 'axios';
 import { Button} from 'reactstrap'
+import { GiEmptyMetalBucketHandle } from 'react-icons/gi';
 
 
 
 
 
-const SignUpShift = ({currentShift, setProxySelect, name, username, user_type, trainer, phone_number, setCurrentShift}) => {
+const SignUpShift = ({currentShift, setProxySelect, name, username, user_type, trainer, phone_number, email, setCurrentShift, session}) => {
     //state template
     
     const signUp = async (e) => {
@@ -23,10 +24,12 @@ const SignUpShift = ({currentShift, setProxySelect, name, username, user_type, t
                 trainer: trainer,
                 role: (user_type === "TRAINEE") ? "TRAINEE": "ROSTERED",
                 comment: "",
+                email: email,
                 action_user: username,
             };
 
-            axios.put('/addToEventLog', article)
+            session
+            .put("roster/addToEventLog", article, {}, true)
             .then(response => {
                 //if error from database
                 if(response.status === 204)

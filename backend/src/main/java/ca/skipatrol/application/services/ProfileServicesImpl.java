@@ -118,7 +118,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getLastName(),
                     user.getEmail(),
                     user.getPhoneNumber(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getTrainer());
 
             if (getEvalTrainings) {
                 Hibernate.initialize(user.getEvalTrainings().size());
@@ -151,7 +152,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getLastName(),
                     user.getEmail(),
                     user.getPhoneNumber(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getTrainer());
 
             Hibernate.initialize(user.getEmergencyContacts().size());
             returnVal.setEmergencyContacts(user.getEmergencyContacts());
@@ -174,7 +176,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getLastName(),
                     user.getEmail(),
                     user.getPhoneNumber(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getTrainer());
 
             Hibernate.initialize(user.getPatrolCommitments().size());
             returnVal.setPatrolCommitments(user.getPatrolCommitments());
@@ -197,7 +200,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getLastName(),
                     user.getEmail(),
                     user.getPhoneNumber(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getTrainer());
 
             Hibernate.initialize(user.getPersonAwards().size());
             returnVal.setPersonAwards(user.getPersonAwards());
@@ -220,7 +224,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getLastName(),
                     user.getEmail(),
                     user.getPhoneNumber(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getTrainer());
 
             List<Uniform> uniforms = new ArrayList<Uniform>();
 
@@ -251,7 +256,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getLastName(),
                     user.getEmail(),
                     user.getPhoneNumber(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getTrainer());
 
             returnVal.setRole(user.getRole());
 
@@ -273,7 +279,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getLastName(),
                     user.getEmail(),
                     user.getPhoneNumber(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getTrainer());
 
             Hibernate.initialize(user.getEvalTrainings().size());
             returnVal.setEvalTrainings(user.getEvalTrainings());
@@ -588,7 +595,8 @@ public class ProfileServicesImpl implements ProfileServices {
             String lastName,
             String email,
             String phoneNumber,
-            String eventRole) {
+            String eventRole,
+            Boolean trainer) {
 
         Optional<User> userLookup = this.userRepository.findByUsername(username);
         if (!userLookup.isEmpty()) {
@@ -600,7 +608,7 @@ public class ProfileServicesImpl implements ProfileServices {
         }
 
         User myUser = new User(username, new BCryptPasswordEncoder().encode(password), firstName, lastName, email,
-                phoneNumber, EventRole.valueOf(eventRole));
+                phoneNumber, EventRole.valueOf(eventRole), trainer);
 
         this.userRepository.save(myUser);
         Optional<User> userEntity = userRepository.findByUsername(username);
@@ -622,7 +630,8 @@ public class ProfileServicesImpl implements ProfileServices {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPhoneNumber(),
-                user.getUserType());
+                user.getUserType(),
+                user.getTrainer());
 
         return returnVal;
 

@@ -275,7 +275,7 @@ const RosterPlanner = ({ session }) => {
                 <ShiftInfo currentShift={currentShift} shiftInfo={shiftInfo} />
                 {/* <ShiftInfo /> */}
                 <div className="ShiftButtons">
-                <SignUpShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName+" "+session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} trainer={session.session_data().firstName+" "+session.session_data().lastName} phone_number={session.session_data().phoneNumber} setCurrentShift={setCurrentShift} />
+                <SignUpShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName+" "+session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} trainer={session.session_data().firstName+" "+session.session_data().lastName} phone_number={session.session_data().phoneNumber} email = {session.session_data().email} setCurrentShift={setCurrentShift} session = {session} />
 
                 <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName+" "+session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} />
 

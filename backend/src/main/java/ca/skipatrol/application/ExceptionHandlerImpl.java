@@ -13,6 +13,8 @@ public class ExceptionHandlerImpl {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<HashMap<String, String>> handleException(HttpServletRequest request, Exception e) {
+        e.printStackTrace();
+
         HashMap<String, String> response = new HashMap<>();
         response.put("status", "error");
         response.put("message", e.getMessage());
@@ -21,6 +23,8 @@ public class ExceptionHandlerImpl {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<HashMap<String, String>> handleNotFoundResourceException(HttpServletRequest request, NoHandlerFoundException e) {
+        e.printStackTrace();
+
         HashMap<String, String> response = new HashMap<>();
         response.put("status", "error");
         response.put("message", "Requested endpoint is unavailable");

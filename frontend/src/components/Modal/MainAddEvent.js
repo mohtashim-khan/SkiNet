@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody, Container } from "reactstrap";
 import {
   CustomInput,
   Row,
@@ -26,7 +26,7 @@ const MainAddEvent = ({
   selectedDate,
   setSelectedDate,
   setUpdater,
-  username,
+  session,
 }) => {
   //state template
 
@@ -34,6 +34,7 @@ const MainAddEvent = ({
   const [Reoccuriung, setReoccuriung] = useState("None");
   const [startDateChange, setStartDateChange] = useState(false);
   const [endDateChange, setEndDateChange] = useState(false);
+
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -132,16 +133,32 @@ const MainAddEvent = ({
     }
   };
 
+  //TODO: ACTIONLOG QUERY NEEDED
   const addEventHelper = async (article) => {
-    await axios.put("/addToEvent", article).then((response) => {
-      //if error from database
-      if (response.status === 200) {
-        //Setting on and off of pop up
-        toggle(false);
-      } else {
-        console.log("Error in DB");
-      }
-    });
+
+
+    let eventReq = {
+      eventName: article.event_name,
+      startDate: new Date(article.start).toISOString(),
+      endDate: new Date(article.end).toISOString(),
+      allDay: article.allDay,
+      minPatrollers: article.min_patrollers,
+      maxPatrollers: article.max_patrollers,
+      maxTrainees: article.max_trainees,
+    };
+
+    try {
+      session
+        .post("events", eventReq, {}, false).then((response) => {
+          toggle(false);
+
+        });
+    }
+    catch (err) {
+      console.log(err);
+
+
+    }
   };
 
   const AddEvent = async (e) => {
@@ -159,16 +176,18 @@ const MainAddEvent = ({
         min_patrollers: eventInfo.min_patrollers,
         max_patrollers: eventInfo.max_patrollers,
         max_trainees: eventInfo.max_trainees,
-        username: username,
-        action_user: username,
+        username: session.session_data().username,
+        action_user: session.session_data().username,
       };
       addEventHelper(article);
     }
 
     /***Reoccuring SHIFTS */
     if (eventInfo.reoccuriung !== "Single") {
+      let startDate = new Date(selectedDate.startStr);
+      startDate.setDate(startDate.getDate()+1);
       startDate.setHours(0, 0, 0);
-      let storeStartDate = startDate;
+      let storeStartDate = startDate ;
       let storeEndDate = startDate;
       storeStartDate = new Date(
         storeStartDate.getTime() + storeStartDate.getTimezoneOffset() * 60000
@@ -176,8 +195,8 @@ const MainAddEvent = ({
       // End Date is just 1 day after start date
       storeEndDate = new Date(
         storeEndDate.getTime() +
-          storeEndDate.getTimezoneOffset() * 60000 +
-          24 * 60 * 60 * 1000
+        storeEndDate.getTimezoneOffset() * 60000 +
+        24 * 60 * 60 * 1000
       );
       let pivotStartDate = storeStartDate; // just placeholder could be null
       let pivotEndDate = storeEndDate; // just placeholder could be null
@@ -200,8 +219,8 @@ const MainAddEvent = ({
           min_patrollers: eventInfo.min_patrollers,
           max_patrollers: eventInfo.max_patrollers,
           max_trainees: eventInfo.max_trainees,
-          username: username,
-          action_user: username,
+          username: session.session_data().username,
+          action_user: session.session_data().username,
         };
         //start
         let month = storeStartDate.getMonth() + 1;
@@ -221,6 +240,7 @@ const MainAddEvent = ({
           "-" +
           storeEndDate.getDate();
 
+        // eslint-disable-next-line default-case
         switch (storeStartDate.getDay()) {
           case 0:
             if (Sunday) {
@@ -277,7 +297,7 @@ const MainAddEvent = ({
     setUpdater(true);
   };
 
-  useEffect(() => {}, [eventInfo]);
+  useEffect(() => { }, [eventInfo]);
 
   const closeBtn = (
     <Button className="close" onClick={() => toggle()}>
@@ -299,6 +319,9 @@ const MainAddEvent = ({
           End: {EventAddModal ? showDate("end") : ""}
         </ModalHeader>
         <ModalBody>
+
+
+
           <Form onSubmit={(e) => AddEvent(e)}>
             <FormGroup>
               <Label for="eventName">Event Name</Label>
@@ -351,8 +374,8 @@ const MainAddEvent = ({
                     Urgent Day
                     <br />
                   </Label>
-                  <CustomInput
-                    type="switch"
+                  <Input
+                    type="checkbox"
                     name="all_day"
                     id="exampleCheck"
                     onChange={onSwitch}

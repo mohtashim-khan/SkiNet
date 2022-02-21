@@ -40,6 +40,9 @@ const SignIn = ({ session }) => {
             lastName: response.data.lastName,
             userID: response.data.userID,
             user_type: response.data.userType,
+            email: response.data.email,
+            phoneNumber: response.data.phoneNumber,
+
           };
           console.log(response);
           console.log(basicUserDetails);
@@ -99,7 +102,7 @@ const SignIn = ({ session }) => {
               <TextWrapper>
                 <TopLine lightTopLine="true">Sign In</TopLine>
                 <Heading lightText={false}>
-                  Sign in to acess the schedule
+                  Sign in to access the schedule
                 </Heading>
                 <Input
                   type="text"
@@ -117,11 +120,11 @@ const SignIn = ({ session }) => {
                   onKeyPress={(e) => handleKeyPress(e, "Password")}
                 />
                 <p className="loginMessage" id="loginMessageID"></p>
-                <Link to="/sign-up">
+                {/* <Link to="/sign-up">
                   <Button big fontBig primary="true">
                     {"Sign Up"}
                   </Button>
-                </Link>
+                </Link> */}
                 <ButtonPadding
                   big
                   fontBig

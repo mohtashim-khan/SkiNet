@@ -1,6 +1,7 @@
 package ca.skipatrol.application.database;
 
 import ca.skipatrol.application.models.*;
+import ca.skipatrol.application.models.cms.Topic;
 import ca.skipatrol.application.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -28,6 +29,8 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
     private OperationalEventRepository operationalEventRepository;
     @Autowired
     private ConditionsRepository conditionsRepository;
+    @Autowired
+    private TopicRepository topicRepository;
 
     @Override
     @Order(value = 1)
@@ -92,6 +95,15 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             if (conditionLookup.isEmpty()) {
                 Conditions conditions = new Conditions(name);
                 this.conditionsRepository.save(conditions);
+            }
+        }
+
+        Optional<Topic> topicLookup;
+        for(String name : topicDefaults) {
+            topicLookup = this.topicRepository.findByDescription(name);
+            if (topicLookup.isEmpty()) {
+                Topic topic = new Topic(name);
+                this.topicRepository.save(topic);
             }
         }
 
@@ -166,5 +178,18 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             "Good",
             "Average",
             "Poor"
+    };
+
+    private String[] topicDefaults = {
+            "News / Announcements",
+            "Weekend Reports",
+            "LLSR Snow Safety Operational Information",
+            "LLSR Policies",
+            "CSP LL Training",
+            "CSP LL Handbook",
+            "Winter Special Events",
+            "CSP LL APL Roles",
+            "CSP LL Awards",
+            "CSP LL Social Events"
     };
 }

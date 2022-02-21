@@ -17,8 +17,14 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
   const [addPrompted, setAddPrompted] = useState(false);
   const [editPrompted, setEditPrompted] = useState(false);
   const [deletePrompted, setDeletePrompted] = useState(false);
+  const [selectedVal, setSelectedVal] = useState("-1");
 
   const [awards, setAwards] = useState([]);
+
+  function editEvent(event) {
+    let temp = event.target.value;
+    setSelectedVal(String(temp));
+  }
 
   function deleteAwards() {
     const params = new URLSearchParams();
@@ -75,6 +81,45 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
   function promptAddCancel() {
     setAddPrompted(false);
     setError(false);
+  }
+
+  function editLakeLouiseAward() {
+    try {
+      if (setSelectedVal === "-1") throw "ERROR: No Value selected";
+
+      const mySeason = $("#seasonSelectEdit").val();
+      const myNotes = $("#awardNotesEdit").val();
+      const myAward = $("#awardSelectEdit").val();
+
+      if (myAward === -1 || mySeason === -1) {
+        throw "empty eval";
+      }
+
+      let temp = {
+        personAwardID: personAwards[parseInt(selectedVal)].personAwardID,
+        comments: myNotes,
+        award: awards[parseInt(myAward)].awardID,
+        season: sortedSeasons[parseInt(mySeason)].seasonID,
+        user: userID,
+      };
+
+      if (myNotes.length == 0) {
+        temp.comments = personAwards[parseInt(selectedVal)].comments;
+      }
+
+      console.log("Sent to put req...", JSON.stringify(temp));
+
+      session.put("profile/personAward", temp, {}, true).then((resp) => {
+        if (resp.status === 200 || resp.status === 201) {
+          console.log(resp);
+          readNewAwards();
+        }
+      });
+      promptEditCancel();
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
   }
 
   function addLakeLouiseAward() {
@@ -164,20 +209,26 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
         </div>
         <div className="card-body">
           <div>
-            <table className="table table-bordered hover">
+            <table className="table table-bordered hover myMiniTable">
               <thead>
                 <tr>
-                  <th scope="col">Season</th>
-                  <th scope="col">Award</th>
-                  <th scope="col">Comment</th>
+                  <th className="tdbreak" scope="col">
+                    Season
+                  </th>
+                  <th className="tdbreak" scope="col">
+                    Award
+                  </th>
+                  <th className="tdbreak" scope="col">
+                    Comment
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {personAwards.map((row, index) => (
                   <tr>
-                    <td>{row.season.description}</td>
-                    <td>{row.award.description}</td>
-                    <td>{row.comments + " "}</td>
+                    <td className="tdbreak">{row.season.description}</td>
+                    <td className="tdbreak">{row.award.description}</td>
+                    <td className="tdbreak">{row.comments + " "}</td>
                   </tr>
                 ))}
               </tbody>
@@ -312,6 +363,116 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
             <Button variant="primary" onClick={deleteAwards}>
               Submit
             </Button>
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={editPrompted} onHide={promptEditCancel}>
+          <Modal.Header closeButton>
+            <Modal.Title>Editing Awards</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Alert
+              variant="danger"
+              show={error}
+              onClose={() => setError(false)}
+              dismissible={true}
+            >
+              <Alert.Heading>Uh oh!</Alert.Heading>
+              <p>Looks like you need glasses</p>
+            </Alert>
+            <div className="form-check mb-3">
+              {personAwards.map((row, index) => (
+                <div className="form-group">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="selectJacketEdit"
+                    checked={selectedVal === String(index)}
+                    value={String(index)}
+                    onChange={editEvent}
+                  />
+                  <label className="form-check-label">
+                    {"Award: " +
+                      row.award.description +
+                      ", Season: " +
+                      row.season.description}
+                  </label>
+                </div>
+              ))}
+            </div>
+            {selectedVal !== "-1" ? (
+              <>
+                <div className="input-group mb-2">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      for="inputGroupSelect01"
+                    >
+                      Award:
+                    </label>
+                  </div>
+                  <Form.Control as="select" custom id="awardSelectEdit">
+                    {awards.map((row, index) =>
+                      row.description ===
+                      personAwards[parseInt(selectedVal)].award.description ? (
+                        <option selected className="text-center" value={index}>
+                          {row.description + " (Current Value)"}
+                        </option>
+                      ) : (
+                        <option className="text-center" value={index}>
+                          {row.description}
+                        </option>
+                      )
+                    )}
+                  </Form.Control>
+                </div>
+                <div className="input-group mb-2">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
+                      Season:
+                    </label>
+                  </div>
+
+                  <select className="form-select" id="seasonSelectEdit">
+                    {sortedSeasons.map((row, index) =>
+                      row.description ===
+                      personAwards[parseInt(selectedVal)].season.description ? (
+                        <option selected value={index}>
+                          {row.description} (Current Value)
+                        </option>
+                      ) : (
+                        <option value={index}>{row.description}</option>
+                      )
+                    )}
+                  </select>
+                </div>
+                <div className="input-group mb-2">
+                  <span className="input-group-text">Notes</span>
+                  <textarea
+                    className="form-control"
+                    aria-label="With textarea"
+                    id="awardNotesEdit"
+                    placeholder={personAwards[parseInt(selectedVal)].comments}
+                  ></textarea>
+                </div>
+              </>
+            ) : (
+              <div>
+                <b>
+                  <i>Select an Award to Edit</i>
+                </b>
+              </div>
+            )}
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={editLakeLouiseAward}
+            >
+              Edit
+            </button>
           </Modal.Body>
         </Modal>
       </div>

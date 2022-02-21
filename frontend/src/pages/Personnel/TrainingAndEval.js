@@ -951,20 +951,31 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
               <h5>
                 <b>Patroller On-Snow Evaluations</b>
               </h5>
-              <table className="table table-bordered hover" it="sortTable">
+              <table
+                className="table table-bordered hover myMiniTable"
+                it="sortTable"
+              >
                 <thead>
                   <tr>
-                    <th scope="col">Discipline</th>
-                    <th scope="col">Evaluation Date</th>
-                    <th scope="col">Evaluation By</th>
+                    <th className="tdbreak" scope="col">
+                      Discipline
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Evaluation Date
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Evaluation By
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {onSnowEvals.map((row) => (
                     <tr>
-                      <td>{row.discipline.description}</td>
-                      <td>{row.evaluationDate.substring(0, 10)}</td>
-                      <td>{row.evaluatedBy}</td>
+                      <td className="tdbreak">{row.discipline.description}</td>
+                      <td className="tdbreak">
+                        {row.evaluationDate.substring(0, 10)}
+                      </td>
+                      <td className="tdbreak">{row.evaluatedBy}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -977,18 +988,27 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
               <h5>
                 <b>Evaluator Training</b>
               </h5>
-              <table className="table table-bordered hover" it="sortTable">
+              <table
+                className="table table-bordered hover myMiniTable"
+                it="sortTable"
+              >
                 <thead>
                   <tr>
-                    <th scope="col">Event Type</th>
-                    <th scope="col">Completion Date</th>
+                    <th className="tdbreak" scope="col">
+                      Event Type
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Completion Date
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {evaluationTraining.map((row) => (
                     <tr>
-                      <td>{row.eventType}</td>
-                      <td>{row.completedDate.substring(0, 10)}</td>
+                      <td className="tdbreak">{row.eventType}</td>
+                      <td className="tdbreak">
+                        {row.completedDate.substring(0, 10)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -1001,18 +1021,29 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
               <h5>
                 <b>Patroller Operational Training</b>
               </h5>
-              <table className="table table-bordered hover" it="sortTable">
+              <table
+                className="table table-bordered hover myMiniTable"
+                it="sortTable"
+              >
                 <thead>
                   <tr>
-                    <th scope="col">Operational Event</th>
-                    <th scope="col">Completion Date</th>
+                    <th className="tdbreak" scope="col">
+                      Operational Event
+                    </th>
+                    <th className="tdbreak" scope="col">
+                      Completion Date
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {operationalTraining.map((row) => (
                     <tr>
-                      <td>{row.operationalEvent.description}</td>
-                      <td>{row.completedDate.substring(0, 10)}</td>
+                      <td className="tdbreak">
+                        {row.operationalEvent.description}
+                      </td>
+                      <td className="tdbreak">
+                        {row.completedDate.substring(0, 10)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

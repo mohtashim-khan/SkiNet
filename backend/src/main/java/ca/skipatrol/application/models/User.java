@@ -45,6 +45,10 @@ public class User {
 
     @Getter
     @Setter
+    private Boolean trainer;
+
+    @Getter
+    @Setter
     @JsonManagedReference
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private Role role;
@@ -107,7 +111,7 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType) {
+    public User(String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType, Boolean trainer) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -115,9 +119,10 @@ public class User {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.userType = userType;
+        this.trainer = trainer;
     }
 
-    public User(UUID userID, String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType) {
+    public User(UUID userID, String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType, Boolean trainer) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -126,6 +131,8 @@ public class User {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.userType = userType;
+        this.trainer = trainer;
+
     }
 
     public User(UUID userID,
@@ -143,7 +150,8 @@ public class User {
                 List<EmergencyContact> emergencyContacts,
                 List<PatrolCommitment> patrolCommitments,
                 List<PersonAward> personAwards,
-                List<Uniform> uniforms) {
+                List<Uniform> uniforms,
+                Boolean trainer) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -160,5 +168,6 @@ public class User {
         this.patrolCommitments = patrolCommitments;
         this.personAwards = personAwards;
         this.uniforms = uniforms;
+        this.trainer = trainer;
     }
 }

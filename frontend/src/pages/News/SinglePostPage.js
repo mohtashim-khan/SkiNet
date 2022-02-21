@@ -7,6 +7,8 @@ const SinglePostPage = ({ session }) => {
 
   const [post, setPost] = useState({});
 
+  const [attachments, setAttachments] = useState([]);
+
   useEffect(() => {
     session.get("posts/" + postId).then((response) => {
       if (response.status == 200) {
@@ -14,6 +16,14 @@ const SinglePostPage = ({ session }) => {
       }
     });
   }, [setPost]);
+
+  useEffect(() => {
+    session.get("posts/" + postId + "/attachments").then((response) => {
+      if (response.status == 200) {
+        setAttachments(response.data._embedded.attachments);
+      }
+    });
+  }, [setAttachments]);    
 
   return (
     <Container className="p-3" style={{
@@ -34,6 +44,20 @@ const SinglePostPage = ({ session }) => {
           <hr />
         </Col>
       </Row>
+        <Row>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Attachments</h5>
+                    <ul>
+                        {
+                            attachments.map((attachment) => {
+                                return (<li>{attachment.originalFileName}</li>);
+                            })
+                        }
+                    </ul>                 
+                </div>
+            </div>            
+        </Row>
     </Container>
   );
 };

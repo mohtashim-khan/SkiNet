@@ -27,16 +27,10 @@ public class AttachmentStorageServicesImpl implements AttachmentStorageServices 
     @Autowired
     private PostRepository postRepository;
 
-    private Path attachmentsDirectory;
+    private final Path attachmentsDirectory = Paths.get("/var/csp");
 
     @Override
     public void init() throws IOException {
-        if (System.getProperty("os.name", "unknown").contains("nix")) {
-            attachmentsDirectory = Paths.get("/var/csp");
-        } else {
-            attachmentsDirectory = Paths.get("~/csp");
-        }
-
         if (!Files.exists(attachmentsDirectory)) {
             Files.createDirectories(attachmentsDirectory);
         }

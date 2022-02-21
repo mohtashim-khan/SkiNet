@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,6 +36,11 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Getter
     private final Set<Comment> comments = new HashSet<>();
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    private List<Attachment> attachments;
 
     public void addComment(Comment comment) {
         comments.add(comment);

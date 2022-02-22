@@ -20,7 +20,7 @@ public class ActionLog {
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(unique = true, nullable = false)
+    @JoinColumn(nullable = false)
     private Event event;
 
 

@@ -120,7 +120,7 @@ export const selectShiftHandler = async (
 
       //Getting the action log
       session
-        .get("actionLogs/search/findAllByEvent_eventID?eventID=" + clickInfo.event.extendedProps.eventID, {} ,{}, false)
+        .get("actionLogs/search/findAllByEvent_eventID?eventID=" + clickInfo.event.extendedProps.eventID, {}, {}, false)
         .then((response) => {
           //correct response
           if (response.status === 200) {
@@ -160,6 +160,19 @@ export const selectShiftHandler = async (
                 shadow_list.push(response.data._embedded.eventLogs[i]);
               }
             }
+
+            //current shift amount
+            setShiftInfo((prev) => ({
+              ...prev,
+              current_ros: rostered_list.length,
+            }));
+            //Setting table viewable
+            setRosteredList(rostered_list);
+            setUnavailList(unavail_list);
+            setTraineeList(trainee_list);
+            setWaitlist(wait_list);
+            setShadowList(shadow_list);
+
           } else {
             console.log("No Shifts");
           }
@@ -168,24 +181,11 @@ export const selectShiftHandler = async (
           console.log("error " + error);
         });
 
-      //current shift amount
-      setShiftInfo((prev) => ({
-        ...prev,
-        current_ros: rostered_list.length,
-      }));
-      //Setting table viewable
-      setRosteredList(rostered_list);
-      setUnavailList(unavail_list);
-      setTraineeList(trainee_list);
-      setWaitlist(wait_list);
-      setShadowList(shadow_list);
 
-      if (
-        compare.event.id !== clickInfo.extendedProps.eventID ||
-        dragDropEnable === "third"
-      ) {
-        await setUpdater(true);
-      }
+
+      // if (compare.event.id !== clickInfo.event.extendedProps.eventID || dragDropEnable === "third") {
+      //   await setUpdater(true);
+      // }
     }
   } catch (error) {
     console.log(error);
@@ -361,7 +361,7 @@ export const dragDropShift = async (
 
       //avoid weird skipping glitch when you update it updates 4 times due to updating the currentShift state
       for (let i = 0; i < shifts.length; i++) {
-        if (shifts[i].id == e.event.id) {
+        if (shifts[i].id === e.event.id) {
           let currentTempStart = new Date(shifts[i].start);
           currentTempStart = new Date(
             currentTempStart.getTime() +

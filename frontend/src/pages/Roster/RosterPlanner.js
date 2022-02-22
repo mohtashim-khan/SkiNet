@@ -233,7 +233,7 @@ const RosterPlanner = ({ session }) => {
               }
               eventClick={ (e) =>{
                 selectShiftHandler(e, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session) //Specifies the handler that is called when an shift is clicked//Specifies the handler that is called when an shift is clicked
-               // history.push('/roster/' + e.event.id) - TODO: MAY HAVE TO UNCOMMENT
+               // history.push('/roster/' + e.event.id) - TODO: do not see the point of this history push just yet
               }}
               select={(e) =>
                 createShiftHandler(
@@ -260,7 +260,7 @@ const RosterPlanner = ({ session }) => {
                             type="button"
                             class="myButton btn btn-info float-start d-flex-inline"
                           >
-                            Bulk Edit Shifts
+                            Bulk Edit Shifts 
                           </button>
                           <button
                             type="button"
@@ -275,7 +275,7 @@ const RosterPlanner = ({ session }) => {
                 <ShiftInfo currentShift={currentShift} shiftInfo={shiftInfo} />
                 {/* <ShiftInfo /> */}
                 <div className="ShiftButtons">
-                <SignUpShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName+" "+session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} trainer={session.session_data().firstName+" "+session.session_data().lastName} phone_number={session.session_data().phoneNumber} email = {session.session_data().email} setCurrentShift={setCurrentShift} session = {session} />
+                <SignUpShift currentShift = {currentShift} setList = {setList} setShiftInfo = {setShiftInfo} setRosteredList = {setRosteredList} setUnavailList = {setUnavailList} setTraineeList = {setTraineeList} setWaitlist = {setWaitlist} setShadowList = {setShadowList} session = {session} />
 
                 <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName+" "+session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} />
 
@@ -289,7 +289,7 @@ const RosterPlanner = ({ session }) => {
                   {session.session_data() !== null &&
                     (session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") && (
                       <>
-                        <EditShift currentShift={currentShift} EditShiftModal={EditShiftModal} setEditShiftModal={setEditShiftModal} setProxySelect={setProxySelect} setUpdater={setUpdater} currentShift={currentShift} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session={session} />
+                        <EditShift currentShift={currentShift} EditShiftModal={EditShiftModal} setEditShiftModal={setEditShiftModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session={session} />
                         <DeleteShift EventDeleteModal={EventDeleteModal} setEventDeleteModal={setEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} setResetter={setResetter} />
 
                       </>
@@ -393,7 +393,7 @@ const RosterPlanner = ({ session }) => {
                           setAssignAreaModal={setAssignAreaModal}
                           setProxySelect={setProxySelect}
                           rosteredList={rosteredList}
-                          userAuth={session.session_data()}
+                          session_data={session.session_data()}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {true ? (

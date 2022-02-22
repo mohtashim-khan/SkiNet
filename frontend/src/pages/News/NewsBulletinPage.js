@@ -122,7 +122,28 @@ const NewsBulletinPage = ({ session }) => {
                   CSP LL Awards
                 </ListGroup.Item>
                 <ListGroup.Item className="py-1" action href="#link2">
-                  Urgent
+                  LLSR Snow Safety Operational Information
+                </ListGroup.Item>
+                <ListGroup.Item className="py-1" action href="#link3">
+                  News / Announcements
+                </ListGroup.Item>
+                <ListGroup.Item className="py-1" action href="#link4">
+                  Weekend Reports
+                </ListGroup.Item>
+                <ListGroup.Item className="py-1" action href="#link5">
+                  CSP LL Training
+                </ListGroup.Item>
+                <ListGroup.Item className="py-1" action href="#link6">
+                  CSP LL Handbook
+                </ListGroup.Item>
+                <ListGroup.Item className="py-1" action href="#link7">
+                  Winter Special Events
+                </ListGroup.Item>
+                <ListGroup.Item className="py-1" action href="#link8">
+                  CSP LL APL Roles
+                </ListGroup.Item>
+                <ListGroup.Item className="py-1" action href="#link9">
+                  CSP LL Social Events
                 </ListGroup.Item>
               </ListGroup>
             </Col>

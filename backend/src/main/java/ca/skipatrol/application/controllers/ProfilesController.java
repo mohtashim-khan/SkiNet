@@ -291,9 +291,10 @@ public class ProfilesController {
     @RequestMapping(value = "/customapi/profile/user/CreateNewUser", method = RequestMethod.POST)
     public ResponseEntity<Object> createNewUser(
             @RequestBody Map<String, String> userInfo) {
-        User user = profileServices.createNewUser(userInfo.get("username"), userInfo.get("password"),
+        
+                User user = profileServices.createNewUser(userInfo.get("username"), userInfo.get("password"),
                 userInfo.get("firstName"), userInfo.get("lastName"), userInfo.get("email"), userInfo.get("phoneNumber"),
-                userInfo.get("eventRole"));
+                userInfo.get("eventRole"), Boolean.parseBoolean(userInfo.get("trainer")));
 
         if (user != null)
             return new ResponseEntity<>(user, HttpStatus.OK);

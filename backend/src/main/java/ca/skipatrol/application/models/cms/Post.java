@@ -1,5 +1,7 @@
 package ca.skipatrol.application.models.cms;
 
+import ca.skipatrol.application.models.PersonAward;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +28,12 @@ public class Post {
     @Getter
     @Setter
     private String body;
+
+    @Getter
+    @Setter
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Topic topic;
 
     @Column(insertable = false,
             updatable = false,

@@ -71,7 +71,8 @@ public interface ProfileServices {
             String lastName,
             String email,
             String phoneNumber,
-            String eventRole);
+            String eventRole,
+            Boolean trainer);
 
     public boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
 

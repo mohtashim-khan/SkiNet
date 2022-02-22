@@ -83,7 +83,8 @@ export const selectShiftHandler = async (
   setUpdater,
   setShadowList,
   setList,
-  setActionLog
+  setActionLog,
+  session
 ) => {
   try {
     let compare = currentShift;
@@ -96,10 +97,7 @@ export const selectShiftHandler = async (
       };
     }
 
-    if (
-      clickInfo.event.proxy === "yes" ||
-      compare.event.id !== clickInfo.event.id
-    ) {
+    if (clickInfo.event.proxy === "yes" || compare.event.id !== clickInfo.event.extendedProps.eventID) {
       //current shift if not selected before
       await setCurrentShift(clickInfo);
 
@@ -107,36 +105,27 @@ export const selectShiftHandler = async (
       await setDragDropEnable("second");
 
       //Setting on and off of pop up
-      await axios
-        .get("/getShiftInfo/" + clickInfo.event.id)
-        .then((response) => {
-          //correct response
-          if (response.status === 200) {
-            setShiftInfo({
-              hl: response.data[0].hl_user,
-              min_pat: response.data[0].min_patrollers,
-              max_pat: response.data[0].max_patrollers,
-              current_ros: "",
-              max_trainee: response.data[0].max_trainees,
-              event_name: response.data[0].event_name,
-              all_day: response.data[0].all_day,
-              startStr: clickInfo.event.startStr,
-            });
-          } else {
-            console.log("No Shifts");
-          }
-        })
-        .catch((error) => {
-          console.log("error " + error);
-        });
+
+      setShiftInfo({
+        hl: clickInfo.event.extendedProps.hlUser,
+        min_pat: clickInfo.event.extendedProps.minPatrollers,
+        max_pat: clickInfo.event.extendedProps.maxPatrollers,
+        current_ros: "",
+        max_trainee: clickInfo.event.extendedProps.maxTrainees,
+        event_name: clickInfo.event.title,
+        all_day: clickInfo.event.allDay,
+        startStr: clickInfo.event.startStr,
+      });
+
 
       //Getting the action log
-      axios
-        .get("/getActionLogInfo/" + clickInfo.event.id)
+      session
+        .get("actionLogs/search/findAllByEvent_eventID?eventID=" + clickInfo.event.extendedProps.eventID, {}, {}, false)
         .then((response) => {
           //correct response
           if (response.status === 200) {
-            setActionLog(response.data);
+            setActionLog(response.data._embedded.actionLogs);
+
           } else {
             console.log("No Actions");
           }
@@ -152,25 +141,38 @@ export const selectShiftHandler = async (
       let shadow_list = [];
 
       //Getting the Event Log Users
-      await axios
-        .get("/getEventLogInfo/" + clickInfo.event.id)
+      session
+        .get("eventLogs/search/findAllByEvent_eventID?eventID=" + clickInfo.event.extendedProps.eventID)
         .then((response) => {
           //correct response
           if (response.status === 200) {
-            setList(response.data);
-            for (let i = 0; i < response.data.length; i++) {
-              if (response.data[i].role === "Rostered") {
-                rostered_list.push(response.data[i]);
-              } else if (response.data[i].role === "Unavailable") {
-                unavail_list.push(response.data[i]);
-              } else if (response.data[i].role === "Trainee") {
-                trainee_list.push(response.data[i]);
-              } else if (response.data[i].role === "Waitlist") {
-                wait_list.push(response.data[i]);
-              } else if (response.data[i].role === "Shadow") {
-                shadow_list.push(response.data[i]);
+            setList(response.data._embedded.eventLogs);
+            for (let i = 0; i < response.data._embedded.eventLogs.length; i++) {
+              if (response.data._embedded.eventLogs[i].role === "ROSTERED") {
+                rostered_list.push(response.data._embedded.eventLogs[i]);
+              } else if (response.data._embedded.eventLogs[i].role === "UNAVAILABLE") {
+                unavail_list.push(response.data._embedded.eventLogs[i]);
+              } else if (response.data._embedded.eventLogs[i].role === "TRAINEE") {
+                trainee_list.push(response.data._embedded.eventLogs[i]);
+              } else if (response.data._embedded.eventLogs[i].role === "WAITLIST") {
+                wait_list.push(response.data._embedded.eventLogs[i]);
+              } else if (response.data._embedded.eventLogs[i].role === "SHADOW") {
+                shadow_list.push(response.data._embedded.eventLogs[i]);
               }
             }
+
+            //current shift amount
+            setShiftInfo((prev) => ({
+              ...prev,
+              current_ros: rostered_list.length,
+            }));
+            //Setting table viewable
+            setRosteredList(rostered_list);
+            setUnavailList(unavail_list);
+            setTraineeList(trainee_list);
+            setWaitlist(wait_list);
+            setShadowList(shadow_list);
+
           } else {
             console.log("No Shifts");
           }
@@ -179,30 +181,18 @@ export const selectShiftHandler = async (
           console.log("error " + error);
         });
 
-      //current shift amount
-      setShiftInfo((prev) => ({
-        ...prev,
-        current_ros: rostered_list.length,
-      }));
-      //Setting table viewable
-      setRosteredList(rostered_list);
-      setUnavailList(unavail_list);
-      setTraineeList(trainee_list);
-      setWaitlist(wait_list);
-      setShadowList(shadow_list);
 
-      if (
-        compare.event.id !== clickInfo.event.id ||
-        dragDropEnable === "third"
-      ) {
-        await setUpdater(true);
-      }
+
+      // if (compare.event.id !== clickInfo.event.extendedProps.eventID || dragDropEnable === "third") {
+      //   await setUpdater(true);
+      // }
     }
   } catch (error) {
     console.log(error);
   }
 };
 
+//TODO: Implement this from old code
 export const linkShiftHandler = async (
   linkId,
   setCurrentShift,
@@ -332,8 +322,8 @@ export const createShiftHandler = async (
   setResetter(true);
   if (
     userAuth.user_type !== "" &&
-    userAuth.user_type !== "Rostered" &&
-    userAuth.user_type !== "Trainee"
+    userAuth.user_type !== "ROSTERED" &&
+    userAuth.user_type !== "TRAINEE"
   ) {
     setSelectedDate(selectedDate);
     setEventAddModal(true);
@@ -353,8 +343,8 @@ export const dragDropShift = async (
   setProxySelect
 ) => {
   if (
-    userAuth.user_type === "System Admin" ||
-    userAuth.user_type === "Hill Admin"
+    userAuth.user_type === "SYSTEM_ADMIN" ||
+    userAuth.user_type === "HILL_ADMIN"
   ) {
     if (dragDropEnable === "third") {
       let shifts = totalShifts;
@@ -371,18 +361,18 @@ export const dragDropShift = async (
 
       //avoid weird skipping glitch when you update it updates 4 times due to updating the currentShift state
       for (let i = 0; i < shifts.length; i++) {
-        if (shifts[i].id == e.event.id) {
+        if (shifts[i].id === e.event.id) {
           let currentTempStart = new Date(shifts[i].start);
           currentTempStart = new Date(
             currentTempStart.getTime() +
-              currentTempStart.getTimezoneOffset() * 60000
+            currentTempStart.getTimezoneOffset() * 60000
           );
           let newTempStart = new Date(currentTempStart.getTime() + diffStart);
 
           let currentTempEnd = new Date(shifts[i].end);
           currentTempEnd = new Date(
             currentTempEnd.getTime() +
-              currentTempEnd.getTimezoneOffset() * 60000
+            currentTempEnd.getTimezoneOffset() * 60000
           );
           let newTempEnd = new Date(currentTempEnd.getTime() + diffEnd);
 

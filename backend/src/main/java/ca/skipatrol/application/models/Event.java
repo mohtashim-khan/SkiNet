@@ -49,7 +49,8 @@ public class Event {
     @Setter
     private int maxTrainees = -1;
 
-    @Column(name = "hl_user", nullable = false, columnDefinition = "varchar(255)")
+    // THIS IS NEVER USED BY THE OLD GROUP'S FRONTEND
+    @Column(name = "hl_user", nullable = true, columnDefinition = "varchar(255)")
     @Getter
     @Setter
     private String hlUser;
@@ -59,8 +60,8 @@ public class Event {
     @Setter
     private String allDay;
 
-    // Potential Foreign Key?? For now left as is
-    @Column(name = "group_id", nullable = false, columnDefinition = "int(11) default -1")
+    // THIS IS NEVER USED BY THE OLD GROUP'S FRONTEND
+    @Column(name = "group_id", nullable = true, columnDefinition = "int(11) default -1")
     @Getter
     @Setter
     private int groupID = -1;

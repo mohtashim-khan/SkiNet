@@ -8,6 +8,7 @@ public enum EventRole {
     ROSTERED,
     HILL_ADMIN,
     SYSTEM_ADMIN,
-    NOT_A_USER
+    NOT_A_USER,
+    TRAINER
 
 }

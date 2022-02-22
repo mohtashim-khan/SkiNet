@@ -31,7 +31,7 @@ public class Post {
 
     @Getter
     @Setter
-    @JsonManagedReference
+    @JoinColumn
     @ManyToOne(fetch = FetchType.EAGER)
     private Topic topic;
 

@@ -7,6 +7,7 @@ import ClockIcon from "../../images/Clock.png";
 import OneAvatarIcon from "../../images/OneAvatar.png";
 import LetterPMultipleAvatarsIcon from "../../images/LetterPMultipleAvatars.png";
 import LetterTMultipleAvatarsIcon from "../../images/LetterTMultipleAvatars.png";
+import $ from 'jquery';
 
 import {
   Container,
@@ -126,6 +127,9 @@ const RosterPlanner = ({ session }) => {
   }, [Updater]);
 
 
+
+
+
   function renameKeys(obj, newKeys) {
     const keyValues = Object.keys(obj).map((key) => {
       const newKey = newKeys[key] || key;
@@ -179,6 +183,8 @@ const RosterPlanner = ({ session }) => {
       setActiveDateTitle(
         getCalendarApi().currentDataManager.getCurrentData().viewTitle
       );
+
+      setUpdater(true);
     }
   }
 
@@ -239,7 +245,7 @@ const RosterPlanner = ({ session }) => {
               selectable={true} //Enables ability to select dates
               selectMirror={true} //To do: I couldn't figure out what this does. I tried changing it to false and nothing changed on the UI
               dayMaxEvents={true} //Enables it so that only 4 shifts can be fit in one date. Additional dates will be shown in "+# more", where # is the additional numbers of shifts
-              eventResizableFromStart={true}
+              eventResizableFromStart={false}
               datesSet={onDateSetEvent}
               events={(Updater) ? (args, successCb, failureCb) => refreshEvents(args, successCb, failureCb) : totalShifts}
               eventClick={(e) => {
@@ -288,7 +294,7 @@ const RosterPlanner = ({ session }) => {
                 <div className="ShiftButtons">
                   <SignUpShift currentShift={currentShift} setList={setList} setShiftInfo={setShiftInfo} setRosteredList={setRosteredList} setUnavailList={setUnavailList} setTraineeList={setTraineeList} setWaitlist={setWaitlist} setShadowList={setShadowList} session={session} />
 
-                  <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName + " " + session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} session={session} setList = {setList} setUnavailList={setUnavailList} setShiftInfo={setShiftInfo}/>
+                  <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName + " " + session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} session={session} setList={setList} setUnavailList={setUnavailList} setShiftInfo={setShiftInfo} />
 
                   <button
                     type="button"

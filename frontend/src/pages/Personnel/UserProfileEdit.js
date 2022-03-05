@@ -7,6 +7,7 @@ import LakeLouiseRoles from "./LakeLouiseRoles.js";
 import PatrolUniformAndEquipment from "./PatrolUniformAndEquipment.js";
 import LakeLouiseAwards from "./LakeLouiseAwards.js";
 import General from "./General.js";
+import Password from "./Password.js";
 import "./UserProfileEdit.css";
 
 const UserProfileEdit = ({ session }) => {
@@ -36,6 +37,8 @@ const UserProfileEdit = ({ session }) => {
             <PatrolCommitment session={session} userID={id} allowed={isAdmin} />
 
             <LakeLouiseRoles session={session} userID={id} allowed={isAdmin} />
+
+            {isAdmin && <Password session={session} userID={id} allowed={isAdmin} />}
           </div>
 
           <div className="col-lg">

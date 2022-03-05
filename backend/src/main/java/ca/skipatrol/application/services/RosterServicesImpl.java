@@ -17,6 +17,7 @@ import java.net.URI;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -288,6 +289,22 @@ public class RosterServicesImpl implements RosterServices {
         }
 
         return 500;
+    }
+
+    public int DeleteEventFull(UUID eventID)
+    {
+        try
+        {
+            List<EventLog> eventLogs = eventLogRepository.findAllByEvent_eventID(eventID);
+            List<UUID> eventLogIDs = eventLogs.stream().map(x -> x.getEventLogID()).collect(Collectors.toList());
+            eventLogRepository.deleteAllByIdInBatch(eventLogIDs);
+
+            eventRepository.deleteById(eventID);
+            return 200;
+        }
+        catch(Exception exception) {
+            return 500;
+        }
     }
 
     public List<Event> RetrieveEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject weekDays)

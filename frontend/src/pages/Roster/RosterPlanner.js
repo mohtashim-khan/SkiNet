@@ -59,8 +59,9 @@ const RosterPlanner = ({ session }) => {
 
   //used for updating information
   const [Updater, setUpdater] = useState(true); // for Add
+  const updateCalendar = () => setUpdater(true);
   const [proxySelect, setProxySelect] = useState(false); // for Add
-  const [resetter, setResetter] = useState(false); // for Add
+  const [resetter, setResetter] = useState(false); // for Add -- TODO: Find out what this does specifically
   const [dragDropEnable, setDragDropEnable] = useState("first"); // for Add
 
   const [rosteredList, setRosteredList] = useState([]);
@@ -117,6 +118,14 @@ const RosterPlanner = ({ session }) => {
     );
   }, []);
 
+  //will update calendar if the Add Roster Modal changes
+  useEffect(() => {
+    if (Updater) {
+      setUpdater(false);
+    }
+  }, [Updater]);
+
+
   function renameKeys(obj, newKeys) {
     const keyValues = Object.keys(obj).map((key) => {
       const newKey = newKeys[key] || key;
@@ -127,38 +136,42 @@ const RosterPlanner = ({ session }) => {
 
   function refreshEvents(args, successCb, failureCb) {
     if (args === undefined) return;
+    if (Updater) {
+      const startDate = args.start;
+      const endDate = args.end;
 
-    const startDate = args.start;
-    const endDate = args.end;
-
-    const params = new URLSearchParams({
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
-    });
-
-    session
-      .get("events/search/findByStartDateBetween", {}, params.toString())
-      .then((response) => {
-        if (response.status === 200) {
-          var events = [];
-          const newKeyNames = {
-            startDate: "start",
-            endDate: "end",
-            eventName: "title",
-          };
-
-          response.data._embedded.events.forEach((event) => {
-            events = [...events, renameKeys(event, newKeyNames)];
-          });
-
-          successCb(events);
-        } else {
-          failureCb(response.status);
-        }
-      })
-      .catch((e) => {
-        failureCb(e);
+      const params = new URLSearchParams({
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
       });
+
+      session
+        .get("events/search/findByStartDateBetween", {}, params.toString())
+        .then((response) => {
+          if (response.status === 200) {
+            var events = [];
+            const newKeyNames = {
+              startDate: "start",
+              endDate: "end",
+              eventName: "title",
+            };
+
+            response.data._embedded.events.forEach((event) => {
+              events = [...events, renameKeys(event, newKeyNames)];
+            });
+
+            setTotalShifts(events);
+            successCb(events);
+          } else {
+            failureCb(response.status);
+          }
+        })
+        .catch((e) => {
+          failureCb(e);
+        });
+    }
+
+
   }
 
   function onDateSetEvent(dateSetEvent) {
@@ -192,20 +205,20 @@ const RosterPlanner = ({ session }) => {
               headerToolbar={
                 window.innerWidth > 760
                   ? {
-                      left: "prev,next",
-                      center: "title",
-                      right: "dayGridMonth,dayGridWeek",
-                    }
+                    left: "prev,next",
+                    center: "title",
+                    right: "dayGridMonth,dayGridWeek",
+                  }
                   : {
-                      left: "title",
-                      right: "prev,next",
-                    }
+                    left: "title",
+                    right: "prev,next",
+                  }
               }
               footerToolbar={
                 window.innerWidth > 760
                   ? {
-                      /** Empty */
-                    }
+                    /** Empty */
+                  }
                   : { center: "dayGridMonth,dayGridWeek" }
               }
               initialView={
@@ -214,12 +227,12 @@ const RosterPlanner = ({ session }) => {
               dayHeaderFormat={
                 window.innerWidth > 760
                   ? {
-                      weekday: "short",
-                    }
+                    weekday: "short",
+                  }
                   : {
-                      month: "numeric",
-                      day: "numeric",
-                    }
+                    month: "numeric",
+                    day: "numeric",
+                  }
               }
               editable={true}
               eventStartEditable={true}
@@ -228,12 +241,10 @@ const RosterPlanner = ({ session }) => {
               dayMaxEvents={true} //Enables it so that only 4 shifts can be fit in one date. Additional dates will be shown in "+# more", where # is the additional numbers of shifts
               eventResizableFromStart={true}
               datesSet={onDateSetEvent}
-              events={(args, successCb, failureCb) =>
-                refreshEvents(args, successCb, failureCb)
-              }
-              eventClick={ (e) =>{
+              events={(Updater) ? (args, successCb, failureCb) => refreshEvents(args, successCb, failureCb) : totalShifts}
+              eventClick={(e) => {
                 selectShiftHandler(e, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session) //Specifies the handler that is called when an shift is clicked//Specifies the handler that is called when an shift is clicked
-               // history.push('/roster/' + e.event.id) - TODO: do not see the point of this history push just yet
+                // history.push('/roster/' + e.event.id) - TODO: do not see the point of this history push just yet
               }}
               select={(e) =>
                 createShiftHandler(
@@ -247,7 +258,7 @@ const RosterPlanner = ({ session }) => {
               }
             />
           </Col>
-          
+
           <Col sm={4}>
             <div className="card w-auto">
               <div class="card-body">
@@ -260,7 +271,7 @@ const RosterPlanner = ({ session }) => {
                             type="button"
                             class="myButton btn btn-info float-start d-flex-inline"
                           >
-                            Bulk Edit Shifts 
+                            Bulk Edit Shifts
                           </button>
                           <button
                             type="button"
@@ -275,9 +286,9 @@ const RosterPlanner = ({ session }) => {
                 <ShiftInfo currentShift={currentShift} shiftInfo={shiftInfo} />
                 {/* <ShiftInfo /> */}
                 <div className="ShiftButtons">
-                <SignUpShift currentShift = {currentShift} setList = {setList} setShiftInfo = {setShiftInfo} setRosteredList = {setRosteredList} setUnavailList = {setUnavailList} setTraineeList = {setTraineeList} setWaitlist = {setWaitlist} setShadowList = {setShadowList} session = {session} />
+                  <SignUpShift currentShift={currentShift} setList={setList} setShiftInfo={setShiftInfo} setRosteredList={setRosteredList} setUnavailList={setUnavailList} setTraineeList={setTraineeList} setWaitlist={setWaitlist} setShadowList={setShadowList} session={session} />
 
-                <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName+" "+session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} />
+                  <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName + " " + session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} session={session} setList = {setList} setUnavailList={setUnavailList} setShiftInfo={setShiftInfo}/>
 
                   <button
                     type="button"
@@ -290,7 +301,7 @@ const RosterPlanner = ({ session }) => {
                     (session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") && (
                       <>
                         <EditShift currentShift={currentShift} EditShiftModal={EditShiftModal} setEditShiftModal={setEditShiftModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session={session} />
-                        <DeleteShift EventDeleteModal={EventDeleteModal} setEventDeleteModal={setEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} setResetter={setResetter} />
+                        <DeleteShift EventDeleteModal={EventDeleteModal} setEventDeleteModal={setEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} setResetter={setResetter} session={session} />
 
                       </>
                     )}

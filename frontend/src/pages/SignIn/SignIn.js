@@ -42,6 +42,8 @@ const SignIn = ({ session }) => {
             user_type: response.data.userType,
             email: response.data.email,
             phoneNumber: response.data.phoneNumber,
+            trainer: response.data.trainer,
+
 
           };
           console.log(response);

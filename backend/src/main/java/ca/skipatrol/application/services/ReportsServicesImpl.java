@@ -123,6 +123,10 @@ public class ReportsServicesImpl implements ReportsServices {
         // Awards
         String[] awards = gson.fromJson(inputDataJSON.get("awards"), String[].class);
 
+        //trainer
+        Boolean trainer = gson.fromJson(inputDataJSON.get("trainer"), Boolean.class);
+        
+
         // General Section -- Emergency Contact
         Boolean hasEmergencyContact = gson.fromJson(inputDataJSON.get("hasEmergencyContact"), Boolean.class);
 
@@ -465,6 +469,10 @@ public class ReportsServicesImpl implements ReportsServices {
             }
         }
 
+        if(trainer != null){
+            conditions.add(builder.equal(user.get("trainer"), trainer));
+        }
+
         // Make Query
         List<User> results;
         ArrayList<User> returnResults = new ArrayList<User>();
@@ -525,7 +533,8 @@ public class ReportsServicesImpl implements ReportsServices {
                     user.getLastName(),
                     user.getEmail(),
                     user.getPhoneNumber(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getTrainer());
 
             if (onSnowEval) {
                 Hibernate.initialize(user.getOnSnowEvals().size());

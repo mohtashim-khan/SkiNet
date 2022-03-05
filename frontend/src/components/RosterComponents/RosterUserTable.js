@@ -15,7 +15,7 @@ const RosterUserTable = ({
   setCurrentShift,
   setProxySelect,
   rosteredList,
-  userAuth,
+  session_data,
 }) => {
   const rosteredUsersToRender = () => {
     let i = 0;
@@ -29,12 +29,12 @@ const RosterUserTable = ({
         <td className="userText">{rosteredUser.area}</td>
         <td className="userText">{rosteredUser.trainer ? "Trainer" : ""}</td>
         <td className="userText">
-          {rosteredUser.timestamp_subrequest !== "0000-00-00 00:00:00"
+          {rosteredUser.timestampSubrequest !== "0000-00-00 00:00:00"
             ? "X"
             : ""}
         </td>
-        <td className="userText">{rosteredUser.attendance}</td>
-        {userAuth.username === rosteredUser.username ? (
+        <td className="userText">{rosteredUser.attendance === null ? "Attendance Not Recorded" : rosteredUser.attendance}</td>
+        {session_data.username === rosteredUser.username ? (
           <>
             <td>
               <div style={{ display: "flex" }}>
@@ -47,7 +47,7 @@ const RosterUserTable = ({
                   currentShift={currentShift}
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
-                  username={userAuth.username}
+                  username={session_data.username}
                 />
               </div>
             </td>
@@ -57,8 +57,8 @@ const RosterUserTable = ({
             <td></td>
           </>
         )}
-        {userAuth.user_type === "System Admin" ||
-        userAuth.user_type === "Hill Admin" ? (
+        {session_data.user_type === "SYSTEM_ADMIN" ||
+        session_data.user_type === "HILL_ADMIN" ? (
           <>
             <td>
               <div style={{ display: "flex" }}>
@@ -67,14 +67,14 @@ const RosterUserTable = ({
                   setCurrentShift={setCurrentShift}
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
-                  username={userAuth.username}
+                  username={session_data.username}
                 />
                 <Attendance
                   currentShift={currentShift}
                   setCurrentShift={setCurrentShift}
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
-                  username={userAuth.username}
+                  username={session_data.username}
                 />
                 <Comment
                   currentShift={currentShift}
@@ -85,7 +85,7 @@ const RosterUserTable = ({
                   currentShift={currentShift}
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
-                  username={userAuth.username}
+                  username={session_data.username}
                 />
               </div>
             </td>
@@ -113,8 +113,8 @@ const RosterUserTable = ({
               <th>SubRequest</th>
               <th>Attendance</th>
               <th>Actions</th>
-              {userAuth.user_type === "System Admin" ||
-              userAuth.user_type === "Hill Admin" ? (
+              {session_data.user_type === "SYSTEM_ADMIN" ||
+              session_data.user_type === "HILL_ADMIN" ? (
                 <>
                   <th>Admin</th>
                 </>

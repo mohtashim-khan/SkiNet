@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 import $ from "jquery";
 
-const Password = ({ session, userID, allowed }) => {
+const Password = ({ session, userID, allowed, selfView }) => {
     const [prompt, setPrompt] = useState(false);
     const [user, setUser] = useState([]);
     const [myPassword, setMyPassword] = useState("");
@@ -28,22 +28,26 @@ const Password = ({ session, userID, allowed }) => {
             setErrorMsg("Please enter a password")
             return;
         }
-        /*session
-           .put("profile/user/CreateNewUser",
-               {
+        session
+            .put("profile/changePassword?userID=" + userID + "&newPassword=" + myPassword,
+                {},
+                {},
+                true)
+            .then((resp) => {
+                if (resp.status === 200 || resp.status === 201) {
+                    openPrompt();
+                    if (selfView) {
+                        window.setTimeout(function () {
 
-                   password: myPassword,
+                            window.location.href = "/sign-in";
 
-               },
-               {},
-               true)
-           .then((resp) => {
-               if (resp === 200 || resp === 201) {
-                   //setUser
-               }
-           });*/
+                        }, 500);
 
-        openPrompt();
+                    }
+                }
+            });
+
+
     }
 
     useEffect(() => {

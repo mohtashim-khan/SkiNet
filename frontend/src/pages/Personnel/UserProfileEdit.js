@@ -15,6 +15,7 @@ const UserProfileEdit = ({ session }) => {
   const [user, setUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
+
   useEffect(() => {
     session.get("users/" + id).then((resp) => {
       if (resp.status === 200) {
@@ -22,6 +23,8 @@ const UserProfileEdit = ({ session }) => {
       }
     });
     setIsAdmin(session.session_data().user_type === "SYSTEM_ADMIN");
+
+
   }, []);
 
   return (
@@ -38,7 +41,9 @@ const UserProfileEdit = ({ session }) => {
 
             <LakeLouiseRoles session={session} userID={id} allowed={isAdmin} />
 
-            {isAdmin && <Password session={session} userID={id} allowed={isAdmin} />}
+            {isAdmin && <Password session={session} userID={id} allowed={isAdmin}
+              selfView={session.session_data().username === user.username} />}
+
           </div>
 
           <div className="col-lg">

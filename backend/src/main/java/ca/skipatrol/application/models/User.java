@@ -25,6 +25,7 @@ public class User {
     private String username;
 
     @Getter
+    @Setter
     private String password;
 
     @Getter

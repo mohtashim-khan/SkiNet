@@ -198,6 +198,17 @@ public class ProfilesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @RequestMapping(value = "customapi/profile/changePassword", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdateChangePassword(@RequestParam UUID userID, @RequestParam String newPassword) {
+
+        String encodedPassword = profileServices.ChangePassword(userID, newPassword);
+
+        if (encodedPassword != null)
+            return new ResponseEntity<>(encodedPassword, HttpStatus.OK);
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
     @RequestMapping(value = "/customapi/profile/user/PatrolCommitments/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deletePatrolCommitmentsInBatch(@RequestParam ArrayList<UUID> ids) {
         boolean returnVal = profileServices.deletePatrolCommitmentsInBatch(ids);

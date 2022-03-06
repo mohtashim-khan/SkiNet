@@ -47,34 +47,36 @@ public interface ProfileServices {
 
     int UpdateUniformReturnedLeaseSigned(JsonObject uniformJSON);
 
-    public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
+    String ChangePassword(UUID userID, String newPassword);
 
-    public boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);
+    boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
 
-    public boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs);
+    boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);
 
-    public boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs);
+    boolean deleteOperationalTrainingsInBatch(ArrayList<UUID> operationalTrainingIDs);
 
-    public boolean deletePacksInBatch(ArrayList<UUID> packIDs);
+    boolean deleteOnSnowEvalsInBatch(ArrayList<UUID> onSnowEvalIDs);
 
-    public boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs);
+    boolean deletePacksInBatch(ArrayList<UUID> packIDs);
 
-    public boolean deleteVestsInBatch(ArrayList<UUID> vestIDs);
+    boolean deleteJacketsInBatch(ArrayList<UUID> jacketIDs);
 
-    public boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
+    boolean deleteVestsInBatch(ArrayList<UUID> vestIDs);
 
-    public boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
+    boolean deleteRolesInBatch(ArrayList<UUID> roleIDs);
 
-    public User createNewUser(String username,
-            String password,
-            String firstName,
-            String lastName,
-            String email,
-            String phoneNumber,
-            String eventRole,
-            Boolean trainer);
+    boolean deleteAwardsInBatch(ArrayList<UUID> personAwardIDs);
 
-    public boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
+    User createNewUser(String username,
+        String password,
+        String firstName,
+        String lastName,
+        String email,
+        String phoneNumber,
+        String eventRole,
+        Boolean trainer);
 
-    public boolean editOperationalTrainings(UUID evalID, String operationalEvent, String evaluationDate );
+    boolean editOnSnowEvals(UUID evalID, String discipline, String evaluatedBy, String evaluationDate );
+
+    boolean editOperationalTrainings(UUID evalID, String operationalEvent, String evaluationDate );
 }

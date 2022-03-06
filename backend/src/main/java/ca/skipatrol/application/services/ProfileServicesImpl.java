@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -479,6 +476,22 @@ public class ProfileServicesImpl implements ProfileServices {
         uniform.setReturned(returned);
 
         return 200;
+    }
+
+    public String ChangePassword(UUID userID, String newPassword)
+    {
+        try
+        {
+            User user = userRepository.getById(userID);
+            String encodedPassword = new BCryptPasswordEncoder().encode(newPassword);
+            user.setPassword(encodedPassword);
+
+            return encodedPassword;
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
     }
 
     public boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs) {

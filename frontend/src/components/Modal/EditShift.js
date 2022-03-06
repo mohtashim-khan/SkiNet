@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody} from 'reactstrap'
 import { CustomInput, Form, FormGroup, Label, Input } from 'reactstrap';
+import{Modal as ReactBootStrapModal} from 'react-bootstrap';
 
 
 
@@ -118,21 +119,21 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
 
                             //PROXY SELECT FROM OLD GROUP - dont know what it is used for but kept as comment just in case
 
-                            // //do this since to select a shift again in proxy and update we must have current.event.id != clickedInfo.event.id in Rostered services proxy select
-                            // let storeShift = {
-                            //     event: {
-                            //         proxy: 'yes',
-                            //         id: currentShift.event.id,
-                            //         title: currentShift.event.title,
-                            //         start: currentShift.event.start,
-                            //         end: currentShift.event.end,
-                            //         startStr: currentShift.event.startStr,
-                            //         endStr: currentShift.event.endStr,
-                            //     }
-                            // }
+                            //do this since to select a shift again in proxy and update we must have current.event.id != clickedInfo.event.id in Rostered services proxy select
+                            let storeShift = {
+                                event: {
+                                    proxy: 'yes',
+                                    id: currentShift.event.id,
+                                    title: currentShift.event.title,
+                                    start: currentShift.event.start,
+                                    end: currentShift.event.end,
+                                    startStr: currentShift.event.startStr,
+                                    endStr: currentShift.event.endStr,
+                                }
+                            }
 
-                            // //update Shift infos
-                            // setProxySelect(storeShift);
+                            //update Shift infos
+                            setProxySelect(storeShift);
 
                             successModalShow();
                         }
@@ -204,27 +205,27 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
                 </ModalBody>
             </Modal>
 
-            <Modal show={successModal} onHide={successModalClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Editing Success!</Modal.Title>
-                </Modal.Header>
-                <Modal.Footer>
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Editing Success!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
                     <Button variant="secondary" onClick={successModalClose}>
                         Close
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
 
-            <Modal show={failModal} onHide={failModalClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Error Editing Event</Modal.Title>
-                </Modal.Header>
-                <Modal.Footer>
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Editing Event</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
                     <Button variant="secondary" onClick={failModalClose}>
                         Close
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </div>
 
 

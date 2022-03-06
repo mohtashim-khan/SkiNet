@@ -124,7 +124,11 @@ const RosterPlanner = ({ session }) => {
     if (Updater) {
       setUpdater(false);
     }
-  }, [Updater]);
+    if (proxySelect) {
+      selectShiftHandler(proxySelect, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session)
+      setProxySelect(false);
+    }
+  }, [Updater, proxySelect, currentShift, dragDropEnable, session]);
 
 
 

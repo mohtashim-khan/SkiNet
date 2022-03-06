@@ -23,7 +23,7 @@ const DeleteShift = ({ EventDeleteModal, setEventDeleteModal, currentShift, setU
         // //https://www.w3schools.com/sql/sql_autoincrement.asp
         e.preventDefault();
 
-        session.delete('/deleteEvent/' + currentShift.event.id) //NEED CUSTOM CALL FOR THIS
+        session.delete('roster/deleteEvent/' + currentShift.event.id, {}, {}, true ) //NEED CUSTOM CALL FOR THIS
             .then(response => {
                 //if error from database
                 if (response.status === 204) {

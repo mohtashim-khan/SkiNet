@@ -104,7 +104,28 @@ public class RosterController {
 
         code = rosterServices.DeleteEventFull(eventID);
 
-        if (code == 204)
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/roster/updateEvent", method = RequestMethod.PUT)
+    public ResponseEntity<Object> UpdateEvent(@RequestParam
+                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                              @RequestParam
+                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                                              @RequestBody Event event, Principal principal) {
+
+        int code = 500;
+
+        if (principal != null) {
+            event.setStartDate(startDate);
+            event.setEndDate(endDate);
+            code = rosterServices.UpdateEvent(event, userRepository.findByUsername(principal.getName()).get());
+        }
+
+        if (code == 200)
             return ResponseEntity.status(HttpStatus.OK).build();
         else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

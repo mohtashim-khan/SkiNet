@@ -38,7 +38,7 @@ const Password = ({ session, userID, allowed, selfView }) => {
                     openPrompt();
                     if (selfView) {
                         window.setTimeout(function () {
-
+                            session.log_out();
                             window.location.href = "/sign-in";
 
                         }, 500);

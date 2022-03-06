@@ -217,15 +217,6 @@ const Header = ({ session }) => {
                       </li>
                     )}
                   </Route>
-                  <Route path="/admin/areas" exact>
-                    {({ match }) => (
-                      <li className={match ? "nav-item active" : "nav-item"}>
-                        <Link className="nav-link" to="/admin/areas">
-                          Areas
-                        </Link>
-                      </li>
-                    )}
-                  </Route>
                   <Route path="/admin/newUser" exact>
                     {({ match }) => (
                       <li className={match ? "nav-item active" : "nav-item"}>

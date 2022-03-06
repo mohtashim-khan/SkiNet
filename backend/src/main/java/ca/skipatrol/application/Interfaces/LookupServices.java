@@ -21,6 +21,5 @@ public interface LookupServices {
     public boolean deleteConditionsInBatch(ArrayList<UUID> disciplineIDs);
 
 
-
-
+    public boolean deleteAreasInBatch(ArrayList<UUID> areaIDs);
 }

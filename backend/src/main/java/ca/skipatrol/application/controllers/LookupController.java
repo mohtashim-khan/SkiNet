@@ -133,4 +133,14 @@ public class LookupController {
         return new ResponseEntity<>("Error deleting conditions", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @RequestMapping(value = "/customapi/lookups/area/deleteInBatch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteAreasInBatch(@RequestParam ArrayList<UUID> ids) {
+        boolean returnVal = lookupServices.deleteAreasInBatch(ids);
+
+        if(returnVal)
+            return new ResponseEntity<>("Areas deleted correctly", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error deleting Areas", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

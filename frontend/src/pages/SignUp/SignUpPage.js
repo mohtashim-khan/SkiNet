@@ -62,7 +62,7 @@ export default function SignUpPage({ session }) {
         "profile/user/CreateNewUser",
         {
           username: myUsername,
-          password: myPassword,
+          password: myPassword, //replace with password: window.btoa(myPassword),
           firstName: fName,
           lastName: lName,
           email: myEmail,

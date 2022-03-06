@@ -7,12 +7,14 @@ import LakeLouiseRoles from "./LakeLouiseRoles.js";
 import PatrolUniformAndEquipment from "./PatrolUniformAndEquipment.js";
 import LakeLouiseAwards from "./LakeLouiseAwards.js";
 import General from "./General.js";
+import Password from "./Password.js";
 import "./UserProfileEdit.css";
 
 const UserProfileEdit = ({ session }) => {
   let { id } = useParams();
   const [user, setUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+
 
   useEffect(() => {
     session.get("users/" + id).then((resp) => {
@@ -21,6 +23,8 @@ const UserProfileEdit = ({ session }) => {
       }
     });
     setIsAdmin(session.session_data().user_type === "SYSTEM_ADMIN");
+
+
   }, []);
 
   return (
@@ -36,6 +40,10 @@ const UserProfileEdit = ({ session }) => {
             <PatrolCommitment session={session} userID={id} allowed={isAdmin} />
 
             <LakeLouiseRoles session={session} userID={id} allowed={isAdmin} />
+
+            {isAdmin && <Password session={session} userID={id} allowed={isAdmin}
+              selfView={session.session_data().username === user.username} />}
+
           </div>
 
           <div className="col-lg">

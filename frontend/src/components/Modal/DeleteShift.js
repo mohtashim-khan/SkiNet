@@ -2,13 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody, Form } from 'reactstrap'
 
-const DeleteShift = ({ EventDeleteModal, setEventDeleteModal, currentShift, setUpdater, setResetter }) => {
+const DeleteShift = ({ EventDeleteModal, setEventDeleteModal, currentShift, setUpdater, setResetter, session }) => {
     //state template
-    const [eventInfo, setEventInfo] = useState(
-        {
-
-        }
-    );
+    const [eventInfo, setEventInfo] = useState({});
 
     const toggle = (e) => {
         if (currentShift) {
@@ -27,7 +23,7 @@ const DeleteShift = ({ EventDeleteModal, setEventDeleteModal, currentShift, setU
         // //https://www.w3schools.com/sql/sql_autoincrement.asp
         e.preventDefault();
 
-        axios.delete('/deleteEvent/' + currentShift.event.id)
+        session.delete('roster/deleteEvent/' + currentShift.event.id, {}, {}, true ) //NEED CUSTOM CALL FOR THIS
             .then(response => {
                 //if error from database
                 if (response.status === 204) {

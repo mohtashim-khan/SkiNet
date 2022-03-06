@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Button, Modal, ModalHeader, ModalBody, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from 'reactstrap'
-import { CustomInput, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody} from 'reactstrap'
+import { CustomInput, Form, FormGroup, Label, Input } from 'reactstrap';
 
 
-const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySelect, shiftInfo, setUpdater, setCurrentShift, session }) => {
+
+const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySelect, shiftInfo, setUpdater, setCurrentShift, session, calendarRef }) => {
     //state template
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
 
     const [eventInfo, setEventInfo] = useState(
         {
@@ -80,79 +87,74 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
 
 
             const article = {
-
+                eventID: currentShift.event.extendedProps.eventID,
                 eventName: eventInfo.event_name,
                 allDay: eventInfo.all_day, //Specifies whether shift will be an all day shift (AKA urgent)
                 minPatrollers: eventInfo.min_patrollers,
                 maxPatrollers: eventInfo.max_patrollers,
                 maxTrainees: eventInfo.max_trainees,
-                startDate: currentShift ? currentShift.event.start: "",
-                endDate: currentShift ? currentShift.event.end: "",
-                // action_user: session.session_data().username, --ONCE CUSTOM API IS IMPLEMENTED
+                groupID: currentShift.event.extendedProps.groupID,
+                hlUser: currentShift.event.extendedProps.hlUser,
             };
 
+            let startDate = currentShift ? currentShift.event.start : "";
+            let endDate = currentShift ? currentShift.event.end : "";
+
+            const params = new URLSearchParams({
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+            });
+
             try {
-                session
-                    .put("events/" + currentShift.event.extendedProps.eventID, article, {}, false).then((response) => {
+                //Custom Query with Action Log here
+                session.put('roster/updateEvent', article, params.toString(), true)
+                    .then(response => {
+                        //if success from database
+                        if (response.status === 200) {
+                            //Setting on and off of pop up
+                            toggle(false);
+                            //load events
+                            setUpdater(true);
+
+                            //PROXY SELECT FROM OLD GROUP - dont know what it is used for but kept as comment just in case
+
+                            // //do this since to select a shift again in proxy and update we must have current.event.id != clickedInfo.event.id in Rostered services proxy select
+                            // let storeShift = {
+                            //     event: {
+                            //         proxy: 'yes',
+                            //         id: currentShift.event.id,
+                            //         title: currentShift.event.title,
+                            //         start: currentShift.event.start,
+                            //         end: currentShift.event.end,
+                            //         startStr: currentShift.event.startStr,
+                            //         endStr: currentShift.event.endStr,
+                            //     }
+                            // }
+
+                            // //update Shift infos
+                            // setProxySelect(storeShift);
+
+                            successModalShow();
+                        }
+                        else {
+                            console.log("Error in DB");
+                            toggle(false);
+                            failModalShow();
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e);
                         toggle(false);
-                        setUpdater(true);
-
-                        //PROXY SELECT FROM OLD GROUP - dont know what it is used for but kept as comment just in case
-
-                        //do this since to select a shift again in proxy and update we must have current.event.id != clickedInfo.event.id in Rostered services proxy select
-                        //  let storeShift = {
-                        //     event: {
-                        //         proxy: 'yes',
-                        //         id: currentShift.event.id,
-                        //         title: currentShift.event.title,
-                        //         start: currentShift.event.start,
-                        //         end: currentShift.event.end,
-                        //         startStr: currentShift.event.startStr,
-                        //         endStr: currentShift.event.endStr,
-                        //     }
-                        // }
-
-                        // //update Shift infos
-                        // setProxySelect(storeShift);
-
-
+                        failModalShow();
                     });
             }
             catch (err) {
                 console.log(err);
+                toggle(false);
+                failModalShow();
             }
 
-            /*Custom Query with Action Log here
-            session.put('roster/editEvent', article, {} , {}, true)
-                .then(response => {
-                    //if error from database
-                    if (response.status === 204) {
-                        //Setting on and off of pop up
-                        toggle(false);
-                        //load events
-                        setUpdater(true);
 
-                        //do this since to select a shift again in proxy and update we must have current.event.id != clickedInfo.event.id in Rostered services proxy select
-                        let storeShift = {
-                            event: {
-                                proxy: 'yes',
-                                id: currentShift.event.id,
-                                title: currentShift.event.title,
-                                start: currentShift.event.start,
-                                end: currentShift.event.end,
-                                startStr: currentShift.event.startStr,
-                                endStr: currentShift.event.endStr,
-                            }
-                        }
-
-                        //update Shift infos
-                        setProxySelect(storeShift);
-                    }
-                    else {
-                        console.log("Error in DB")
-                    }
-                });
-                */
         }
 
     }
@@ -201,7 +203,31 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
                     </Form>
                 </ModalBody>
             </Modal>
+
+            <Modal show={successModal} onHide={successModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Editing Success!</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={failModal} onHide={failModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error Editing Event</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
+
+
     );
 
 }

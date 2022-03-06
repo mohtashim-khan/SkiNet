@@ -307,6 +307,20 @@ public class RosterServicesImpl implements RosterServices {
         }
     }
 
+    public int UpdateEvent(Event event, User actionUser)
+    {
+        try
+        {
+            eventRepository.save(event);
+            AddActionToActionLog("User " + actionUser.getUsername() + " updated event.", actionUser, event);
+
+            return 200;
+        }
+        catch(Exception exception) {
+            return 500;
+        }
+    }
+
     public List<Event> RetrieveEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject weekDays)
     {
         Gson gson = new Gson();

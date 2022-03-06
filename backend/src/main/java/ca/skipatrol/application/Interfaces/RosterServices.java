@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public interface RosterServices {
 
@@ -16,4 +17,5 @@ public interface RosterServices {
     int AddSubRequest(EventLog eventLog, User actionUser);
     int RemoveUserEventLog(EventLog eventLog, User actionUser);
     List<Event> RetrieveEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject weekDays);
+    int DeleteEventFull(UUID eventID);
 }

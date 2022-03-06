@@ -133,7 +133,7 @@ const MainAddEvent = ({
     }
   };
 
-  //TODO: ACTIONLOG QUERY NEEDED
+  //TODO: ACTIONLOG query? -- Discuss with group, Not really necessary
   const addEventHelper = async (article) => {
 
 

@@ -33,6 +33,7 @@ public class Post {
     @Setter
     @JoinColumn
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
     private Topic topic;
 
     @Column(insertable = false,

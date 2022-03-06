@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 *{
@@ -12,133 +12,132 @@ const GlobalStyle = createGlobalStyle`
 export default GlobalStyle;
 
 export const Container = styled.div`
-    z-index: 1;
-    width: 100%;
-    max-width: 1300px;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: 50px;
-    padding-left: 50px;
+  z-index: 1;
+  width: 100%;
+  max-width: 1300px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 50px;
+  padding-left: 50px;
 
-    @media screen and (max-width: 960px) {
-        padding-right: 25px;
-        padding-left: 25px;
-    }
+  @media screen and (max-width: 960px) {
+    padding-right: 25px;
+    padding-left: 25px;
+  }
 `;
 
 export const ButtonPadding = styled.button`
-    margin-left: 30px;
-    border-radius: 4px;
-    background: ${({primary}) => (primary ? '#4b59f7' : '#0467fb')};
-    white-space: nowrap;
-    padding: ${({big}) => (big ? '12px 64px' : '10px 20px')};
-    color: #fff;
-    font-size: ${({fontBig}) => (fontBig ? '20px' : '16px')};
-    outline: none;
-    border: none;
-    cursor: pointer;
+  margin-left: 30px;
+  border-radius: 4px;
+  background: ${({ primary }) => (primary ? "#4b59f7" : "#0467fb")};
+  white-space: nowrap;
+  padding: ${({ big }) => (big ? "12px 64px" : "10px 20px")};
+  color: #fff;
+  font-size: ${({ fontBig }) => (fontBig ? "20px" : "16px")};
+  outline: none;
+  border: none;
+  cursor: pointer;
 
-    &:hover {
-        transition: all 0.3s ease-out;
-        background: #fff;
-        background: ${({primary}) => (primary ? '#0467fb' : '#4b59f7')};
-    }
+  &:hover {
+    transition: all 0.3s ease-out;
+    background: #fff;
+    background: ${({ primary }) => (primary ? "#0467fb" : "#4b59f7")};
+  }
 
-    @media screen and (max-width: 960px) {
-        /* width: 35.5%; */
-        padding-left: 0;
-        width: 100%;
-    }
-  `;
+  @media screen and (max-width: 960px) {
+    /* width: 35.5%; */
+    padding-left: 0;
+    width: 100%;
+  }
+`;
 
 export const Button = styled.button`
-    border-radius: 4px;
-    background: ${({primary}) => (primary ? '#4b59f7' : '#0467fb')};
-    white-space: nowrap;
-    padding: ${({big}) => (big ? '12px 64px' : '10px 20px')};
-    color: #fff;
-    font-size: ${({fontBig}) => (fontBig ? '20px' : '16px')};
-    outline: none;
-    border: none;
-    cursor: pointer;
+  border-radius: 4px;
+  background: ${({ primary }) => (primary ? "#4b59f7" : "#0467fb")};
+  white-space: nowrap;
+  padding: ${({ big }) => (big ? "12px 64px" : "10px 20px")};
+  color: #fff;
+  font-size: ${({ fontBig }) => (fontBig ? "20px" : "16px")};
+  outline: none;
+  border: none;
+  cursor: pointer;
 
-    &:hover {
-        transition: all 0.3s ease-out;
-        background: #fff;
-        background: ${({primary}) => (primary ? '#0467fb' : '#4b59f7')};
-    }
+  &:hover {
+    transition: all 0.3s ease-out;
+    background: #fff;
+    background: ${({ primary }) => (primary ? "#0467fb" : "#4b59f7")};
+  }
 
-    @media screen and (max-width: 960px) {
-        /* width: 35.5%; */
-        width: 100%
-    }
+  @media screen and (max-width: 960px) {
+    /* width: 35.5%; */
+    width: 100%;
+  }
 `;
 
 export const SignOutButton = styled.button`
-    border-radius: 4px;
-    background: ${({primary}) => (primary ? '#de3366' : '#9e0505')};
-    white-space: nowrap;
-    padding: ${({big}) => (big ? '12px 64px' : '10px 20px')};
-    color: #fff;
-    font-size: ${({fontBig}) => (fontBig ? '20px' : '16px')};
-    outline: none;
-    border: none;
-    cursor: pointer;
+  border-radius: 4px;
+  background: ${({ primary }) => (primary ? "#de3366" : "#9e0505")};
+  white-space: nowrap;
+  padding: ${({ big }) => (big ? "12px 64px" : "10px 20px")};
+  color: #fff;
+  font-size: ${({ fontBig }) => (fontBig ? "20px" : "16px")};
+  outline: none;
+  border: none;
+  cursor: pointer;
 
-    &:hover {
-        transition: all 0.3s ease-out;
-        background: ${({primary}) => (primary ? '#9e0505' : '#de3366')};        
-    }
-    
-    @media screen and (max-width: 960px) {
-        /* width: 35.5%; */
-        width: 100%
-    }
+  &:hover {
+    transition: all 0.3s ease-out;
+    background: ${({ primary }) => (primary ? "#9e0505" : "#de3366")};
+  }
+
+  @media screen and (max-width: 960px) {
+    /* width: 35.5%; */
+    width: 100%;
+  }
 `;
 
 export const UserEditButton = styled.button`
-    border-radius: 4px;
-    background: ${({primary}) => (primary ? '#4b59f7' : '#0467fb')};
-    white-space: nowrap;
-    padding: ${({big}) => (big ? '12px 64px' : '10px 20px')};
-    color: #fff;
-    font-size: ${({fontBig}) => (fontBig ? '20px' : '16px')};
-    outline: none;
-    border: none;
-    cursor: pointer;
+  border-radius: 4px;
+  background: ${({ primary }) => (primary ? "#4b59f7" : "#0467fb")};
+  white-space: nowrap;
+  padding: ${({ big }) => (big ? "12px 64px" : "10px 20px")};
+  color: #fff;
+  font-size: ${({ fontBig }) => (fontBig ? "20px" : "16px")};
+  outline: none;
+  border: none;
+  cursor: pointer;
 
-    &:hover {
-        transition: all 0.3s ease-out;
-        background: #fff;
-        background: ${({primary}) => (primary ? '#0467fb' : '#4b59f7')};
-    }
+  &:hover {
+    transition: all 0.3s ease-out;
+    background: #fff;
+    background: ${({ primary }) => (primary ? "#0467fb" : "#4b59f7")};
+  }
 
-    @media screen and (max-width: 960px) {
-        /* width: 35.5%; */
-        width: 100%
-    }
+  @media screen and (max-width: 960px) {
+    /* width: 35.5%; */
+    width: 100%;
+  }
 `;
 
 export const Input = styled.input`
-    border-radius: 4px;
+  border-radius: 4px;
+  width: 77%;
+  height: 40px;
+  margin-bottom: 20px;
+  /* white-space: nowrap; */
+  font-size: ${({ fontBig }) => (fontBig ? "20px" : "16px")};
+  border: 2px solid #0467fb;
+  cursor: pointer;
+
+  &:hover {
+    transition: all 0.3s ease-out;
+    background: #fff;
+  }
+
+  @media screen and (max-width: 960px) {
     width: 77%;
-    height: 40px;
-    margin-bottom: 20px;
-    /* white-space: nowrap; */
-    font-size: ${({fontBig}) => (fontBig ? '20px' : '16px')};
-    border: 2px solid #0467fb;
-    cursor: pointer;
-
-    &:hover {
-        transition: all 0.3s ease-out;
-        background: #fff;
-    }
-
-    @media screen and (max-width: 960px) {
-        width: 77%;
-    }
+  }
 `;
-
 
 export const CardContainer = styled.div`
   display: grid;
@@ -151,72 +150,73 @@ export const CardContainer = styled.div`
 `;
 
 export const Card = styled.div`
-    background: #fff;
-    box-shadow: 0 6px 20px rgba(56, 125, 255, 0.2);
-    border-radius: 10px;
-    height: ${({ height }) => (height ? 'height' : '200px')};
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(56, 125, 255, 0.2);
+  border-radius: 10px;
+  height: ${({ height }) => (height ? "height" : "200px")};
 
-    &:nth-child(n) {
-        margin: 24px;
-        padding: 24px;
-    }
+  &:nth-child(n) {
+    margin: 24px;
+    padding: 24px;
+  }
 
-    &:nth-last-child(1) {
-        margin: 24px;
-        padding: 24px;
-    }
+  &:nth-last-child(1) {
+    margin: 24px;
+    padding: 24px;
+  }
+
+  &:hover {
+    transform: scale(1.06);
+    transition: all 0.3s ease-out;
+    color: #1c2237;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 90%;
 
     &:hover {
-        transform: scale(1.06);
-        transition: all 0.3s ease-out;
-        color: #1c2237;
+      transform: none;
     }
-
-    @media screen and (max-width: 960px) {
-        width: 90%;
-
-        &:hover {
-            transform: none;
-        }
-    }
+  }
 `;
 
 export const TableCard = styled.div`
-    background: #fff;
-    box-shadow: 0 6px 20px rgba(56, 125, 255, 0.2);
-    border-radius: 10px;
-    height: auto;
-    overflow-x: scroll;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(56, 125, 255, 0.2);
+  border-radius: 10px;
+  height: auto;
+  overflow-x: scroll;
 
-    &:nth-child(n) {
-        margin: 24px;
-        padding: 24px;
-    }
+  &:nth-child(n) {
+    margin: 24px;
+    padding: 24px;
+  }
 
-    &:nth-last-child(1) {
-        margin: 24px;
-        padding: 24px;
-    }
+  &:nth-last-child(1) {
+    margin: 24px;
+    padding: 24px;
+  }
+
+  &:hover {
+    transform: scale(1.06);
+    transition: all 0.3s ease-out;
+    color: #1c2237;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 90%;
 
     &:hover {
-        transform: scale(1.06);
-        transition: all 0.3s ease-out;
-        color: #1c2237;
+      transform: none;
     }
-
-    @media screen and (max-width: 960px) {
-        width: 90%;
-
-        &:hover {
-            transform: none;
-        }
-    }
+  }
 `;
 
 export const InfoSec = styled.div`
   color: #fff;
   padding: 160px 0;
-  background: ${({ lightBg }) => (lightBg ? '#fff' : '#101522')};
+  // background: ${({ lightBg }) => (lightBg ? "#fff" : "#101522")};
+  background-image: url(../../images/LLSS\ Roster\ Page.jpg);
 `;
 
 export const InfoRow = styled.div`
@@ -224,7 +224,7 @@ export const InfoRow = styled.div`
   margin: 0 -15px -15px -15px;
   flex-wrap: wrap;
   align-items: center;
-  flex-direction: ${({ imgStart }) => (imgStart ? 'row-reverse' : 'row')};
+  flex-direction: ${({ imgStart }) => (imgStart ? "row-reverse" : "row")};
 `;
 
 export const InfoColumn = styled.div`
@@ -232,6 +232,7 @@ export const InfoColumn = styled.div`
   padding-right: 15px;
   padding-left: 15px;
   flex: 1;
+
   max-width: 50%;
   flex-basis: 50%;
 
@@ -256,11 +257,11 @@ export const TextWrapper = styled.div`
 export const ImgWrapper = styled.div`
   max-width: 555px;
   display: flex;
-  justify-content: ${({ start }) => (start ? 'flex-start' : 'flex-end')};
+  justify-content: ${({ start }) => (start ? "flex-start" : "flex-end")};
 `;
 
 export const TopLine = styled.div`
-  color: ${({ lightTopLine }) => (lightTopLine ? '#a9b3c1' : '#4B59F7')};
+  color: ${({ lightTopLine }) => (lightTopLine ? "#a9b3c1" : "#4B59F7")};
   font-size: 18px;
   line-height: 16px;
   font-weight: 700;
@@ -270,7 +271,8 @@ export const TopLine = styled.div`
 
 export const Img = styled.img`
   padding-right: 0;
-  border: 0;
+  border: 5px solid black;
+  // border: 0;
   max-width: 100%;
   vertical-align: middle;
   display: inline-block;
@@ -282,7 +284,9 @@ export const Heading = styled.h1`
   font-size: 48px;
   line-height: 1.1;
   font-weight: 600;
-  color: ${({ lightText }) => (lightText ? '#f7f8fa' : '#1c2237')};
+  text-shadow: 0 0 1px grey;
+  color: black;
+  // color: ${({ lightText }) => (lightText ? "#f7f8fa" : "#1c2237")};
 `;
 
 export const Subtitle = styled.p`
@@ -290,7 +294,7 @@ export const Subtitle = styled.p`
   margin-bottom: 35px;
   font-size: 18px;
   line-height: 24px;
-  color: ${({ lightTextDesc }) => (lightTextDesc ? '#a9b3c1' : '#1c2237')};
+  color: ${({ lightTextDesc }) => (lightTextDesc ? "#a9b3c1" : "#1c2237")};
 `;
 
 export const UserCardContainer = styled.div`
@@ -316,80 +320,83 @@ export const UserDescription = styled.p`
   width: 50%;
   font-size: 16px;
   line-height: 10px;
-  color: ${({ lightTextDesc }) => (lightTextDesc ? '#a9b3c1' : '#1c2237')};
+  color: ${({ lightTextDesc }) => (lightTextDesc ? "#a9b3c1" : "#1c2237")};
 `;
 
 export const UserInput = styled.input`
-    border-radius: 4px;
-    width: 50%;
-    height: 26px;
-    font-size: 16px;
-    border: ${({ editing }) => (editing ? '2px solid #0467fb' : '0px solid #0467fb')};
-    cursor: pointer;
+  border-radius: 4px;
+  width: 50%;
+  height: 26px;
+  font-size: 16px;
+  border: ${({ editing }) =>
+    editing ? "2px solid #0467fb" : "0px solid #0467fb"};
+  cursor: pointer;
 `;
 
 export const UserHeadingInput = styled.input`
-    margin-bottom: 10px;
-    font-size: 30px;
-    line-height: 1.1;
-    font-weight: 600;
-    color: ${({ lightText }) => (lightText ? '#f7f8fa' : '#1c2237')};
-    border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 600;
+  color: ${({ lightText }) => (lightText ? "#f7f8fa" : "#1c2237")};
+  border-radius: 4px;
 
-    width: 100%;
-    height: 40px;
-    border: ${({ editing }) => (editing ? '2px solid #0467fb' : '0px solid #0467fb')};
-    cursor: pointer;
+  width: 100%;
+  height: 40px;
+  border: ${({ editing }) =>
+    editing ? "2px solid #0467fb" : "0px solid #0467fb"};
+  cursor: pointer;
 `;
 
 export const UserHeadingInputLink = styled.input`
-    margin-bottom: 10px;
-    font-size: 30px;
-    line-height: 1.1;
-    font-weight: 600;
-    color: #007bff;
-    border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 600;
+  color: #007bff;
+  border-radius: 4px;
 
-    width: 100%;
-    height: 40px;
-    border: ${({ editing }) => (editing ? '2px solid #0467fb' : '0px solid #0467fb')};
-    cursor: pointer;
+  width: 100%;
+  height: 40px;
+  border: ${({ editing }) =>
+    editing ? "2px solid #0467fb" : "0px solid #0467fb"};
+  cursor: pointer;
 
-    &:hover {
-      text-decoration: underline;
-      color: #0056B3;
+  &:hover {
+    text-decoration: underline;
+    color: #0056b3;
   }
 `;
 
 export const UserButton = styled.button`
-    margin-top: 20px;
-    margin-left: ${({useMargin}) => (useMargin ? useMargin : '0%')};
-    border-radius: 4px;
-    width: ${({width}) => (width ? width : '30%')};
-    height: 36px;
-    background: ${({primary}) => (primary ? '#4b59f7' : '#0467fb')};
-    white-space: nowrap;
-    color: #fff;
-    font-size: 16px;
-    outline: none;
-    border: none;
-    visibility: ${({hide}) => (hide ? 'hidden' : 'shown')};
-    cursor: pointer;
+  margin-top: 20px;
+  margin-left: ${({ useMargin }) => (useMargin ? useMargin : "0%")};
+  border-radius: 4px;
+  width: ${({ width }) => (width ? width : "30%")};
+  height: 36px;
+  background: ${({ primary }) => (primary ? "#4b59f7" : "#0467fb")};
+  white-space: nowrap;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+  border: none;
+  visibility: ${({ hide }) => (hide ? "hidden" : "shown")};
+  cursor: pointer;
 
-    &:hover {
-        transition: all 0.3s ease-out;
-        background: #fff;
-        background: ${({primary}) => (primary ? '#0467fb' : '#4b59f7')};
-    }
+  &:hover {
+    transition: all 0.3s ease-out;
+    background: #fff;
+    background: ${({ primary }) => (primary ? "#0467fb" : "#4b59f7")};
+  }
 `;
 
 export const UserImage = styled.img`
-    padding-right: 0;
-    border: 0;
-    max-width: 100%;
-    vertical-align: middle;
-    display: inline-block;
-    max-height: 500px;
+  padding-right: 0;
+  border: 0;
+  max-width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  max-height: 500px;
 `;
 
 export const UserTopContainer = styled.div`
@@ -401,39 +408,39 @@ export const UserTopContainer = styled.div`
 export const Icon = styled.div`
   width: 33%;
   margin-left: 33%;
-  color: #B8B8B8;
+  color: #b8b8b8;
 `;
 
 export const FirstCard = styled.div`
-    display: flex;
-    flex: 1;
-    align-items: center;
-    background: #fff;
-    box-shadow: 0 6px 20px rgba(56, 125, 255, 0.2);
-    border-radius: 10px;
-    height: ${({ height }) => (height ? 'height' : '200px')};
+  display: flex;
+  flex: 1;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(56, 125, 255, 0.2);
+  border-radius: 10px;
+  height: ${({ height }) => (height ? "height" : "200px")};
 
-    &:nth-child(n) {
-        margin: 24px;
-        padding: 24px;
-    }
+  &:nth-child(n) {
+    margin: 24px;
+    padding: 24px;
+  }
 
-    &:nth-last-child(1) {
-        margin: 24px;
-        padding: 24px;
-    }
+  &:nth-last-child(1) {
+    margin: 24px;
+    padding: 24px;
+  }
+
+  &:hover {
+    transform: scale(1.06);
+    transition: all 0.3s ease-out;
+    color: #1c2237;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 90%;
 
     &:hover {
-        transform: scale(1.06);
-        transition: all 0.3s ease-out;
-        color: #1c2237;
+      transform: none;
     }
-
-    @media screen and (max-width: 960px) {
-        width: 90%;
-
-        &:hover {
-            transform: none;
-        }
-    }
+  }
 `;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Route, Link, useHistory } from "react-router-dom";
 import CSPLogo from "../../images/CSP-logo.png";
+// import CSPLogo from "../../CSP Logo Text right of logo.jpg"; // OTHER IMAGE OPTION
 import "./Header.css";
 
 const Header = ({ session }) => {

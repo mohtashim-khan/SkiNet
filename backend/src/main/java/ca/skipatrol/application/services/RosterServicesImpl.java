@@ -17,6 +17,7 @@ import java.net.URI;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -290,6 +291,22 @@ public class RosterServicesImpl implements RosterServices {
         return 500;
     }
 
+    public int DeleteEventFull(UUID eventID)
+    {
+        try
+        {
+            List<EventLog> eventLogs = eventLogRepository.findAllByEvent_eventID(eventID);
+            List<UUID> eventLogIDs = eventLogs.stream().map(x -> x.getEventLogID()).collect(Collectors.toList());
+            eventLogRepository.deleteAllByIdInBatch(eventLogIDs);
+
+            eventRepository.deleteById(eventID);
+            return 200;
+        }
+        catch(Exception exception) {
+            return 500;
+        }
+    }
+
     public List<Event> RetrieveEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject weekDays)
     {
         Gson gson = new Gson();
@@ -298,14 +315,17 @@ public class RosterServicesImpl implements RosterServices {
         List<String> weekDaysString = gson.fromJson(weekDays.get("weekDays"), List.class);
 
         List<DayOfWeek> dayOfWeeks = new ArrayList();
-        for (String weekDay: weekDaysString)
-            dayOfWeeks.add(DayOfWeek.valueOf(weekDay.toUpperCase(Locale.ROOT)));
+        if(weekDaysString != null)
+        {
+            for (String weekDay : weekDaysString)
+                dayOfWeeks.add(DayOfWeek.valueOf(weekDay.toUpperCase(Locale.ROOT)));
+        }
 
         List<Event> events = eventRepository.findByStartDateBetween(startDate, endDate);
 
         for (Event event: events)
         {
-            if (dayOfWeeks.contains(event.getStartDate().getDayOfWeek()))
+            if (dayOfWeeks.isEmpty() || dayOfWeeks.contains(event.getStartDate().getDayOfWeek()))
                 eventsReturn.add(event);
         }
 

@@ -31,6 +31,7 @@ public class Post {
 
     @Getter
     @Setter
+    @JoinColumn
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private Topic topic;
@@ -44,6 +45,11 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Getter
     private final Set<Comment> comments = new HashSet<>();
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    private List<Attachment> attachments;
 
     public void addComment(Comment comment) {
         comments.add(comment);

@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 @RestController
 public class RosterController {
@@ -94,6 +95,19 @@ public class RosterController {
 
         return new ResponseEntity(events, HttpStatus.OK);
 
+    }
+
+    @RequestMapping(value = "customapi/roster/deleteEvent", method = RequestMethod.PUT)
+    public ResponseEntity<Object> DeleteEvent(@RequestParam UUID eventID) {
+
+        int code = 500;
+
+        code = rosterServices.DeleteEventFull(eventID);
+
+        if (code == 204)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
 }

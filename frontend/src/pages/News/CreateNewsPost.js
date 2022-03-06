@@ -16,6 +16,10 @@ const CreateNewsPost = ({ session }) => {
     message: "",
   });
 
+  const [selectedFile, setSelectedFile] = useState();    
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isFilePicked, setIsFilePicked] = useState(false);    
+
   const history = useHistory();
 
   function showError(message) {
@@ -42,28 +46,65 @@ const CreateNewsPost = ({ session }) => {
       return;
     }
 
-    session
-      .post(
-        "posts",
-        {
-          title: titleValue,
-          body: bodyValue,
-          datePublished: new Date().toISOString(),
-        },
-        {}
-      )
-      .then((response) => {
-        if (response.status == 201) {
-          setValidationMessage({
-            error: false,
-            message: "Post creation successful!",
+      session
+          .post(
+              "posts",
+              {
+                  title: titleValue,
+                  body: bodyValue,
+                  datePublished: new Date().toISOString(),
+              },
+              {}
+          )
+          .then((response) => {
+              if (response.status == 201) {
+                  if (isFilePicked) {
+                      const postId = response.data.id;
+                      Promise.all(selectedFiles.map((file) => {
+                          var data = new FormData();
+                          data.append('file', selectedFile);
+
+                          session.post("attachments/new/" + postId, data, {}, true).then(res => {
+                              if (res.status != 200) {
+                                  setValidationMessage({
+                                      error: true,
+                                      message: "Uploads failed!",
+                                  });
+                                  setShowValidationMessage(true);
+                              } else {
+                                  setValidationMessage({
+                                      error: false,
+                                      message: "Post creation and upload(s) successful!",
+                                  });
+                                  setShowValidationMessage(true);                      
+                              }
+                          });
+                      }));
+                  } else {
+                      setValidationMessage({
+                          error: false,
+                          message: "Post creation successful!",
+                      });
+                      setShowValidationMessage(true);
+                  }
+              } else {
+                  console.log(response);
+              }
+          })
+          .catch((e) => {
+              showError(JSON.stringify(e));
           });
-          setShowValidationMessage(true);
-        }
-      })
-      .catch((e) => {
-        showError(JSON.stringify(e));
-      });
+  }
+
+  function attachFile() {
+      if (isFilePicked) {
+          setSelectedFiles([...selectedFiles, selectedFile]);
+      }
+  }
+
+    function changeFileHandler(e) {
+        setSelectedFile(e.target.files[0]);
+	    setIsFilePicked(true);
   }
 
   const handleClose = () => setShowValidationMessage(false);
@@ -86,6 +127,24 @@ const CreateNewsPost = ({ session }) => {
               />
             </InputGroup>
             <ReactQuill theme="snow" value={bodyValue} onChange={setBodyValue} />
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h5 class="card-title">Attachments</h5>
+                    <ul>
+                        {
+                            selectedFiles.map((file) => {
+                                return (<li>{file.name}</li>);
+                            })
+                        }
+                    </ul>
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" onChange={changeFileHandler} />
+                        <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04" onClick={attachFile}>Attach</button>
+                    </div>                    
+                </div>
+            </div>
+
+
             <div class="d-grid gap-1 d-md-flex justify-content-md-end mt-2">
               <Link to="/news" className="btn btn-secondary">
                 Cancel

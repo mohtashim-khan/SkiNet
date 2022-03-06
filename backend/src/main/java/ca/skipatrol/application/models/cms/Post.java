@@ -31,7 +31,6 @@ public class Post {
 
     @Getter
     @Setter
-    @JoinColumn
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private Topic topic;

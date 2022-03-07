@@ -277,18 +277,12 @@ const RosterPlanner = ({ session }) => {
                     {session.session_data() !== null &&
                       session.session_data().user_type === "SYSTEM_ADMIN" && (
                         <>
-                          <button
-                            type="button"
-                            class="myButton btn btn-info float-start d-flex-inline"
-                          >
-                            Bulk Edit Shifts
-                          </button>
-                          <button
-                            type="button"
-                            className="myButton btn btn-danger float-start d-flex-inline"
-                          >
-                            Bulk Delete Shifts
-                          </button>
+
+                          <EditBulk currentShift={currentShift} BulkEditModal={BulkEditModal} setBulkEditModal={setBulkEditModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} />
+
+
+                          <DeleteBulk BulkEventDeleteModal={BulkEventDeleteModal} setBulkEventDeleteModal={setBulkEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} />
+
                         </>
                       )}
                   </div>
@@ -424,7 +418,7 @@ const RosterPlanner = ({ session }) => {
                             AddRosterModal={AddRosterModal}
                             setAddRosterModal={setAddRosterModal}
                             setProxySelect={setProxySelect}
-                            userAuth={session.session_data()}
+                            session={session}
                           />
                         ) : (
                           <></>

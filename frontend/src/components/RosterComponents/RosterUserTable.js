@@ -22,6 +22,8 @@ const RosterUserTable = ({
     return rosteredList.map((rosteredUser) => (
       <tr key={i++}>
         <td className="userText">
+
+          {/* TODO: set up user links */}
           <Link to={"/users/" + rosteredUser.username}>
             {rosteredUser.name}
           </Link>

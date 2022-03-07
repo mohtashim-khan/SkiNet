@@ -346,6 +346,13 @@ public class RosterServicesImpl implements RosterServices {
         return eventsReturn;
     }
 
+    public List<EventLog> RetrieveEventLogsByEventID(UUID eventID)
+    {
+        List<EventLog> eventLogs = eventLogRepository.findAllByEvent_eventID(eventID);
+
+        return eventLogs;
+    }
+
     private void AddActionToActionLog(String actionString, User actionUser, Event event)
     {
         ActionLog actionLog = new ActionLog(event, actionUser.getUsername(), actionUser.getUserID().toString(), actionString, LocalDateTime.now());

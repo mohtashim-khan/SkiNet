@@ -303,7 +303,7 @@ const RosterPlanner = ({ session }) => {
                   <button
                     type="button"
                     className="myButton btn btn-secondary float-start d-flex-inline"
-                    onClick={() => printSignInSheet(currentShift, list)}
+                    onClick={() => printSignInSheet(currentShift, list, session)}
                   >
                     Attendance(PDF)
                   </button>

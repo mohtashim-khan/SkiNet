@@ -123,12 +123,22 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
                             let storeShift = {
                                 event: {
                                     proxy: 'yes',
-                                    id: currentShift.event.id,
-                                    title: currentShift.event.title,
-                                    start: currentShift.event.start,
-                                    end: currentShift.event.end,
+                                    extendedProps:
+                                    {
+                                        hlUser: article.hlUser,
+                                        minPatrollers: article.minPatrollers,
+                                        maxPatrollers: article.maxPatrollers,
+                                        maxTrainees: article.maxTrainees,
+                                        eventID: article.eventID,
+
+
+
+
+                                    },
+                                    allDay: article.allDay,
+                                    title: article.eventName,
                                     startStr: currentShift.event.startStr,
-                                    endStr: currentShift.event.endStr,
+
                                 }
                             }
 

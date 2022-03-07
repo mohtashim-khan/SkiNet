@@ -131,4 +131,12 @@ public class RosterController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @RequestMapping(value = "customapi/roster/retrieveEventLogs", method = RequestMethod.GET)
+    public ResponseEntity<Object> RetrieveEventLogsByEventID(@RequestParam UUID eventID)
+    {
+        List<EventLog> eventLogs = rosterServices.RetrieveEventLogsByEventID(eventID);
+
+        return new ResponseEntity(eventLogs, HttpStatus.OK);
+    }
+
 }

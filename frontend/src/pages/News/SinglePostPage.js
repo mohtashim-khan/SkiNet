@@ -51,7 +51,7 @@ const SinglePostPage = ({ session }) => {
                     <ul>
                         {
                             attachments.map((attachment) => {
-                                return (<li><a href={session._get_base_url() + "/customapi/attachments/" + attachment.id }>{attachment.originalFileName}</a></li>);
+                                return (<li><a href={session._get_base_url() + "/public/attachments/" + attachment.id }>{attachment.originalFileName}</a></li>);
                             })
                         }
                     </ul>                 

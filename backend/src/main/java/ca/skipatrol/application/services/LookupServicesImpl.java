@@ -32,6 +32,8 @@ public class LookupServicesImpl implements LookupServices {
     AwardRepository awardRepository;
     @Autowired
     PatrolCommitmentRepository patrolCommitmentRepository;
+    @Autowired
+    AreaRepository areaRepository;
     //endregion
 
 
@@ -187,6 +189,21 @@ public class LookupServicesImpl implements LookupServices {
         }
     }
 
+    @Override
+    public boolean deleteAreasInBatch(ArrayList<UUID> areaIDs) {
+        try
+        {
+            areaRepository.deleteAllByIdInBatch(areaIDs);
+            for (UUID areaID : areaIDs) {
+                assert (areaRepository.findById(areaID).isEmpty());
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
 
 
 }

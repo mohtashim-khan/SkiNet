@@ -1,0 +1,13 @@
+.container-bg {
+  background-image: url(../../images/LLSS\ Roster\ Page.jpg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  /* opacity: 0.8; */
+}
+
+.signin-card {
+  max-width: 25rem;
+  background-color: rgba(0, 0, 0, 0.1);
+
+  /* opacity: 0.4; */
+}

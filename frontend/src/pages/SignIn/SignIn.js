@@ -17,6 +17,7 @@ import {
   ImgWrapper,
   Img,
 } from "../../components/Elements/Elements";
+import "./SignIn.css";
 
 const SignIn = ({ session }) => {
   const history = useHistory();
@@ -43,8 +44,6 @@ const SignIn = ({ session }) => {
             email: response.data.email,
             phoneNumber: response.data.phoneNumber,
             trainer: response.data.trainer,
-
-
           };
           console.log(response);
           console.log(basicUserDetails);
@@ -96,63 +95,74 @@ const SignIn = ({ session }) => {
   };
 
   return (
-    <>
-      <InfoSec lightBg="true">
+    <div className="container-bg">
+      <InfoSec lightBg="false">
         <Container>
           <InfoRow imgStart="start">
             <InfoColumn>
-              <TextWrapper>
-                <TopLine lightTopLine="true">Sign In</TopLine>
-                <Heading lightText={false}>
-                  Sign in to access the schedule
-                </Heading>
-                <Input
-                  type="text"
-                  placeholder="Username"
-                  id="usernameInput"
-                  autoFocus="autofocus"
-                  onKeyPress={(e) => handleKeyPress(e, "Username")}
-                />
-                <div />
-                <Input
-                  type="text"
-                  type="password"
-                  placeholder="Password"
-                  id="passwordInput"
-                  onKeyPress={(e) => handleKeyPress(e, "Password")}
-                />
-                <p className="loginMessage" id="loginMessageID"></p>
-                {/* <Link to="/sign-up">
+              <div className="card signin-card bg-transparent">
+                {" "}
+                {/* change to bg-white if needed */}
+                <div className="card-body signin-card">
+                  <TextWrapper>
+                    <TopLine lightTopLine="true">Sign In</TopLine>
+                    <Heading lightText={false}>
+                      Sign in to access the schedule
+                    </Heading>
+                    <Input
+                      type="text"
+                      placeholder="Username"
+                      id="usernameInput"
+                      autoFocus="autofocus"
+                      onKeyPress={(e) => handleKeyPress(e, "Username")}
+                    />
+                    <div />
+                    <Input
+                      type="text"
+                      type="password"
+                      placeholder="Password"
+                      id="passwordInput"
+                      onKeyPress={(e) => handleKeyPress(e, "Password")}
+                    />
+                    <p className="loginMessage" id="loginMessageID"></p>
+                    {/* <Link to="/sign-up">
                   <Button big fontBig primary="true">
                     {"Sign Up"}
                   </Button>
                 </Link> */}
-                <ButtonPadding
-                  big
-                  fontBig
-                  primary="true"
-                  className="loginButton"
-                  onClick={() => {
-                    console.log(document.getElementById("usernameInput").value);
-                    verifyCredentials(
-                      document.getElementById("usernameInput").value,
-                      document.getElementById("passwordInput").value
-                    );
-                  }}
-                >
-                  Sign In
-                </ButtonPadding>
-              </TextWrapper>
+                    <ButtonPadding
+                      big
+                      fontBig
+                      primary="true"
+                      className="loginButton"
+                      onClick={() => {
+                        console.log(
+                          document.getElementById("usernameInput").value
+                        );
+                        verifyCredentials(
+                          document.getElementById("usernameInput").value,
+                          document.getElementById("passwordInput").value
+                        );
+                      }}
+                    >
+                      Sign In
+                    </ButtonPadding>
+                  </TextWrapper>
+                </div>
+              </div>
             </InfoColumn>
             <InfoColumn>
-              <ImgWrapper start="start">
-                <Img src={require("../../images/workout.svg").default} />
-              </ImgWrapper>
+              {/* <ImgWrapper start="start">
+                 <Img
+                  src={require("../../images/LLSS Roster Page.jpg").default}
+                /> 
+              </ImgWrapper> */}
             </InfoColumn>
+            <InfoColumn></InfoColumn>
           </InfoRow>
         </Container>
       </InfoSec>
-    </>
+    </div>
   );
 };
 

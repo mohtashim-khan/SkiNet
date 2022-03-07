@@ -131,4 +131,32 @@ public class RosterController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @RequestMapping(value = "customapi/roster/bulkUpdateEventsByDate", method = RequestMethod.PUT)
+    public ResponseEntity<Object> BulkUpdateEventsByDateFull(@RequestParam
+                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                              @RequestParam
+                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                                              @RequestBody String requestBody, Principal principal) {
+
+        int code = 500;
+
+        if (principal != null) {
+            JsonObject requestBodyJSON = JsonParser.parseString(requestBody).getAsJsonObject();
+            code = rosterServices.BulkUpdateEventsByDateFull(startDate, endDate, requestBodyJSON, userRepository.findByUsername(principal.getName()).get());
+        }
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "customapi/roster/retrieveEventLogs", method = RequestMethod.GET)
+    public ResponseEntity<Object> RetrieveEventLogsByEventID(@RequestParam UUID eventID)
+    {
+        List<EventLog> eventLogs = rosterServices.RetrieveEventLogsByEventID(eventID);
+
+        return new ResponseEntity(eventLogs, HttpStatus.OK);
+    }
+
 }

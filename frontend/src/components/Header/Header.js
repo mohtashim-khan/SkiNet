@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Route, Link, useHistory } from "react-router-dom";
 import CSPLogo from "../../images/CSP-logo.png";
+// import CSPLogo from "../../CSP Logo Text right of logo.jpg"; // OTHER IMAGE OPTION
 import "./Header.css";
 
 const Header = ({ session }) => {
@@ -213,15 +214,6 @@ const Header = ({ session }) => {
                       <li className={match ? "nav-item active" : "nav-item"}>
                         <Link className="nav-link" to="/admin/lookups">
                           Lookups
-                        </Link>
-                      </li>
-                    )}
-                  </Route>
-                  <Route path="/admin/areas" exact>
-                    {({ match }) => (
-                      <li className={match ? "nav-item active" : "nav-item"}>
-                        <Link className="nav-link" to="/admin/areas">
-                          Areas
                         </Link>
                       </li>
                     )}

@@ -7,6 +7,7 @@ import DisciplineLookup from "./DisciplineLookup.js";
 import SeasonLookup from "./SeasonLookup.js";
 import OperationalEventLookup from "./OperationalEventLookup";
 import ConditionsLookup from "./ConditionsLookup";
+import AreaLookup from "./AreaLookup";
 
 const AdminLookupsPage = ({ session }) => {
   return (
@@ -26,6 +27,7 @@ const AdminLookupsPage = ({ session }) => {
 
         <div className="row">
           <ConditionsLookup session={session} />
+          <AreaLookup session={session} />
         </div>
       </div>
     </>

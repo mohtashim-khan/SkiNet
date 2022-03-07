@@ -20,6 +20,9 @@ const NewsBulletinPage = ({ session }) => {
   const [pageCount, setPageCount] = useState(1);
   const [currentPage, setCurrentPage] = useState(0);
 
+  const [availableTopics, setAvailableTopics] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState(); 
+
   const history = useHistory();
 
   const searchRef = React.createRef();
@@ -27,6 +30,16 @@ const NewsBulletinPage = ({ session }) => {
   const [searchState, setSearchState] = useState(false);
 
   const POSTS_PER_PAGE = 5;
+
+  useEffect(() => {
+    session
+          .get("topics")
+          .then((resp) => {
+              if (resp.status == 200) {
+                  setAvailableTopics(resp.data._embedded.topics);
+              }
+          });
+  }, [setAvailableTopics]);
 
   function getPosts() {
     session
@@ -75,6 +88,24 @@ const NewsBulletinPage = ({ session }) => {
     return subString.substr(0, subString.lastIndexOf(" ")) + "...";
   }
 
+  function selectTopic(id) {
+      if (selectedTopic === id) {
+          setSelectedTopic(undefined);
+          getPosts();
+      } else {
+          setSelectedTopic(id);
+          session.get("topics/" + id + "/post").then((resp) => {
+              if (resp.status == 200) {
+                  setPosts(resp.data._embedded.posts);
+              }
+          });
+      }
+  }
+
+  function showPagination() {
+      return (!searchState && selectedTopic === undefined);
+  }
+
   return (
     <>
       <nav class="navbar navbar-light bg-light sticky-top">
@@ -117,34 +148,18 @@ const NewsBulletinPage = ({ session }) => {
           {!searchState ? (
             <Col xs={2}>
               <h4>Topics</h4>
-              <ListGroup defaultActiveKey="#link1" className="h6">
-                <ListGroup.Item className="py-1" action href="#link1">
-                  CSP LL Awards
-                </ListGroup.Item>
-                <ListGroup.Item className="py-1" action href="#link2">
-                  LLSR Snow Safety Operational Information
-                </ListGroup.Item>
-                <ListGroup.Item className="py-1" action href="#link3">
-                  News / Announcements
-                </ListGroup.Item>
-                <ListGroup.Item className="py-1" action href="#link4">
-                  Weekend Reports
-                </ListGroup.Item>
-                <ListGroup.Item className="py-1" action href="#link5">
-                  CSP LL Training
-                </ListGroup.Item>
-                <ListGroup.Item className="py-1" action href="#link6">
-                  CSP LL Handbook
-                </ListGroup.Item>
-                <ListGroup.Item className="py-1" action href="#link7">
-                  Winter Special Events
-                </ListGroup.Item>
-                <ListGroup.Item className="py-1" action href="#link8">
-                  CSP LL APL Roles
-                </ListGroup.Item>
-                <ListGroup.Item className="py-1" action href="#link9">
-                  CSP LL Social Events
-                </ListGroup.Item>
+                <ListGroup>
+                {
+                    availableTopics.map((topic) => {
+                        return <ListGroup.Item className="py-1"
+                                               key={topic.id}
+                                               action
+                                               active={topic.id === selectedTopic}
+                                               onClick={() => selectTopic(topic.id)}>
+                                   { topic.description }
+                               </ListGroup.Item>
+                    })
+                }
               </ListGroup>
             </Col>
           ) : (
@@ -185,7 +200,7 @@ const NewsBulletinPage = ({ session }) => {
               </Card>
             ))}
 
-            {!searchState ? (
+            {showPagination() ? (
               <Pagination>
                 <Pagination.Prev
                   disabled={currentPage == 0}
@@ -208,7 +223,7 @@ const NewsBulletinPage = ({ session }) => {
                 />
               </Pagination>
             ) : (
-              <></>
+              <><hr /></>
             )}
           </Col>
         </Row>

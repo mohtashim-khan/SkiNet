@@ -182,7 +182,7 @@ const NewsBulletinPage = ({ session }) => {
               <Card className="mb-2">
                 <Card.Body>
                   <Card.Title>
-                    {post.title} <Badge bg="secondary">CSP LL Awards</Badge>
+                    {post.title}
                   </Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
                     {post.publishedDate}

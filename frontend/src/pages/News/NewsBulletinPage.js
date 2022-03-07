@@ -43,7 +43,7 @@ const NewsBulletinPage = ({ session }) => {
 
   function getPosts() {
     session
-      .get("posts", {
+      .get("posts/search/findAllByOrderByPublishedDateDesc", {
         size: POSTS_PER_PAGE,
         page: currentPage,
       })

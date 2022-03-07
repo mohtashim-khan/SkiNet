@@ -35,7 +35,13 @@ public class AttachmentUploadController {
         this.storageService = storageService;
     }
 
-    @GetMapping("/customapi/attachments/{identifier:.+}")
+    @GetMapping("/public/attachments/bingo")
+    @ResponseBody
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok().body("asdf");
+    }
+
+    @GetMapping("/public/attachments/{identifier:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String identifier) throws IOException {
         Resource file = storageService.load(identifier);
@@ -50,7 +56,7 @@ public class AttachmentUploadController {
         }
     }
 
-    @PostMapping("/customapi/attachments/new/{postId}")
+    @PostMapping("/public/attachments/new/{postId}")
     public ResponseEntity<UUID> handleFileUpload(@RequestParam("file") MultipartFile file, @PathVariable String postId) throws IOException {
         Optional<UUID> storedId = storageService.store(Long.valueOf(postId), file);
         return storedId.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());

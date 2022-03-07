@@ -103,6 +103,24 @@ class Session {
     return axios.post(url, body, payload);
   }
 
+  async post_with_prefix(endpoint, body, urlParams, prefix) {
+    var payload = {
+      headers: {
+        authorization: this._get(this.SESSION_AUTH),
+        "Content-Type": "application/json",
+      },
+    };
+
+    var url =
+      this._get_base_url() + prefix + "/" + endpoint;
+    if (Object.keys(urlParams).length > 0) {
+      const queryString = urlParams.toString();
+      url += queryString.length > 0 ? "?" + queryString : "";
+    }
+
+    return axios.post(url, body, payload);
+  }    
+
   async put(endpoint, body, urlParams, custom) {
     var payload = {
       headers: {

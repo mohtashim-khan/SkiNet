@@ -323,17 +323,9 @@ public class RosterServicesImpl implements RosterServices {
 
     public List<Event> RetrieveEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject weekDays)
     {
-        Gson gson = new Gson();
         List<Event> eventsReturn = new ArrayList();
 
-        List<String> weekDaysString = gson.fromJson(weekDays.get("weekDays"), List.class);
-
-        List<DayOfWeek> dayOfWeeks = new ArrayList();
-        if(weekDaysString != null)
-        {
-            for (String weekDay : weekDaysString)
-                dayOfWeeks.add(DayOfWeek.valueOf(weekDay.toUpperCase(Locale.ROOT)));
-        }
+        List<DayOfWeek> dayOfWeeks = ParseWeekdays(weekDays);
 
         List<Event> events = eventRepository.findByStartDateBetween(startDate, endDate);
 
@@ -346,11 +338,48 @@ public class RosterServicesImpl implements RosterServices {
         return eventsReturn;
     }
 
+    public int BulkUpdateEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject requestBody, User actionUser)
+    {
+        Gson gson = new Gson();
+        Event eventUpdate = gson.fromJson(requestBody.get("event"), Event.class);
+        List<DayOfWeek> dayOfWeeks = ParseWeekdays(requestBody);
+
+        List<Event> events = eventRepository.findByStartDateBetween(startDate, endDate);
+
+        for (Event event: events)
+        {
+            if (dayOfWeeks.isEmpty() || dayOfWeeks.contains(event.getStartDate().getDayOfWeek()))
+            {
+                event.setMinPatrollers(eventUpdate.getMinPatrollers());
+                event.setMaxPatrollers(eventUpdate.getMaxPatrollers());
+                event.setMaxTrainees(eventUpdate.getMaxTrainees());
+                event.setHlUser(eventUpdate.getHlUser());
+                UpdateEvent(event, actionUser);
+            }
+        }
+
+        return 200;
+    }
+
     public List<EventLog> RetrieveEventLogsByEventID(UUID eventID)
     {
         List<EventLog> eventLogs = eventLogRepository.findAllByEvent_eventID(eventID);
 
         return eventLogs;
+    }
+
+    private List<DayOfWeek> ParseWeekdays(JsonObject requestBody)
+    {
+        Gson gson = new Gson();
+        List<String> weekDaysString = gson.fromJson(requestBody.get("weekDays"), List.class);
+
+        List<DayOfWeek> dayOfWeeks = new ArrayList();
+        if(weekDaysString != null)
+        {
+            for (String weekDay : weekDaysString)
+                dayOfWeeks.add(DayOfWeek.valueOf(weekDay.toUpperCase(Locale.ROOT)));
+        }
+        return dayOfWeeks;
     }
 
     private void AddActionToActionLog(String actionString, User actionUser, Event event)

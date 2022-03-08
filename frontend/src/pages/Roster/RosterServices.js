@@ -142,7 +142,7 @@ export const selectShiftHandler = async (
 
       //Getting the Event Log Users
       session
-        .get("eventLogs/search/findAllByEvent_eventID?eventID=" + clickInfo.event.extendedProps.eventID) //.get("roster/retrieveEventLogs?eventID=" + clickInfo.event.extendedProps.eventID, {}, {}, true)
+        .get("roster/retrieveEventLogs?eventID=" + clickInfo.event.extendedProps.eventID, {}, {}, true) //.get("eventLogs/search/findAllByEvent_eventID?eventID=" + clickInfo.event.extendedProps.eventID) 
         .then((response) => {
           //correct response
           if (response.status === 200) {

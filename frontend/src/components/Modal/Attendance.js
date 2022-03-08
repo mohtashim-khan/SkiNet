@@ -2,10 +2,19 @@ import React, {useState, useEffect}  from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { Form, FormGroup, Label, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from 'reactstrap';
+import{Modal as ReactBootStrapModal} from 'react-bootstrap';
 
 
-const Attendance = ({currentShift, setProxySelect, user, username}) => {
+
+const Attendance = ({currentShift, setProxySelect, user, session, shiftInfo}) => {
     //state template
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [attendanceModal, setAttendanceModal] = useState(false); // for Edit Shift
@@ -51,40 +60,56 @@ const Attendance = ({currentShift, setProxySelect, user, username}) => {
     const editAttendance = (e) => {
 
         e.preventDefault();
+
         const article = {
-            event_id: currentShift.event.id,
-            username: user.username,
-            attendance: eventInfo.attendance,
-            action_user: username,
+            attendance: attendance,
         };
+        console.log(eventInfo.selectedArea)
+        session
+            .patch("eventLogs/"+user.eventLogID, article, {}, false)
+            .then(response => {
+                //if error from database
+                if (response.status === 200) {
 
-        axios.put('/editAttendance', article)
-        .then(response => {
-            //if error from database
-            if(response.status === 204)
-            {
-                //Setting on and off of pop up
-                toggle(false);
-                //load events
-                let storeShift = {
-                    event: {
-                        proxy: 'yes',
-                        id: currentShift.event.id,
-                        title: currentShift.event.title,
-                        start: currentShift.event.start,
-                        end: currentShift.event.end,
-                        startStr: currentShift.event.startStr,
-                        endStr: currentShift.event.endStr,
+                    //** PROXY SELECT ** /
+                    let storeShift = {
+                        event: {
+                            proxy: 'yes',
+                            extendedProps:
+                            {
+                                hlUser: shiftInfo.hl,
+                                minPatrollers: shiftInfo.min_pat,
+                                maxPatrollers: shiftInfo.max_pat,
+                                maxTrainees: shiftInfo.max_trainee,
+                                eventID: currentShift.event._def.extendedProps.eventID,
+
+
+
+
+                            },
+                            allDay: shiftInfo.all_day,
+                            title: shiftInfo.event_name,
+                            startStr: shiftInfo.startStr,
+
+                        }
                     }
-                }
 
-                //load events
-                setProxySelect(storeShift);
-            }
-            else{
-                console.log("Error in DB")
-            }
-        });
+                    //update Shift infos
+                    setProxySelect(storeShift);
+
+
+                    successModalShow();
+
+
+                }
+                else {
+                    failModalShow();
+                }
+            })
+            .catch((error) => {
+                console.log("error " + error);
+                failModalShow();
+            });
     }
 
     useEffect(() => {}, [attendanceModal]);
@@ -98,7 +123,7 @@ const Attendance = ({currentShift, setProxySelect, user, username}) => {
         <div>
             {openBtn}
             <Modal isOpen={attendanceModal} toggle={() => toggle(false)} className= "">
-                <ModalHeader  close={closeBtn}>{user.name} - {user.username}</ModalHeader>
+                <ModalHeader  close={closeBtn}>{user.firstName}  {user.lastName}</ModalHeader>
                 <ModalBody onSubmit = {(e) => editAttendance(e)} >
                     <Form>
                         <FormGroup>
@@ -108,13 +133,13 @@ const Attendance = ({currentShift, setProxySelect, user, username}) => {
                                         {attendance}
                                     </DropdownToggle>
                                     <DropdownMenu>
-                                        <DropdownItem onClick={() => changeAttendance("On Time")} selected>On Time</DropdownItem>
+                                        <DropdownItem onClick={() => changeAttendance("ON_TIME")} selected>On Time</DropdownItem>
                                         <DropdownItem divider />
-                                        <DropdownItem onClick={() => changeAttendance("Late")}>Late</DropdownItem>
+                                        <DropdownItem onClick={() => changeAttendance("LATE")}>Late</DropdownItem>
                                         <DropdownItem divider />
-                                        <DropdownItem onClick={() => changeAttendance("No Show")}>No Show</DropdownItem>
+                                        <DropdownItem onClick={() => changeAttendance("NO_SHOW")}>No Show</DropdownItem>
                                         <DropdownItem divider />
-                                        <DropdownItem onClick={() => changeAttendance("Excused Absense")}>Excused Absense</DropdownItem>
+                                        <DropdownItem onClick={() => changeAttendance("EXCUSED_ABSENCE")}>Excused Absence</DropdownItem>
                                     </DropdownMenu>
                                     </Dropdown>
                         </FormGroup>
@@ -122,6 +147,28 @@ const Attendance = ({currentShift, setProxySelect, user, username}) => {
                     </Form>
                 </ModalBody>
             </Modal>
+
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Attendance Assignment Success!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Assigning Attendance</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </div>
     );
 

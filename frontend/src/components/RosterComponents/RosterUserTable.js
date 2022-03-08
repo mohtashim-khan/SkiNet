@@ -83,17 +83,23 @@ const RosterUserTable = ({
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
                   username={session_data.username}
+                  session={session}
+                  shiftInfo={shiftInfo}
                 />
                 <Comment
                   currentShift={currentShift}
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
+                  session={session}
+                  shiftInfo={shiftInfo}
                 />
                 <RemoveUser
                   currentShift={currentShift}
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
                   username={session_data.username}
+                  session={session}
+                  shiftInfo={shiftInfo}
                 />
               </div>
             </td>

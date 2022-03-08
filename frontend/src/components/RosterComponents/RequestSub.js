@@ -4,7 +4,7 @@ import { Button} from 'reactstrap'
 
 
 
-const RequestSub = ({currentShift, setProxySelect, user, username}) => {
+const RequestSub = ({currentShift, setProxySelect, user, username, session}) => {
     //state template
 
     const RequestSub = async (e) => {

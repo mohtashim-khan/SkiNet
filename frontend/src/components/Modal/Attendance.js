@@ -1,12 +1,12 @@
-import React, {useState, useEffect}  from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { Form, FormGroup, Label, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from 'reactstrap';
-import{Modal as ReactBootStrapModal} from 'react-bootstrap';
+import { Modal as ReactBootStrapModal } from 'react-bootstrap';
 
 
 
-const Attendance = ({currentShift, setProxySelect, user, session, shiftInfo}) => {
+const Attendance = ({ currentShift, setProxySelect, user, session, shiftInfo }) => {
     //state template
     const [successModal, setSuccessModal] = useState(false);
     const successModalShow = () => setSuccessModal(true);
@@ -22,21 +22,20 @@ const Attendance = ({currentShift, setProxySelect, user, session, shiftInfo}) =>
 
     const [eventInfo, setEventInfo] = useState(
         {
-            event_id: currentShift?currentShift.event.id:"",
-            username:  user?user.username:"",
-            attendance: user?user.attendance:"",
+            event_id: currentShift ? currentShift.event.id : "",
+            username: user ? user.username : "",
+            attendance: user ? user.attendance : "",
         }
     );
 
     const dropToggle = () => setDropdownOpen(prevState => !prevState);
     const toggle = (e) => {
-        if(user && currentShift)
-        {
+        if (user && currentShift) {
             setEventInfo(
                 {
-                    event_id: currentShift?currentShift.event.id:"",
-                    username:  user?user.username:"",
-                    attendance: user?user.attendance:"",
+                    event_id: currentShift ? currentShift.event.id : "",
+                    username: user ? user.username : "",
+                    attendance: user ? user.attendance : "",
                 }
             );
             changeAttendance("On Time");
@@ -66,7 +65,7 @@ const Attendance = ({currentShift, setProxySelect, user, session, shiftInfo}) =>
         };
         console.log(eventInfo.selectedArea)
         session
-            .patch("eventLogs/"+user.eventLogID, article, {}, false)
+            .patch("eventLogs/" + user.eventLogID, article, {}, false)
             .then(response => {
                 //if error from database
                 if (response.status === 200) {
@@ -81,7 +80,7 @@ const Attendance = ({currentShift, setProxySelect, user, session, shiftInfo}) =>
                                 minPatrollers: shiftInfo.min_pat,
                                 maxPatrollers: shiftInfo.max_pat,
                                 maxTrainees: shiftInfo.max_trainee,
-                                eventID: currentShift.event._def.extendedProps.eventID,
+                                eventID: currentShift.event.extendedProps.eventID,
 
 
 
@@ -112,36 +111,36 @@ const Attendance = ({currentShift, setProxySelect, user, session, shiftInfo}) =>
             });
     }
 
-    useEffect(() => {}, [attendanceModal]);
+    useEffect(() => { }, [attendanceModal]);
 
-    const openBtn = <Button color="secondary" className ="mr-1 mt-1" onClick={() => toggle(true)}>Attendance</Button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
-    const closeBtn = <Button className="close" onClick = {() =>toggle(false)}>Close</Button>;
+    const openBtn = <Button color="secondary" className="mr-1 mt-1" onClick={() => toggle(true)}>Attendance</Button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
+    const closeBtn = <Button className="close" onClick={() => toggle(false)}>Close</Button>;
 
     return (
 
         //put UI objects here
         <div>
             {openBtn}
-            <Modal isOpen={attendanceModal} toggle={() => toggle(false)} className= "">
-                <ModalHeader  close={closeBtn}>{user.firstName}  {user.lastName}</ModalHeader>
-                <ModalBody onSubmit = {(e) => editAttendance(e)} >
+            <Modal isOpen={attendanceModal} toggle={() => toggle(false)} className="">
+                <ModalHeader close={closeBtn}>{user.firstName}  {user.lastName}</ModalHeader>
+                <ModalBody onSubmit={(e) => editAttendance(e)} >
                     <Form>
                         <FormGroup>
                             <Label for="attendance">Attendance</Label>
                             <Dropdown isOpen={dropdownOpen} toggle={dropToggle}>
-                                    <DropdownToggle caret>
-                                        {attendance}
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem onClick={() => changeAttendance("ON_TIME")} selected>On Time</DropdownItem>
-                                        <DropdownItem divider />
-                                        <DropdownItem onClick={() => changeAttendance("LATE")}>Late</DropdownItem>
-                                        <DropdownItem divider />
-                                        <DropdownItem onClick={() => changeAttendance("NO_SHOW")}>No Show</DropdownItem>
-                                        <DropdownItem divider />
-                                        <DropdownItem onClick={() => changeAttendance("EXCUSED_ABSENCE")}>Excused Absence</DropdownItem>
-                                    </DropdownMenu>
-                                    </Dropdown>
+                                <DropdownToggle caret>
+                                    {attendance}
+                                </DropdownToggle>
+                                <DropdownMenu>
+                                    <DropdownItem onClick={() => changeAttendance("ON_TIME")} selected>On Time</DropdownItem>
+                                    <DropdownItem divider />
+                                    <DropdownItem onClick={() => changeAttendance("LATE")}>Late</DropdownItem>
+                                    <DropdownItem divider />
+                                    <DropdownItem onClick={() => changeAttendance("NO_SHOW")}>No Show</DropdownItem>
+                                    <DropdownItem divider />
+                                    <DropdownItem onClick={() => changeAttendance("EXCUSED_ABSENCE")}>Excused Absence</DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
                         </FormGroup>
                         <Button >Submit</Button>
                     </Form>

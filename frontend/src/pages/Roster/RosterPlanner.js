@@ -410,6 +410,7 @@ const RosterPlanner = ({ session }) => {
                           rosteredList={rosteredList}
                           session_data={session.session_data()}
                           session = {session}
+                          shiftInfo= {shiftInfo}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {true ? (

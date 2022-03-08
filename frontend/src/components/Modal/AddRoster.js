@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { CustomInput, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import{Modal as ReactBootStrapModal} from 'react-bootstrap';
+
 
 
 const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySelect, session, shiftInfo }) => {
@@ -158,7 +160,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
         //put UI objects here
         <>
             {openBtn}
-            <Modal isOpen={AddRosterModal} toggle={() => toggle(false)} className="">
+            <Modal isOpen={AddRosterModal} toggle={() => toggle(false)} className="Modal">
                 <ModalHeader close={closeBtn}>Add to Roster</ModalHeader>
                 <ModalBody>
                     <Form onSubmit={(e) => AddRoster(e)} >
@@ -177,27 +179,27 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
                 </ModalBody>
             </Modal>
 
-            <Modal show={successModal} onHide={successModalClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Sign Up Success!</Modal.Title>
-                </Modal.Header>
-                <Modal.Footer>
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Sign Up Success!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
                     <Button variant="secondary" onClick={successModalClose}>
                         Close
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
 
-            <Modal show={failModal} onHide={failModalClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Error Signing Up</Modal.Title>
-                </Modal.Header>
-                <Modal.Footer>
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Signing Up</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
                     <Button variant="secondary" onClick={failModalClose}>
                         Close
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </>
     );
 

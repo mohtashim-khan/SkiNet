@@ -16,7 +16,8 @@ const RosterUserTable = ({
   setProxySelect,
   rosteredList,
   session_data,
-  session
+  session,
+  shiftInfo
 }) => {
   const rosteredUsersToRender = () => {
     let i = 0;
@@ -73,6 +74,8 @@ const RosterUserTable = ({
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
                   username={session_data.username}
+                  session={session}
+                  shiftInfo={shiftInfo}
                 />
                 <Attendance
                   currentShift={currentShift}

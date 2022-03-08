@@ -278,11 +278,18 @@ const RosterPlanner = ({ session }) => {
                       session.session_data().user_type === "SYSTEM_ADMIN" && (
                         <>
 
-                          <EditBulk currentShift={currentShift} BulkEditModal={BulkEditModal} setBulkEditModal={setBulkEditModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} />
-
-
-                          <DeleteBulk BulkEventDeleteModal={BulkEventDeleteModal} setBulkEventDeleteModal={setBulkEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} />
-
+                          <button
+                            type="button"
+                            class="myButton btn btn-info float-start d-flex-inline"
+                          >
+                            Bulk Edit Shifts
+                          </button>
+                          <button
+                            type="button"
+                            className="myButton btn btn-danger float-start d-flex-inline"
+                          >
+                            Bulk Delete Shifts
+                          </button>
                         </>
                       )}
                   </div>
@@ -409,8 +416,8 @@ const RosterPlanner = ({ session }) => {
                           setProxySelect={setProxySelect}
                           rosteredList={rosteredList}
                           session_data={session.session_data()}
-                          session = {session}
-                          shiftInfo= {shiftInfo}
+                          session={session}
+                          shiftInfo={shiftInfo}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {true ? (
@@ -492,7 +499,7 @@ const RosterPlanner = ({ session }) => {
                         setProxySelect={setProxySelect}
                         name="Unavaiable"
                         session_data={session.session_data()}
-                        session = {session}
+                        session={session}
                       />
                       {/** ACCESS FOR ADMINS ONLY */}
                       {true ? (

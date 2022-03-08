@@ -62,6 +62,8 @@ const NewsBulletinPage = ({ session }) => {
   function performSearch() {
     if (searchRef.current.value.trim().length == 0) return;
 
+    setSelectedTopic(undefined);
+      
     setSearchState(true);
     const searchTerms = searchRef.current.value.split(" ");
     const searchPayload = JSON.stringify(searchTerms);

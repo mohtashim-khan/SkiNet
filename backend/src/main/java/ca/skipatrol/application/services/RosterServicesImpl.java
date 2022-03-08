@@ -55,7 +55,7 @@ public class RosterServicesImpl implements RosterServices {
         UUID userID = ParseLastURIPartToUUID(gson.fromJson(eventLogJSON.get("user"), String.class));
         eventLog.setUser((User) Hibernate.unproxy(userRepository.getById(userID)));
 
-        String areaURI = gson.fromJson(eventLogJSON.get("shadowing"), String.class);
+        String areaURI = gson.fromJson(eventLogJSON.get("area"), String.class);
         if(areaURI != null && !areaURI.isEmpty())
             eventLog.setArea((Area) Hibernate.unproxy(areaRepository.getById(ParseLastURIPartToUUID(areaURI))));
 

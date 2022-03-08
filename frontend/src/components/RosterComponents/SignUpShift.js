@@ -49,7 +49,7 @@ const SignUpShift = ({ currentShift, setList, setShiftInfo, setRosteredList, set
                                     minPatrollers: shiftInfo.min_pat,
                                     maxPatrollers: shiftInfo.max_pat,
                                     maxTrainees: shiftInfo.max_trainee,
-                                    eventID: currentShift.event._def.extendedProps.eventID,
+                                    eventID: currentShift.event.extendedProps.eventID,
 
 
 

@@ -124,7 +124,11 @@ const RosterPlanner = ({ session }) => {
     if (Updater) {
       setUpdater(false);
     }
-  }, [Updater]);
+    if (proxySelect) {
+      selectShiftHandler(proxySelect, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session)
+      setProxySelect(false);
+    }
+  }, [Updater, proxySelect, currentShift, dragDropEnable, session]);
 
 
 
@@ -273,18 +277,12 @@ const RosterPlanner = ({ session }) => {
                     {session.session_data() !== null &&
                       session.session_data().user_type === "SYSTEM_ADMIN" && (
                         <>
-                          <button
-                            type="button"
-                            class="myButton btn btn-info float-start d-flex-inline"
-                          >
-                            Bulk Edit Shifts
-                          </button>
-                          <button
-                            type="button"
-                            className="myButton btn btn-danger float-start d-flex-inline"
-                          >
-                            Bulk Delete Shifts
-                          </button>
+
+                          <EditBulk currentShift={currentShift} BulkEditModal={BulkEditModal} setBulkEditModal={setBulkEditModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} />
+
+
+                          <DeleteBulk BulkEventDeleteModal={BulkEventDeleteModal} setBulkEventDeleteModal={setBulkEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} />
+
                         </>
                       )}
                   </div>
@@ -292,14 +290,14 @@ const RosterPlanner = ({ session }) => {
                 <ShiftInfo currentShift={currentShift} shiftInfo={shiftInfo} />
                 {/* <ShiftInfo /> */}
                 <div className="ShiftButtons">
-                  <SignUpShift currentShift={currentShift} setList={setList} setShiftInfo={setShiftInfo} setRosteredList={setRosteredList} setUnavailList={setUnavailList} setTraineeList={setTraineeList} setWaitlist={setWaitlist} setShadowList={setShadowList} session={session} />
+                  <SignUpShift currentShift={currentShift} setList={setList} setShiftInfo={setShiftInfo} setRosteredList={setRosteredList} setUnavailList={setUnavailList} setTraineeList={setTraineeList} setWaitlist={setWaitlist} setShadowList={setShadowList} session={session} setProxySelect={setProxySelect} shiftInfo={shiftInfo} />
 
-                  <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName + " " + session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} session={session} setList={setList} setUnavailList={setUnavailList} setShiftInfo={setShiftInfo} />
+                  <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName + " " + session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} session={session} setList={setList} setUnavailList={setUnavailList} setShiftInfo={setShiftInfo} shiftInfo={shiftInfo} />
 
                   <button
                     type="button"
                     className="myButton btn btn-secondary float-start d-flex-inline"
-                    onClick={() => printSignInSheet(currentShift, list)}
+                    onClick={() => printSignInSheet(currentShift, list, session)}
                   >
                     Attendance(PDF)
                   </button>
@@ -411,6 +409,8 @@ const RosterPlanner = ({ session }) => {
                           setProxySelect={setProxySelect}
                           rosteredList={rosteredList}
                           session_data={session.session_data()}
+                          session = {session}
+                          shiftInfo= {shiftInfo}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {true ? (
@@ -420,7 +420,8 @@ const RosterPlanner = ({ session }) => {
                             AddRosterModal={AddRosterModal}
                             setAddRosterModal={setAddRosterModal}
                             setProxySelect={setProxySelect}
-                            userAuth={session.session_data()}
+                            session={session}
+                            shiftInfo={shiftInfo}
                           />
                         ) : (
                           <></>
@@ -472,7 +473,8 @@ const RosterPlanner = ({ session }) => {
                           userlist={waitlist}
                           setProxySelect={setProxySelect}
                           name="Waitlist"
-                          userAuth={session.session_data()}
+                          session_data={session.session_data()}
+                          session={session}
                         />
                       </Col>
                     </Row>
@@ -489,7 +491,8 @@ const RosterPlanner = ({ session }) => {
                         userlist={unavailList}
                         setProxySelect={setProxySelect}
                         name="Unavaiable"
-                        userAuth={session.session_data()}
+                        session_data={session.session_data()}
+                        session = {session}
                       />
                       {/** ACCESS FOR ADMINS ONLY */}
                       {true ? (

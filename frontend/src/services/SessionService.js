@@ -138,6 +138,24 @@ class Session {
 
     return axios.put(url, body, payload);
   }
+
+  async patch(endpoint, body, urlParams, custom) {
+    var payload = {
+      headers: {
+        authorization: this._get(this.SESSION_AUTH),
+        "Content-Type": "application/json",
+      },
+    };
+
+    var url =
+      this._get_base_url() + (custom ? "/customapi" : "/api") + "/" + endpoint;
+    if (Object.keys(urlParams).length > 0) {
+      const queryString = urlParams.toString();
+      url += queryString.length > 0 ? "?" + queryString : "";
+    }
+
+    return axios.patch(url, body, payload);
+  }
 }
 
 export default Session;

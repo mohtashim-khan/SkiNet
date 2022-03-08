@@ -1,31 +1,39 @@
-import React, {useState, useEffect}  from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { Form, FormGroup, Label, Input } from 'reactstrap';
+import{Modal as ReactBootStrapModal} from 'react-bootstrap';
 
 
-const AssignArea = ({currentShift, setProxySelect, user, username}) => {
+
+const AssignArea = ({ currentShift, setProxySelect, user, username, session, shiftInfo }) => {
     //state template
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
 
     const [Areas, setAreas] = useState(false);
     const [AssignAreaModal, setAssignAreaModal] = useState(false); // for Edit Shift
 
     const [eventInfo, setEventInfo] = useState(
         {
-            event_id: currentShift?currentShift.event.id:"",
-            username:  user?user.username:"",
-            selectedArea: user?user.area:"",
+            event_id: currentShift ? currentShift.event.id : "",
+            username: user ? user.username : "",
+            selectedArea: user ? user.area : "",
         }
     );
 
     const toggle = (e) => {
-        if(user && currentShift)
-        {
+        if (user && currentShift) {
             setEventInfo(
                 {
-                    event_id: currentShift?currentShift.event.id:"",
-                    username:  user?user.username:"",
-                    selectedArea: user?user.area:"",
+                    event_id: currentShift ? currentShift.event.id : "",
+                    username: user ? user.username : "",
+                    selectedArea: user ? user.area : "",
                 }
             );
             //Setting on and off of pop up
@@ -49,52 +57,67 @@ const AssignArea = ({currentShift, setProxySelect, user, username}) => {
 
         e.preventDefault();
 
+        
+
         const article = {
-            event_id: currentShift.event.id,
-            username: user.username,
-            area: eventInfo.selectedArea,
-            action_user: username, 
+            area: Areas[eventInfo.selectedArea]._links.area.href,
         };
         console.log(eventInfo.selectedArea)
-        axios.put('/editArea', article)
-        .then(response => {
-            //if error from database
-            if(response.status === 204)
-            {
-                //Setting on and off of pop up
-                toggle(false);
+        session
+            .patch("eventLogs/"+user.eventLogID, article, {}, false)
+            .then(response => {
+                //if error from database
+                if (response.status === 200) {
 
-                //load events
-                let storeShift = {
-                    event: {
-                        proxy: 'yes',
-                        id: currentShift.event.id,
-                        title: currentShift.event.title,
-                        start: currentShift.event.start,
-                        end: currentShift.event.end,
-                        startStr: currentShift.event.startStr,
-                        endStr: currentShift.event.endStr,
+                    //** PROXY SELECT ** /
+                    let storeShift = {
+                        event: {
+                            proxy: 'yes',
+                            extendedProps:
+                            {
+                                hlUser: shiftInfo.hl,
+                                minPatrollers: shiftInfo.min_pat,
+                                maxPatrollers: shiftInfo.max_pat,
+                                maxTrainees: shiftInfo.max_trainee,
+                                eventID: currentShift.event.extendedProps.eventID,
+
+
+
+
+                            },
+                            allDay: shiftInfo.all_day,
+                            title: shiftInfo.event_name,
+                            startStr: shiftInfo.startStr,
+
+                        }
                     }
-                }
 
-                //load events
-                setProxySelect(storeShift);
-            }
-            else{
-                console.log("Error in DB")
-            }
-        });
+                    //update Shift infos
+                    setProxySelect(storeShift);
+
+
+                    successModalShow();
+
+
+                }
+                else {
+                    failModalShow();
+                }
+            })
+            .catch((error) => {
+                console.log("error " + error);
+                failModalShow();
+            });
+
     }
 
     const userRender = () => {
         //If it exists and it is greater than 0
-        if(Areas.length !== 0 && Areas)
-        {
+        if (Areas.length !== 0 && Areas) {
             let userOptionRender = [];
 
-            for(let i = 0; i< Areas.length; i++)
-            {
-                userOptionRender.push(<option key={i}>{Areas[i].area}</option>)
+            for (let i = 0; i < Areas.length; i++) {
+                userOptionRender.push(<option value={i}>{Areas[i].areaname}</option>)
             }
             return userOptionRender;
         }
@@ -104,34 +127,33 @@ const AssignArea = ({currentShift, setProxySelect, user, username}) => {
 
 
     useEffect(() => {
-        if(AssignAreaModal)
-        {
-            axios.get('/getAreas')
-            .then(response => {
-                // If request is good...
-                setAreas(response.data);
-            })
-            .catch((error) => {
-                console.log('error ' + error);
-            });
+        if (AssignAreaModal) {
+            session.get('areas')
+                .then(response => {
+                    // If request is good...
+                    setAreas(response.data._embedded.areas);
+                })
+                .catch((error) => {
+                    console.log('error ' + error);
+                });
         }
 
-    }, [AssignAreaModal]);
+    }, [AssignAreaModal, session]);
 
-    const openBtn = <Button color="primary" className ="mr-1 mt-1" onClick={() => toggle(true)}>Area</Button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
-    const closeBtn = <Button className="close" onClick = {() =>toggle(false)}>Close</Button>;
+    const openBtn = <Button color="primary" className="mr-1 mt-1" onClick={() => toggle(true)}>Area</Button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
+    const closeBtn = <Button className="close" onClick={() => toggle(false)}>Close</Button>;
 
     return (
 
         //put UI objects here
         <div>
             {openBtn}
-            <Modal isOpen={AssignAreaModal} toggle={() => toggle(false)} className= "">
-                <ModalHeader  close={closeBtn}>Assign Area</ModalHeader>
-                <ModalBody onSubmit = {(e) => editArea(e)} >
+            <Modal isOpen={AssignAreaModal} toggle={() => toggle(false)} className="">
+                <ModalHeader close={closeBtn}>Assign Area</ModalHeader>
+                <ModalBody onSubmit={(e) => editArea(e)} >
                     <Form>
                         <FormGroup>
-                            <Label for="selectedArea">{}</Label>
+                            <Label for="selectedArea">{ }</Label>
                             <Input type="select" name="selectedArea" id="exampleSelectMulti" onChange={onChange} size="5" required>
                                 {userRender()}
                             </Input>
@@ -140,6 +162,28 @@ const AssignArea = ({currentShift, setProxySelect, user, username}) => {
                     </Form>
                 </ModalBody>
             </Modal>
+
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Area Assignment Success!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Assigning Area</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </div>
     );
 

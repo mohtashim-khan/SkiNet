@@ -55,7 +55,7 @@ public class RosterServicesImpl implements RosterServices {
         UUID userID = ParseLastURIPartToUUID(gson.fromJson(eventLogJSON.get("user"), String.class));
         eventLog.setUser((User) Hibernate.unproxy(userRepository.getById(userID)));
 
-        String areaURI = gson.fromJson(eventLogJSON.get("shadowing"), String.class);
+        String areaURI = gson.fromJson(eventLogJSON.get("area"), String.class);
         if(areaURI != null && !areaURI.isEmpty())
             eventLog.setArea((Area) Hibernate.unproxy(areaRepository.getById(ParseLastURIPartToUUID(areaURI))));
 
@@ -300,6 +300,10 @@ public class RosterServicesImpl implements RosterServices {
             List<EventLog> eventLogs = eventLogRepository.findAllByEvent_eventID(eventID);
             List<UUID> eventLogIDs = eventLogs.stream().map(x -> x.getEventLogID()).collect(Collectors.toList());
             eventLogRepository.deleteAllByIdInBatch(eventLogIDs);
+
+            List<ActionLog> actionLogs = actionLogRepository.findAllByEvent_eventID(eventID);
+            List<UUID> actionLogIDs = actionLogs.stream().map(x -> x.getActionLogID()).collect(Collectors.toList());
+            actionLogRepository.deleteAllByIdInBatch(actionLogIDs);
 
             eventRepository.deleteById(eventID);
             return 200;

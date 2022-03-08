@@ -16,10 +16,12 @@ const TraineeUserTable = ({currentShift, setCurrentShift, setProxySelect, traine
         let i = 0;
         return traineeList.map(traineeUser => (
             <tr key={i++}>
-                <td className='userText'><Link to={'/users/' + traineeUser.username}>{traineeUser.name}</Link></td>
-                <td className='userText'>{traineeUser.area}</td>
+                <td className='userText'><Link to={"/personnel/user/" + traineeUser.user.userID}>{traineeUser.user.firstName+" "+traineeUser.user.lastName}</Link></td>
+                <td className='userText'>{traineeUser.area === null? "Area Not Set": traineeUser.area.areaname}</td>
                 <td className='userText'>{traineeUser.shadowing}</td>
-                <td className='userText'>{(traineeUser.timestamp_subrequest !== '0000-00-00 00:00:00')?'X':''}</td>
+                <td className='userText'>{traineeUser.timestampSubrequest !== "1970-01-01T00:00:00"
+            ? "✓"
+            : " "}</td>
                 <td className='userText'>{traineeUser.attendance}</td>
 
                 {(userAuth.username === traineeUser.username)?

@@ -2,16 +2,25 @@ import  React, {useEffect} from 'react';
 import RemoveUser from './RemoveUser'
 import './Table.css'
 import {Table} from 'reactstrap';
+import { Link } from "react-router-dom";
 
-const UserTable = ({currentShift, userlist, setProxySelect, name, userAuth}) => {
+
+const UserTable = ({currentShift, userlist, setProxySelect, name, session_data, session}) => {
 
     const UsersToRender = () => {
         let i = 0;
         return userlist.map(user => (
             <tr key={i++}>
-                <td className='userText'>{user.name}</td>
-                {(userAuth.username === user.username || userAuth.user_type === "System Admin" || userAuth.user_type === "Hill Admin")?
-                    <td><RemoveUser currentShift={currentShift} setProxySelect={setProxySelect} user={user}/></td>
+                <td className='userText'><Link to={"/personnel/user/" + user.user.userID}>
+            {user.user.firstName+" "+user.user.lastName}
+          </Link></td>
+                {(session_data.username === user.user.username || session_data.user_type === "SYSTEM_ADMIN" || session_data.user_type === "HILL_ADMIN")?
+                    <td><RemoveUser currentShift={currentShift}
+                    setProxySelect={setProxySelect}
+                    user={user}
+                    username={session_data.username}
+                    session={session}
+                    session_data = {session.session_data()}/></td>
                     :
                     <></>
                 }

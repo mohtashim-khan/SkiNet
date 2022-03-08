@@ -3,10 +3,10 @@ package ca.skipatrol.application.models.cms;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -17,14 +17,19 @@ public class Topic {
     @Getter
     @Setter
     @Column(columnDefinition = "binary(16)")
-    private UUID topicID;
+    private UUID id;
 
     @Getter
     @Setter
     @Column(unique = true, nullable = false)
     private String description;
 
-    public Topic(){}
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "topic", cascade = CascadeType.ALL)
+    @Getter
+    @Setter
+    private Set<Post> post = new HashSet<>();
+
+    Topic() {}
 
     public Topic(String description) { this.description = description; }
 

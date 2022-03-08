@@ -365,7 +365,35 @@ public class RosterServicesImpl implements RosterServices {
     {
         List<EventLog> eventLogs = eventLogRepository.findAllByEvent_eventID(eventID);
 
-        return eventLogs;
+        List<EventLog> returnEventLogs = new ArrayList<>();
+
+        for (EventLog eventLog : eventLogs)
+        {
+            EventLog returnEventLog = new EventLog();
+
+            returnEventLog.setEventLogID(eventLog.getEventLogID());
+            returnEventLog.setRole(eventLog.getRole());
+            returnEventLog.setAttendance(eventLog.getAttendance());
+            returnEventLog.setTimestampRostered(eventLog.getTimestampRostered());
+            returnEventLog.setTimestampSubrequest(eventLog.getTimestampSubrequest());
+            returnEventLog.setComment(eventLog.getComment());
+            returnEventLog.setEmail(eventLog.getEmail());
+            returnEventLog.setPhoneNumber(eventLog.getPhoneNumber());
+            returnEventLog.setTrainer(eventLog.getTrainer());
+
+            Hibernate.initialize(eventLog.getEvent());
+            Hibernate.initialize(eventLog.getUser());
+            Hibernate.initialize(eventLog.getArea());
+            Hibernate.initialize(eventLog.getShadowing());
+            returnEventLog.setEvent(eventLog.getEvent());
+            returnEventLog.setUser(eventLog.getUser());
+            returnEventLog.setArea(eventLog.getArea());
+            returnEventLog.setShadowing(eventLog.getShadowing());
+
+            returnEventLogs.add(returnEventLog);
+        }
+
+        return returnEventLogs;
     }
 
     private List<DayOfWeek> ParseWeekdays(JsonObject requestBody)

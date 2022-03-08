@@ -1,9 +1,9 @@
 package ca.skipatrol.application.models.cms;
 
-import ca.skipatrol.application.models.PersonAward;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,7 +32,8 @@ public class Post {
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn
+    @JoinColumn(name = "topic_id", nullable = true)
+    @JsonBackReference
     private Topic topic;
 
     @Column(insertable = false,

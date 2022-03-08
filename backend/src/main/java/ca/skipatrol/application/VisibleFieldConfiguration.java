@@ -3,6 +3,7 @@ package ca.skipatrol.application;
 import ca.skipatrol.application.models.*;
 import ca.skipatrol.application.models.cms.Attachment;
 import ca.skipatrol.application.models.cms.Post;
+import ca.skipatrol.application.models.cms.Topic;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -37,6 +38,7 @@ public class VisibleFieldConfiguration implements RepositoryRestConfigurer {
         config.exposeIdsFor(Uniform.class);
         config.exposeIdsFor(Vest.class);
         config.exposeIdsFor(Attachment.class);
+        config.exposeIdsFor(Topic.class);
     }
 
 }

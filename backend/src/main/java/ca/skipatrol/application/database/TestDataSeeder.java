@@ -2,6 +2,7 @@ package ca.skipatrol.application.database;
 
 import ca.skipatrol.application.models.*;
 import ca.skipatrol.application.models.cms.Post;
+import ca.skipatrol.application.models.cms.Topic;
 import ca.skipatrol.application.repositories.*;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,8 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
         private OnSnowEvalRepository onSnowEvalRepository;
         @Autowired
         private PostRepository postRepository;
+        @Autowired
+        private TopicRepository topicRepository;
 
         private Optional<User> userLookup;
         private Optional<Area> areaLookup;
@@ -392,11 +395,14 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         String title = "Got Stuck? Try These Tips To Streamline Your SKI PATROL";
                         Optional<Post> testPost = this.postRepository.findByTitle(title);
 
-                        if (testPost.isEmpty()) {
+                        Optional<Topic> weekendReportTopic = topicRepository.findByDescription("Weekend Reports");
+
+                        if (testPost.isEmpty() && weekendReportTopic.isPresent()) {
                                 Post newTestPost = new Post();
                                 newTestPost.setTitle(title);
                                 newTestPost.setBody(
                                                 "According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyways. Because bees don't care what humans think is impossible.");
+                                newTestPost.setTopic(weekendReportTopic.get());
                                 this.postRepository.save(newTestPost);
                         }
                 }

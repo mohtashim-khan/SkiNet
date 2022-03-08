@@ -64,7 +64,7 @@ const CreateNewsPost = ({ session }) => {
                           var data = new FormData();
                           data.append('file', selectedFile);
 
-                          session.post("attachments/new/" + postId, data, {}, true).then(res => {
+                          session.post_with_prefix("attachments/new/" + postId, data, {}, "/public").then(res => {
                               if (res.status != 200) {
                                   setValidationMessage({
                                       error: true,

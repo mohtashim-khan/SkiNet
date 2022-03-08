@@ -72,7 +72,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             phoneNumber: user.phoneNumber,
             trainer: user.trainer,
             role: (user.userType === "TRAINEE") ? "TRAINEE" : "ROSTERED",
-            comment: "",
+            comment: eventInfo.comment,
             email: user.email,
         };
 

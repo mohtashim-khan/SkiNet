@@ -473,7 +473,8 @@ const RosterPlanner = ({ session }) => {
                           userlist={waitlist}
                           setProxySelect={setProxySelect}
                           name="Waitlist"
-                          userAuth={session.session_data()}
+                          session_data={session.session_data()}
+                          session={session}
                         />
                       </Col>
                     </Row>
@@ -490,7 +491,8 @@ const RosterPlanner = ({ session }) => {
                         userlist={unavailList}
                         setProxySelect={setProxySelect}
                         name="Unavaiable"
-                        userAuth={session.session_data()}
+                        session_data={session.session_data()}
+                        session = {session}
                       />
                       {/** ACCESS FOR ADMINS ONLY */}
                       {true ? (

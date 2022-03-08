@@ -1,47 +1,71 @@
-import React, {useEffect}  from 'react';
+import React, {useEffect, useState}  from 'react';
 import axios from 'axios';
 import { Button} from 'reactstrap'
+import{Modal as ReactBootStrapModal} from 'react-bootstrap';
 
 
 
-const RemoveUser = ({currentShift, setProxySelect, user, username}) => {
+const RemoveUser = ({currentShift, setProxySelect, user, username, session}) => {
     //state template
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
+
 
     const removeUser = async (e) => {
 
-        const article = {
-            event_id: currentShift.event.id,
-            username: user.username,
-            role: user.role,
-            action_user: username
-        };
+       
+        //NEED ACTION LOG QUERY HERE
+
+        session
+            .delete("eventLogs/"+user.eventLogID, {}, {}, false)
+            .then(response => {
+                //if error from database
+                if (response.status === 204) {
+
+                    //** PROXY SELECT ** /
+                    let storeShift = {
+                        event: {
+                            proxy: 'yes',
+                            extendedProps:
+                            {
+                                hlUser: user.event.hlUser,
+                                minPatrollers: user.event.minPatrollers,
+                                maxPatrollers: user.event.maxPatrollers,
+                                maxTrainees: user.event.maxTrainees,
+                                eventID: user.event.eventID,
 
 
-        axios.put('/removeUser', article)
-        .then(response => {
-            //if error from database
-            if(response.status === 204)
-            {
-                //load events
-                let storeShift = {
-                    event: {
-                        proxy: 'yes',
-                        id: currentShift.event.id,
-                        title: currentShift.event.title,
-                        start: currentShift.event.start,
-                        end: currentShift.event.end,
-                        startStr: currentShift.event.startStr,
-                        endStr: currentShift.event.endStr,
+
+
+                            },
+                            allDay: user.event.allDay,
+                            title: user.event.eventName,
+                            startStr: currentShift.event.startStr,
+
+                        }
                     }
-                }
 
-                //load events
-                setProxySelect(storeShift);
-            }
-            else{
-                console.log("Error in DB")
-            }
-        });
+                    //update Shift infos
+                    setProxySelect(storeShift);
+
+
+                    successModalShow();
+
+
+                }
+                else {
+                    failModalShow();
+                }
+            })
+            .catch((error) => {
+                console.log("error " + error);
+                failModalShow();
+            });
 
     }
 
@@ -57,6 +81,28 @@ const RemoveUser = ({currentShift, setProxySelect, user, username}) => {
         //put UI objects here
         <div>
             {removeButton}
+
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Delete Success!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Deleting</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </div>
     );
 

@@ -142,22 +142,22 @@ export const selectShiftHandler = async (
 
       //Getting the Event Log Users
       session
-        .get("eventLogs/search/findAllByEvent_eventID?eventID=" + clickInfo.event.extendedProps.eventID) //.get("roster/retrieveEventLogs?eventID=" + clickInfo.event.extendedProps.eventID, {}, {}, true)
+      .get("roster/retrieveEventLogs?eventID=" + clickInfo.event.extendedProps.eventID, {}, {}, true) //.get("eventLogs/search/findAllByEvent_eventID?eventID=" + clickInfo.event.extendedProps.eventID) 
         .then((response) => {
           //correct response
           if (response.status === 200) {
-            setList(response.data._embedded.eventLogs);
-            for (let i = 0; i < response.data._embedded.eventLogs.length; i++) {
-              if (response.data._embedded.eventLogs[i].role === "ROSTERED") {
-                rostered_list.push(response.data._embedded.eventLogs[i]);
-              } else if (response.data._embedded.eventLogs[i].role === "UNAVAILABLE") {
-                unavail_list.push(response.data._embedded.eventLogs[i]);
-              } else if (response.data._embedded.eventLogs[i].role === "TRAINEE") {
-                trainee_list.push(response.data._embedded.eventLogs[i]);
-              } else if (response.data._embedded.eventLogs[i].role === "WAITLIST") {
-                wait_list.push(response.data._embedded.eventLogs[i]);
-              } else if (response.data._embedded.eventLogs[i].role === "SHADOW") {
-                shadow_list.push(response.data._embedded.eventLogs[i]);
+            setList(response.data);
+            for (let i = 0; i < response.data.length; i++) {
+              if (response.data[i].role === "ROSTERED") {
+                rostered_list.push(response.data[i]);
+              } else if (response.data[i].role === "UNAVAILABLE") {
+                unavail_list.push(response.data[i]);
+              } else if (response.data[i].role === "TRAINEE") {
+                trainee_list.push(response.data[i]);
+              } else if (response.data[i].role === "WAITLIST") {
+                wait_list.push(response.data[i]);
+              } else if (response.data[i].role === "SHADOW") {
+                shadow_list.push(response.data[i]);
               }
             }
 

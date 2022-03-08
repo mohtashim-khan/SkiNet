@@ -49,7 +49,7 @@ const UnavailableShift = ({ currentShift, setProxySelect, name, username, user_t
                                     minPatrollers: shiftInfo.min_pat,
                                     maxPatrollers: shiftInfo.max_pat,
                                     maxTrainees: shiftInfo.max_trainee,
-                                    eventID: currentShift.event._def.extendedProps.eventID,
+                                    eventID: currentShift.event.extendedProps.eventID,
 
 
 

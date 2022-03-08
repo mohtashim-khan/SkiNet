@@ -113,11 +113,7 @@ public class EventLog {
     }
 
     public EventLog(UUID eventLogID,
-                    Event event,
-                    User user,
-                    Area area,
                     EventRole role,
-                    User shadowing,
                     EventAttendance attendance,
                     LocalDateTime timestampRostered,
                     LocalDateTime timestampSubrequest,
@@ -126,11 +122,7 @@ public class EventLog {
                     String phoneNumber,
                     Boolean trainer) {
         this.eventLogID = eventLogID;
-        this.event = event;
-        this.user = user;
-        this.area = area;
         this.role = role;
-        this.shadowing = shadowing;
         this.attendance = attendance;
         this.timestampRostered = timestampRostered;
         this.timestampSubrequest = timestampSubrequest;

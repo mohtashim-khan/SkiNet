@@ -32,6 +32,8 @@ public class RosterServicesImpl implements RosterServices {
     UserRepository userRepository;
     @Autowired
     ActionLogRepository actionLogRepository;
+    @Autowired
+    ProfileServices profileServices;
 
     static LocalDateTime minDate = LocalDateTime.of(1970,1,1,0,0);
 
@@ -369,26 +371,26 @@ public class RosterServicesImpl implements RosterServices {
 
         for (EventLog eventLog : eventLogs)
         {
-            EventLog returnEventLog = new EventLog();
-
-            returnEventLog.setEventLogID(eventLog.getEventLogID());
-            returnEventLog.setRole(eventLog.getRole());
-            returnEventLog.setAttendance(eventLog.getAttendance());
-            returnEventLog.setTimestampRostered(eventLog.getTimestampRostered());
-            returnEventLog.setTimestampSubrequest(eventLog.getTimestampSubrequest());
-            returnEventLog.setComment(eventLog.getComment());
-            returnEventLog.setEmail(eventLog.getEmail());
-            returnEventLog.setPhoneNumber(eventLog.getPhoneNumber());
-            returnEventLog.setTrainer(eventLog.getTrainer());
+            EventLog returnEventLog = new EventLog(
+                    eventLog.getEventLogID(),
+                    eventLog.getRole(),
+                    eventLog.getAttendance(),
+                    eventLog.getTimestampRostered(),
+                    eventLog.getTimestampSubrequest(),
+                    eventLog.getComment(),
+                    eventLog.getEmail(),
+                    eventLog.getPhoneNumber(),
+                    eventLog.getTrainer()
+            );
 
             Hibernate.initialize(eventLog.getEvent());
-            Hibernate.initialize(eventLog.getUser());
             Hibernate.initialize(eventLog.getArea());
-            Hibernate.initialize(eventLog.getShadowing());
             returnEventLog.setEvent(eventLog.getEvent());
-            returnEventLog.setUser(eventLog.getUser());
             returnEventLog.setArea(eventLog.getArea());
-            returnEventLog.setShadowing(eventLog.getShadowing());
+
+            returnEventLog.setUser(profileServices.retrieveUserBasic(eventLog.getUser().getUserID()));
+            if(eventLog.getShadowing() != null)
+                returnEventLog.setShadowing(profileServices.retrieveUserBasic(eventLog.getShadowing().getUserID()));
 
             returnEventLogs.add(returnEventLog);
         }

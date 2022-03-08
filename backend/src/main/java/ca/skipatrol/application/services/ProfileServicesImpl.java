@@ -298,6 +298,28 @@ public class ProfileServicesImpl implements ProfileServices {
         return null;
     }
 
+    public User retrieveUserBasic(UUID userID) {
+        Optional<User> userEntity = userRepository.findById(userID);
+
+        if (userEntity.isPresent()) {
+            User user = userEntity.get();
+
+            User returnVal = new User(
+                    user.getUserID(),
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    user.getUserType(),
+                    user.getTrainer());
+
+            return returnVal;
+        }
+        return null;
+    }
+
     // endregion
 
 

@@ -290,9 +290,9 @@ const RosterPlanner = ({ session }) => {
                 <ShiftInfo currentShift={currentShift} shiftInfo={shiftInfo} />
                 {/* <ShiftInfo /> */}
                 <div className="ShiftButtons">
-                  <SignUpShift currentShift={currentShift} setList={setList} setShiftInfo={setShiftInfo} setRosteredList={setRosteredList} setUnavailList={setUnavailList} setTraineeList={setTraineeList} setWaitlist={setWaitlist} setShadowList={setShadowList} session={session} />
+                  <SignUpShift currentShift={currentShift} setList={setList} setShiftInfo={setShiftInfo} setRosteredList={setRosteredList} setUnavailList={setUnavailList} setTraineeList={setTraineeList} setWaitlist={setWaitlist} setShadowList={setShadowList} session={session} setProxySelect={setProxySelect} shiftInfo={shiftInfo} />
 
-                  <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName + " " + session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} session={session} setList={setList} setUnavailList={setUnavailList} setShiftInfo={setShiftInfo} />
+                  <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName + " " + session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} session={session} setList={setList} setUnavailList={setUnavailList} setShiftInfo={setShiftInfo} shiftInfo={shiftInfo} />
 
                   <button
                     type="button"
@@ -409,6 +409,7 @@ const RosterPlanner = ({ session }) => {
                           setProxySelect={setProxySelect}
                           rosteredList={rosteredList}
                           session_data={session.session_data()}
+                          session = {session}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {true ? (
@@ -419,6 +420,7 @@ const RosterPlanner = ({ session }) => {
                             setAddRosterModal={setAddRosterModal}
                             setProxySelect={setProxySelect}
                             session={session}
+                            shiftInfo={shiftInfo}
                           />
                         ) : (
                           <></>

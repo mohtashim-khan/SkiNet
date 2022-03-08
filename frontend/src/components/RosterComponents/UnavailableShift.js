@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import './Table.css'
 
 
-const UnavailableShift = ({ currentShift, setProxySelect, name, username, user_type, session, setUnavailList, setShiftInfo, setList }) => {
+const UnavailableShift = ({ currentShift, setProxySelect, name, username, user_type, session, setUnavailList, setShiftInfo, setList, shiftInfo }) => {
     //state template
     const [successModal, setSuccessModal] = useState(false);
     const successModalShow = () => setSuccessModal(true);
@@ -37,80 +37,56 @@ const UnavailableShift = ({ currentShift, setProxySelect, name, username, user_t
                 .then(response => {
                     //if error from database
                     if (response.status === 200) {
-                        // {
-                        //     let storeShift = {
-                        //         event: {
-                        //             // proxy: 'yes',    --TODO: Figure out what old group means by proxy
-                        //             id: currentShift.event.id,
-                        //             title: currentShift.event.title,
-                        //             start: currentShift.event.start,
-                        //             end: currentShift.event.end,
-                        //             startStr: currentShift.event.startStr,
-                        //             endStr: currentShift.event.endStr,
-                        //         }
-                        //     }
-
-                        //     //load events
-                        //     setProxySelect(storeShift);
 
 
-                        let unavail_list = [];
-                        let rostered_list = [];
-
-                        //Getting the Event Log Users
-                        session
-                            .get("eventLogs/search/findAllByEvent_eventID?eventID=" + currentShift.event.extendedProps.eventID)
-                            .then((response) => {
-                                //correct response
-                                if (response.status === 200) {
-                                    setList(response.data._embedded.eventLogs);
-                                    for (let i = 0; i < response.data._embedded.eventLogs.length; i++) {
-
-                                        if (response.data._embedded.eventLogs[i].role === "UNAVAILABLE") {
-                                            unavail_list.push(response.data._embedded.eventLogs[i]);
-                                        }
-                                        else if (response.data._embedded.eventLogs[i].role === 'ROSTERED') {
-                                            rostered_list.push(response.data._embedded.eventLogs[i])
-                                        }
-                                    }
-
-                                    //current shift amount
-                                    setShiftInfo((prev) => ({
-                                        ...prev,
-                                        current_ros: rostered_list.length,
-                                    }));
-
-                                    //Setting table viewable
-                                    setUnavailList(unavail_list);
-
-
-                                    successModalShow();
-
-
-                                } else {
-                                    console.log("No Shifts");
-                                    failModalShow();
-                                }
-                            })
-                            .catch((error) => {
-                                console.log("error " + error);
-                                failModalShow();
-                            });
+                        //** PROXY SELECT ** /
+                        let storeShift = {
+                            event: {
+                                proxy: 'yes',
+                                extendedProps:
+                                {
+                                    hlUser: shiftInfo.hl,
+                                    minPatrollers: shiftInfo.min_pat,
+                                    maxPatrollers: shiftInfo.max_pat,
+                                    maxTrainees: shiftInfo.max_trainee,
+                                    eventID: currentShift.event._def.extendedProps.eventID,
 
 
 
 
-                    }
-                    else {
+                                },
+                                allDay: shiftInfo.all_day,
+                                title: shiftInfo.event_name,
+                                startStr: shiftInfo.startStr,
+
+                            }
+                        }
+
+
+                        //update Shift infos
+                        setProxySelect(storeShift);
+
+
+                        successModalShow();
+
+                    } else {
+                        console.log("No Shifts");
                         failModalShow();
                     }
+                })
+                .catch((error) => {
+                    console.log("error " + error);
+                    failModalShow();
                 });
 
+
+
+
         }
-
-
+        else {
+            failModalShow();
+        }
     }
-
 
 
     useEffect(() => {

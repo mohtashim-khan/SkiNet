@@ -16,6 +16,7 @@ const RosterUserTable = ({
   setProxySelect,
   rosteredList,
   session_data,
+  session
 }) => {
   const rosteredUsersToRender = () => {
     let i = 0;
@@ -28,12 +29,12 @@ const RosterUserTable = ({
             {rosteredUser.name}
           </Link>
         </td>
-        <td className="userText">{rosteredUser.area}</td>
-        <td className="userText">{rosteredUser.trainer ? "Trainer" : ""}</td>
+        <td className="userText">{rosteredUser.area === null? "Area Not Set": rosteredUser.area}</td>
+        <td className="userText">{rosteredUser.trainer ? "✓" : " "}</td>
         <td className="userText">
-          {rosteredUser.timestampSubrequest !== "0000-00-00 00:00:00"
-            ? "X"
-            : ""}
+          {rosteredUser.timestampSubrequest !== "1970-01-01T00:00:00"
+            ? "✓"
+            : " "}
         </td>
         <td className="userText">{rosteredUser.attendance === null ? "Attendance Not Recorded" : rosteredUser.attendance}</td>
         {session_data.username === rosteredUser.username ? (
@@ -44,12 +45,14 @@ const RosterUserTable = ({
                   currentShift={currentShift}
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
+                  session = {session}
                 />
                 <RequestSub
                   currentShift={currentShift}
                   setProxySelect={setProxySelect}
                   user={rosteredUser}
                   username={session_data.username}
+                  session={session}
                 />
               </div>
             </td>

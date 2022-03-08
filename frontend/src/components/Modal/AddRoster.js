@@ -4,8 +4,15 @@ import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { CustomInput, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 
 
-const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySelect, session }) => {
+const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySelect, session, shiftInfo }) => {
     //state template
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
 
     const [Users, setUsers] = useState(false);
 
@@ -54,56 +61,64 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
 
         let session_data = session.session_data();
 
+        let user = Users[eventInfo.selectUser];
+        
 
-        const splitting = eventInfo.selectUser.split('#').join(',').split(':').join(',').split(',')
-        const name = splitting[0];
-        const username = splitting[1].replace(' ', '');
-        const user_type = splitting[2];
-        const phone_number = splitting[3];
-        const trainer = splitting[4];
         const article = {
-            event_id: eventInfo.event_id,
-            event_name: eventInfo.event_name,
-            username: username,
-            name: name,
-            user_type: user_type,
-            phone_number: phone_number,
-            trainer: (trainer === "Trainer") ? 1 : 0,
-            role: eventInfo.role,
-            comment: eventInfo.comment,
-            //action_user: userAuth.username
-        }
+            event: currentShift.event.extendedProps.eventID,
+            user: user.userID,
+            phoneNumber: user.phoneNumber,
+            trainer: user.trainer,
+            role: (user.userType === "TRAINEE") ? "TRAINEE" : "ROSTERED",
+            comment: "",
+            email: user.email,
+        };
 
-        axios.put('/addToEventLog', article)
-            .then(response => {
-                //if error from database
-                if (response.status === 204) {
-                    //Setting on and off of pop up
-                    setAddRosterModal(false);
-                    //load events
+        session
+                .put("roster/addToEventLog", article, {}, true)
+                .then(response => {
+                    //if error from database
+                    if (response.status === 200) {
+                        
+                        //** PROXY SELECT ** /
+                        let storeShift = {
+                            event: {
+                                proxy: 'yes',
+                                extendedProps:
+                                {
+                                    hlUser: shiftInfo.hl,
+                                    minPatrollers: shiftInfo.min_pat,
+                                    maxPatrollers: shiftInfo.max_pat,
+                                    maxTrainees: shiftInfo.max_trainee,
+                                    eventID: currentShift.event._def.extendedProps.eventID,
 
-                    let storeShift = {
-                        event: {
-                            proxy: 'yes',
-                            id: currentShift.event.id,
-                            title: currentShift.event.title,
-                            start: currentShift.event.start,
-                            end: currentShift.event.end,
-                            startStr: currentShift.event.startStr,
-                            endStr: currentShift.event.endStr,
+
+
+
+                                },
+                                allDay: shiftInfo.all_day,
+                                title: shiftInfo.event_name,
+                                startStr: shiftInfo.startStr,
+
+                            }
                         }
-                    }
 
-                    //load events
-                    setProxySelect(storeShift);
-                }
-                else {
-                    console.log("Error in DB")
-                }
-            })
-            .catch((error) => {
-                console.log('error ' + error);
-            });
+                        //update Shift infos
+                        setProxySelect(storeShift);
+
+
+                        successModalShow();
+
+
+                    }
+                    else {
+                        failModalShow();
+                    }
+                })
+                .catch((error) => {
+                    console.log("error " + error);
+                    failModalShow();
+                });
     }
 
     const userRender = () => {
@@ -112,7 +127,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             let userOptionRender = [];
 
             for (let i = 0; i < Users.length; i++) {
-                userOptionRender.push(<option key={i}>{Users[i].name} #{Users[i].username}:{Users[i].user_type}:{Users[i].phone_number}:{(Users[i].trainer) ? "Trainer" : "Not Trainer"}</option>)
+                userOptionRender.push(<option value={i}>{Users[i].firstName+Users[i].lastName} #{Users[i].username}:{Users[i].userType}:{Users[i].phoneNumber}:{(Users[i].trainer) ? "Trainer" : "Not Trainer"} : {Users[i].userID} </option>)
             }
             return userOptionRender;
         }
@@ -126,7 +141,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             session.get("users/search/findByUserType?userType=ROSTERED")
                 .then(response => {
                     // If request is good...
-                    setUsers(response.data);
+                    setUsers(response.data._embedded.users);
                 })
                 .catch((error) => {
                     console.log('error ' + error);
@@ -160,6 +175,28 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
                         <Button >Submit</Button>
                     </Form>
                 </ModalBody>
+            </Modal>
+
+            <Modal show={successModal} onHide={successModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Sign Up Success!</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={failModal} onHide={failModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error Signing Up</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </>
     );

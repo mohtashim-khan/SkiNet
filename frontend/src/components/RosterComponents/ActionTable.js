@@ -10,7 +10,7 @@ const ActionTable = ({currentShift, actionLog}) => {
         return actionLog.map(action => (
             <tr key={i++}>
                 <td className='userText'>{action.result}</td>
-                <td className='userText'>{action.timestamp_action}</td>
+                <td className='userText'>{action.timeStamp_action}</td>
             </tr>
         ))
     }
@@ -27,7 +27,7 @@ const ActionTable = ({currentShift, actionLog}) => {
                     <thead>
                         <tr>
                             <th>Action</th>
-                            <th>Timetamp</th>
+                            <th>Timestamp</th>
                         </tr>
                     </thead>
                     <tbody>

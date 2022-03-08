@@ -7,7 +7,7 @@ import { Modal } from 'react-bootstrap';
 
 
 
-const SignUpShift = ({ currentShift, setList, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setShadowList, session }) => {
+const SignUpShift = ({ currentShift, setList, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setShadowList, session, setProxySelect, shiftInfo }) => {
     //state template
     const [successModal, setSuccessModal] = useState(false);
     const successModalShow = () => setSuccessModal(true);
@@ -25,10 +25,8 @@ const SignUpShift = ({ currentShift, setList, setShiftInfo, setRosteredList, set
         if (currentShift) {
             const article = {
                 event: currentShift.event.extendedProps.eventID,
-                event_name: currentShift.event.title,
                 user: session_data.userID,
-                user_type: session_data.user_type,
-                phone_number: session_data.phone_number,
+                phoneNumber: session_data.phoneNumber,
                 trainer: session_data.trainer,
                 role: (session_data.user_type === "TRAINEE") ? "TRAINEE" : "ROSTERED",
                 comment: "",
@@ -40,83 +38,45 @@ const SignUpShift = ({ currentShift, setList, setShiftInfo, setRosteredList, set
                 .then(response => {
                     //if error from database
                     if (response.status === 200) {
-                        // {
-                        //     let storeShift = {
-                        //         event: {
-                        //             // proxy: 'yes',    --TODO: Figure out what old group means by proxy
-                        //             id: currentShift.event.id,
-                        //             title: currentShift.event.title,
-                        //             start: currentShift.event.start,
-                        //             end: currentShift.event.end,
-                        //             startStr: currentShift.event.startStr,
-                        //             endStr: currentShift.event.endStr,
-                        //         }
-                        //     }
-
-                        //     //load events
-                        //     setProxySelect(storeShift);
+                        
+                        //** PROXY SELECT ** /
+                        let storeShift = {
+                            event: {
+                                proxy: 'yes',
+                                extendedProps:
+                                {
+                                    hlUser: shiftInfo.hl,
+                                    minPatrollers: shiftInfo.min_pat,
+                                    maxPatrollers: shiftInfo.max_pat,
+                                    maxTrainees: shiftInfo.max_trainee,
+                                    eventID: currentShift.event._def.extendedProps.eventID,
 
 
-                        let rostered_list = [];
-                        let unavail_list = [];
-                        let trainee_list = [];
-                        let wait_list = [];
-                        let shadow_list = [];
-
-                        //Getting the Event Log Users
-                        session
-                            .get("eventLogs/search/findAllByEvent_eventID?eventID=" + currentShift.event.extendedProps.eventID)
-                            .then((response) => {
-                                //correct response
-                                if (response.status === 200) {
-                                    setList(response.data._embedded.eventLogs);
-                                    for (let i = 0; i < response.data._embedded.eventLogs.length; i++) {
-                                        if (response.data._embedded.eventLogs[i].role === "ROSTERED") {
-                                            rostered_list.push(response.data._embedded.eventLogs[i]);
-                                        } else if (response.data._embedded.eventLogs[i].role === "UNAVAILABLE") {
-                                            unavail_list.push(response.data._embedded.eventLogs[i]);
-                                        } else if (response.data._embedded.eventLogs[i].role === "TRAINEE") {
-                                            trainee_list.push(response.data._embedded.eventLogs[i]);
-                                        } else if (response.data._embedded.eventLogs[i].role === "WAITLIST") {
-                                            wait_list.push(response.data._embedded.eventLogs[i]);
-                                        } else if (response.data._embedded.eventLogs[i].role === "SHADOW") {
-                                            shadow_list.push(response.data._embedded.eventLogs[i]);
-                                        }
-                                    }
-
-                                    //current shift amount
-                                    setShiftInfo((prev) => ({
-                                        ...prev,
-                                        current_ros: rostered_list.length,
-                                    }));
-
-                                    //Setting table viewable
-                                    setRosteredList(rostered_list);
-                                    setUnavailList(unavail_list);
-                                    setTraineeList(trainee_list);
-                                    setWaitlist(wait_list);
-                                    setShadowList(shadow_list);
-
-                                    successModalShow();
 
 
-                                } else {
-                                    console.log("No Shifts");
-                                    failModalShow();
-                                }
-                            })
-                            .catch((error) => {
-                                console.log("error " + error);
-                                failModalShow();
-                            });
+                                },
+                                allDay: shiftInfo.all_day,
+                                title: shiftInfo.event_name,
+                                startStr: shiftInfo.startStr,
+
+                            }
+                        }
+
+                        //update Shift infos
+                        setProxySelect(storeShift);
 
 
+                        successModalShow();
 
 
                     }
                     else {
                         failModalShow();
                     }
+                })
+                .catch((error) => {
+                    console.log("error " + error);
+                    failModalShow();
                 });
 
         }

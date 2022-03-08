@@ -25,6 +25,8 @@ public interface ProfileServices {
 
     User retrieveUserAll(UUID userID);
 
+    User retrieveUserBasic(UUID userID);
+
     Vest ParseVestJson(JsonObject vestJSON);
 
     Jacket ParseJacketJson(JsonObject vestJSON);

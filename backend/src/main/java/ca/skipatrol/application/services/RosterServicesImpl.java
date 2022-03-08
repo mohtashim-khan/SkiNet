@@ -301,6 +301,10 @@ public class RosterServicesImpl implements RosterServices {
             List<UUID> eventLogIDs = eventLogs.stream().map(x -> x.getEventLogID()).collect(Collectors.toList());
             eventLogRepository.deleteAllByIdInBatch(eventLogIDs);
 
+            List<ActionLog> actionLogs = actionLogRepository.findAllByEvent_eventID(eventID);
+            List<UUID> actionLogIDs = actionLogs.stream().map(x -> x.getActionLogID()).collect(Collectors.toList());
+            actionLogRepository.deleteAllByIdInBatch(actionLogIDs);
+
             eventRepository.deleteById(eventID);
             return 200;
         }

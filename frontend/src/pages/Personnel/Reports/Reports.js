@@ -106,8 +106,23 @@ const Reports = ({ session }) => {
     hasEmergencyContact: null,
   });
   const [reportString, setReportString] = useState("");
+  const [selectedString, setSelectedString] = useState("");
+  const [lolThisIsStupid, setLolThisIsStupid] = useState(false);
 
   function generateReport() {
+    session.post("report/getReportData", state, {}, true).then((resp) => {
+      if (resp.status === 200) {
+        console.log("success");
+        console.log(resp.data);
+        session.set_report_data(state);
+        setReportResult(resp.data);
+      }
+    });
+
+    printReportParams();
+  }
+
+  function generateInitialReport() {
     session.post("report/getReportData", state, {}, true).then((resp) => {
       if (resp.status === 200) {
         console.log("success");
@@ -137,8 +152,35 @@ const Reports = ({ session }) => {
     setReportString(result);
   }
 
+  function printSelectedReportParams() {
+    let result = JSON.stringify(
+      state,
+      (key, value) => {
+        if (value !== null) return value;
+      },
+      null,
+      4
+    );
+    result = result.substring(1, result.length - 1);
+    result = result.replace(/[\:]/g, ": ");
+    result = result.replace(/\,/g, ", ");
+    result = result.replace(/["']/g, "");
+    console.log(result);
+
+    setSelectedString(result);
+  }
+
+  function loadPreviousReport() {
+    if (session.report_data() != null) setState(session.report_data());
+    console.log("sessions data: " + session.report_data());
+  }
+
   useEffect(() => {
-    generateReport();
+    printSelectedReportParams();
+  }, [state]);
+
+  useEffect(() => {
+    generateInitialReport();
   }, []);
 
   function refreshPage() {
@@ -154,6 +196,7 @@ const Reports = ({ session }) => {
           <div class="container-fluid">
             <div class="row justify-content-md-center">
               <div class="col col-lg-9 myPanel">
+                <h6>CURRENT SELECTED PARAMETERS: {selectedString}</h6>
                 <table
                   class="table myTable table-bordered myPanel"
                   id="table-to-xls"
@@ -167,7 +210,7 @@ const Reports = ({ session }) => {
                         Report Generated on:{" "}
                         {new Date().toISOString().substring(0, 10)}
                         <br />
-                        <div class="">Parameters: {reportString}</div>
+                        <div class="">CURRENT REPORT PARAMETERS: {reportString}</div>
                       </th>
                       {/* <th
                         colspan="100"
@@ -240,7 +283,7 @@ const Reports = ({ session }) => {
                             <Link
                               className="link"
                               to={"/personnel/user/" + row.userID}
-                              // style={{ color: "#000" }}
+                            // style={{ color: "#000" }}
                             >
                               {row.username}
                             </Link>
@@ -253,23 +296,20 @@ const Reports = ({ session }) => {
                           {reportResult.length > 0 &&
                             reportResult[0].onSnowEvals && (
                               <td className="text-start text-wrap">
-                                {JSON.stringify(row.onSnowEvals, null, 2)}
+                                {row.onSnowEvals.map((item) => (<>{item.discipline.description + " from " + item.evaluationDate + " evaluated by " + item.evaluatedBy}<br /></>))}
                               </td>
                             )}
                           {reportResult.length > 0 &&
                             reportResult[0].evalTrainings && (
                               <td className="text-start text-wrap">
-                                {JSON.stringify(row.evalTrainings, null, 2)}
-                              </td>
-                            )}
+                                {row.evalTrainings.map((item) => (<>{item.eventType + " on " + item.completedDate} <br /></>))}
+                              </td>)}
+
+
                           {reportResult.length > 0 &&
                             reportResult[0].operationalTrainings && (
                               <td className="text-start text-wrap">
-                                {JSON.stringify(
-                                  row.operationalTrainings,
-                                  null,
-                                  2
-                                )}
+                                {row.operationalTrainings.map((item) => (<>{item.operationalEvent.description + " on " + item.completedDate}<br /></>))}
                               </td>
                             )}
                           {reportResult.length > 0 &&
@@ -277,13 +317,12 @@ const Reports = ({ session }) => {
                               <td className="text-start text-wrap">
                                 {/* {JSON.stringify(row.patrolCommitments, null, 2)} */}
                                 {row.patrolCommitments.map(
-                                  (item) =>
-                                    item.days +
+                                  (item) => <> {(item.achieved === true ? "✔" : "✘") +
+                                    " - " + item.days +
                                     " days for " +
-                                    item.season.description +
-                                    " " +
-                                    (item.commitmentAchieved ? "✓" : "X") +
-                                    ", "
+                                    item.season.description
+                                  }<br /></>
+
                                 )}
                               </td>
                             )}
@@ -292,7 +331,7 @@ const Reports = ({ session }) => {
                               {/* {JSON.stringify(row.role, null, 2)} */}
                               {Object.keys(row.role).map((item) =>
                                 row.role[item] === true
-                                  ? prettyRoles[item] + ", "
+                                  ? (<>{prettyRoles[item]} <br /></>)
                                   : ""
                               )}
                             </td>
@@ -306,7 +345,7 @@ const Reports = ({ session }) => {
                               <td className="text-start text-wrap">
                                 {/* {JSON.stringify(row.personAwards, null, 2)} */}
                                 {row.personAwards.map(
-                                  (info) => info.award.description + ", "
+                                  (info) => (<>{info.award.description} <br /></>)
                                 )}
                               </td>
                             )}
@@ -327,7 +366,7 @@ const Reports = ({ session }) => {
                   <div class="col">
                     <button
                       type="button"
-                      class="myButton btn btn-primary float-end d-flex-inline"
+                      class="myButton btn btn-warning float-end d-flex-inline"
                       onClick={refreshPage}
                     >
                       Reset
@@ -338,6 +377,13 @@ const Reports = ({ session }) => {
                       onClick={generateReport}
                     >
                       Generate Report
+                    </button>
+                    <button
+                      type="button"
+                      className="myButton btn btn-info float-end d-flex-inline"
+                      onClick={loadPreviousReport}
+                    >
+                      Load Previous Report Parameters
                     </button>
                     <ReactHTMLTableToExcel
                       id="test-table-xls-button"
@@ -377,8 +423,9 @@ const Reports = ({ session }) => {
             </div>
           </div>
         </div>
-      )}
-    </FilterContext.Provider>
+      )
+      }
+    </FilterContext.Provider >
   );
 };
 export default Reports;

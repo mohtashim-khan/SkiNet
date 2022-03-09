@@ -7,7 +7,7 @@ export default function UserPerf({ session, userID, allowed }) {
   useEffect(() => {
     session.get("roster/retrieveEventLogsUser?eventID=" + userID, {}, {}, true).then((resp) => {
       if (resp.status === 200) {
-        console.log(resp.data);
+
         setUserPerf(resp.data);
       }
     })

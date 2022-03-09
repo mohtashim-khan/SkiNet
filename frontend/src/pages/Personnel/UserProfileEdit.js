@@ -7,6 +7,7 @@ import LakeLouiseRoles from "./LakeLouiseRoles.js";
 import PatrolUniformAndEquipment from "./PatrolUniformAndEquipment.js";
 import LakeLouiseAwards from "./LakeLouiseAwards.js";
 import General from "./General.js";
+import Contact from "./EmergencyContact.js"
 import Password from "./Password.js";
 import "./UserProfileEdit.css";
 import UserPerf from "./UserPerf.js";
@@ -70,6 +71,13 @@ const UserProfileEdit = ({ session }) => {
             <LakeLouiseAwards session={session} userID={id} allowed={isAdmin} />
 
             <General
+              session={session}
+              userID={id}
+              allowed={
+                isAdmin || session.session_data().username === user.username
+              }
+            />
+            <Contact
               session={session}
               userID={id}
               allowed={

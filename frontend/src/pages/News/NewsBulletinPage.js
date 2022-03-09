@@ -189,7 +189,6 @@ const NewsBulletinPage = ({ session }) => {
                   <Card.Subtitle className="mb-2 text-muted">
                     {post.publishedDate}
                   </Card.Subtitle>
-                  <Card.Text>{truncateParagraph(post.body, 128)}</Card.Text>
                   <a
                     onClick={() => {
                       history.push("/news/view/" + post.id);

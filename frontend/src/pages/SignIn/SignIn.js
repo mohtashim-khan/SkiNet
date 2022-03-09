@@ -105,9 +105,11 @@ const SignIn = ({ session }) => {
                 {/* change to bg-white if needed */}
                 <div className="card-body signin-card">
                   <TextWrapper>
-                    <TopLine lightTopLine="true">Sign In</TopLine>
+                    <TopLine lightTopLine="true">
+                      Lake Louise CSP User Portal
+                    </TopLine>
                     <Heading lightText={false}>
-                      Sign in to access the schedule
+                      Sign in to access the Lake Louise CSP User Portal
                     </Heading>
                     <Input
                       type="text"
@@ -130,11 +132,8 @@ const SignIn = ({ session }) => {
                     {"Sign Up"}
                   </Button>
                 </Link> */}
-                    <ButtonPadding
-                      big
-                      fontBig
-                      primary="true"
-                      className="loginButton"
+                    <button
+                      className="btn btn-lg signin-button"
                       onClick={() => {
                         console.log(
                           document.getElementById("usernameInput").value
@@ -146,7 +145,7 @@ const SignIn = ({ session }) => {
                       }}
                     >
                       Sign In
-                    </ButtonPadding>
+                    </button>
                   </TextWrapper>
                 </div>
               </div>

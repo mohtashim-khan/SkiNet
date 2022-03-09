@@ -131,9 +131,11 @@ export default function ReportPatrolCommitment({
 
   useEffect(() => {
     let tempSeasons = [...seasons];
-    tempSeasons.sort(function (a, b) {
-      return a.sequence - b.sequence;
-    });
+    tempSeasons
+      .sort(function (a, b) {
+        return a.sequence - b.sequence;
+      })
+      .reverse();
     setSortedSeasons(tempSeasons);
     // console.log("asdasda", sortedSeasons);
   }, [seasons]);

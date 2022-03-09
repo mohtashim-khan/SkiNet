@@ -3,7 +3,7 @@ import $ from "jquery";
 import "./Lookups.css";
 import { Button, Modal } from "react-bootstrap";
 
-const DisciplineLookup = ({ session }) => {
+const DisciplineLookup = ({ session, error }) => {
   const [discipline, setDiscipline] = useState(new Map());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
@@ -55,6 +55,7 @@ const DisciplineLookup = ({ session }) => {
         }
       })
       .catch((e) => {
+        error(true);
         console.log(e);
       });
     setDeletePrompted(false);

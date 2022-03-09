@@ -3,7 +3,7 @@ import $ from "jquery";
 import "./Lookups.css";
 import { Button, Modal } from "react-bootstrap";
 
-const AwardLookup = ({ session }) => {
+const AwardLookup = ({ session, error }) => {
   const [award, setAwards] = useState(new Map());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
@@ -51,6 +51,7 @@ const AwardLookup = ({ session }) => {
       })
       .catch((e) => {
         console.log(e);
+        error(true);
       });
     setDeletePrompted(false);
   }

@@ -183,9 +183,11 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
 
   useEffect(() => {
     let tempSeasons = [...seasons];
-    tempSeasons.sort(function (a, b) {
-      return a.sequence - b.sequence;
-    });
+    tempSeasons
+      .sort(function (a, b) {
+        return a.sequence - b.sequence;
+      })
+      .reverse();
     setSortedSeasons(tempSeasons);
   }, [seasons]);
 

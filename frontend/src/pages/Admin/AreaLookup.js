@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Modal, Button } from "react-bootstrap";
 import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
-export default function AreaLookup({ session }) {
+export default function AreaLookup({ session, error }) {
   const [areas, setAreas] = useState(new Map());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
@@ -37,6 +37,7 @@ export default function AreaLookup({ session }) {
       })
       .catch((e) => {
         console.log(e);
+        error(true);
       });
     setDeletePrompted(false);
   }

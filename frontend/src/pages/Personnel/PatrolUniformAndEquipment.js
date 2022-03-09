@@ -398,7 +398,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         )
         .then((resp) => {
           if (resp.status === 201) {
-            readNewUniform();
+            if (uniform) readNewUniform();
             setError(false);
           }
         });
@@ -424,7 +424,9 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
   }
 
   useEffect(() => {
-    if (uniform) readNewUniform();
+    if (uniform) {
+      if (uniform.uniformID) readNewUniform();
+    }
   }, [uniform]);
 
   useEffect(() => {

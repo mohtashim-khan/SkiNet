@@ -120,9 +120,14 @@ const Reports = ({ session }) => {
   }
 
   function printReportParams() {
-    let result = JSON.stringify(state, (key, value) => {
-      if (value !== null) return value;
-    });
+    let result = JSON.stringify(
+      state,
+      (key, value) => {
+        if (value !== null) return value;
+      },
+      null,
+      4
+    );
     result = result.substring(1, result.length - 1);
     result = result.replace(/[\:]/g, ": ");
     result = result.replace(/\,/g, ", ");
@@ -276,10 +281,9 @@ const Reports = ({ session }) => {
                                     item.days +
                                     " days for " +
                                     item.season.description +
-                                    " ( " +
-                                    (item.commitmentAchieved
-                                      ? "achieved ), "
-                                      : "not achieved ), ")
+                                    " " +
+                                    (item.commitmentAchieved ? "✓" : "X") +
+                                    ", "
                                 )}
                               </td>
                             )}

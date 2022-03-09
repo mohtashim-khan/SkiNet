@@ -112,14 +112,14 @@ const Header = ({ session }) => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <button
+        {/* <button
           className="btn btn-light my-2 my-sm-0"
           onClick={() => {
             history.push("/sign-in");
           }}
         >
           Sign In
-        </button>
+        </button> */}
       </>
     );
   };
@@ -129,7 +129,12 @@ const Header = ({ session }) => {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">
           <img className="myImage" src={CSPLogo} width="32px" />
-          <span> CSP - Lake Louise </span>
+          <span>
+            <font face="Arial narrow" size="30px">
+              {" "}
+              <b>CSP</b> - Lake Louise
+            </font>
+          </span>
         </a>
         {session.logged_in()
           ? renderLoggedInNavigation()

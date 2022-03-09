@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./UserProfileEdit.css";
 
 export default function UserPerf({ session, userID, allowed }) {
+  const [userPerf, setUserPerf] = useState([]);
+
+  useEffect(() => {
+    session.get("roster/retrieveEventLogsUser?eventID=" + userID, {}, {}, true).then((resp) => {
+      if (resp.status === 200) {
+        console.log(resp.data);
+        setUserPerf(resp.data);
+      }
+    })
+  }, []);
   return (
     <>
       <div className="card">
@@ -36,152 +46,20 @@ export default function UserPerf({ session, userID, allowed }) {
                 </tr>
               </thead>
 
-              <tbody className="myTableBody">
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
+              <tbody >
+                {userPerf.map((row) => (
 
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
-                <tr>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                  <td className="tdbreak">HI</td>
-                </tr>
+                  <tr>
+                    <td className="tdbreak">{row.event.eventName}</td>
+                    <td className="tdbreak">{row.area === null ? "Unassigned" : row.area}</td>
+                    <td className="tdbreak">{row.event.startDate.substring(0, 10)}</td>
+                    <td className="tdbreak">{row.role}</td>
+                    <td className="tdbreak">{row.timestampRostered.substring(0, 10)}</td>
+                    <td className="tdbreak">{row.attendance === null ? "Not specified" : row.attendance}</td>
+                  </tr>
+
+                ))}
+
               </tbody>
             </table>
           </div>

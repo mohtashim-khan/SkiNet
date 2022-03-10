@@ -21,7 +21,6 @@ import ca.skipatrol.application.models.Uniform;
 import ca.skipatrol.application.models.User;
 import ca.skipatrol.application.models.Vest;
 import ch.qos.logback.core.joran.conditional.Condition;
-import ch.qos.logback.core.joran.conditional.ElseAction;
 
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;

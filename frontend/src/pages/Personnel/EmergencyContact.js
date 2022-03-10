@@ -4,9 +4,10 @@ import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 import $ from "jquery";
 
-const General = ({ session, userID, allowed }) => {
+const Contact = ({ session, userID, allowed }) => {
   const [editPrompted, setEditPrompted] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState([]);
+  const [emergencyContact, setEmergencyContact] = useState({});
 
   function promptEditOpen() {
     setEditPrompted(true);
@@ -16,45 +17,38 @@ const General = ({ session, userID, allowed }) => {
     setEditPrompted(false);
   }
 
-  function editUserInfo() {
-    let temp = {};
-    let tempEmail = $("#emailSelect").val();
-    let tempPhone = $("#phoneSelect").val();
-    if (tempEmail !== "") {
-      temp.email = tempEmail;
-    } else {
-      temp.email = user.email;
-    }
-
-    if (tempPhone !== "") {
-      temp.phone = tempPhone;
-    } else {
-      temp.phone = user.phoneNumber;
-    }
-    if ($("#trainer").is(":checked")) {
-      temp.trainer = "true";
-    } else {
-      temp.trainer = "false";
-    }
+  function editEmergencyContact() {
+    let temp = emergencyContact;
+    temp.name = $("#nameSelect").val();
+    temp.relationship = $("#relationshipSelect").val();
+    temp.phone = $("#phoneSelect").val();
+    let emergencyContactsID = emergencyContact.emergencyContactID;
 
     session
-      .patch("profile/changeGeneral?userID=" + userID, temp, {}, true)
+      .put("emergencyContacts/" + emergencyContactsID, temp, {}, false)
       .then((resp) => {
-        if (resp.status === 200 || resp.status === 201) {
-          getUserInfo();
+        if (resp === 200 || resp === 201) {
+          setEmergencyContact(resp.data);
         }
       });
     promptEditCancel();
   }
-  function getUserInfo() {
+
+  function readEmergencyContact() {
+    session.get("users/" + userID + "/emergencyContacts").then((resp) => {
+      if (resp.status === 200) {
+        setEmergencyContact(resp.data._embedded.emergencyContacts[0]);
+      }
+    });
+  }
+
+  useEffect(() => {
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
         setUser(resp.data);
       }
+      readEmergencyContact();
     });
-  }
-  useEffect(() => {
-    getUserInfo();
   }, []);
 
   return (
@@ -64,7 +58,7 @@ const General = ({ session, userID, allowed }) => {
           <form className="mb-0.5">
             <div className="card-header">
               <h4>
-                <b>General</b>
+                <b>Emergency Contact Information</b>
               </h4>
             </div>
             <div className="card-body">
@@ -74,13 +68,29 @@ const General = ({ session, userID, allowed }) => {
                     className="input-group-text"
                     htmlFor="inputGroupSelect01"
                   >
-                    <b>Email</b>
+                    <b>Name</b>
                   </label>
                 </div>
                 <input
                   type="text"
                   className="form-control"
-                  value={user.email} //this is not a good solution
+                  value={emergencyContact && emergencyContact.name}
+                  disabled
+                ></input>
+              </div>
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="inputGroupSelect01"
+                  >
+                    <b>Relationship</b>
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={emergencyContact && emergencyContact.relationship} //this is not a good solution
                   disabled
                 ></input>
               </div>
@@ -96,24 +106,7 @@ const General = ({ session, userID, allowed }) => {
                 <input
                   type="text"
                   className="form-control"
-                  value={user.phoneNumber}
-                  disabled
-                ></input>
-              </div>
-
-              <div className="input-group mb-3">
-                <div className="input-group-prepend">
-                  <label
-                    className="input-group-text"
-                    htmlFor="inputGroupSelect01"
-                  >
-                    <b>Roster Role: </b>
-                  </label>
-                </div>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={user.trainer ? "Trainer" : "Trainee"} //this is not a good solution
+                  value={emergencyContact && emergencyContact.phone}
                   disabled
                 ></input>
               </div>
@@ -143,21 +136,42 @@ const General = ({ session, userID, allowed }) => {
           </div> */}
             <div className="form-group">
               <h5>
-                <b>User Information</b>
+                <b>Emergency Contact Information</b>
               </h5>
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
-                  <label className="input-group-text" htmlFor="emailSelect">
-                    Email
+                  <label className="input-group-text" htmlFor="nameSelect">
+                    Name
                   </label>
                 </div>
                 <input
                   type="tel"
                   className="form-control"
-                  id="emailSelect"
+                  id="nameSelect"
                   name="myEvalInput"
                   aria-describedby="emailHelp"
-                  placeholder={user.email}
+                  placeholder={emergencyContact && emergencyContact.name}
+                />
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label
+                    className="input-group-text"
+                    htmlFor="relationshipSelect"
+                  >
+                    Relationship
+                  </label>
+                </div>
+                <input
+                  type="tel"
+                  className="form-control"
+                  id="relationshipSelect"
+                  name="myEvalInput"
+                  aria-describedby="emailHelp"
+                  placeholder={
+                    emergencyContact && emergencyContact.relationship
+                  }
                 />
               </div>
 
@@ -173,33 +187,11 @@ const General = ({ session, userID, allowed }) => {
                   id="phoneSelect"
                   name="myEvalInput"
                   aria-describedby="emailHelp"
-                  placeholder={user.phoneNumber}
+                  placeholder={emergencyContact && emergencyContact.phone}
                 />
               </div>
 
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="selectTraineeEdit"
-                  defaultChecked={user.trainer}
-                  id="trainer"
-                />
-                <label className="form-check-label">Trainer</label>
-              </div>
-
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="selectTraineeEdit"
-                  defaultChecked={!user.trainer}
-                  id="trainee"
-                />
-                <label className="form-check-label">Trainee</label>
-              </div>
-
-              <Button variant="primary" onClick={editUserInfo}>
+              <Button variant="primary" onClick={editEmergencyContact}>
                 Submit
               </Button>
             </div>
@@ -210,4 +202,4 @@ const General = ({ session, userID, allowed }) => {
   );
 };
 
-export default General;
+export default Contact;

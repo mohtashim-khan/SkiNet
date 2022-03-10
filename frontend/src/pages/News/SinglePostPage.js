@@ -7,12 +7,20 @@ const SinglePostPage = ({ session }) => {
 
   const [post, setPost] = useState({});
 
+  const [associatedTopic, setAssociatedTopic] = useState();    
+
   const [attachments, setAttachments] = useState([]);
 
   useEffect(() => {
     session.get("posts/" + postId).then((response) => {
       if (response.status == 200) {
-        setPost(response.data);
+          setPost(response.data);
+
+          session.get_raw(response.data._links.topic.href, {}).then((resp) => {
+              if (resp.status == 200) {
+                  setAssociatedTopic(resp.data.description);
+              }
+          });
       }
     });
   }, [setPost]);
@@ -37,8 +45,11 @@ const SinglePostPage = ({ session }) => {
       </Row>
       <Row>
         <Col>
-          <h1>{post.title}</h1>
-          <small class="text-muted">{post.publishedDate}</small>
+            <h1>{post.title}</h1>
+            <span>
+                <small class="text-muted">{post.publishedDate}</small>
+                {associatedTopic !== undefined && (<small class="text-muted"> &middot; {associatedTopic}</small> || <></>)}
+            </span>
           <hr />
           <div dangerouslySetInnerHTML={{ __html: post.body }} />
           <hr />

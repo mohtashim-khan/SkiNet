@@ -24,6 +24,31 @@
   white-space: nowrap;
   /* table-layout: fixed; */
 }
+.rosterTable {
+  /*overflow-y: scroll;*/
+  table-layout: fixed;
+  width: 100%;
+  max-width: 1500px;
+  max-height: 200px;
+  /* word-break: break-word; */
+  white-space: nowrap;
+
+  /* display: block; */
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: rgb(204, 204, 204);
+}
+
+.cardTable {
+  max-height: 200px;
+  overflow: hidden;
+  overflow-y: scroll;
+  display: block;
+}
 
 .tdbreak {
   white-space: pre-line;

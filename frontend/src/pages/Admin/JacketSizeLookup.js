@@ -3,7 +3,7 @@ import $ from "jquery";
 import "./Lookups.css";
 import { Button, Modal } from "react-bootstrap";
 
-const JacketSizeLookup = ({ session }) => {
+const JacketSizeLookup = ({ session, error }) => {
   const [size, setSizes] = useState(new Map());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
@@ -50,6 +50,7 @@ const JacketSizeLookup = ({ session }) => {
         }
       })
       .catch((e) => {
+        error(true);
         console.log(e);
       });
     setDeletePrompted(false);

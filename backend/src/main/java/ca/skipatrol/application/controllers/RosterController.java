@@ -159,4 +159,12 @@ public class RosterController {
         return new ResponseEntity(eventLogs, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "customapi/roster/retrieveEventLogsUser", method = RequestMethod.GET)
+    public ResponseEntity<Object> RetrieveEventLogsByUserID(@RequestParam UUID eventID)
+    {
+        List<EventLog> eventLogs = rosterServices.RetrieveEventLogsByUserID(eventID);
+
+        return new ResponseEntity(eventLogs, HttpStatus.OK);
+    }
+
 }

@@ -3,7 +3,7 @@ import $ from "jquery";
 import "./Lookups.css";
 import { Button, Modal } from "react-bootstrap";
 
-const OperationalEventLookup = ({ session }) => {
+const OperationalEventLookup = ({ session, error }) => {
   const [operationalEvent, setOperationalEvents] = useState(new Map());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
@@ -55,6 +55,7 @@ const OperationalEventLookup = ({ session }) => {
         }
       })
       .catch((e) => {
+        error(true);
         console.log(e);
       });
     setDeletePrompted(false);

@@ -4,6 +4,7 @@ class Session {
   constructor() {
     this.SESSION_AUTH = "csp-session-auth";
     this.SESSION_DATA = "csp-session-data";
+    this.SESSION_REPORT_DATA = "csp-last-report";
     this.api_url = process.env.ENV_API_URL || "localhost:8080";
   }
 
@@ -25,12 +26,20 @@ class Session {
     this._set(this.SESSION_AUTH, null);
   }
 
+  set_report_data(session_data) {
+    this._set(this.SESSION_REPORT_DATA, session_data);
+  }
+
   set_session_data(session_data) {
     this._set(this.SESSION_DATA, session_data);
   }
 
   session_data() {
     return this._get(this.SESSION_DATA);
+  }
+
+  report_data() {
+    return this._get(this.SESSION_REPORT_DATA);
   }
 
   set_login(basic_authentication) {
@@ -40,6 +49,15 @@ class Session {
   _get_base_url() {
     return "http://" + this.api_url;
   }
+    
+    async get_raw(url) {
+        var payload = {
+            headers: {
+                authorization: this._get(this.SESSION_AUTH),
+            },
+        };         
+        return axios.get(url, payload);
+    }
 
   async get(endpoint, params_ = {}, urlParams = {}, custom = false) {
     var payload = {
@@ -119,7 +137,7 @@ class Session {
     }
 
     return axios.post(url, body, payload);
-  }    
+  }
 
   async put(endpoint, body, urlParams, custom) {
     var payload = {

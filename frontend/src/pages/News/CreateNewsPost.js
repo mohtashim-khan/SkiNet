@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-import { Container, Row, Col, InputGroup, FormControl, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, InputGroup, FormControl, Modal, Button, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 
 const CreateNewsPost = ({ session }) => {
@@ -18,9 +18,23 @@ const CreateNewsPost = ({ session }) => {
 
   const [selectedFile, setSelectedFile] = useState();    
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [isFilePicked, setIsFilePicked] = useState(false);    
+  const [isFilePicked, setIsFilePicked] = useState(false);
+
+  const [availableTopics, setAvailableTopics] = useState([]);
+
+  const topicSelectionRef = useRef();  
 
   const history = useHistory();
+
+  useEffect(() => {
+    session
+          .get("topics")
+          .then((resp) => {
+              if (resp.status == 200) {
+                  setAvailableTopics(resp.data._embedded.topics);
+              }
+          });
+  }, [setAvailableTopics]);    
 
   function showError(message) {
     setValidationMessage({
@@ -46,6 +60,18 @@ const CreateNewsPost = ({ session }) => {
       return;
     }
 
+      function associateTopic(postId) {
+          const topicSelection = topicSelectionRef.current.value;
+
+          if (topicSelection !== "None") {
+              const params = new URLSearchParams();
+              params.append("id", postId);
+              params.append("topicId", topicSelection);
+              
+              session.post("posts/associateTopic" + "?" + params.toString(), {}, {}, true);
+          }
+      }
+
       session
           .post(
               "posts",
@@ -58,12 +84,11 @@ const CreateNewsPost = ({ session }) => {
           )
           .then((response) => {
               if (response.status == 201) {
+                  const postId = response.data.id;                  
                   if (isFilePicked) {
-                      const postId = response.data.id;
                       Promise.all(selectedFiles.map((file) => {
                           var data = new FormData();
                           data.append('file', selectedFile);
-
                           session.post_with_prefix("attachments/new/" + postId, data, {}, "/public").then(res => {
                               if (res.status != 200) {
                                   setValidationMessage({
@@ -76,7 +101,9 @@ const CreateNewsPost = ({ session }) => {
                                       error: false,
                                       message: "Post creation and upload(s) successful!",
                                   });
-                                  setShowValidationMessage(true);                      
+                                  setShowValidationMessage(true);
+
+                                  associateTopic(postId);
                               }
                           });
                       }));
@@ -86,6 +113,8 @@ const CreateNewsPost = ({ session }) => {
                           message: "Post creation successful!",
                       });
                       setShowValidationMessage(true);
+                      
+                      associateTopic(postId);                      
                   }
               } else {
                   console.log(response);
@@ -126,6 +155,17 @@ const CreateNewsPost = ({ session }) => {
                 aria-describedby="title-label"
               />
             </InputGroup>
+            <InputGroup size="md" className="mb-2">
+              <InputGroup.Text id="topic-label">Topic</InputGroup.Text>                  
+              <Form.Select ref={topicSelectionRef}>
+                  <option>None</option>
+                  {
+                      availableTopics.map((topic) => {
+                          return <option value={topic.id}>{ topic.description }</option>
+                      })
+                  }                  
+              </Form.Select>
+            </InputGroup>                
             <ReactQuill theme="snow" value={bodyValue} onChange={setBodyValue} />
             <div class="card mt-2">
                 <div class="card-body">

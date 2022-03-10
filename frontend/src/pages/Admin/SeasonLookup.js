@@ -3,7 +3,7 @@ import $ from "jquery";
 import "./Lookups.css";
 import { Button, Modal } from "react-bootstrap";
 
-const SeasonLookup = ({ session }) => {
+const SeasonLookup = ({ session, error }) => {
   const [season, setSeason] = useState(new Map());
 
   const [deletePrompted, setDeletePrompted] = useState(false);
@@ -52,6 +52,7 @@ const SeasonLookup = ({ session }) => {
         }
       })
       .catch((e) => {
+        error(true);
         console.log(e);
       });
     setDeletePrompted(false);

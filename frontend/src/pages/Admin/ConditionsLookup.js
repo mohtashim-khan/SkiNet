@@ -3,7 +3,7 @@ import $ from "jquery";
 import "./Lookups.css";
 import { Button, Modal } from "react-bootstrap";
 
-const ConditionsLookup = ({ session }) => {
+const ConditionsLookup = ({ session, error }) => {
   const [condition, setConditions] = useState(new Map());
   const [deletePrompted, setDeletePrompted] = useState(false);
   const [creationPrompted, setCreatePrompted] = useState(false);
@@ -55,6 +55,7 @@ const ConditionsLookup = ({ session }) => {
         }
       })
       .catch((e) => {
+        error(true);
         console.log(e);
       });
     setDeletePrompted(false);

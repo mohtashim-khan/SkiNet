@@ -33,7 +33,6 @@ public class Post {
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "topic_id", nullable = true)
-    @JsonBackReference
     private Topic topic;
 
     @Column(insertable = false,
@@ -42,17 +41,9 @@ public class Post {
     @Getter
     private LocalDateTime publishedDate;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @Getter
-    private final Set<Comment> comments = new HashSet<>();
-
     @Getter
     @Setter
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     private List<Attachment> attachments;
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-    }
 
 }

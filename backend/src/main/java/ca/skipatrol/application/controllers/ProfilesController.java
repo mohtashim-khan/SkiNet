@@ -208,6 +208,16 @@ public class ProfilesController {
         else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+    @RequestMapping(value = "customapi/profile/changeGeneral", method = RequestMethod.PATCH)
+    public ResponseEntity<Object> UpdateUserGeneral(@RequestParam UUID userID, @RequestBody Map<String, String> userInfo) {
+
+        boolean rV = profileServices.updateUserGeneral(userID, userInfo.get("email"), userInfo.get("phone"), userInfo.get("trainer"));
+
+        if (rV)
+            return new ResponseEntity<>("User Information Updated successfully", HttpStatus.OK);
+
+        return new ResponseEntity<>("Error updating user information", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @RequestMapping(value = "/customapi/profile/user/PatrolCommitments/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deletePatrolCommitmentsInBatch(@RequestParam ArrayList<UUID> ids) {

@@ -22,29 +22,39 @@ const General = ({ session, userID, allowed }) => {
     let tempPhone = $("#phoneSelect").val();
     if (tempEmail !== "") {
       temp.email = tempEmail;
+    } else {
+      temp.email = user.email;
     }
+
     if (tempPhone !== "") {
-      temp.phoneNumber = tempPhone;
+      temp.phone = tempPhone;
+    } else {
+      temp.phone = user.phoneNumber;
+    }
+    if ($("#trainer").is(":checked")) {
+      temp.trainer = "true";
+    } else {
+      temp.trainer = "false";
     }
 
     session
-      .patch("users/" + userID, temp, {}, false)
+      .patch("profile/changeGeneral?userID=" + userID, temp, {}, true)
       .then((resp) => {
-        if (resp === 200 || resp === 201) {
-          setUser(resp.data);
+        if (resp.status === 200 || resp.status === 201) {
+          getUserInfo();
         }
       });
     promptEditCancel();
   }
-
-
-
-  useEffect(() => {
+  function getUserInfo() {
     session.get("users/" + userID).then((resp) => {
       if (resp.status === 200) {
         setUser(resp.data);
       }
     });
+  }
+  useEffect(() => {
+    getUserInfo();
   }, []);
 
   return (
@@ -153,10 +163,7 @@ const General = ({ session, userID, allowed }) => {
 
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
-                  <label
-                    className="input-group-text"
-                    htmlFor="phoneSelect"
-                  >
+                  <label className="input-group-text" htmlFor="phoneSelect">
                     Phone Number
                   </label>
                 </div>
@@ -166,12 +173,31 @@ const General = ({ session, userID, allowed }) => {
                   id="phoneSelect"
                   name="myEvalInput"
                   aria-describedby="emailHelp"
-                  placeholder={
-                    user.phoneNumber
-                  }
+                  placeholder={user.phoneNumber}
                 />
               </div>
 
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="selectTraineeEdit"
+                  defaultChecked={user.trainer}
+                  id="trainer"
+                />
+                <label className="form-check-label">Trainer</label>
+              </div>
+
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="selectTraineeEdit"
+                  defaultChecked={!user.trainer}
+                  id="trainee"
+                />
+                <label className="form-check-label">Trainee</label>
+              </div>
 
               <Button variant="primary" onClick={editUserInfo}>
                 Submit

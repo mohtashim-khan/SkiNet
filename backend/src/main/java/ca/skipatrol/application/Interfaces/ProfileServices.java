@@ -51,6 +51,8 @@ public interface ProfileServices {
 
     String ChangePassword(UUID userID, String newPassword);
 
+    boolean updateUserGeneral(UUID userID, String email, String phone, String trainer);
+
     boolean deletePatrolCommitmentsInBatch(ArrayList<UUID> patrolCommitmentIDs);
 
     boolean deleteEvalTrainingsInBatch(ArrayList<UUID> evalTrainingIDs);

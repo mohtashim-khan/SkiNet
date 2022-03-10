@@ -21,6 +21,7 @@ import ca.skipatrol.application.models.Uniform;
 import ca.skipatrol.application.models.User;
 import ca.skipatrol.application.models.Vest;
 import ch.qos.logback.core.joran.conditional.Condition;
+import ch.qos.logback.core.joran.conditional.ElseAction;
 
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
@@ -123,9 +124,8 @@ public class ReportsServicesImpl implements ReportsServices {
         // Awards
         String[] awards = gson.fromJson(inputDataJSON.get("awards"), String[].class);
 
-        //trainer
+        // trainer
         Boolean trainer = gson.fromJson(inputDataJSON.get("trainer"), Boolean.class);
-        
 
         // General Section -- Emergency Contact
         Boolean hasEmergencyContact = gson.fromJson(inputDataJSON.get("hasEmergencyContact"), Boolean.class);
@@ -147,6 +147,9 @@ public class ReportsServicesImpl implements ReportsServices {
         Boolean patrolCommitment = false;
         Boolean role = false;
         Boolean uniformAndEquip = false;
+        Boolean vestsBool = false;
+        Boolean jacketsBool = false;
+        Boolean packsBool = false;
         Boolean awardsBool = false;
         Boolean emergencyContact = false;
 
@@ -371,6 +374,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
             if (jacketBrand != null || jacketSize != null || jacketCondition != null || jacketNumber != null) {
                 Join<Uniform, Jacket> jacketJoin = uniformJoin.join("jackets");
+                jacketsBool = true;
 
                 if (jacketBrand != null) {
                     Join<Jacket, Brand> brandJoin = jacketJoin.join("brand");
@@ -395,6 +399,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
             if (vestBrand != null || vestSize != null || vestCondition != null || vestNumber != null) {
                 Join<Uniform, Vest> vestJoin = uniformJoin.join("vests");
+                vestsBool = true;
 
                 if (vestBrand != null) {
                     Join<Vest, Brand> brandJoin = vestJoin.join("brand");
@@ -419,6 +424,7 @@ public class ReportsServicesImpl implements ReportsServices {
 
             if (packBrand != null || packCondition != null || packNumber != null) {
                 Join<Uniform, Pack> packJoin = uniformJoin.join("packs");
+                packsBool = true;
 
                 if (packBrand != null) {
                     Join<Pack, Brand> brandJoin = packJoin.join("brand");
@@ -469,7 +475,7 @@ public class ReportsServicesImpl implements ReportsServices {
             }
         }
 
-        if(trainer != null){
+        if (trainer != null) {
             conditions.add(builder.equal(user.get("trainer"), trainer));
         }
 
@@ -488,6 +494,9 @@ public class ReportsServicesImpl implements ReportsServices {
                         patrolCommitment,
                         role,
                         uniformAndEquip,
+                        jacketsBool,
+                        vestsBool,
+                        packsBool,
                         awardsBool,
                         emergencyContact));
             }
@@ -504,6 +513,9 @@ public class ReportsServicesImpl implements ReportsServices {
                         patrolCommitment,
                         role,
                         uniformAndEquip,
+                        jacketsBool,
+                        vestsBool,
+                        packsBool,
                         awardsBool,
                         emergencyContact));
             }
@@ -522,6 +534,9 @@ public class ReportsServicesImpl implements ReportsServices {
             Boolean patrolCommitment,
             Boolean role,
             Boolean uniformAndEquip,
+            Boolean jacketsBool,
+            Boolean vestsBool,
+            Boolean packsBool,
             Boolean awardsBool,
             Boolean emergencyContact) {
         if (user != null) {
@@ -566,6 +581,51 @@ public class ReportsServicesImpl implements ReportsServices {
             if (uniformAndEquip) {
                 Hibernate.initialize(user.getUniforms().size());
                 returnVal.setUniforms(user.getUniforms());
+
+                if (jacketsBool) {
+                    for (int i = 0; i < user.getUniforms().size(); i++) {
+                        Hibernate.initialize(user.getUniforms().get(i).getJackets().size());
+                        returnVal.getUniforms().get(i).setJackets(user.getUniforms().get(i).getJackets());
+                    }
+
+                }
+
+                else {
+                    for (int i = 0; i < user.getUniforms().size(); i++) {
+                        returnVal.getUniforms().get(i).setJackets(null);
+                    }
+
+                }
+
+                if (vestsBool) {
+                    for (int i = 0; i < user.getUniforms().size(); i++) {
+                        Hibernate.initialize(user.getUniforms().get(i).getVests().size());
+                        returnVal.getUniforms().get(i).setVests(user.getUniforms().get(i).getVests());
+                    }
+
+                }
+
+                else {
+                    for (int i = 0; i < user.getUniforms().size(); i++) {
+                        returnVal.getUniforms().get(i).setVests(null);
+                    }
+
+                }
+
+                if (packsBool) {
+                    for (int i = 0; i < user.getUniforms().size(); i++) {
+                        Hibernate.initialize(user.getUniforms().get(i).getPacks().size());
+                        returnVal.getUniforms().get(i).setPacks(user.getUniforms().get(i).getPacks());
+                    }
+
+                }
+
+                else {
+                    for (int i = 0; i < user.getUniforms().size(); i++) {
+                        returnVal.getUniforms().get(i).setPacks(null);
+                    }
+
+                }
 
             }
 

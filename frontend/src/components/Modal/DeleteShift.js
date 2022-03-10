@@ -33,7 +33,7 @@ const DeleteShift = ({ EventDeleteModal, setEventDeleteModal, currentShift, setU
         e.preventDefault();
 
         const params = new URLSearchParams({
-            eventID: currentShift.event._def.extendedProps.eventID,
+            eventID: currentShift.event.extendedProps.eventID,
           });
 
         session.put('roster/deleteEvent/', {}, params.toString(), true ) //NEED CUSTOM CALL FOR THIS

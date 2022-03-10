@@ -1,35 +1,41 @@
-import  React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import AssignArea from '../Modal/AssignArea'
 import AssignTrainer from '../Modal/AssignTrainer'
 import Comment from '../Modal/Comment'
 import RemoveUser from './RemoveUser'
 import RequestSub from './RequestSub'
 import Attendance from '../Modal/Attendance'
-import {Table} from 'reactstrap';
+import { Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import {Subtitle, TableCard} from'../Elements/Elements'
+import { Subtitle, TableCard } from '../Elements/Elements'
 import './Table.css'
 
-const TraineeUserTable = ({currentShift, setCurrentShift, setProxySelect, traineeList, userAuth}) => {
+const TraineeUserTable = ({ currentShift, setCurrentShift, setProxySelect, traineeList, session_data, session, shiftInfo }) => {
 
     const traineeUsersToRender = () => {
         let i = 0;
         return traineeList.map(traineeUser => (
             <tr key={i++}>
-                <td className='userText'><Link to={"/personnel/user/" + traineeUser.user.userID}>{traineeUser.user.firstName+" "+traineeUser.user.lastName}</Link></td>
-                <td className='userText'>{traineeUser.area === null? "Area Not Set": traineeUser.area.areaname}</td>
+                <td className='userText'><Link to={"/personnel/user/" + traineeUser.user.userID}>{traineeUser.user.firstName + " " + traineeUser.user.lastName}</Link></td>
+                <td className='userText'>{traineeUser.area === null ? "Area Not Set" : traineeUser.area.areaname}</td>
                 <td className='userText'>{traineeUser.shadowing}</td>
                 <td className='userText'>{traineeUser.timestampSubrequest !== "1970-01-01T00:00:00"
-            ? "✓"
-            : " "}</td>
+                    ? "✓"
+                    : " "}</td>
                 <td className='userText'>{traineeUser.attendance}</td>
 
-                {(userAuth.username === traineeUser.username)?
+                {(session_data.username === traineeUser.username) ?
                     <>
                         <td >
-                            <div style={{display: 'flex'}}>
-                                <Comment currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser}/>
-                                <RequestSub currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser} username={userAuth.username}/>
+                            <div style={{ display: 'flex' }}>
+                                <Comment currentShift={currentShift}
+                                    setProxySelect={setProxySelect}
+                                    user={traineeUser}
+                                    username={session_data.username}
+                                    session={session}
+                                    session_data={session.session_data()}
+                                    shiftInfo={shiftInfo} />
+                                <RequestSub currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} />
                             </div>
                         </td>
                     </>
@@ -38,21 +44,21 @@ const TraineeUserTable = ({currentShift, setCurrentShift, setProxySelect, traine
                         <td></td>
                     </>
                 }
-                {(userAuth.user_type === "System Admin" || userAuth.user_type === "Hill Admin")?
+                {(session_data.user_type === "SYSTEM_ADMIN" || session_data.user_type === "HILL_ADMIN") ?
                     <>
                         <td>
-                            <div style={{display: 'flex'}}>
-                                <AssignArea currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={userAuth.username}/>
-                                <AssignTrainer currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={userAuth.username}/> 
-                                <Attendance currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={userAuth.username}/> 
-                                <Comment currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser}/>
-                                <RemoveUser currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser} username={userAuth.username}/>
+                            <div style={{ display: 'flex' }}>
+                                <AssignArea currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} session={session} />
+                                <AssignTrainer currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} />
+                                <Attendance currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} />
+                                <Comment currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser} />
+                                <RemoveUser currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} />
                             </div>
-                            
+
                         </td>
                     </>
                     :
-                    <>
+                    <> 
                         <td></td>
                     </>
                 }
@@ -80,11 +86,11 @@ const TraineeUserTable = ({currentShift, setCurrentShift, setProxySelect, traine
                             <th>Trainer</th>
                             <th>SubRequest</th>
                             <th>Attendance</th>
-                            <th>Actions</th>  
-                            {(userAuth.user_type === "System Admin" || userAuth.user_type === "Hill Admin")?
-                                <><th>Admin</th></>:<></>
+                            <th>Actions</th>
+                            {(session_data.user_type === "SYSTEM_ADMIN" || session_data.user_type === "HILL_ADMIN") ?
+                                <><th>Admin</th></> : <></>
                             }
-                        
+
                         </tr>
                     </thead>
                     <tbody>

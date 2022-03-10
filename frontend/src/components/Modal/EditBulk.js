@@ -196,7 +196,7 @@ const EditShift = ({BulkEditModal , setBulkEditModal, currentShift, setProxySele
       const weekdays = (Sunday? "$Sunday":"")+(Monday? "$Monday":"")+(Tuesday? "$Tuesday":"")+(Wednesday? "$Wednesday":"")+(Thursday? "$Thursday":"")+
                 (Friday? "$Friday":"")+(Saturday? "$Saturday":"");
 
-      axios.get('/eventsAltered/' + startAndEnd + weekdays)
+       axios.get('/eventsAltered/' + startAndEnd + weekdays)
       .then(response => {
           //if error from database
           if(response.status === 200)

@@ -447,9 +447,12 @@ const RosterPlanner = ({ session }) => {
                         <TraineeUserTable
                           currentShift={currentShift}
                           setCurrentShift={setCurrentShift}
-                          setProxySelect={setProxySelect}
+                          AssignAreaModal={AssignAreaModal}
+                          setAssignAreaModal={setAssignAreaModal}
                           traineeList={traineeList}
-                          userAuth={session.session_data()}
+                          session_data={session.session_data()}
+                          session={session}
+                          shiftInfo={shiftInfo}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (

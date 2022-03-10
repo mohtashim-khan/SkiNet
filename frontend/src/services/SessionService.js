@@ -49,6 +49,15 @@ class Session {
   _get_base_url() {
     return "http://" + this.api_url;
   }
+    
+    async get_raw(url) {
+        var payload = {
+            headers: {
+                authorization: this._get(this.SESSION_AUTH),
+            },
+        };         
+        return axios.get(url, payload);
+    }
 
   async get(endpoint, params_ = {}, urlParams = {}, custom = false) {
     var payload = {

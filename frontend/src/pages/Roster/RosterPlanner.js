@@ -459,7 +459,8 @@ const RosterPlanner = ({ session }) => {
                             AddTraineeModal={AddTraineeModal}
                             setAddTraineeModal={setAddTraineeModal}
                             setProxySelect={setProxySelect}
-                            userAuth={session.session_data()}
+                            session={session}
+                            shiftInfo={shiftInfo}
                           />
                         ) : (
                           <></>

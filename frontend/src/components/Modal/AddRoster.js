@@ -24,7 +24,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             event_name: currentShift ? currentShift.event.title : "",
             selectUser: "",
             phone_number: "",
-            role: "Rostered",
+            role: "ROSTERED",
             comment: "",
         }
     );
@@ -36,7 +36,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
                     event_id: currentShift ? currentShift.event.id : "",
                     event_name: currentShift ? currentShift.event.title : "",
                     selectUser: "",
-                    role: "Rostered",
+                    role: "ROSTERED",
                     comment: "",
                 }
             );
@@ -129,7 +129,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             let userOptionRender = [];
 
             for (let i = 0; i < Users.length; i++) {
-                userOptionRender.push(<option value={i}>{Users[i].firstName+Users[i].lastName} #{Users[i].username}:{Users[i].userType}:{Users[i].phoneNumber}:{(Users[i].trainer) ? "Trainer" : "Not Trainer"} : {Users[i].userID} </option>)
+                userOptionRender.push(<option value={i}>{Users[i].firstName+Users[i].lastName}</option>)
             }
             return userOptionRender;
         }

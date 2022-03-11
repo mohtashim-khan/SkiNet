@@ -131,7 +131,11 @@ const General = ({ session, userID, allowed }) => {
           </form>
         </div>
 
-        <Modal show={editPrompted} onHide={promptEditCancel}>
+        <Modal
+          className="ProfileModal"
+          show={editPrompted}
+          onHide={promptEditCancel}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Editing General Information</Modal.Title>
           </Modal.Header>

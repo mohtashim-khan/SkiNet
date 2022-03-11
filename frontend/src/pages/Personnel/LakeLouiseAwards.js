@@ -5,11 +5,18 @@ import "./UserProfileEdit.css";
 import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
-const LakeLouiseAwards = ({ session, userID, allowed }) => {
+const LakeLouiseAwards = ({
+  session,
+  userID,
+  allowed,
+  error,
+  setError,
+  setErrBody,
+  setErrHeading,
+}) => {
   const [update, setUpdate] = useState(false);
   const [personAwards, setPersonAwards] = useState([]);
   const [user, setUsers] = useState([]);
-  const [error, setError] = useState(false);
 
   const [seasons, setSeasons] = useState([]);
   const [sortedSeasons, setSortedSeasons] = useState([]);
@@ -85,7 +92,7 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
 
   function editLakeLouiseAward() {
     try {
-      if (setSelectedVal === "-1") throw "ERROR: No Value selected";
+      if (selectedVal === "-1") throw "No value selected";
 
       const mySeason = $("#seasonSelectEdit").val();
       const myNotes = $("#awardNotesEdit").val();
@@ -109,16 +116,26 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
 
       console.log("Sent to put req...", JSON.stringify(temp));
 
-      session.put("profile/personAward", temp, {}, true).then((resp) => {
-        if (resp.status === 200 || resp.status === 201) {
-          console.log(resp);
-          readNewAwards();
-        }
-      });
+      session
+        .put("profile/personAward", temp, {}, true)
+        .then((resp) => {
+          if (resp.status === 200 || resp.status === 201) {
+            console.log(resp);
+            readNewAwards();
+          }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Edit Attempt Failed");
+          setErrBody(
+            "There was an error while trying to edit this award for this user."
+          );
+        });
       promptEditCancel();
     } catch (e) {
+      setErrHeading("Input Error");
+      setErrBody(e);
       setError(true);
-      console.log(e);
     }
   }
 
@@ -128,8 +145,8 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
       const myNotes = $("#awardNotes").val();
       const myAward = $("#awardSelect").val();
 
-      if (myAward === -1 || mySeason === -1) {
-        throw "empty eval";
+      if (parseInt(myAward) === -1 || parseInt(mySeason) === -1) {
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
       }
 
       session
@@ -137,8 +154,8 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
           "personAwards",
           {
             comments: myNotes,
-            award: awards[myAward]._links.self.href,
-            season: seasons[mySeason]._links.self.href,
+            award: awards[parseInt(myAward)]._links.self.href,
+            season: seasons[parseInt(mySeason)]._links.self.href,
             user: user._links.self.href,
           },
           {},
@@ -146,11 +163,20 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
         )
         .then((resp) => {
           readNewAwards();
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Add Attempt Failed");
+          setErrBody(
+            "There was an error attempting to create this award for this user."
+          );
         });
       promptAddCancel();
       setUpdate(!update);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      setErrHeading("Input Error");
+      setErrBody(err);
       setError(true);
     }
   }
@@ -266,7 +292,11 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
           )}
         </div>
 
-        <Modal show={addPrompted} onHide={promptAddCancel}>
+        <Modal
+          className="ProfileModal"
+          show={addPrompted}
+          onHide={promptAddCancel}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Add New Lake Louise Award</Modal.Title>
           </Modal.Header>
@@ -339,7 +369,11 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
           </Modal.Body>
         </Modal>
 
-        <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+        <Modal
+          className="ProfileModal"
+          show={deletePrompted}
+          onHide={promptDeleteCancel}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Remove Awards</Modal.Title>
           </Modal.Header>
@@ -368,20 +402,15 @@ const LakeLouiseAwards = ({ session, userID, allowed }) => {
           </Modal.Body>
         </Modal>
 
-        <Modal show={editPrompted} onHide={promptEditCancel}>
+        <Modal
+          className="ProfileModal"
+          show={editPrompted}
+          onHide={promptEditCancel}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Editing Awards</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Alert
-              variant="danger"
-              show={error}
-              onClose={() => setError(false)}
-              dismissible={true}
-            >
-              <Alert.Heading>Uh oh!</Alert.Heading>
-              <p>Looks like you need glasses</p>
-            </Alert>
             <div className="form-check mb-3">
               {personAwards.map((row, index) => (
                 <div className="form-group">

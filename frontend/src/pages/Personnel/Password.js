@@ -108,7 +108,7 @@ const Password = ({ session, userID, allowed, selfView }) => {
           </form>
         </div>
 
-        <Modal show={prompt} onHide={closePrompt}>
+        <Modal className="ProfileModal" show={prompt} onHide={closePrompt}>
           <Modal.Header closeButton></Modal.Header>
           <Modal.Body>Password Changed Succesfully!</Modal.Body>
           <Modal.Footer>

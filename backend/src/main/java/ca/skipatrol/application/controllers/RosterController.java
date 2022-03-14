@@ -110,6 +110,20 @@ public class RosterController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @RequestMapping(value = "customapi/roster/bulkDeleteEvents", method = RequestMethod.PUT)
+    public ResponseEntity<Object> BulkDeleteEventsFull(@RequestBody String requestBody) {
+
+        int code = 500;
+
+        JsonObject requestBodyJSON = JsonParser.parseString(requestBody).getAsJsonObject();
+        code = rosterServices.BulkDeleteEventsFull(requestBodyJSON);
+
+        if (code == 200)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
     @RequestMapping(value = "customapi/roster/updateEvent", method = RequestMethod.PUT)
     public ResponseEntity<Object> UpdateEvent(@RequestParam
                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,

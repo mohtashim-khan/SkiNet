@@ -10,6 +10,4 @@ public interface EventLogRepository extends JpaRepository<EventLog, UUID> {
 
     List<EventLog> findAllByEvent_eventID(UUID eventID);
     List<EventLog> findAllByUser_userID(UUID eventID);
-
-//    List<EventLog> findAllByUsername(String username);
 }

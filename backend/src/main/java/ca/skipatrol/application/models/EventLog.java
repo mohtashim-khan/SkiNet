@@ -28,7 +28,7 @@ public class EventLog {
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private User user;
 
     @Getter
@@ -77,6 +77,11 @@ public class EventLog {
     @Getter
     @Setter
     @Column(columnDefinition = "varchar(255)")
+    private String name;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "varchar(255)")
     private String phoneNumber;
 
     @Getter
@@ -96,6 +101,7 @@ public class EventLog {
                     LocalDateTime timestampSubrequest,
                     String comment,
                     String email,
+                    String name,
                     String phoneNumber,
                     Boolean trainer) {
         this.event = event;
@@ -108,6 +114,7 @@ public class EventLog {
         this.timestampSubrequest = timestampSubrequest;
         this.comment = comment;
         this.email = email;
+        this.name = name;
         this.phoneNumber = phoneNumber;
         this.trainer = trainer;
     }
@@ -119,6 +126,7 @@ public class EventLog {
                     LocalDateTime timestampSubrequest,
                     String comment,
                     String email,
+                    String name,
                     String phoneNumber,
                     Boolean trainer) {
         this.eventLogID = eventLogID;
@@ -128,6 +136,7 @@ public class EventLog {
         this.timestampSubrequest = timestampSubrequest;
         this.comment = comment;
         this.email = email;
+        this.name = name;
         this.phoneNumber = phoneNumber;
         this.trainer = trainer;
     }

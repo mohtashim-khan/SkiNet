@@ -395,6 +395,7 @@ public class RosterServicesImpl implements RosterServices {
                     eventLog.getTimestampSubrequest(),
                     eventLog.getComment(),
                     eventLog.getEmail(),
+                    eventLog.getName(),
                     eventLog.getPhoneNumber(),
                     eventLog.getTrainer()
             );
@@ -430,6 +431,7 @@ public class RosterServicesImpl implements RosterServices {
                     eventLog.getTimestampSubrequest(),
                     eventLog.getComment(),
                     eventLog.getEmail(),
+                    eventLog.getName(),
                     eventLog.getPhoneNumber(),
                     eventLog.getTrainer()
             );

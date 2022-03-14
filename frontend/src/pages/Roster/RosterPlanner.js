@@ -117,6 +117,7 @@ const RosterPlanner = ({ session }) => {
     setActiveDateTitle(
       getCalendarApi().currentDataManager.getCurrentData().viewTitle
     );
+
   }, []);
 
   //will update calendar if the Add Roster Modal changes
@@ -513,6 +514,8 @@ const RosterPlanner = ({ session }) => {
                           AddUnavailableModal={AddUnavailableModal}
                           setAddUnavailableModal={setAddUnavailableModal}
                           setProxySelect={setProxySelect}
+                          session={session}
+                          shiftInfo={shiftInfo}
                         />
                       ) : (
                         <></>

@@ -73,7 +73,7 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
             user: user.userID,
             phoneNumber: user.phoneNumber,
             trainer: user.trainer,
-            role: (user.userType === "TRAINEE") ? "TRAINEE" : "ROSTERED",
+            role: "TRAINEE",
             comment: eventInfo.comment,
             email: user.email,
         };
@@ -145,7 +145,7 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
     useEffect(() => {
         if(AddTraineeModal)
         {
-            session.get("users/search/findByUserType?userType=TRAINEE")
+            session.get("users/search/findByTrainer?trainer=false")
                 .then(response => {
                     // If request is good...
                     setUsers(response.data._embedded.users);

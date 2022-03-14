@@ -133,7 +133,7 @@ const MainAddEvent = ({
     }
   };
 
-  //TODO: ACTIONLOG query? -- Discuss with group, Not really necessary
+  //TODO: ACTIONLOG query? -- Discuss with group, Not really necessary for creating events maybe
   const addEventHelper = async (article) => {
 
 
@@ -151,6 +151,7 @@ const MainAddEvent = ({
       session
         .post("events", eventReq, {}, false).then((response) => {
           toggle(false);
+          setUpdater(true);
 
         });
     }
@@ -294,7 +295,7 @@ const MainAddEvent = ({
         storeEndDate = pivotEndDate;
       }
     }
-    setUpdater(true);
+    // setUpdater(true);
   };
 
   useEffect(() => { }, [eventInfo]);

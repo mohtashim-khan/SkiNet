@@ -183,9 +183,7 @@ export const selectShiftHandler = async (
 
 
 
-      // if (compare.event.id !== clickInfo.event.extendedProps.eventID || dragDropEnable === "third") {
-      //   await setUpdater(true);
-      // }
+      setUpdater(true);
     }
   } catch (error) {
     console.log(error);

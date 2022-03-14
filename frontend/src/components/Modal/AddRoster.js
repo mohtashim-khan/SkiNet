@@ -61,7 +61,6 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
         // //https://www.w3schools.com/sql/sql_autoincrement.asp
         e.preventDefault();
 
-        let session_data = session.session_data();
 
         let user = Users[eventInfo.selectUser];
         
@@ -71,7 +70,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             user: user.userID,
             phoneNumber: user.phoneNumber,
             trainer: user.trainer,
-            role: (user.userType === "TRAINEE") ? "TRAINEE" : "ROSTERED",
+            role: (user.trainer === false) ? "TRAINEE" : "ROSTERED",
             comment: eventInfo.comment,
             email: user.email,
         };
@@ -129,7 +128,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             let userOptionRender = [];
 
             for (let i = 0; i < Users.length; i++) {
-                userOptionRender.push(<option value={i}>{Users[i].firstName+Users[i].lastName}</option>)
+                userOptionRender.push(<option value={i}>{Users[i].firstName+" "+Users[i].lastName}</option>)
             }
             return userOptionRender;
         }
@@ -140,7 +139,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
 
     useEffect(() => {
         if (AddRosterModal) {
-            session.get("users/search/findByUserType?userType=ROSTERED")
+            session.get("users/search/findByTrainer?trainer=true")
                 .then(response => {
                     // If request is good...
                     setUsers(response.data._embedded.users);

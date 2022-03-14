@@ -2,10 +2,20 @@ import React, {useState, useEffect}  from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { CustomInput, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import{Modal as ReactBootStrapModal} from 'react-bootstrap';
 
 
-const AddUnavailable = ({AddUnavailableModal , setAddUnavailableModal, currentShift, setProxySelect}) => {
+
+const AddUnavailable = ({AddUnavailableModal , setAddUnavailableModal, currentShift, setProxySelect, session, shiftInfo}) => {
     //state template
+
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
 
     const [Users, setUsers] = useState([]);
 
@@ -53,54 +63,65 @@ const AddUnavailable = ({AddUnavailableModal , setAddUnavailableModal, currentSh
         // //Refer to
         // //https://www.w3schools.com/sql/sql_autoincrement.asp
         e.preventDefault();
-        const splitting = eventInfo.selectUser.split('#').join(',').split(':').join(',').split(',')
-        const name = splitting[0];
-        const username = splitting[1].replace(' ', '');
-        const user_type = splitting[2];
+        
 
-        const phone_number = splitting[3];
+        let user = Users[eventInfo.selectUser];
+
         const article = {
-            event_id: eventInfo.event_id,
-            event_name: eventInfo.event_name,
-            username: username,
-            name: name,
-            user_type: user_type,
-            phone_number: phone_number,
-            role: eventInfo.role,
+            event: currentShift.event.extendedProps.eventID,
+            user: user.userID,
+            phoneNumber: user.phoneNumber,
+            trainer: user.trainer,
+            role:"UNAVAILABLE",
             comment: eventInfo.comment,
-        }
+            email: user.email,
+        };
 
-        axios.put('/addToEventLog', article)
-        .then(response => {
-            //if error from database
-            if(response.status === 204)
-            {
-                //Setting on and off of pop up
-                toggle(false);
+        session
+                .put("roster/addToEventLog", article, {}, true)
+                .then(response => {
+                    //if error from database
+                    if (response.status === 200) {
+                        
+                        //** PROXY SELECT ** /
+                        let storeShift = {
+                            event: {
+                                proxy: 'yes',
+                                extendedProps:
+                                {
+                                    hlUser: shiftInfo.hl,
+                                    minPatrollers: shiftInfo.min_pat,
+                                    maxPatrollers: shiftInfo.max_pat,
+                                    maxTrainees: shiftInfo.max_trainee,
+                                    eventID: currentShift.event.extendedProps.eventID,
 
-                //load events
-                let storeShift = {
-                    event: {
-                        proxy: 'yes',
-                        id: currentShift.event.id,
-                        title: currentShift.event.title,
-                        start: currentShift.event.start,
-                        end: currentShift.event.end,
-                        startStr: currentShift.event.startStr,
-                        endStr: currentShift.event.endStr,
+
+
+
+                                },
+                                allDay: shiftInfo.all_day,
+                                title: shiftInfo.event_name,
+                                startStr: shiftInfo.startStr,
+
+                            }
+                        }
+
+                        //update Shift infos
+                        setProxySelect(storeShift);
+
+
+                        successModalShow();
+
+
                     }
-                }
-
-                //load events
-                setProxySelect(storeShift);
-            }
-            else{
-                console.log("Error in DB")
-            }
-        })
-        .catch((error) => {
-            console.log('error ' + error);
-        });
+                    else {
+                        failModalShow();
+                    }
+                })
+                .catch((error) => {
+                    console.log("error " + error);
+                    failModalShow();
+                });
     }
 
     const userRender = () => {
@@ -111,7 +132,7 @@ const AddUnavailable = ({AddUnavailableModal , setAddUnavailableModal, currentSh
 
             for(let i = 0; i< Users.length; i++)
             {
-                userOptionRender.push(<option key={i}>{Users[i].name} #{Users[i].username}:{Users[i].user_type}:{Users[i].phone_number}</option>)
+                userOptionRender.push(<option value ={i}>{Users[i].firstName+" "+Users[i].lastName}</option>)
             }
             return userOptionRender;
         }
@@ -123,28 +144,19 @@ const AddUnavailable = ({AddUnavailableModal , setAddUnavailableModal, currentSh
     useEffect(() => {
         if(AddUnavailableModal)
         {
-            axios.get('/getNameAndUsername/Trainee')
-            .then(response => {
-                // If request is good...
-                setUsers(prev => prev.concat(response.data));
-            })
-            .catch((error) => {
-                console.log('error ' + error);
-            });
-
-            axios.get('/getNameAndUsername/Rostered')
-            .then(response => {
-                // If request is good...
-                setUsers(prev => prev.concat(response.data));
-            })
-            .catch((error) => {
-                console.log('error ' + error);
-            });
+            session.get("users")
+                .then(response => {
+                    // If request is good...
+                    setUsers(response.data._embedded.users);
+                })
+                .catch((error) => {
+                    console.log('error ' + error);
+                });
         }
 
 
 
-    }, [AddUnavailableModal]);
+    }, [AddUnavailableModal, session]);
 
     const openBtn = <Button color="primary" onClick={() => toggle(true)}>Add Unavailable</Button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
     const closeBtn = <Button className="close" onClick = {() =>toggle(false)}>Close</Button>;
@@ -172,6 +184,28 @@ const AddUnavailable = ({AddUnavailableModal , setAddUnavailableModal, currentSh
                     </Form>
                 </ModalBody>
             </Modal>
+
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Successfully Added to Unavailable List!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Adding Unavailable</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </>
     );
 

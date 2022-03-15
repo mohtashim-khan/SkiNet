@@ -313,6 +313,18 @@ public class RosterServicesImpl implements RosterServices {
         }
     }
 
+    public int BulkDeleteEventsFull(JsonObject requestBody)
+    {
+        Gson gson = new Gson();
+        List<String> eventIDs = gson.fromJson(requestBody.get("eventIDs"), List.class);
+
+        for(String eventID: eventIDs) {
+            DeleteEventFull(UUID.fromString(eventID));
+        }
+
+        return 200;
+    }
+
     public int UpdateEvent(Event event, User actionUser)
     {
         try
@@ -383,6 +395,7 @@ public class RosterServicesImpl implements RosterServices {
                     eventLog.getTimestampSubrequest(),
                     eventLog.getComment(),
                     eventLog.getEmail(),
+                    eventLog.getName(),
                     eventLog.getPhoneNumber(),
                     eventLog.getTrainer()
             );
@@ -418,6 +431,7 @@ public class RosterServicesImpl implements RosterServices {
                     eventLog.getTimestampSubrequest(),
                     eventLog.getComment(),
                     eventLog.getEmail(),
+                    eventLog.getName(),
                     eventLog.getPhoneNumber(),
                     eventLog.getTrainer()
             );

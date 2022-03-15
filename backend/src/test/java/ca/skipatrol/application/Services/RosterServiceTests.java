@@ -55,6 +55,7 @@ public class RosterServiceTests {
                 LocalDateTime.MIN,
                 "testComment",
                 "testEmail",
+                null,
                 "123-123-1234",
                 false);
 

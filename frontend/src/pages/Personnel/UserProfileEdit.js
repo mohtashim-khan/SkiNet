@@ -16,6 +16,9 @@ const UserProfileEdit = ({ session }) => {
   let { id } = useParams();
   const [user, setUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [errHeading, setErrHeading] = useState("");
+  const [errBody, setErrBody] = useState("");
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     session.get("users/" + id).then((resp) => {
@@ -45,9 +48,25 @@ const UserProfileEdit = ({ session }) => {
 
         <div className="row">
           <div className="col-lg">
-            <TrainingAndEval session={session} userID={id} allowed={isAdmin} />
+            <TrainingAndEval
+              session={session}
+              userID={id}
+              allowed={isAdmin}
+              error={hasError}
+              setError={setHasError}
+              setErrBody={setErrBody}
+              setErrHeading={setErrHeading}
+            />
 
-            <PatrolCommitment session={session} userID={id} allowed={isAdmin} />
+            <PatrolCommitment
+              session={session}
+              userID={id}
+              allowed={isAdmin}
+              error={hasError}
+              setError={setHasError}
+              setErrBody={setErrBody}
+              setErrHeading={setErrHeading}
+            />
 
             <LakeLouiseRoles session={session} userID={id} allowed={isAdmin} />
             <General
@@ -64,9 +83,21 @@ const UserProfileEdit = ({ session }) => {
               session={session}
               userID={id}
               allowed={isAdmin}
+              error={hasError}
+              setError={setHasError}
+              setErrBody={setErrBody}
+              setErrHeading={setErrHeading}
             />
 
-            <LakeLouiseAwards session={session} userID={id} allowed={isAdmin} />
+            <LakeLouiseAwards
+              session={session}
+              userID={id}
+              allowed={isAdmin}
+              error={hasError}
+              setError={setHasError}
+              setErrBody={setErrBody}
+              setErrHeading={setErrHeading}
+            />
 
             <Contact
               session={session}
@@ -86,6 +117,22 @@ const UserProfileEdit = ({ session }) => {
           </div>
         </div>
       </Container>
+      <Modal
+        className="modal-whole"
+        show={hasError}
+        onHide={() => {
+          setHasError(false);
+        }}
+      >
+        <Modal.Header className="modal-error modal-dialog-centered" closeButton>
+          <Modal.Title>
+            <b className="modal-error-text">{errHeading}</b>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="modal-error">
+          <h6 className="modal-error-text">{errBody}</h6>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

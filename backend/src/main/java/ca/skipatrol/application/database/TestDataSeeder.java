@@ -380,6 +380,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         test_TimestampSubRequest,
                                         "testComment",
                                         "testEmail",
+                                        null,
                                         "123-123-1234",
                                         false);
                         this.eventLogRepository.save(testEventLog);
@@ -485,6 +486,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                                 testTimestampRequest,
                                                 "testComment",
                                                 "testEmail",
+                                                null,
                                                 "123-123-1234",
                                                 false);
                                 this.eventLogRepository.save(testEventLog);

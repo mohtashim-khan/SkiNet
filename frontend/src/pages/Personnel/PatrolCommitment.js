@@ -13,11 +13,19 @@ import "./UserProfileEdit.css";
 import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
-const PatrolCommitment = ({ session, userID, allowed }) => {
+const PatrolCommitment = ({
+  session,
+  userID,
+  allowed,
+  error,
+  setError,
+  setErrBody,
+  setErrHeading,
+}) => {
   const [discipline, setDisciplines] = useState([]);
   const [patrolCommit, setPatrolCommit] = useState([]);
   const [user, setUser] = useState([]);
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
 
   const [AddPrompted, setAddPrompted] = useState(false);
   const [editPrompted, setEditPrompted] = useState(false);
@@ -60,9 +68,7 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
           readNewPatrolCommitments();
         }
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch((e) => {});
     setDeletePrompted(false);
   }
 
@@ -92,19 +98,14 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
         temp.days = patrolCommit[parseInt(selectedVal)].days.toString();
       }
 
-      console.log("Sent to put req...", JSON.stringify(temp));
-
       session.put("profile/patrolCommitment", temp, {}, true).then((resp) => {
         if (resp.status === 200 || resp.status === 201) {
-          console.log(resp);
-          //if (uniform) readNewUniform();
           readNewPatrolCommitments();
         }
       });
       promptEditCancel();
     } catch (e) {
       setError(true);
-      console.log(e);
     }
   }
 
@@ -126,7 +127,7 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
         myDays === null ||
         mySeason === -1
       ) {
-        throw "empty eval";
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
       }
       const achievedBool = achieved === "1" ? true : false;
 
@@ -149,6 +150,8 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
       promptAddCancel();
     } catch (err) {
       console.log(err);
+      setErrHeading("Input Error");
+      setErrBody(err);
       setError(true);
     }
   }
@@ -273,7 +276,11 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
           </div>
         </form>
       </div>
-      <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+      <Modal
+        className="ProfileModal"
+        show={deletePrompted}
+        onHide={promptDeleteCancel}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Deleting Patrol Commitment(s)</Modal.Title>
         </Modal.Header>
@@ -304,20 +311,15 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={AddPrompted} onHide={promptAddCancel}>
+      <Modal
+        className="ProfileModal"
+        show={AddPrompted}
+        onHide={promptAddCancel}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Adding Patrol Commitment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <div className="input-group mb-2">
             <div className="input-group-prepend">
               <label className="input-group-text" for="inputGroupSelect01">
@@ -390,20 +392,15 @@ const PatrolCommitment = ({ session, userID, allowed }) => {
           </Button>
         </Modal.Body>
       </Modal>
-      <Modal show={editPrompted} onHide={promptEditCancel}>
+      <Modal
+        className="ProfileModal"
+        show={editPrompted}
+        onHide={promptEditCancel}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Editing Patrol Commitments</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <div className="form-check mb-3">
             {patrolCommit.map((row, index) => (
               <div className="form-group">

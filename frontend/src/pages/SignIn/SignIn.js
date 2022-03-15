@@ -100,7 +100,7 @@ const SignIn = ({ session }) => {
         <Container>
           <InfoRow imgStart="start">
             <InfoColumn>
-              <div className="card signin-card bg-transparent">
+              <div className=" signin-card bg-transparent">
                 {" "}
                 {/* change to bg-white if needed */}
                 <div className="card-body signin-card">

@@ -5,7 +5,15 @@ import $ from "jquery";
 import "./UserProfileEdit.css";
 import Alert from "react-bootstrap/Alert";
 
-const TrainingAndEval = ({ session, userID, allowed }) => {
+const TrainingAndEval = ({
+  session,
+  userID,
+  allowed,
+  error,
+  setError,
+  setErrBody,
+  setErrHeading,
+}) => {
   const [discipline, setDisciplines] = useState([]);
 
   const [onSnowEvals, setOnSnowEvals] = useState([]);
@@ -21,7 +29,7 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
 
   const [date, setDate] = useState(null);
   const [theEventType, setTheEventType] = useState(null);
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
   const [type, setType] = useState("1");
 
   const [selectedVal, setSelectedVal] = useState("-1");
@@ -140,19 +148,21 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
 
   function editOnSnowEvals() {
     try {
-      if (selectedVal === "-1") throw "ERROR: No Value selected";
+      if (selectedVal === "-1")
+        throw "an On Snow Eval is not properly selected. Please select an option before submitting,";
+      if ($("#OnSnowTrainingDateEdit").val().length === 0) {
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
+      }
       const myDate = new Date($("#OnSnowTrainingDateEdit").val()).toISOString();
       const myDiscipline = $("#OnSnowDisciplinesEdit").val();
       const myEval = $("#OnSnowEvalByEdit").val();
 
       let temp = onSnowEvals[parseInt(selectedVal)];
       temp.evaluationDate = myDate.substring(0, 10);
-      temp.discipline = discipline[myDiscipline].description;
+      temp.discipline = discipline[parseInt(myDiscipline)].description;
       if (myEval.length > 0) {
         temp.evaluatedBy = myEval;
       }
-
-      console.log("Sent to put req...", JSON.stringify(temp));
 
       session
         .put(
@@ -165,17 +175,29 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           if (resp.status === 200 || resp.status === 201) {
             readNewTrainingAndEvals();
           }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Edit Attempt Failed");
+          setErrBody(
+            "There was an error while trying to edit this On-Snow Evaluation for this user."
+          );
         });
       promptEditCancel();
     } catch (e) {
       setError(true);
-      console.log(e);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
   function editOperationalTraining() {
     try {
-      if (selectedVal === "-1") throw "ERROR: No Value selected";
+      if (selectedVal === "-1")
+        throw "An operational training is not properly selected. Please select an option before submitting.";
+      if ($("#OperationalTrainingDateEdit").val().length === 0) {
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
+      }
       const myDate = new Date(
         $("#OperationalTrainingDateEdit").val()
       ).toISOString();
@@ -183,9 +205,7 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
 
       let temp = operationalTraining[parseInt(selectedVal)];
       temp.completedDate = myDate.substring(0, 10);
-      temp.operationalEvent = operationalEvent[myEvent].description;
-
-      console.log("Sent to put req...", JSON.stringify(temp));
+      temp.operationalEvent = operationalEvent[parseInt(myEvent)].description;
 
       session
         .put(
@@ -199,17 +219,30 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           if (resp.status === 200 || resp.status === 201) {
             readNewTrainingAndEvals();
           }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Edit Attempt Failed");
+          setErrBody(
+            "There was an error while trying to edit this Operational Training for this user."
+          );
         });
       promptEditCancel();
     } catch (e) {
       setError(true);
-      console.log(e);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
   function editEvalTraining() {
     try {
-      if (selectedVal === "-1") throw "ERROR: No Value selected";
+      if (selectedVal === "-1")
+        throw "An Evaluation training is not properly selected. Please select an option before submitting";
+
+      if ($("#EvalTrainingDateEdit").val().length === 0) {
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
+      }
       const myDate = new Date($("#EvalTrainingDateEdit").val()).toISOString();
       const myEval = $("#EvalTrainingEventEdit").val();
 
@@ -219,19 +252,25 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
         temp.eventType = myEval;
       }
 
-      console.log("Sent to put req...", JSON.stringify(temp));
-
       session
         .put("evalTrainings/" + temp.evalTrainingID, temp, {}, false)
         .then((resp) => {
           if (resp.status === 200 || resp.status === 201) {
             readNewTrainingAndEvals();
           }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Edit Attempt Failed");
+          setErrBody(
+            "There was an error while trying to edit this Evaluation Training for this user."
+          );
         });
       promptEditCancel();
     } catch (e) {
       setError(true);
-      console.log(e);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
@@ -268,18 +307,22 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
 
   function addOnSnowEval() {
     try {
+      if ($("#OnSnowTrainingDate").val().length === 0) {
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
+      }
       const myDate = new Date($("#OnSnowTrainingDate").val()).toISOString();
       const myDiscipline = $("#OnSnowDisciplines").val();
       const myEval = $("#OnSnowEvalBy").val();
-      if (myEval.length === 0 || myDiscipline === -1) {
-        throw "empty eval";
+      console.log("asdfasdf" + myDate);
+      if (myEval.length === 0 || parseInt(myDiscipline) === -1) {
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
       }
       session
         .post(
           "onSnowEvals",
           {
             evaluationDate: myDate,
-            discipline: discipline[myDiscipline]._links.self.href,
+            discipline: discipline[parseInt(myDiscipline)]._links.self.href,
             evaluatedBy: myEval,
             user: user._links.self.href,
           },
@@ -288,20 +331,31 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
         )
         .then(() => {
           readNewTrainingAndEvals();
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Add Attempt Failed");
+          setErrBody(
+            "There was an error while trying to add this evaluation for this user."
+          );
         });
       promptAddCancel();
     } catch (err) {
-      console.log(err);
       setError(true);
+      setErrHeading("Input Error");
+      setErrBody(err);
     }
   }
 
   function addEvalTraining() {
     try {
+      if ($("#EvalTrainingDate").val().length === 0) {
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
+      }
       const myDate = new Date($("#EvalTrainingDate").val()).toISOString();
       const myEval = $("#EvalTrainingEvent").val();
       if (myEval.length === 0) {
-        throw "empty eval";
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
       }
       session
         .post(
@@ -316,23 +370,34 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
         )
         .then(() => {
           readNewTrainingAndEvals();
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Add Attempt Failed");
+          setErrBody(
+            "There was an error while trying to add this evaluation training for this user."
+          );
         });
       promptAddCancel();
     } catch (err) {
-      console.log(err);
       setError(true);
+      setErrHeading("Input Error");
+      setErrBody(err);
     }
   }
 
   function addOperationalTraining() {
     try {
+      if ($("#OperationalTrainingDate").val().length === 0) {
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
+      }
       const myDate = new Date(
         $("#OperationalTrainingDate").val()
       ).toISOString();
       const myOperationalIndex = $("#OperationalTrainingEvent").val();
 
       if (myOperationalIndex === -1) {
-        throw "empty operational";
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
       }
 
       session
@@ -349,10 +414,18 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
         )
         .then(() => {
           readNewTrainingAndEvals();
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Add Attempt Failed");
+          setErrBody(
+            "There was an error while trying to add this operational training for this user."
+          );
         });
       promptAddCancel();
     } catch (err) {
-      console.log(err);
+      setErrHeading("Input Error");
+      setErrBody(err);
       setError(true);
     }
   }
@@ -361,15 +434,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     if (type === "1") {
       return (
         <>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <h5>Patroller On-Snow Evaluation</h5>
 
           <div className="input-group mb-3">
@@ -428,15 +492,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     } else if (type === "2") {
       return (
         <>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <h5>Evaluator Snow Training</h5>
 
           <div className="input-group mb-3">
@@ -477,15 +532,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     } else {
       return (
         <>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <h5>Patroller Operational Training</h5>
 
           <div className="input-group mb-3">
@@ -619,15 +665,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     if (type === "1") {
       return (
         <>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <h5>Patroller On-Snow Evaluation</h5>
           <div className="form-check mb-3">
             {onSnowEvals.map((row, index) => (
@@ -725,15 +762,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     } else if (type === "2") {
       return (
         <>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <h5>Evaluator Snow Training</h5>
           <div className="form-check mb-3">
             {evaluationTraining.map((row, index) => (
@@ -809,15 +837,6 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
     } else {
       return (
         <>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <h5>Patroller Operational Training</h5>
           <div className="form-check mb-3">
             {operationalTraining.map((row, index) => (
@@ -1082,7 +1101,11 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           )}
         </div>
 
-        <Modal show={addPrompted} onHide={promptAddCancel}>
+        <Modal
+          className="ProfileModal"
+          show={addPrompted}
+          onHide={promptAddCancel}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Add New Training Evaluation Certification</Modal.Title>
           </Modal.Header>
@@ -1111,7 +1134,11 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           </Modal.Body>
         </Modal>
 
-        <Modal show={editPrompted} onHide={promptEditCancel}>
+        <Modal
+          className="ProfileModal"
+          show={editPrompted}
+          onHide={promptEditCancel}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Edit Training Evaluation Certification</Modal.Title>
           </Modal.Header>
@@ -1140,7 +1167,11 @@ const TrainingAndEval = ({ session, userID, allowed }) => {
           </Modal.Body>
         </Modal>
 
-        <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+        <Modal
+          className="ProfileModal"
+          show={deletePrompted}
+          onHide={promptDeleteCancel}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Delete Training Evaluation Certifications</Modal.Title>
           </Modal.Header>

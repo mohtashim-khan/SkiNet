@@ -18,6 +18,7 @@ public interface RosterServices {
     int RemoveUserEventLog(EventLog eventLog, User actionUser);
     List<Event> RetrieveEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject weekDays);
     int DeleteEventFull(UUID eventID);
+    int BulkDeleteEventsFull(JsonObject requestBody);
     int UpdateEvent(Event event, User actionUser);
     List<EventLog> RetrieveEventLogsByEventID(UUID eventID);
     List<EventLog> RetrieveEventLogsByUserID(UUID userID);

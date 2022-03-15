@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Route, Link, useHistory } from "react-router-dom";
-import CSPLogo from "../../images/CSP-logo.png";
+import CSPLogo from "../../images/Re-colored-logo.svg";
 // import CSPLogo from "../../CSP Logo Text right of logo.jpg"; // OTHER IMAGE OPTION
 import "./Header.css";
 
@@ -69,7 +69,7 @@ const Header = ({ session }) => {
 
         <div>
           <button
-            className="btn btn-outline-light my-2 my-sm-0 signOutButton"
+            className="btn btn-outline-light my-2 my-sm-0 userButton"
             onClick={() => {
               if (session.session_data().userID) {
                 window.location.href =
@@ -84,10 +84,7 @@ const Header = ({ session }) => {
           </button>
         </div>
         <div>
-          <button
-            className="btn btn-light my-2 my-sm-0 signOutButton"
-            onClick={logOut}
-          >
+          <button className="btn my-2 my-sm-0 signOutButton" onClick={logOut}>
             Sign Out
           </button>
         </div>
@@ -128,12 +125,12 @@ const Header = ({ session }) => {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">
-          <img className="myImage" src={CSPLogo} width="32px" />
+          <img className="myImage" src={CSPLogo} width="175px" />
           <span>
-            <font face="Arial narrow" size="30px">
+            {/* <font face="Arial narrow" size="30px">
               {" "}
               <b>CSP</b> - Lake Louise
-            </font>
+            </font> */}
           </span>
         </a>
         {session.logged_in()

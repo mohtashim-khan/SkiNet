@@ -5,7 +5,15 @@ import "./UserProfileEdit.css";
 import $ from "jquery";
 import Alert from "react-bootstrap/Alert";
 
-const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
+const PatrolUniformAndEquipment = ({
+  session,
+  userID,
+  allowed,
+  error,
+  setError,
+  setErrBody,
+  setErrHeading,
+}) => {
   const [user, setUser] = useState([]);
   const [uniform, setUniform] = useState([]);
 
@@ -23,7 +31,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
   const [editPrompted, setEditPrompted] = useState(false);
   const [deletePrompted, setDeletePrompted] = useState(false);
 
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
   const [jacketSelectedVal, setJacketSelectedVal] = useState("-1");
   const [packSelectedVal, setPackSelectedVal] = useState("-1");
   const [vestSelectedVal, setVestSelectedVal] = useState("-1");
@@ -45,7 +53,8 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
   function editJackets() {
     try {
-      if (setJacketSelectedVal === "-1") throw "ERROR: No Value selected";
+      if (jacketSelectedVal === "-1")
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
 
       const myBrand = $("#jacketBrandSelectEdit").val();
       const mySize = $("#jacketSizeSelectEdit").val();
@@ -65,24 +74,30 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         temp.number = jackets[parseInt(jacketSelectedVal)].number.toString();
       }
 
-      console.log("Sent to put req...", JSON.stringify(temp));
-
-      session.put("profile/jacket", temp, {}, true).then((resp) => {
-        if (resp.status === 200 || resp.status === 201) {
-          console.log(resp);
-          if (uniform) readNewUniform();
-        }
-      });
+      session
+        .put("profile/jacket", temp, {}, true)
+        .then((resp) => {
+          if (resp.status === 200 || resp.status === 201) {
+            if (uniform) readNewUniform();
+          }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Edit Attempt Failed");
+          setErrBody("A jacket with this number is already being used.");
+        });
       promptEditCancel();
     } catch (e) {
       setError(true);
-      console.log(e);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
   function editPacks() {
     try {
-      if (setJacketSelectedVal === "-1") throw "ERROR: No Value selected";
+      if (packSelectedVal === "-1")
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
 
       const myBrand = $("#packBrandSelectEdit").val();
       const myCond = $("#packConditionSelectEdit").val();
@@ -102,22 +117,31 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
       console.log("Sent to put req...", JSON.stringify(temp));
 
-      session.put("profile/pack", temp, {}, true).then((resp) => {
-        if (resp.status === 200 || resp.status === 201) {
-          console.log(resp);
-          if (uniform) readNewUniform();
-        }
-      });
+      session
+        .put("profile/pack", temp, {}, true)
+        .then((resp) => {
+          if (resp.status === 200 || resp.status === 201) {
+            console.log(resp);
+            if (uniform) readNewUniform();
+          }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Edit Attempt Failed");
+          setErrBody("A Pack with this number is already being used.");
+        });
       promptEditCancel();
     } catch (e) {
       setError(true);
-      console.log(e);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
   function editVests() {
     try {
-      if (setVestSelectedVal === "-1") throw "ERROR: No Value selected";
+      if (vestSelectedVal === "-1")
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
 
       const myBrand = $("#vestBrandSelectEdit").val();
       const mySize = $("#vestSizeSelectEdit").val();
@@ -139,16 +163,24 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
       console.log("Sent to put req...", JSON.stringify(temp));
 
-      session.put("profile/vest", temp, {}, true).then((resp) => {
-        if (resp.status === 200 || resp.status === 201) {
-          console.log(resp);
-          if (uniform) readNewUniform();
-        }
-      });
+      session
+        .put("profile/vest", temp, {}, true)
+        .then((resp) => {
+          if (resp.status === 200 || resp.status === 201) {
+            console.log(resp);
+            if (uniform) readNewUniform();
+          }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Edit Attempt Failed");
+          setErrBody("A Vest with this number is already being used.");
+        });
       promptEditCancel();
     } catch (e) {
       setError(true);
-      console.log(e);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
@@ -290,6 +322,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
           if (uniform) readNewUniform();
         }
       });
+
     promptEditCancel();
   }
 
@@ -306,7 +339,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         myCond === -1 ||
         myNum.length === 0
       ) {
-        throw "empty eval";
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
       }
       session
         .post(
@@ -326,10 +359,16 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             if (uniform) readNewUniform();
             setError(false);
           }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Add Attempt Failed");
+          setErrBody("A jacket with this number is already being used.");
         });
     } catch (e) {
-      console.log(e);
       setError(true);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
@@ -346,7 +385,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         myCond === -1 ||
         myNum.length === 0
       ) {
-        throw "empty eval";
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
       }
 
       session
@@ -367,10 +406,16 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             if (uniform) readNewUniform();
             setError(false);
           }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Add Attempt Failed");
+          setErrBody("A Vest with this number is already being used.");
         });
     } catch (e) {
-      console.log(e);
       setError(true);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
@@ -381,7 +426,7 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
       const myNum = $("#packNumberSelect").val();
 
       if (myBrand === -1 || myCond === -1 || myNum.length === 0) {
-        throw "empty eval";
+        throw "One or more of the fields is empty or not selected. Please ensure that all fields are filled correctly.";
       }
 
       session
@@ -401,10 +446,16 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             if (uniform) readNewUniform();
             setError(false);
           }
+        })
+        .catch((e) => {
+          setError(true);
+          setErrHeading("Add Attempt Failed");
+          setErrBody("A Pack with this number is already being used.");
         });
     } catch (e) {
-      console.log(e);
       setError(true);
+      setErrHeading("Input Error");
+      setErrBody(e);
     }
   }
 
@@ -621,20 +672,15 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         </form>
       </div>
 
-      <Modal show={addPrompted} onHide={promptAddCancel}>
+      <Modal
+        className="ProfileModal"
+        show={addPrompted}
+        onHide={promptAddCancel}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Add New Patrol Uniform and Equipment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Alert
-            variant="danger"
-            show={error}
-            onClose={() => setError(false)}
-            dismissible={true}
-          >
-            <Alert.Heading>Uh oh!</Alert.Heading>
-            <p>Looks like you need glasses</p>
-          </Alert>
           <div className="card">
             <button
               className="card-header btn"
@@ -919,7 +965,11 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={editPrompted} onHide={promptEditCancel}>
+      <Modal
+        className="ProfileModal"
+        show={editPrompted}
+        onHide={promptEditCancel}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Editing Patrol Uniform and Equipment</Modal.Title>
         </Modal.Header>
@@ -937,15 +987,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             </button>
             <div className="collapse" id="jacketEdit">
               <div className="card-body">
-                <Alert
-                  variant="danger"
-                  show={error}
-                  onClose={() => setError(false)}
-                  dismissible={true}
-                >
-                  <Alert.Heading>Uh oh!</Alert.Heading>
-                  <p>Looks like you need glasses</p>
-                </Alert>
                 <div className="form-check mb-3">
                   {jackets &&
                     jackets.map((row, index) => (
@@ -1105,15 +1146,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
 
             <div className="collapse" id="vestEdit">
               <div className="card-body">
-                <Alert
-                  variant="danger"
-                  show={error}
-                  onClose={() => setError(false)}
-                  dismissible={true}
-                >
-                  <Alert.Heading>Uh oh!</Alert.Heading>
-                  <p>Looks like you need glasses</p>
-                </Alert>
                 <div className="form-check mb-3">
                   {vests &&
                     vests.map((row, index) => (
@@ -1265,15 +1297,6 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
             </button>
             <div className="collapse" id="packEdit">
               <div className="card-body">
-                <Alert
-                  variant="danger"
-                  show={error}
-                  onClose={() => setError(false)}
-                  dismissible={true}
-                >
-                  <Alert.Heading>Uh oh!</Alert.Heading>
-                  <p>Looks like you need glasses</p>
-                </Alert>
                 <div className="form-check mb-3">
                   {packs &&
                     packs.map((row, index) => (
@@ -1432,7 +1455,11 @@ const PatrolUniformAndEquipment = ({ session, userID, allowed }) => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={deletePrompted} onHide={promptDeleteCancel}>
+      <Modal
+        className="ProfileModal"
+        show={deletePrompted}
+        onHide={promptDeleteCancel}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Deleting Patrol Uniform and Equipment</Modal.Title>
         </Modal.Header>

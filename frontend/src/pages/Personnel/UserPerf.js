@@ -4,14 +4,28 @@ import "./UserProfileEdit.css";
 export default function UserPerf({ session, userID, allowed }) {
   const [userPerf, setUserPerf] = useState([]);
 
-  useEffect(() => {
-    session.get("roster/retrieveEventLogsUser?eventID=" + userID, {}, {}, true).then((resp) => {
-      if (resp.status === 200) {
+  const [sortedPerf, setSortedPerf] = useState([]);
 
-        setUserPerf(resp.data);
-      }
-    })
+  useEffect(() => {
+    session
+      .get("roster/retrieveEventLogsUser?eventID=" + userID, {}, {}, true)
+      .then((resp) => {
+        if (resp.status === 200) {
+          setUserPerf(resp.data);
+        }
+      });
   }, []);
+
+  useEffect(() => {
+    let temp = [...userPerf];
+    temp
+      .sort(function (a, b) {
+        return new Date(a.event.startDate) - new Date(b.event.startDate);
+      })
+      .reverse();
+    setSortedPerf(temp);
+  }, [userPerf]);
+
   return (
     <>
       <div className="card">
@@ -46,20 +60,27 @@ export default function UserPerf({ session, userID, allowed }) {
                 </tr>
               </thead>
 
-              <tbody >
-                {userPerf.map((row) => (
-
+              <tbody>
+                {sortedPerf.map((row) => (
                   <tr>
                     <td className="tdbreak">{row.event.eventName}</td>
-                    <td className="tdbreak">{row.area === null ? "Unassigned" : row.area}</td>
-                    <td className="tdbreak">{row.event.startDate.substring(0, 10)}</td>
+                    <td className="tdbreak">
+                      {row.area === null ? "Unassigned" : row.area}
+                    </td>
+                    <td className="tdbreak">
+                      {row.event.startDate.substring(0, 10)}
+                    </td>
                     <td className="tdbreak">{row.role}</td>
-                    <td className="tdbreak">{row.timestampRostered.substring(0, 10)}</td>
-                    <td className="tdbreak">{row.attendance === null ? "Not specified" : row.attendance}</td>
+                    <td className="tdbreak">
+                      {row.timestampRostered.substring(0, 10)}
+                    </td>
+                    <td className="tdbreak">
+                      {row.attendance === null
+                        ? "Not specified"
+                        : row.attendance}
+                    </td>
                   </tr>
-
                 ))}
-
               </tbody>
             </table>
           </div>

@@ -126,7 +126,11 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
         </div>
       </div>
 
-      <Modal show={editPrompted} onHide={promptEditCancel}>
+      <Modal
+        className="ProfileModal"
+        show={editPrompted}
+        onHide={promptEditCancel}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Editing Roles</Modal.Title>
         </Modal.Header>

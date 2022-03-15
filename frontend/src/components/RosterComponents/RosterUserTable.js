@@ -31,8 +31,8 @@ const RosterUserTable = ({
           </Link>
         </td>
         <td className="userText">{rosteredUser.area === null? "Area Not Set": rosteredUser.area.areaname}</td>
-        <td className="userText">{rosteredUser.comment === null? "": rosteredUser.comment}</td>
         <td className="userText">{rosteredUser.user.trainer ? "✓" : " "}</td>
+        <td className="userText">{rosteredUser.comment === null? "": rosteredUser.comment}</td>
         <td className="userText">
           {rosteredUser.timestampSubrequest !== "1970-01-01T00:00:00"
             ? "✓"

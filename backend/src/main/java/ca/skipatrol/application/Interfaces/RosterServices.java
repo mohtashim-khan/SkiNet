@@ -7,6 +7,7 @@ import ca.skipatrol.application.models.User;
 import com.google.gson.JsonObject;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,5 +23,6 @@ public interface RosterServices {
     int UpdateEvent(Event event, User actionUser);
     List<EventLog> RetrieveEventLogsByEventID(UUID eventID);
     List<EventLog> RetrieveEventLogsByUserID(UUID userID);
+    HashSet<UUID> RetrieveEventIDsByUserID(UUID userID);
     int BulkUpdateEventsByDateFull(LocalDateTime startDate, LocalDateTime endDate, JsonObject requestBody, User actionUser);
 }

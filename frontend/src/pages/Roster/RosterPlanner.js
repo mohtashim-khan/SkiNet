@@ -180,9 +180,9 @@ const RosterPlanner = ({ session }) => {
             };
 
             session
-              .get("roster/retrieveEventLogsUser?eventID=" + session.session_data().userID, {}, {}, true)
-              .then((EventLogsResponse) => {
-                if (EventLogsResponse.status === 200) {
+              .get("roster/retrieveEventIDsUser?userID=" + session.session_data().userID, {}, {}, true)
+              .then((EventIDsResponse) => {
+                if (EventIDsResponse.status === 200) {
 
                   response.data._embedded.events.forEach((event) => {
 
@@ -200,8 +200,8 @@ const RosterPlanner = ({ session }) => {
                     else
                     {
 
-                      EventLogsResponse.data.every(eventLog => {
-                        if (event.eventID === eventLog.event.eventID && eventLog.role !== "UNAVAILABLE") {
+                      EventIDsResponse.data.every(eventID => {
+                        if (event.eventID === eventID) {
                           backgroundColor = "#228B22";
                           return false;
                         }

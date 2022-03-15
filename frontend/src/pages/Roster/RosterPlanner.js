@@ -50,6 +50,8 @@ import {
   EditBulk,
   printSignInSheet,
 } from "../../components";
+import { GiTurtleShell } from "react-icons/gi";
+import { FaLastfmSquare } from "react-icons/fa";
 
 const RosterPlanner = ({ session }) => {
   const [activeDateTitle, setActiveDateTitle] = useState("");
@@ -186,16 +188,29 @@ const RosterPlanner = ({ session }) => {
 
                     let backgroundColor = "#0047AB";
 
-                    EventLogsResponse.data.forEach(eventLog => {
+                    let currentDate = new Date();
+                    let eventDate = new Date(event.startDate);
 
-                      if (event.eventID === eventLog.event.eventID && eventLog.role !== "UNAVAILABLE") {
-                        backgroundColor = "#228B22";
-                      }
+                    if(eventDate < currentDate)
+                    {
+                      backgroundColor = "#696969";
 
-                      
+                    }
 
+                    else
+                    {
 
-                    });
+                      EventLogsResponse.data.every(eventLog => {
+                        if (event.eventID === eventLog.event.eventID && eventLog.role !== "UNAVAILABLE") {
+                          backgroundColor = "#228B22";
+                          return false;
+                        }
+                        return true;
+                      });
+
+                    }
+
+                    
                     event["backgroundColor"] = backgroundColor;
                     events = [...events, renameKeys(event, newKeyNames)];
                     setTotalShifts(events);

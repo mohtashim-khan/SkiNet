@@ -56,13 +56,19 @@ public class RosterController {
         JsonObject eventLogJSON = JsonParser.parseString(subRequestString).getAsJsonObject();
         EventLog eventLog = rosterServices.ParseEventLogJson(eventLogJSON);
 
-        if (principal != null)
-            code = rosterServices.AddSubRequest(eventLog, userRepository.findByUsername(principal.getName()).get());
+        try {
+            if (principal != null)
+                code = rosterServices.AddSubRequest(eventLog, userRepository.findByUsername(principal.getName()).get());
 
-        if (code == 204)
-            return ResponseEntity.status(HttpStatus.OK).build();
-        else
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            if (code == 204)
+                return ResponseEntity.status(HttpStatus.OK).build();
+            else
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        catch (Exception ex)
+        {
+            return new ResponseEntity(ex.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "customapi/roster/removeUserEventLog", method = RequestMethod.PUT)

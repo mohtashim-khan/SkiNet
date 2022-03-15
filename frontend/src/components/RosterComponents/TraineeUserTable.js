@@ -18,6 +18,7 @@ const TraineeUserTable = ({ currentShift, setCurrentShift, setProxySelect, train
             <tr key={i++}>
                 <td className='userText'><Link to={"/personnel/user/" + traineeUser.user.userID}>{traineeUser.user.firstName + " " + traineeUser.user.lastName}</Link></td>
                 <td className='userText'>{traineeUser.area === null ? "Area Not Set" : traineeUser.area.areaname}</td>
+                <td className='userText'>{traineeUser.comment === null ? "" : traineeUser.comment}</td>
                 <td className='userText'>{traineeUser.shadowing}</td>
                 <td className='userText'>{traineeUser.timestampSubrequest !== "1970-01-01T00:00:00"
                     ? "✓"
@@ -83,6 +84,7 @@ const TraineeUserTable = ({ currentShift, setCurrentShift, setProxySelect, train
                         <tr>
                             <th>Name</th>
                             <th>Area</th>
+                            <th>Comment</th>
                             <th>Trainer</th>
                             <th>SubRequest</th>
                             <th>Attendance</th>

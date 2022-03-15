@@ -172,7 +172,6 @@ public class RosterServicesImpl implements RosterServices {
         else
         {
             EventLog userEventLog = userEventLogReturn.get();
-
             // if already sub request they have to be de sub requested
             if (!userEventLog.getTimestampRostered().equals(minDate))
             {
@@ -222,8 +221,7 @@ public class RosterServicesImpl implements RosterServices {
                             }
                             else //check if user exists and await result
                             {
-                                EventLog updateToSub = existingEventLogs.stream().filter(x -> x.getUser().equals(eventLog.getUser())).findFirst().get();
-                                updateToSub.setTimestampSubrequest(LocalDateTime.now());
+                                userEventLog.setTimestampSubrequest(LocalDateTime.now());
 
                                 AddActionToActionLog("Sub Requested by " + actionUser.getUsername().toString(), actionUser, event);
                                 return 204;

@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -36,7 +39,7 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
     @Order(value = 1)
     public void onApplicationEvent(ApplicationReadyEvent event) {
         Optional<Award> awardLookup;
-        for(String name : awardDefaults) {
+        for (String name : awardDefaults) {
             awardLookup = this.awardRepository.findByDescription(name);
             if (awardLookup.isEmpty()) {
                 Award testAward = new Award(name);
@@ -45,7 +48,7 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
         }
 
         Optional<Brand> brandLookup;
-        for(String name : brandDefaults) {
+        for (String name : brandDefaults) {
             brandLookup = this.brandRepository.findByDescription(name);
             if (brandLookup.isEmpty()) {
                 Brand brand = new Brand(name);
@@ -54,7 +57,7 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
         }
 
         Optional<Discipline> disciplineLookup;
-        for(String name : disciplineDefaults) {
+        for (String name : disciplineDefaults) {
             disciplineLookup = this.disciplineRepository.findByDescription(name);
             if (disciplineLookup.isEmpty()) {
                 Discipline discipline = new Discipline(name);
@@ -63,25 +66,25 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
         }
 
         Optional<Size> sizeLookup;
-        for(int i = 0; i < sizeDefaults.length; i++) {
+        for (int i = 0; i < sizeDefaults.length; i++) {
             sizeLookup = this.sizeRepository.findByDescription(sizeDefaults[i]);
-            if (sizeLookup.isEmpty()){
+            if (sizeLookup.isEmpty()) {
                 Size size = new Size(sizeDefaults[i], i);
                 this.sizeRepository.save(size);
             }
         }
 
         Optional<Season> seasonLookup;
-        for(int i = 1; i < seasonDefaults.length; i++) {
+        for (int i = 1; i < seasonDefaults.length; i++) {
             seasonLookup = this.seasonRepository.findByDescription(seasonDefaults[i]);
-            if (seasonLookup.isEmpty()){
+            if (seasonLookup.isEmpty()) {
                 Season season = new Season(seasonDefaults[i], i);
                 this.seasonRepository.save(season);
             }
         }
 
         Optional<OperationalEvent> operationalEventLookup;
-        for(String name : operationalEventDefaults) {
+        for (String name : operationalEventDefaults) {
             operationalEventLookup = this.operationalEventRepository.findByDescription(name);
             if (operationalEventLookup.isEmpty()) {
                 OperationalEvent operationalEvent = new OperationalEvent(name);
@@ -90,7 +93,7 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
         }
 
         Optional<Conditions> conditionLookup;
-        for(String name : conditionDefaults) {
+        for (String name : conditionDefaults) {
             conditionLookup = this.conditionsRepository.findByDescription(name);
             if (conditionLookup.isEmpty()) {
                 Conditions conditions = new Conditions(name);
@@ -99,10 +102,11 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
         }
 
         Optional<Topic> topicLookup;
-        for(String name : topicDefaults) {
-            topicLookup = this.topicRepository.findByDescription(name);
+        for (Pair<String, Integer> topicPair : topicDefaults) {
+            topicLookup = this.topicRepository.findByDescription(topicPair.getFirst());
             if (topicLookup.isEmpty()) {
-                Topic topic = new Topic(name);
+                Topic topic = new Topic(topicPair.getFirst());
+                topic.setSequence(topicPair.getSecond().longValue());
                 this.topicRepository.save(topic);
             }
         }
@@ -180,16 +184,16 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             "Poor"
     };
 
-    private String[] topicDefaults = {
-            "News / Announcements",
-            "Weekend Reports",
-            "LLSR Snow Safety Operational Information",
-            "LLSR Policies",
-            "CSP LL Training",
-            "CSP LL Handbook",
-            "Winter Special Events",
-            "CSP LL APL Roles",
-            "CSP LL Awards",
-            "CSP LL Social Events"
-    };
+    private List<Pair<String, Integer>> topicDefaults = new ArrayList<>(List.of(
+            Pair.of("News / Announcements", 0),
+            Pair.of("Weekend Reports", 1),
+            Pair.of("LLSR Snow Safety Operational Information", 2),
+            Pair.of("LLSR Policies", 3),
+            Pair.of("CSP LL Handbook", 4),
+            Pair.of("CSP LL Training", 5),
+            Pair.of("CSP LL APL Roles", 6),
+            Pair.of("CSP LL Awards", 7),
+            Pair.of("CSP LL Social Events", 8),
+            Pair.of("Winter Special Events", 9)
+    ));
 }

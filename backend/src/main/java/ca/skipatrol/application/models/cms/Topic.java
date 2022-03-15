@@ -22,6 +22,11 @@ public class Topic {
     @Getter
     @Setter
     @Column(unique = true, nullable = false)
+    private Long sequence;
+
+    @Getter
+    @Setter
+    @Column(unique = true, nullable = false)
     private String description;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "topic", cascade = CascadeType.ALL)

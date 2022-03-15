@@ -31,15 +31,19 @@ const NewsBulletinPage = ({ session }) => {
 
   const POSTS_PER_PAGE = 5;
 
-  useEffect(() => {
-    session
-          .get("topics")
-          .then((resp) => {
-              if (resp.status == 200) {
-                  setAvailableTopics(resp.data._embedded.topics);
-              }
-          });
-  }, [setAvailableTopics]);
+    useEffect(() => {
+        session
+            .get("topics")
+            .then((resp) => {
+                if (resp.status == 200) {
+                    const topics = resp.data._embedded.topics;
+                    topics.sort((a, b) => {
+                        return a.sequence > b.sequence ? 1 : -1;
+                    });                    
+                    setAvailableTopics(topics);
+                }
+            });
+    }, [setAvailableTopics]);
 
   function getPosts() {
     session
@@ -176,9 +180,7 @@ const NewsBulletinPage = ({ session }) => {
                     <a href="#">Cancel Search</a>
                   </small>{" "}
                 </>
-              ) : (
-                "News & Announcements"
-              )}{" "}
+              ) : (<></>)}{" "}
             </h4>
             {posts.map((post) => (
               <Card className="mb-2">

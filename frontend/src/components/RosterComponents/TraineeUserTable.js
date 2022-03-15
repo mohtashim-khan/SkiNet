@@ -49,17 +49,49 @@ const TraineeUserTable = ({ currentShift, setCurrentShift, setProxySelect, train
                     <>
                         <td>
                             <div style={{ display: 'flex' }}>
-                                <AssignArea currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} session={session} />
+                                <AssignArea
+                                    currentShift={currentShift}
+                                    setCurrentShift={setCurrentShift}
+                                    setProxySelect={setProxySelect}
+                                    user={traineeUser}
+                                    username={session_data.username}
+                                    session={session}
+                                    shiftInfo={shiftInfo}
+                                />
                                 <AssignTrainer currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} />
-                                <Attendance currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} />
-                                <Comment currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser} />
-                                <RemoveUser currentShift={currentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} />
+                                <Attendance
+                                    currentShift={currentShift}
+                                    setCurrentShift={setCurrentShift}
+                                    setProxySelect={setProxySelect}
+                                    user={traineeUser}
+                                    username={session_data.username}
+                                    session={session}
+                                    shiftInfo={shiftInfo}
+                                />
+                                <Comment
+                                    currentShift={currentShift}
+                                    setProxySelect={setProxySelect}
+                                    user={traineeUser}
+                                    username={session_data.username}
+                                    session={session}
+                                    session_data={session.session_data()}
+                                    shiftInfo={shiftInfo}
+                                />
+                                <RemoveUser
+                                    currentShift={currentShift}
+                                    setProxySelect={setProxySelect}
+                                    user={traineeUser}
+                                    username={session_data.username}
+                                    session={session}
+                                    session_data={session.session_data()}
+                                    shiftInfo={shiftInfo}
+                                />
                             </div>
 
                         </td>
                     </>
                     :
-                    <> 
+                    <>
                         <td></td>
                     </>
                 }

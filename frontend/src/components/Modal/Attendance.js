@@ -122,7 +122,7 @@ const Attendance = ({ currentShift, setProxySelect, user, session, shiftInfo }) 
         <div>
             {openBtn}
             <Modal isOpen={attendanceModal} toggle={() => toggle(false)} className="">
-                <ModalHeader close={closeBtn}>{user.firstName}  {user.lastName}</ModalHeader>
+                <ModalHeader close={closeBtn}>Attendance</ModalHeader>
                 <ModalBody onSubmit={(e) => editAttendance(e)} >
                     <Form>
                         <FormGroup>

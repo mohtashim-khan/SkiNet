@@ -499,6 +499,7 @@ const RosterPlanner = ({ session }) => {
                           setCurrentShift={setCurrentShift}
                           AssignAreaModal={AssignAreaModal}
                           setAssignAreaModal={setAssignAreaModal}
+                          setProxySelect={setProxySelect}
                           traineeList={traineeList}
                           session_data={session.session_data()}
                           session={session}

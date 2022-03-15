@@ -366,10 +366,15 @@ public class RosterServicesImpl implements RosterServices {
         {
             if (dayOfWeeks.isEmpty() || dayOfWeeks.contains(event.getStartDate().getDayOfWeek()))
             {
+                if (eventUpdate.getEventName() != null && !eventUpdate.getEventName().isEmpty())
+                    event.setEventName((eventUpdate.getEventName()));
+                if (eventUpdate.getHlUser() != null && !eventUpdate.getHlUser().isEmpty())
+                    event.setHlUser(eventUpdate.getHlUser());
+
                 event.setMinPatrollers(eventUpdate.getMinPatrollers());
                 event.setMaxPatrollers(eventUpdate.getMaxPatrollers());
                 event.setMaxTrainees(eventUpdate.getMaxTrainees());
-                event.setHlUser(eventUpdate.getHlUser());
+
                 UpdateEvent(event, actionUser);
             }
         }

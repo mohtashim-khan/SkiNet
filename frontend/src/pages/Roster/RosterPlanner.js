@@ -50,6 +50,8 @@ import {
   EditBulk,
   printSignInSheet,
 } from "../../components";
+import { GiTurtleShell } from "react-icons/gi";
+import { FaLastfmSquare } from "react-icons/fa";
 
 const RosterPlanner = ({ session }) => {
   const [activeDateTitle, setActiveDateTitle] = useState("");
@@ -103,6 +105,7 @@ const RosterPlanner = ({ session }) => {
   const [BulkEventDeleteModal, setBulkEventDeleteModal] = useState(false);
   const [BulkEditModal, setBulkEditModal] = useState(false);
 
+
   const [AddEventDetailsVisibility, setAddEventDetailsVisibility] =
     useState(false);
 
@@ -133,6 +136,10 @@ const RosterPlanner = ({ session }) => {
 
 
 
+  function populateUserEventLogs() {
+
+
+  }
 
 
   function renameKeys(obj, newKeys) {
@@ -148,6 +155,8 @@ const RosterPlanner = ({ session }) => {
     if (Updater) {
       const startDate = args.start;
       const endDate = args.end;
+
+
 
       //Used To Solve Bug where event at beginning Is not fetched. this is a backend oversight.
       var hackyStartDate = new Date(startDate);
@@ -170,12 +179,55 @@ const RosterPlanner = ({ session }) => {
               eventName: "title",
             };
 
-            response.data._embedded.events.forEach((event) => {
-              events = [...events, renameKeys(event, newKeyNames)];
-            });
+            session
+              .get("roster/retrieveEventIDsUser?userID=" + session.session_data().userID, {}, {}, true)
+              .then((EventIDsResponse) => {
+                if (EventIDsResponse.status === 200) {
 
-            setTotalShifts(events);
-            successCb(events);
+                  response.data._embedded.events.forEach((event) => {
+
+                    let backgroundColor = "#0047AB";
+
+                    let currentDate = new Date();
+                    let eventDate = new Date(event.startDate);
+
+                    if(eventDate < currentDate)
+                    {
+                      backgroundColor = "#696969";
+
+                    }
+
+                    else
+                    {
+
+                      EventIDsResponse.data.every(eventID => {
+                        if (event.eventID === eventID) {
+                          backgroundColor = "#228B22";
+                          return false;
+                        }
+                        return true;
+                      });
+
+                    }
+
+                    
+                    event["backgroundColor"] = backgroundColor;
+                    events = [...events, renameKeys(event, newKeyNames)];
+                    setTotalShifts(events);
+                    successCb(events);
+
+                  });
+
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+
+
+
+
+
           } else {
             failureCb(response.status);
           }
@@ -259,8 +311,8 @@ const RosterPlanner = ({ session }) => {
               datesSet={onDateSetEvent}
               events={(Updater) ? (args, successCb, failureCb) => refreshEvents(args, successCb, failureCb) : totalShifts}
               eventClick={(e) => {
+
                 selectShiftHandler(e, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session) //Specifies the handler that is called when an shift is clicked//Specifies the handler that is called when an shift is clicked
-                // history.push('/roster/' + e.event.id) - TODO: do not see the point of this history push just yet
               }}
               select={(e) =>
                 createShiftHandler(
@@ -284,10 +336,10 @@ const RosterPlanner = ({ session }) => {
                       session.session_data().user_type === "SYSTEM_ADMIN" && (
                         <>
 
-                          <EditBulk currentShift={currentShift} BulkEditModal={BulkEditModal} setBulkEditModal={setBulkEditModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session = {session} />
+                          <EditBulk currentShift={currentShift} BulkEditModal={BulkEditModal} setBulkEditModal={setBulkEditModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session={session} />
 
 
-                          <DeleteBulk BulkEventDeleteModal={BulkEventDeleteModal} setBulkEventDeleteModal={setBulkEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} session = {session}/>
+                          <DeleteBulk BulkEventDeleteModal={BulkEventDeleteModal} setBulkEventDeleteModal={setBulkEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} session={session} />
                         </>
                       )}
                   </div>

@@ -18,6 +18,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -186,5 +187,14 @@ public class RosterController {
 
         return new ResponseEntity(eventLogs, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "customapi/roster/retrieveEventIDsUser", method = RequestMethod.GET)
+    public ResponseEntity<Object> RetrieveEventIDsByUserID(@RequestParam UUID userID)
+    {
+        HashSet<UUID> eventIDs = rosterServices.RetrieveEventIDsByUserID(userID);
+
+        return new ResponseEntity(eventIDs, HttpStatus.OK);
+    }
+
 
 }

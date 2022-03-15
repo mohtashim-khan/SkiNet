@@ -45,8 +45,8 @@ const DeleteShift = ({BulkEventDeleteModal, setBulkEventDeleteModal, currentShif
             }
         );
         //Setting on and off of pop up
-        setStartDate((currentShift)?currentShift.event.start: new Date());
-        setEndDate((currentShift)?currentShift.event.end: new Date());
+        setStartDate(new Date());
+        setEndDate(new Date());
         setSunday(false);
         setMonday(false);
         setTuesday(false);

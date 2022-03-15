@@ -73,6 +73,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             role: (user.trainer === false) ? "TRAINEE" : "ROSTERED",
             comment: eventInfo.comment,
             email: user.email,
+            attendance: "ON_TIME"
         };
 
         session

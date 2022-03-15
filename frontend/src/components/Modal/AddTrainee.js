@@ -76,6 +76,7 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
             role: "TRAINEE",
             comment: eventInfo.comment,
             email: user.email,
+            attendance: "ON_TIME"
         };
 
         session
@@ -133,7 +134,7 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
 
             for(let i = 0; i< Users.length; i++)
             {
-                userOptionRender.push(<option value={i}>{Users[i].firstName+Users[i].lastName}</option>)
+                userOptionRender.push(<option value={i}>{Users[i].firstName+" "+Users[i].lastName}</option>)
             }
             return userOptionRender;
         }

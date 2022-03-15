@@ -31,6 +31,7 @@ const SignUpShift = ({ currentShift, setList, setShiftInfo, setRosteredList, set
                 role: (session_data.trainer === false) ? "TRAINEE" : "ROSTERED",
                 comment: "",
                 email: session_data.email,
+                attendance: "ON_TIME"
             };
 
             session

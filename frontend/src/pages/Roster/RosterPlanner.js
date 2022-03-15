@@ -287,12 +287,7 @@ const RosterPlanner = ({ session }) => {
                           <EditBulk currentShift={currentShift} BulkEditModal={BulkEditModal} setBulkEditModal={setBulkEditModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session = {session} />
 
 
-                          <button
-                            type="button"
-                            className="myButton btn btn-danger float-start d-flex-inline"
-                          >
-                            Bulk Delete Shifts
-                          </button>
+                          <DeleteBulk BulkEventDeleteModal={BulkEventDeleteModal} setBulkEventDeleteModal={setBulkEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} session = {session}/>
                         </>
                       )}
                   </div>

@@ -273,7 +273,7 @@ const EditShift = ({ BulkEditModal, setBulkEditModal, currentShift, setProxySele
                     <Form onSubmit={(e) => EditEvent(e)} >
                         <FormGroup>
                             <Label for="eventName">Event Name</Label>
-                            <Input type="text" name="event_name" onChange={onChange} value={eventInfo.event_name} required />
+                            <Input type="text" name="event_name" onChange={onChange} value={eventInfo.event_name}/>
                         </FormGroup>
                         <FormGroup>
                             <Label for="min_patrollers">Min Patrollers</Label>

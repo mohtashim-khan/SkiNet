@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, ModalHeader, ModalBody} from 'reactstrap'
+import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { CustomInput, Form, FormGroup, Label, Input } from 'reactstrap';
-import{Modal as ReactBootStrapModal} from 'react-bootstrap';
+import { Modal as ReactBootStrapModal } from 'react-bootstrap';
 
 
 
@@ -14,6 +14,10 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
     const [failModal, setFailModal] = useState(false);
     const failModalShow = () => setFailModal(true);
     const failModalClose = () => setFailModal(false);
+
+    const [failReselectModal, setFailReselectModal] = useState(false);
+    const failReselectModalShow = () => setFailReselectModal(true);
+    const failReselectModalClose = () => setFailReselectModal(false);
 
     const [eventInfo, setEventInfo] = useState(
         {
@@ -100,13 +104,13 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
 
             let startDate = currentShift ? currentShift.event.start : "";
             let endDate = currentShift ? currentShift.event.end : "";
-
-            const params = new URLSearchParams({
-                startDate: startDate.toISOString(),
-                endDate: endDate.toISOString(),
-            });
-
             try {
+                const params = new URLSearchParams({
+                    startDate: startDate.toISOString(),
+                    endDate: endDate.toISOString(),
+                });
+
+
                 //Custom Query with Action Log here
                 session.put('roster/updateEvent', article, params.toString(), true)
                     .then(response => {
@@ -162,7 +166,7 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
             catch (err) {
                 console.log(err);
                 toggle(false);
-                failModalShow();
+                failReselectModalShow();
             }
 
 
@@ -232,6 +236,17 @@ const EditShift = ({ EditShiftModal, setEditShiftModal, currentShift, setProxySe
                 </ReactBootStrapModal.Header>
                 <ReactBootStrapModal.Footer>
                     <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={failReselectModal} onHide={failReselectModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Please Reselect Event to Edit</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={failReselectModalClose}>
                         Close
                     </Button>
                 </ReactBootStrapModal.Footer>

@@ -5,6 +5,7 @@ import { CustomInput, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { UserDescription } from '../../components/Elements/Elements'
+import{Modal as ReactBootStrapModal} from 'react-bootstrap';
 
 
 const EditShift = ({ BulkEditModal, setBulkEditModal, currentShift, setProxySelect, shiftInfo, setUpdater, setCurrentShift, session }) => {
@@ -20,6 +21,15 @@ const EditShift = ({ BulkEditModal, setBulkEditModal, currentShift, setProxySele
     const [endDate, setEndDate] = useState(new Date());
     const [eventsAltered, setEventsAltered] = useState([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
+    
 
     const [eventInfo, setEventInfo] = useState(
         {
@@ -93,8 +103,7 @@ const EditShift = ({ BulkEditModal, setBulkEditModal, currentShift, setProxySele
     }
 
     const EditEvent = async (e) => {
-        // //Refer to
-        // //https://www.w3schools.com/sql/sql_autoincrement.asp
+        
         e.preventDefault();
 
         const weekDays = [];
@@ -162,10 +171,12 @@ const EditShift = ({ BulkEditModal, setBulkEditModal, currentShift, setProxySele
             .then(response => {
                 //if error from database
                 setUpdater(true);
+                successModalShow();
             })
             .catch((error) => {
                 setEventsAltered([]);
                 console.log(error);
+                failModalShow();
             });
     }
 
@@ -277,15 +288,15 @@ const EditShift = ({ BulkEditModal, setBulkEditModal, currentShift, setProxySele
                         </FormGroup>
                         <FormGroup>
                             <Label for="min_patrollers">Min Patrollers</Label>
-                            <Input min={0} max={eventInfo.max_patrollers} type="number" name="min_patrollers" onChange={onChange} value={eventInfo.min_patrollers} />
+                            <Input min={0} max={eventInfo.max_patrollers} type="number" name="min_patrollers" onChange={onChange} value={eventInfo.min_patrollers} required />
                         </FormGroup>
                         <FormGroup>
                             <Label for="max_patrollers">Max Patrollers</Label>
-                            <Input min={0} type="number" name="max_patrollers" onChange={onChange} value={eventInfo.max_patrollers} />
+                            <Input min={0} type="number" name="max_patrollers" onChange={onChange} value={eventInfo.max_patrollers} required />
                         </FormGroup>
                         <FormGroup>
                             <Label for="max_trainees">Max Trainees</Label>
-                            <Input min={0} type="number" name="max_trainees" onChange={onChange} value={eventInfo.max_trainees} />
+                            <Input min={0} type="number" name="max_trainees" onChange={onChange} value={eventInfo.max_trainees} required/>
                         </FormGroup>
                         <FormGroup>
                             <Label for="all_day" check>Urgent Day<br /></Label>
@@ -293,11 +304,11 @@ const EditShift = ({ BulkEditModal, setBulkEditModal, currentShift, setProxySele
                         </FormGroup>
                         <FormGroup>
                             <UserDescription>From: </UserDescription>
-                            <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                            <DatePicker selected={startDate} onChange={date => setStartDate(date)}/>
                         </FormGroup>
                         <FormGroup>
                             <UserDescription>To: </UserDescription>
-                            <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
+                            <DatePicker selected={endDate} onChange={date => setEndDate(date)}/>
                         </FormGroup>
                         <FormGroup check inline>
                             <Label check>
@@ -344,6 +355,28 @@ const EditShift = ({ BulkEditModal, setBulkEditModal, currentShift, setProxySele
                     </Form>
                 </ModalBody>
             </Modal>
+
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Bulk Edit Success!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Editing Events</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </div>
     );
 

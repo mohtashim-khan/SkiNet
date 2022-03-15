@@ -188,6 +188,7 @@ const MainAddEvent = ({
       let startDate = new Date(selectedDate.startStr);
       startDate.setDate(startDate.getDate()+1);
       startDate.setHours(0, 0, 0);
+      startDate.setHours(startDate.getHours()-6);
       let storeStartDate = startDate ;
       let storeEndDate = startDate;
       storeStartDate = new Date(

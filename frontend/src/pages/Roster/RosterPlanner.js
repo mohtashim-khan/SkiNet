@@ -149,8 +149,13 @@ const RosterPlanner = ({ session }) => {
       const startDate = args.start;
       const endDate = args.end;
 
+      //Used To Solve Bug where event at beginning Is not fetched. this is a backend oversight.
+      var hackyStartDate = new Date(startDate);
+      hackyStartDate.setHours(-6);
+      hackyStartDate.setMinutes(-1);
+
       const params = new URLSearchParams({
-        startDate: startDate.toISOString(),
+        startDate: hackyStartDate.toISOString(),
         endDate: endDate.toISOString(),
       });
 
@@ -279,12 +284,9 @@ const RosterPlanner = ({ session }) => {
                       session.session_data().user_type === "SYSTEM_ADMIN" && (
                         <>
 
-                          <button
-                            type="button"
-                            class="myButton btn btn-info float-start d-flex-inline"
-                          >
-                            Bulk Edit Shifts
-                          </button>
+                          <EditBulk currentShift={currentShift} BulkEditModal={BulkEditModal} setBulkEditModal={setBulkEditModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session = {session} />
+
+
                           <button
                             type="button"
                             className="myButton btn btn-danger float-start d-flex-inline"

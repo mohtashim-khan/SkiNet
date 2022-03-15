@@ -19,7 +19,7 @@ const RequestSub = ({currentShift, setProxySelect, user, username, session}) => 
 
         let article = 
                     {
-                        area: user.area.areaID,
+                        area: (user.area !== null)? user.area.areaID:null,
                         attendance: user.attendance,
                         comment: user.comment,
                         email: user.email,

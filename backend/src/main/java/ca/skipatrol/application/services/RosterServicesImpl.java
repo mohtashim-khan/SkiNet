@@ -78,9 +78,11 @@ public class RosterServicesImpl implements RosterServices {
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         //check if user exists and await result
-        if (existingEventLogs.stream().anyMatch(x -> x.getUser().getUserID() == eventLog.getUser().getUserID())){
-            AddActionToActionLog(actionUser.getUsername() + " already in table. No action.", actionUser, event);
-            return 204;
+        if (eventLog.getUser() != null){
+            if (existingEventLogs.stream().anyMatch(x -> x.getUser().getUserID() == eventLog.getUser().getUserID())) {
+                AddActionToActionLog(actionUser.getUsername() + " already in table. No action.", actionUser, event);
+                return 204;
+            }
         }
 
         //adding a shadow or unavailable no questions

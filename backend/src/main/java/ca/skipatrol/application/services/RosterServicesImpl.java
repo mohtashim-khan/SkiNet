@@ -49,6 +49,8 @@ public class RosterServicesImpl implements RosterServices {
         eventLog.setTrainer(gson.fromJson(eventLogJSON.get("trainer"), Boolean.class));
         eventLog.setRole(gson.fromJson(eventLogJSON.get("role"), EventRole.class));
         eventLog.setAttendance(gson.fromJson(eventLogJSON.get("attendance"), EventAttendance.class));
+        eventLog.setName(gson.fromJson(eventLogJSON.get("name"), String.class));
+
 
         UUID eventID = ParseLastURIPartToUUID(gson.fromJson(eventLogJSON.get("event"), String.class));
         eventLog.setEvent((Event) Hibernate.unproxy(eventRepository.getById(eventID)));
@@ -413,7 +415,8 @@ public class RosterServicesImpl implements RosterServices {
             returnEventLog.setEvent(eventLog.getEvent());
             returnEventLog.setArea(eventLog.getArea());
 
-            returnEventLog.setUser(profileServices.retrieveUserBasic(eventLog.getUser().getUserID()));
+            if(eventLog.getUser() != null)
+                returnEventLog.setUser(profileServices.retrieveUserBasic(eventLog.getUser().getUserID()));
             if(eventLog.getShadowing() != null)
                 returnEventLog.setShadowing(profileServices.retrieveUserBasic(eventLog.getShadowing().getUserID()));
 

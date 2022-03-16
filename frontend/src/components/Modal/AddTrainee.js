@@ -23,7 +23,7 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
             event_id: currentShift?currentShift.event.id:"",
             event_name:  currentShift?currentShift.event.title:"",
             selectUser: "",
-            role: "Trainee",
+            role: "TRAINEE",
             comment: "",
             trainer: 0,
         }

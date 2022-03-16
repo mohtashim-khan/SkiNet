@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { Subtitle, TableCard } from '../Elements/Elements'
 import './Table.css'
 
-const TraineeUserTable = ({ currentShift, setCurrentShift, setProxySelect, traineeList, session_data, session, shiftInfo }) => {
+const TraineeUserTable = ({ currentShift, setCurrentShift, setProxySelect, traineeList, session_data, session, shiftInfo, rosteredList }) => {
 
     const traineeUsersToRender = () => {
         let i = 0;
@@ -58,7 +58,15 @@ const TraineeUserTable = ({ currentShift, setCurrentShift, setProxySelect, train
                                     session={session}
                                     shiftInfo={shiftInfo}
                                 />
-                                <AssignTrainer currentShift={currentShift} setCurrentShift={setCurrentShift} setProxySelect={setProxySelect} user={traineeUser} username={session_data.username} />
+                                <AssignTrainer 
+                                    currentShift={currentShift}
+                                    setCurrentShift={setCurrentShift}
+                                    setProxySelect={setProxySelect}
+                                    user={traineeUser}
+                                    username={session_data.username}
+                                    session={session}
+                                    shiftInfo={shiftInfo}
+                                    rosteredList={rosteredList} />
                                 <Attendance
                                     currentShift={currentShift}
                                     setCurrentShift={setCurrentShift}

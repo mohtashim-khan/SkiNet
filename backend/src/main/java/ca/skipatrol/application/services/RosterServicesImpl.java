@@ -81,7 +81,7 @@ public class RosterServicesImpl implements RosterServices {
 
         //check if user exists and await result
         if (eventLog.getUser() != null){
-            if (existingEventLogs.stream().anyMatch(x -> x.getUser().getUserID() == eventLog.getUser().getUserID())) {
+            if (existingEventLogs.stream().anyMatch(x -> x.getUser() != null && x.getUser().getUserID() == eventLog.getUser().getUserID())) {
                 AddActionToActionLog(actionUser.getUsername() + " already in table. No action.", actionUser, event);
                 return 204;
             }

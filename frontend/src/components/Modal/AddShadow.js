@@ -2,12 +2,23 @@ import React, {useState, useEffect}  from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { Form, FormFeedback, FormGroup, Label, Input } from 'reactstrap';
+import{Modal as ReactBootStrapModal} from 'react-bootstrap';
 
 
-const AddShadow = ({AddShadowModal , setAddShadowModal, currentShift, setProxySelect, userAuth}) => {
+
+const AddShadow = ({AddShadowModal , setAddShadowModal, currentShift, setProxySelect, session, shiftInfo}) => {
 
     const [phonenumberValidation, setPhonenumberValidation] = useState(false);
     const [usernameAvailability, setUsernameAvailability] = useState(false);
+
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
+
 
     const [userInfo, setUserInfo] = useState(
         {
@@ -108,51 +119,63 @@ const AddShadow = ({AddShadowModal , setAddShadowModal, currentShift, setProxySe
     const AddShadow = (e) => {
 
       e.preventDefault();
+
       const article = {
-        event_id: userInfo.event_id,
-        event_name: userInfo.event_name,
-        username: userInfo.shadow_name,
+        event: currentShift.event.extendedProps.eventID,
         name: userInfo.shadow_name,
-        phone_number: userInfo.shadow_phone_number,
-        email: userInfo.shadow_email,
-        user_type: userInfo.user_type,
-        role: userInfo.role,
+        phoneNumber: userInfo.shadow_phone_number,
+        trainer: false,
+        role: "SHADOW",
         comment: userInfo.comment,
-        trainer: userInfo.trainer,
-        action_user: userAuth.username,
-      }
+        email: userInfo.shadow_email,
+        attendance: "ON_TIME"
+    };
 
-      axios.put('/addToEventLog', article)
+
+    session
+        .put("roster/addToEventLog", article, {}, true)
         .then(response => {
-
-          console.log(response);
             //if error from database
-            if(response.status === 204)
-            {
-                //load proxy
+            if (response.status === 200) {
+                
+                //** PROXY SELECT ** /
                 let storeShift = {
                     event: {
                         proxy: 'yes',
-                        id: currentShift.event.id,
-                        title: currentShift.event.title,
-                        start: currentShift.event.start,
-                        end: currentShift.event.end,
-                        startStr: currentShift.event.startStr,
-                        endStr: currentShift.event.endStr,
+                        extendedProps:
+                        {
+                            hlUser: shiftInfo.hl,
+                            minPatrollers: shiftInfo.min_pat,
+                            maxPatrollers: shiftInfo.max_pat,
+                            maxTrainees: shiftInfo.max_trainee,
+                            eventID: currentShift.event.extendedProps.eventID,
+
+
+
+
+                        },
+                        allDay: shiftInfo.all_day,
+                        title: shiftInfo.event_name,
+                        startStr: shiftInfo.startStr,
+
                     }
                 }
 
-                //load events
+                //update Shift infos
                 setProxySelect(storeShift);
-                //Setting on and off of pop up
-                setAddShadowModal(false);
+
+
+                successModalShow();
+
+
             }
-            else{
-                console.log("Error in DB");
+            else {
+                failModalShow();
             }
         })
         .catch((error) => {
-            console.log('error ' + error);
+            console.log("error " + error);
+            failModalShow();
         });
     }
 
@@ -162,21 +185,22 @@ const AddShadow = ({AddShadowModal , setAddShadowModal, currentShift, setProxySe
         //checking if username is available for creation
         if(userInfo.shadow_name !== '')
         {
-            axios.get('/checkAvailability/' + userInfo.shadow_name)
-                .then(response =>
-                {
-                    // If request is good...
-                    if(response.status === 204)
-                    {
-                        setUsernameAvailability(true);
-                    }
-                    else{
-                        setUsernameAvailability(false);
-                    }
-                })
-                .catch((error) => {
-                    setUsernameAvailability(false);
-                });
+            setUsernameAvailability(true);
+
+            // axios.get('/checkAvailability/' + userInfo.shadow_name)
+            //     .then(response =>
+            //     {
+            //         // If request is good...
+            //         if(response.status === 204)
+            //         {
+            //         }
+            //         else{
+            //             setUsernameAvailability(false);
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         setUsernameAvailability(false);
+            //     });
         }
         else{
             setUsernameAvailability(false);
@@ -230,6 +254,28 @@ const AddShadow = ({AddShadowModal , setAddShadowModal, currentShift, setProxySe
                     </Form>
                 </ModalBody>
             </Modal>
+
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Shadow Sign Up Success!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Signing Up Shadow</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </div>
     );
 

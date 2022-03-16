@@ -135,13 +135,6 @@ const RosterPlanner = ({ session }) => {
   }, [Updater, proxySelect, currentShift, dragDropEnable, session]);
 
 
-
-  function populateUserEventLogs() {
-
-
-  }
-
-
   function renameKeys(obj, newKeys) {
     const keyValues = Object.keys(obj).map((key) => {
       const newKey = newKeys[key] || key;
@@ -504,6 +497,7 @@ const RosterPlanner = ({ session }) => {
                           session_data={session.session_data()}
                           session={session}
                           shiftInfo={shiftInfo}
+                          rosteredList = {rosteredList}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (
@@ -581,11 +575,15 @@ const RosterPlanner = ({ session }) => {
                     <Row>
                       <Col sm="12">
                         <ShadowUserTable
-                          currentShift={currentShift}
-                          setCurrentShift={setCurrentShift}
-                          setProxySelect={setProxySelect}
-                          shadowList={shadowList}
-                          userAuth={session.session_data()}
+                          currentShift = {currentShift}
+                          setCurrentShift = {setCurrentShift}
+                          setProxySelect = {setProxySelect}
+                          shadowList = {shadowList}
+                          session_data = {session.session_data()}
+                          session = {session}
+                          shiftInfo = {shiftInfo}
+                          rosteredList = {rosteredList}
+                          traineeList = {traineeList}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (
@@ -595,7 +593,8 @@ const RosterPlanner = ({ session }) => {
                             AddShadowModal={AddShadowModal}
                             setAddShadowModal={setAddShadowModal}
                             setProxySelect={setProxySelect}
-                            userAuth={session.session_data()}
+                            session={session}
+                            shiftInfo={shiftInfo}
                           />
                         ) : (
                           <></>

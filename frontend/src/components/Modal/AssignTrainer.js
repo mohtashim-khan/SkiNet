@@ -1,31 +1,48 @@
-import React, {useState, useEffect}  from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { Form, FormGroup, Label, Input } from 'reactstrap';
+import { Modal as ReactBootStrapModal } from 'react-bootstrap';
 
 
-const AssignTrainer = ({currentShift, setProxySelect, user, username}) => {
+
+const AssignTrainer = ({ currentShift,
+    setCurrentShift,
+    setProxySelect,
+    user,
+    username,
+    session,
+    shiftInfo,
+    rosteredList }) => {
     //state template
 
     const [Users, setUsers] = useState(false);
     const [AssignShadowModal, setAssignShadowModal] = useState(false); // for Edit Shift
 
+    const [successModal, setSuccessModal] = useState(false);
+    const successModalShow = () => setSuccessModal(true);
+    const successModalClose = () => setSuccessModal(false);
+
+    const [failModal, setFailModal] = useState(false);
+    const failModalShow = () => setFailModal(true);
+    const failModalClose = () => setFailModal(false);
+
+
     const [eventInfo, setEventInfo] = useState(
         {
-            event_id: currentShift?currentShift.event.id:"",
-            username:  user?user.username:"",
-            selectedShadow: user?user.shadowing:"",
+            event_id: currentShift ? currentShift.event.id : "",
+            username: user ? user.username : "",
+            selectedShadow: user ? user.shadowing : "",
         }
     );
 
     const toggle = (e) => {
-        if(currentShift)
-        {
+        if (currentShift) {
             setEventInfo(
                 {
-                    event_id: currentShift?currentShift.event.id:"",
-                    username:  user?user.username:"",
-                    selectedShadow: user?user.shadowing:"",
+                    event_id: currentShift ? currentShift.event.id : "",
+                    username: user ? user.username : "",
+                    selectedShadow: user ? user.shadowing : "",
                 }
             );
             //Setting on and off of pop up
@@ -49,52 +66,69 @@ const AssignTrainer = ({currentShift, setProxySelect, user, username}) => {
         // //https://www.w3schools.com/sql/sql_autoincrement.asp
         e.preventDefault();
 
-        const article = {
-            event_id: eventInfo.event_id,
-            username: eventInfo.username,
-            shadowing: eventInfo.selectedShadow,
-            action_user: username,
-        };
-        axios.put('/editShadow', article)
-        .then(response => {
-            //if error from database
-            if(response.status === 204)
-            {
-                //Setting on and off of pop up
-                toggle(false);
-                //load events
-                let storeShift = {
-                    event: {
-                        proxy: 'yes',
-                        id: currentShift.event.id,
-                        title: currentShift.event.title,
-                        start: currentShift.event.start,
-                        end: currentShift.event.end,
-                        startStr: currentShift.event.startStr,
-                        endStr: currentShift.event.endStr,
-                    }
-                }
+        let shadowingUserEventLog = Users[eventInfo.selectedShadow];
+        let shadowingUserLink = session._get_base_url() + "/api/users/" + shadowingUserEventLog.user.userID;
 
-                //load events
-                setProxySelect(storeShift);
-            }
-            else{
-                console.log("Error in DB")
-            }
-        });
+
+        const article = {
+            shadowing: shadowingUserLink,
+        };
+        console.log(eventInfo.selectedArea)
+        session
+            .patch("eventLogs/" + user.eventLogID, article, {}, false)
+            .then(response => {
+                //if error from database
+                if (response.status === 200) {
+
+                    //** PROXY SELECT ** /
+                    let storeShift = {
+                        event: {
+                            proxy: 'yes',
+                            extendedProps:
+                            {
+                                hlUser: shiftInfo.hl,
+                                minPatrollers: shiftInfo.min_pat,
+                                maxPatrollers: shiftInfo.max_pat,
+                                maxTrainees: shiftInfo.max_trainee,
+                                eventID: currentShift.event.extendedProps.eventID,
+
+
+
+
+                            },
+                            allDay: shiftInfo.all_day,
+                            title: shiftInfo.event_name,
+                            startStr: shiftInfo.startStr,
+
+                        }
+                    }
+
+                    //update Shift infos
+                    setProxySelect(storeShift);
+
+
+                    successModalShow();
+
+
+                }
+                else {
+                    failModalShow();
+                }
+            })
+            .catch((error) => {
+                console.log("error " + error);
+                failModalShow();
+            });
     }
 
     const userRender = () => {
         //If it exists and it is greater than 0
-        if(Users.length !== 0 && Users)
-        {
+        if (Users.length !== 0 && Users) {
             let userOptionRender = [];
 
-            for(let i = 0; i< Users.length; i++)
-            {
-              if(Users[i].trainer){
-                userOptionRender.push(<option key={i}>{Users[i].name} #{Users[i].username}:{Users[i].user_type}</option>)
-              }
+            for (let i = 0; i < Users.length; i++) {
+                userOptionRender.push(<option value={i}>{Users[i].user.firstName + " " + Users[i].user.lastName}</option>)
+
             }
             return userOptionRender;
         }
@@ -104,33 +138,24 @@ const AssignTrainer = ({currentShift, setProxySelect, user, username}) => {
 
 
     useEffect(() => {
-        if(AssignShadowModal)
-        {
-            axios.get('/getEventLogInfo/' + eventInfo.event_id)
-            .then(response => {
-              console.log(response.data);
-                // If request is good...
-                setUsers(response.data);
-            })
-            .catch((error) => {
-                console.log('error ' + error);
-            });
+        if (AssignShadowModal) {
+            setUsers(rosteredList);
         }
 
-    }, [AssignShadowModal]);
+    }, [AssignShadowModal, rosteredList]);
 
-    const openBtn = <Button color="warning" className = "mt-1" onClick={() => toggle(true)}>Trainer</Button> //<Button color="primary">ADD TO ROSTER</Button>{' '}
-    const closeBtn = <Button className="close" onClick = {() =>toggle(false)}>Close</Button>;
+    const openBtn = <Button color="warning" className="mt-1" onClick={() => toggle(true)}>Trainer</Button> //<Button color="primary">ADD TO ROSTER</Button>{' '}
+    const closeBtn = <Button className="close" onClick={() => toggle(false)}>Close</Button>;
 
     return (
 
         //put UI objects here
         <>
             {openBtn}
-            <Modal isOpen={AssignShadowModal} toggle={() => toggle(false)} className= "">
-                <ModalHeader  close={closeBtn}>Assign User to Trainer:</ModalHeader>
+            <Modal isOpen={AssignShadowModal} toggle={() => toggle(false)} className="">
+                <ModalHeader close={closeBtn}>Assign User to Trainer:</ModalHeader>
                 <ModalBody>
-                    <Form onSubmit = {(e) => AddRoster(e)} >
+                    <Form onSubmit={(e) => AddRoster(e)} >
                         <FormGroup>
                             <Label for="selectedShadow">Select</Label>
                             <Input type="select" name="selectedShadow" id="exampleSelectMulti" onChange={onChange} size="5" required>
@@ -141,6 +166,28 @@ const AssignTrainer = ({currentShift, setProxySelect, user, username}) => {
                     </Form>
                 </ModalBody>
             </Modal>
+
+            <ReactBootStrapModal show={successModal} onHide={successModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Trainer Assignment Success!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={failModal} onHide={failModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error Assigning Trainer</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={failModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
         </>
     );
 

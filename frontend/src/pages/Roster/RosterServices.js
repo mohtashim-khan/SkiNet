@@ -190,7 +190,7 @@ export const selectShiftHandler = async (
   }
 };
 
-//TODO: Implement this from old code
+//Old Code -- Not Really needed for core functionality
 export const linkShiftHandler = async (
   linkId,
   setCurrentShift,

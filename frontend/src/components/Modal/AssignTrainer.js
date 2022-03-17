@@ -127,7 +127,9 @@ const AssignTrainer = ({ currentShift,
             let userOptionRender = [];
 
             for (let i = 0; i < Users.length; i++) {
-                userOptionRender.push(<option value={i}>{Users[i].user.firstName + " " + Users[i].user.lastName}</option>)
+
+                if(Users[i].user.trainer === true)
+                    userOptionRender.push(<option value={i}>{Users[i].user.firstName + " " + Users[i].user.lastName}</option>)
 
             }
             return userOptionRender;

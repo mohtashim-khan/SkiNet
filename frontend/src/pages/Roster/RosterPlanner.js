@@ -184,14 +184,12 @@ const RosterPlanner = ({ session }) => {
                     let currentDate = new Date();
                     let eventDate = new Date(event.startDate);
 
-                    if(eventDate < currentDate)
-                    {
+                    if (eventDate < currentDate) {
                       backgroundColor = "#696969";
 
                     }
 
-                    else
-                    {
+                    else {
 
                       EventIDsResponse.data.every(eventID => {
                         if (event.eventID === eventID) {
@@ -203,7 +201,7 @@ const RosterPlanner = ({ session }) => {
 
                     }
 
-                    
+
                     event["backgroundColor"] = backgroundColor;
                     events = [...events, renameKeys(event, newKeyNames)];
                     setTotalShifts(events);
@@ -304,8 +302,8 @@ const RosterPlanner = ({ session }) => {
               datesSet={onDateSetEvent}
               events={(Updater) ? (args, successCb, failureCb) => refreshEvents(args, successCb, failureCb) : totalShifts}
               eventClick={(e) => {
+                selectShiftHandler(e, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session); //Specifies the handler that is called when an shift is clicked//Specifies the handler that is called when an shift is clicked
 
-                selectShiftHandler(e, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session) //Specifies the handler that is called when an shift is clicked//Specifies the handler that is called when an shift is clicked
               }}
               select={(e) =>
                 createShiftHandler(
@@ -497,7 +495,7 @@ const RosterPlanner = ({ session }) => {
                           session_data={session.session_data()}
                           session={session}
                           shiftInfo={shiftInfo}
-                          rosteredList = {rosteredList}
+                          rosteredList={rosteredList}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (
@@ -575,15 +573,15 @@ const RosterPlanner = ({ session }) => {
                     <Row>
                       <Col sm="12">
                         <ShadowUserTable
-                          currentShift = {currentShift}
-                          setCurrentShift = {setCurrentShift}
-                          setProxySelect = {setProxySelect}
-                          shadowList = {shadowList}
-                          session_data = {session.session_data()}
-                          session = {session}
-                          shiftInfo = {shiftInfo}
-                          rosteredList = {rosteredList}
-                          traineeList = {traineeList}
+                          currentShift={currentShift}
+                          setCurrentShift={setCurrentShift}
+                          setProxySelect={setProxySelect}
+                          shadowList={shadowList}
+                          session_data={session.session_data()}
+                          session={session}
+                          shiftInfo={shiftInfo}
+                          rosteredList={rosteredList}
+                          traineeList={traineeList}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (

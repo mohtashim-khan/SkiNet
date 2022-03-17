@@ -34,7 +34,7 @@ export async function printSignInSheet(currentShift, list, session) {
 
     var areas = [];
     try {
-      session
+      await session
         .get("areas", {}, {}, false)
         
         .then((response) => {
@@ -56,25 +56,31 @@ export async function printSignInSheet(currentShift, list, session) {
 
     areas.push("");
 
+
     var seperatedList = new Array(areas.length);
     for (var i = 0; i < seperatedList.length; i++) {
       seperatedList[i] = new Array();
     }
     for (let i = 0; i < areas.length; i++) {
       for (let j = 0; j < list.length; j++) {
-        if (list[j].area === areas[i].area && (list[j].role === "TRAINEE" || list[j].role === "ROSTERED" || list[j].role === "SHADOW")) {
-          seperatedList[i].unshift(list[j]);
+        if(list[j].area!==null)
+        {
+          if (list[j].area.areaname === areas[i] && (list[j].role === "TRAINEE" || list[j].role === "ROSTERED" || list[j].role === "SHADOW")) {
+            seperatedList[i].unshift(list[j]);
+          }
         }
-        else if (i === areas.length - 1 && list[j].area === null && list[j].username && (list[j].role === "TRAINEE" || list[j].role === "ROSTERED" || list[j].role === "SHADOW")) {
+
+        if (i === areas.length - 1 && list[j].area === null && list[j].name && (list[j].role === "TRAINEE" || list[j].role === "ROSTERED" || list[j].role === "SHADOW")) {
           seperatedList[areas.length - 1].unshift(list[j]);
         }
+        
       }
     }
 
     for (let i = 0; i < areas.length; i++) {
       var head = [{}];
       var body = new Array();
-      const areaString = areas[i].area;
+      const areaString = areas[i];
       head[0].key = ''
       head[0].area = areaString;
       head[0].lift = 'Lift';
@@ -92,7 +98,7 @@ export async function printSignInSheet(currentShift, list, session) {
         body.push(new Object());
         body[j].key = (j + 1);
         if (seperatedList[i][j]) {
-          const userString = seperatedList[i][j].name + ':' + seperatedList[i][j].phone_number;
+          const userString = (seperatedList[i][j].user !== null) ? seperatedList[i][j].user.firstName+" "+seperatedList[i][j].user.lastName+ ' : ' + seperatedList[i][j].user.phoneNumber : seperatedList[i][j].name + ' : ' + seperatedList[i][j].phoneNumber ;
           body[j].area = userString;
           const commentString = seperatedList[i][j].comment + '';
           body[j].comment = commentString;

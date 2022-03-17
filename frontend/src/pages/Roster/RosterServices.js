@@ -307,7 +307,7 @@ export const linkShiftHandler = async (
   }
 };
 
-//When one of the dates is clicked, allow user to create a new shift
+//When one of the dates is clicked, allow user to create a new shift -- Old Code
 export const createShiftHandler = async (
   selectedDate,
   userAuth,
@@ -328,7 +328,7 @@ export const createShiftHandler = async (
   }
 };
 
-//When one of the dates is clicked, allow user to create a new shift
+//When one of the dates is clicked, allow user to create a new shift -- Old Code
 export const dragDropShift = async (
   e,
   dragDropEnable,

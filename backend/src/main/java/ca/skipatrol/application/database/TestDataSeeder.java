@@ -471,12 +471,11 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                 // TODO: Convert this to saveAll
                                 this.eventRepository.save(test);
                                 eventLookup = Optional.of(test);
-                        }
 
-                        if (userLookup.isPresent() && areaLookup.isPresent()) {
-                                LocalDateTime testTimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
-                                LocalDateTime testTimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
-                                EventLog testEventLog = new EventLog(eventLookup.get(),
+                                if (userLookup.isPresent() && areaLookup.isPresent()) {
+                                        LocalDateTime testTimestampRostered = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
+                                        LocalDateTime testTimestampRequest = LocalDateTime.of(2021, Month.JANUARY, 12, 12, 1);
+                                        EventLog testEventLog = new EventLog(eventLookup.get(),
                                                 userLookup.get(),
                                                 null,
                                                 EventRole.ROSTERED,
@@ -489,7 +488,8 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                                 null,
                                                 "123-123-1234",
                                                 false);
-                                this.eventLogRepository.save(testEventLog);
+                                        this.eventLogRepository.save(testEventLog);
+                                }
                         }
                 }
         }

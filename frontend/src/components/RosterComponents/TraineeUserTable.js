@@ -20,7 +20,7 @@ const TraineeUserTable = ({ currentShift, setCurrentShift, setProxySelect, train
                 <td className='userText'>{traineeUser.area === null ? "Area Not Set" : traineeUser.area.areaname}</td>
                 <td className='userText'>{traineeUser.shadowing !== null ? traineeUser.shadowing.firstName+" "+traineeUser.shadowing.lastName : "Not Assigned"}</td>
                 <td className='userText'>{traineeUser.comment === null ? "" : traineeUser.comment}</td>
-                <td className='userText'>{traineeUser.timestampSubrequest !== "1970-01-01T00:00:00"
+                <td className='userText'>{traineeUser.timestampSubrequest !== "1970-01-01T00:00:01"
                     ? "✓"
                     : " "}</td>
                 <td className='userText'>{traineeUser.attendance}</td>

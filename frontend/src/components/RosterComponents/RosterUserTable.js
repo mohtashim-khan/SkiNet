@@ -34,7 +34,7 @@ const RosterUserTable = ({
         <td className="userText">{rosteredUser.user.trainer ? "✓" : " "}</td>
         <td className="userText">{rosteredUser.comment === null? "": rosteredUser.comment}</td>
         <td className="userText">
-          {rosteredUser.timestampSubrequest !== "1970-01-01T00:00:00"
+          {rosteredUser.timestampSubrequest !== "1970-01-01T00:00:01"
             ? "✓"
             : " "}
         </td>

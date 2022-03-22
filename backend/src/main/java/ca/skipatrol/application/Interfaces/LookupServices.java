@@ -7,11 +7,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public interface LookupServices {
-
-    public void saveSeason(Season season);
-    public void saveSize(Size size);
-    public void deleteSeason(UUID seasonID);
-    public void deleteSize(UUID sizeID);
+    
     public boolean deleteBrandsInBatch(ArrayList<UUID> brandIDs);
     public boolean deleteAwardsInBatch(ArrayList<UUID> awardIDs);
     public boolean deleteSeasonsInBatch(ArrayList<UUID> seasonIDs);

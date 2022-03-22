@@ -35,34 +35,6 @@ public class LookupController {
     @Autowired
     DisciplineRepository disciplineRepository;
 
-    @RequestMapping(value = "/customapi/lookups/season", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<Object> saveSeason(@RequestBody Season season) {
-
-        lookupServices.saveSeason(season);
-        return new ResponseEntity<>("Season saved correctly", HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/customapi/lookups/size", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<Object> saveSize(@RequestBody Size size) {
-
-        lookupServices.saveSize(size);
-        return new ResponseEntity<>("Size saved correctly", HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/customapi/lookups/season/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> deleteSeason(@PathVariable UUID id) {
-
-        lookupServices.deleteSeason(id);
-        return new ResponseEntity<>("Season deleted correctly", HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/customapi/lookups/size/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> deleteSize(@PathVariable UUID id) {
-
-        lookupServices.deleteSize(id);
-        return new ResponseEntity<>("Size deleted correctly", HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/customapi/lookups/brand/deleteInBatch", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteBrandInBatch(@RequestParam ArrayList<UUID> ids) {
         boolean returnVal = lookupServices.deleteBrandsInBatch(ids);

@@ -67,7 +67,7 @@ const JacketSizeLookup = ({ session, error }) => {
   function promptCreateExecute() {
     const newSizeName = $("#size-name").val();
     session
-      .post("lookups/size", { description: newSizeName }, {}, true)
+      .post("sizes", { description: newSizeName }, {}, false)
       .then((response) => {
         if (response.status == 201) {
           getSizes();

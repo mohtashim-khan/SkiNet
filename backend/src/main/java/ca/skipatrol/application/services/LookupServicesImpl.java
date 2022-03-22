@@ -37,19 +37,6 @@ public class LookupServicesImpl implements LookupServices {
     //endregion
 
 
-
-    public void saveSeason(Season season) {
-        List<Season> seasonList = seasonRepository.findAll();
-        season.setSequence(seasonList.size() + 1);
-        seasonRepository.save(season);
-    }
-
-    public void saveSize(Size size) {
-        List<Size> sizeList = sizeRepository.findAll();
-        size.setSequence(sizeList.size());
-        sizeRepository.save(size);
-    }
-
     public void deleteSeason(UUID seasonID) {
         List<Season> seasonList = seasonRepository.findAll();
         int delSeq = seasonRepository.findById(seasonID).get().getSequence();
@@ -113,10 +100,12 @@ public class LookupServicesImpl implements LookupServices {
     {
         try
         {
+
+            seasonRepository.deleteAllByIdInBatch(seasonIDs);
             for (UUID seasonID : seasonIDs) {
-                this.deleteSeason(seasonID);
                 assert (seasonRepository.findById(seasonID).isEmpty());
             }
+
             return true;
         }
         catch (Exception ex)
@@ -161,10 +150,12 @@ public class LookupServicesImpl implements LookupServices {
     {
         try
         {
+
+            sizeRepository.deleteAllByIdInBatch(sizeIDs);
             for (UUID sizeID : sizeIDs) {
-                this.deleteSize(sizeID);
-                assert (sizeRepository.findById(sizeID).isEmpty());
+                assert (seasonRepository.findById(sizeID).isEmpty());
             }
+
             return true;
         }
         catch (Exception ex)

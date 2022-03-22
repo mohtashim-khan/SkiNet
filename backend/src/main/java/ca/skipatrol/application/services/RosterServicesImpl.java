@@ -35,7 +35,7 @@ public class RosterServicesImpl implements RosterServices {
     @Autowired
     ProfileServices profileServices;
 
-    static LocalDateTime minDate = LocalDateTime.of(1970,1,1,0,0);
+    static LocalDateTime minDate = LocalDateTime.of(1970,1,1,0,0, 1);
 
     @Override
     public EventLog ParseEventLogJson(JsonObject eventLogJSON)
@@ -180,9 +180,9 @@ public class RosterServicesImpl implements RosterServices {
         {
             EventLog userEventLog = userEventLogReturn.get();
             // if already sub request they have to be de sub requested
-            if (!userEventLog.getTimestampRostered().equals(minDate))
+            if (!userEventLog.getTimestampSubrequest().equals(minDate))
             {
-                userEventLog.setTimestampRostered(minDate);
+                userEventLog.setTimestampSubrequest(minDate);
                 eventLogRepository.save(userEventLog);
             }
             // add sub-request

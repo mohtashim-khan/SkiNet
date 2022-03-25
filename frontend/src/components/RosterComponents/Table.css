@@ -19,3 +19,35 @@ td {
 th {
   background: #eee;
 }
+
+.rosterButton {
+  margin: 2px;
+}
+
+.signupColour {
+  background-color: #8064a2 !important;
+}
+
+.editShiftColour {
+  background-color: #8064a2 !important;
+}
+
+.unavailColour {
+  background-color: #8104a2 !important;
+}
+
+.attendColour {
+  background-color: #8064a2 !important;
+}
+
+.deleteShiftColour {
+  background-color: #8064a2 !important;
+}
+
+.bulkEditColour {
+  background-color: #8064a2 !important;
+}
+
+.bulkDeleteColour {
+  background-color: #8064a2 !important;
+}

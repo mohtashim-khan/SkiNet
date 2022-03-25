@@ -161,6 +161,10 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                         Award award2 = awardRepository.findByDescription("Mallard Award").get();
                         personAwardRepository.save(new PersonAward("testComment", award2, season, user));
 
+                        Uniform uniform = new Uniform(true, false, user);
+                        uniformRepository.save(uniform);
+                        emergencyContactRepository.save(new EmergencyContact("Father", "000-000-0000", "asdasda", user));
+
                 }
 
                 Optional<User> userLookup3 = this.userRepository.findByUsername("Really_Fast_Skier_324");
@@ -256,7 +260,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
 
                         Season season = seasonRepository.findByDescription("2025 - 2026").get();
 
-                        Award award = awardRepository.findByDescription("\"Triangle\" Operational Proficieny Award")
+                        Award award = awardRepository.findByDescription("\"Triangle\" Operational Proficiency Award")
                                         .get(); // Accomodation Award
                         personAwardRepository.save(new PersonAward("Test Comment", award, season, user));
 
@@ -332,7 +336,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
 
                         Brand mouse = new Brand("ratatouille");
                         brandRepository.save(mouse);
-                        Conditions condition = new Conditions("Mediocre");
+                        Conditions condition = new Conditions("Decent");
 
                         conditionsRepository.save(condition);
                         Size size = new Size("Small-ish", 996);

@@ -115,7 +115,7 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
 
     private String[] awardDefaults = {
             "A over T",
-            "\"Triangle\" Operational Proficieny Award",
+            "\"Triangle\" Operational Proficiency Award",
             "Accomodation Award",
             "Andrews/Hamstead Award – 1st Year Patroller Award",
             "Brad Geisler Proficiency Award",

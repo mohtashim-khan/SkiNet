@@ -81,7 +81,8 @@ public class RosterServicesImpl implements RosterServices {
 
         //check if user exists and await result
         if (eventLog.getUser() != null){
-            if (existingEventLogs.stream().anyMatch(x -> x.getUser() != null && x.getUser().getUserID() == eventLog.getUser().getUserID())) {
+
+            if (existingEventLogs.stream().anyMatch(x -> x.getUser() != null && x.getUser().getUserID().equals(eventLog.getUser().getUserID()))) {
                 AddActionToActionLog(actionUser.getUsername() + " already in table. No action.", actionUser, event);
                 return 204;
             }
@@ -170,7 +171,7 @@ public class RosterServicesImpl implements RosterServices {
     public int AddSubRequest(EventLog eventLog, User actionUser)
     {
         List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
-        Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser().getUserID() == eventLog.getUser().getUserID()).findFirst();
+        Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser().getUserID().equals(eventLog.getUser().getUserID())).findFirst();
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         //check if user exists and await result

@@ -86,7 +86,7 @@ const UnavailableShift = ({
   // const unavailButton = <Button color="warning" onClick={() => signUp()}>Unavailable</Button>
   const unavailButton = (
     <button
-      className="btn unavailColour rosterButton float-start"
+      className="btn greyButton rosterButton float-start"
       onClick={() => signUp()}
     >
       Unavailable

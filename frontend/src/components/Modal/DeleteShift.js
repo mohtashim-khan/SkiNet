@@ -61,7 +61,7 @@ const DeleteShift = ({
 
   const openBtn = (
     <button
-      className="btn deleteShiftColour rosterButton"
+      className="btn redButton rosterButton"
       onClick={() => toggle(true)}
     >
       Delete Shift

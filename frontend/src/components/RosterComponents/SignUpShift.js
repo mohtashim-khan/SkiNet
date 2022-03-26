@@ -80,7 +80,7 @@ const SignUpShift = ({
 
   // const signUpButton = <Button color="primary" onClick={() => signUp()}>Sign Up</Button>
   const signUpButton = (
-    <button className="btn rosterButton signupColour" onClick={() => signUp()}>
+    <button className="btn rosterButton navyButton" onClick={() => signUp()}>
       Sign Up
     </button>
   );

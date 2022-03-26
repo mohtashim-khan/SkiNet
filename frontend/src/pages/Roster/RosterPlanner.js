@@ -194,7 +194,7 @@ const RosterPlanner = ({ session }) => {
               .then((EventIDsResponse) => {
                 if (EventIDsResponse.status === 200) {
                   response.data._embedded.events.forEach((event) => {
-                    let backgroundColor = "#0047AB";
+                    let backgroundColor = "#1c3f78";
 
                     let currentDate = new Date();
                     let eventDate = new Date(event.startDate);
@@ -410,7 +410,7 @@ const RosterPlanner = ({ session }) => {
 
                       <button
                         type="button"
-                        className="btn attendColour rosterButton float-start"
+                        className="btn greyButton rosterButton float-start"
                         // className="myButton btn btn-secondary float-start d-flex-inline"
                         onClick={() =>
                           printSignInSheet(currentShift, list, session)

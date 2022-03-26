@@ -190,7 +190,7 @@ const DeleteShift = ({
 
   const openBtn = (
     <button
-      className="btn bulkDeleteColour rosterButton float-start"
+      className="btn redButton rosterButton float-start"
       onClick={() => toggle(true)}
     >
       Bulk Delete Shifts

@@ -152,7 +152,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
 
     }, [AddRosterModal, session]);
 
-    const openBtn = <Button color="primary" className="mt-1" onClick={() => toggle(true)}>Add To Roster</Button> //<Button color="primary">ADD TO ROSTER</Button>{' '}
+    const openBtn = <Button className="mt-1 navyButton" onClick={() => toggle(true)}>Add To Roster</Button> //<Button color="primary">ADD TO ROSTER</Button>{' '}
     const closeBtn = <Button className="close" onClick={() => toggle(false)}>Close</Button>;
 
     return (

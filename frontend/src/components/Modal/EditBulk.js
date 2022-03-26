@@ -289,7 +289,7 @@ const EditShift = ({
 
   const openBtn = (
     <button
-      className="btn bulkEditColour rosterButton float-start"
+      className="btn navyButton rosterButton float-start"
       onClick={() => toggle(true)}
     >
       Bulk Edit Shifts

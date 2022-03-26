@@ -24,30 +24,22 @@ th {
   margin: 2px;
 }
 
-.signupColour {
-  background-color: #8064a2 !important;
+.navyButton {
+  color: #ffffff !important;
+  background-color: #1a252f !important;
 }
 
-.editShiftColour {
-  background-color: #8064a2 !important;
+.redButton {
+  color: #ffffff !important;
+  background-color: #a7192d !important;
 }
 
-.unavailColour {
-  background-color: #8104a2 !important;
+.greyButton {
+  color: #ffffff !important;
+  background-color: #2c3e50 !important;
 }
 
-.attendColour {
-  background-color: #8064a2 !important;
-}
-
-.deleteShiftColour {
-  background-color: #8064a2 !important;
-}
-
-.bulkEditColour {
-  background-color: #8064a2 !important;
-}
-
-.bulkDeleteColour {
-  background-color: #8064a2 !important;
+.greenButton {
+  color: #ffffff !important;
+  background-color: #228B22 !important;
 }

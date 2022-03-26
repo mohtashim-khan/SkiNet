@@ -1072,7 +1072,7 @@ const TrainingAndEval = ({
 
           {allowed && (
             <button
-              className="btn btn-primary m-1"
+              className="btn btn-primary m-1 navyButton"
               type="button"
               onClick={promptAddOpen}
             >
@@ -1082,7 +1082,7 @@ const TrainingAndEval = ({
 
           {allowed && (
             <button
-              className="btn btn-primary m-1"
+              className="btn btn-primary m-1 greyButton"
               type="button"
               onClick={promptEditOpen}
             >
@@ -1092,7 +1092,7 @@ const TrainingAndEval = ({
 
           {allowed && (
             <button
-              className="btn btn-primary m-1"
+              className="btn btn-primary m-1 redButton"
               type="button"
               onClick={promptDeleteOpen}
             >

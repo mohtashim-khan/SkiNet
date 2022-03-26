@@ -195,7 +195,7 @@ const NewsBulletinPage = ({ session }) => {
                     onClick={() => {
                       history.push("/news/view/" + post.id);
                     }}
-                    className="btn btn-primary stretched-link btn-sm"
+                    className="btn btn-primary stretched-link btn-sm navyButton"
                   >
                     Read more
                   </a>

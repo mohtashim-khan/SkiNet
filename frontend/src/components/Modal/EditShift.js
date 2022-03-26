@@ -159,7 +159,7 @@ const EditShift = ({
 
   const openBtn = (
     <button
-      className="btn editShiftColour rosterButton"
+      className="btn navyButton rosterButton"
       onClick={() => toggle(true)}
     >
       Edit Shift

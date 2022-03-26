@@ -101,26 +101,28 @@ const General = ({ session, userID, allowed, isAdmin }) => {
                 ></input>
               </div>
 
-              {isAdmin && (<div className="input-group mb-3">
-                <div className="input-group-prepend">
-                  <label
-                    className="input-group-text"
-                    htmlFor="inputGroupSelect01"
-                  >
-                    <b>Roster Role: </b>
-                  </label>
+              {isAdmin && (
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <label
+                      className="input-group-text"
+                      htmlFor="inputGroupSelect01"
+                    >
+                      <b>Roster Role: </b>
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={user.trainer ? "Trainer" : "Trainee"} //this is not a good solution
+                    disabled
+                  ></input>
                 </div>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={user.trainer ? "Trainer" : "Trainee"} //this is not a good solution
-                  disabled
-                ></input>
-              </div>)}
+              )}
 
               {allowed && (
                 <button
-                  className="btn btn-primary m-1"
+                  className="btn greyButton m-1"
                   type="button"
                   onClick={promptEditOpen}
                 >
@@ -181,31 +183,35 @@ const General = ({ session, userID, allowed, isAdmin }) => {
                 />
               </div>
 
-              {isAdmin && (<><div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="selectTraineeEdit"
-                  defaultChecked={user.trainer}
-                  id="trainer"
-                />
-                <label className="form-check-label">Trainer</label>
-              </div>
+              {isAdmin && (
+                <>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="selectTraineeEdit"
+                      defaultChecked={user.trainer}
+                      id="trainer"
+                    />
+                    <label className="form-check-label">Trainer</label>
+                  </div>
 
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="selectTraineeEdit"
-                  defaultChecked={!user.trainer}
-                  id="trainee"
-                />
-                <label className="form-check-label">Trainee</label>
-              </div></>)}
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="selectTraineeEdit"
+                      defaultChecked={!user.trainer}
+                      id="trainee"
+                    />
+                    <label className="form-check-label">Trainee</label>
+                  </div>
+                </>
+              )}
 
-              <Button variant="primary" onClick={editUserInfo}>
+              <button className="btn greyButton" onClick={editUserInfo}>
                 Submit
-              </Button>
+              </button>
             </div>
           </Modal.Body>
         </Modal>

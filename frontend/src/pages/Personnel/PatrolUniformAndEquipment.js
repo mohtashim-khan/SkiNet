@@ -641,7 +641,7 @@ const PatrolUniformAndEquipment = ({
 
             {allowed && (
               <button
-                className="btn btn-primary m-1"
+                className="btn navyButton m-1"
                 type="button"
                 onClick={promptAddOpen}
               >
@@ -651,7 +651,7 @@ const PatrolUniformAndEquipment = ({
 
             {allowed && (
               <button
-                className="btn btn-primary m-1"
+                className="btn greyButton m-1"
                 type="button"
                 onClick={promptEditOpen}
               >
@@ -661,7 +661,7 @@ const PatrolUniformAndEquipment = ({
 
             {allowed && (
               <button
-                className="btn btn-primary m-1"
+                className="btn redButton m-1"
                 type="button"
                 onClick={promptDeleteOpen}
               >
@@ -771,7 +771,7 @@ const PatrolUniformAndEquipment = ({
                   ></input>
                 </div>
                 <button
-                  className="btn btn-primary"
+                  className="btn navyButton"
                   type="button"
                   onClick={addNewJacket}
                 >
@@ -872,7 +872,7 @@ const PatrolUniformAndEquipment = ({
                   ></input>
                 </div>
                 <button
-                  className="btn btn-primary"
+                  className="btn navyButton"
                   type="button"
                   onClick={addNewVest}
                 >
@@ -953,7 +953,7 @@ const PatrolUniformAndEquipment = ({
                   ></input>
                 </div>
                 <button
-                  className="btn btn-primary"
+                  className="btn navyButton"
                   type="button"
                   onClick={addNewPack}
                 >
@@ -1122,7 +1122,7 @@ const PatrolUniformAndEquipment = ({
                   </div>
                 )}
                 <button
-                  className="btn btn-primary"
+                  className="btn greyButton"
                   type="button"
                   onClick={editJackets}
                 >
@@ -1274,7 +1274,7 @@ const PatrolUniformAndEquipment = ({
                   </div>
                 )}
                 <button
-                  className="btn btn-primary"
+                  className="btn greyButton"
                   type="button"
                   onClick={editVests}
                 >
@@ -1401,7 +1401,7 @@ const PatrolUniformAndEquipment = ({
                   </div>
                 )}
                 <button
-                  className="btn btn-primary"
+                  className="btn greyButton"
                   type="button"
                   onClick={editPacks}
                 >
@@ -1443,7 +1443,7 @@ const PatrolUniformAndEquipment = ({
                   <label className="form-check-label">Returned</label>
                 </div>
                 <button
-                  className="btn btn-primary"
+                  className="btn greyButton"
                   type="button"
                   onClick={editLease}
                 >
@@ -1501,7 +1501,7 @@ const PatrolUniformAndEquipment = ({
                     ))}
                 </div>
                 <button
-                  className="btn btn-primary"
+                  className="btn redButton"
                   type="button"
                   onClick={deleteJackets}
                 >
@@ -1549,7 +1549,7 @@ const PatrolUniformAndEquipment = ({
                     ))}
                 </div>
                 <button
-                  className="btn btn-primary"
+                  className="btn redButton"
                   type="button"
                   onClick={deleteVests}
                 >
@@ -1594,7 +1594,7 @@ const PatrolUniformAndEquipment = ({
                     ))}
                 </div>
                 <button
-                  className="btn btn-primary"
+                  className="btn redButton"
                   type="button"
                   onClick={deletePacks}
                 >

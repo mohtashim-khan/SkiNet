@@ -248,7 +248,7 @@ const PatrolCommitment = ({
             </table>{" "}
             {allowed && (
               <button
-                className="btn btn-primary m-1"
+                className="btn navyButton m-1"
                 type="button"
                 onClick={promptAddOpen}
               >
@@ -257,7 +257,7 @@ const PatrolCommitment = ({
             )}
             {allowed && (
               <button
-                className="btn btn-primary m-1"
+                className="btn greyButton m-1"
                 type="button"
                 onClick={promptEditOpen}
               >
@@ -266,7 +266,7 @@ const PatrolCommitment = ({
             )}
             {allowed && (
               <button
-                className="btn btn-primary m-1"
+                className="btn redButton m-1"
                 type="button"
                 onClick={promptDeleteOpen}
               >
@@ -305,9 +305,9 @@ const PatrolCommitment = ({
               </div>
             ))}
           </div>
-          <Button variant="primary" onClick={deletePatrolCommit}>
+          <button className="btn redButton" onClick={deletePatrolCommit}>
             Submit
-          </Button>
+          </button>
         </Modal.Body>
       </Modal>
 
@@ -387,9 +387,9 @@ const PatrolCommitment = ({
             ></textarea>
           </div>
 
-          <Button variant="primary" onClick={addPatrolCommit}>
+          <button className="btn navyButton" onClick={addPatrolCommit}>
             Submit
-          </Button>
+          </button>
         </Modal.Body>
       </Modal>
       <Modal
@@ -510,7 +510,7 @@ const PatrolCommitment = ({
             </div>
           )}
           <button
-            className="btn btn-primary"
+            className="btn greyButton"
             type="button"
             onClick={editPatrolCommitment}
           >

@@ -115,7 +115,7 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
             </ul>
             {allowed && (
               <button
-                className="btn btn-primary m-1"
+                className="btn greyButton m-1"
                 type="button"
                 onClick={promptEditOpen}
               >
@@ -149,9 +149,9 @@ const LakeLouiseRoles = ({ session, userID, allowed }) => {
             ))}
           </div>
 
-          <Button variant="primary" onClick={editRoles}>
+          <button className="btn greyButton" onClick={editRoles}>
             Submit
-          </Button>
+          </button>
         </Modal.Body>
       </Modal>
     </>

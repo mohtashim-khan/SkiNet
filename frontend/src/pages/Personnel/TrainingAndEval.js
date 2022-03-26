@@ -484,9 +484,9 @@ const TrainingAndEval = ({
             />
           </div>
 
-          <Button variant="primary" onClick={addOnSnowEval}>
+          <button className="btn navyButton" onClick={addOnSnowEval}>
             Submit
-          </Button>
+          </button>
         </>
       );
     } else if (type === "2") {
@@ -524,9 +524,9 @@ const TrainingAndEval = ({
               // }}
             />
           </div>
-          <Button variant="primary" onClick={addEvalTraining}>
+          <button className="btn navyButton" onClick={addEvalTraining}>
             Submit
-          </Button>
+          </button>
         </>
       );
     } else {
@@ -566,9 +566,9 @@ const TrainingAndEval = ({
               // }}
             />
           </div>
-          <Button variant="primary" onClick={addOperationalTraining}>
+          <button className="btn navyButton" onClick={addOperationalTraining}>
             Submit
-          </Button>
+          </button>
         </>
       );
     }
@@ -599,9 +599,9 @@ const TrainingAndEval = ({
               </div>
             ))}
           </div>
-          <Button variant="primary" onClick={deleteOnSnowEvals}>
+          <button className="btn redButton" onClick={deleteOnSnowEvals}>
             Submit
-          </Button>
+          </button>
         </>
       );
     } else if (type === "2") {
@@ -626,9 +626,9 @@ const TrainingAndEval = ({
               </div>
             ))}
           </div>
-          <Button variant="primary" onClick={deleteEvalTraining}>
+          <button className="btn redButton" onClick={deleteEvalTraining}>
             Submit
-          </Button>
+          </button>
         </>
       );
     } else {
@@ -653,9 +653,9 @@ const TrainingAndEval = ({
               </div>
             ))}
           </div>
-          <Button variant="primary" onClick={deleteOperationalTraining}>
+          <button className="btn redButton" onClick={deleteOperationalTraining}>
             Submit
-          </Button>
+          </button>
         </>
       );
     }
@@ -754,9 +754,9 @@ const TrainingAndEval = ({
             </>
           )}
 
-          <Button variant="primary" onClick={editOnSnowEvals}>
+          <button className="btn greyButton" onClick={editOnSnowEvals}>
             Submit
-          </Button>
+          </button>
         </>
       );
     } else if (type === "2") {
@@ -829,9 +829,9 @@ const TrainingAndEval = ({
             </>
           )}
 
-          <Button variant="primary" onClick={editEvalTraining}>
+          <button className="btn greyButton" onClick={editEvalTraining}>
             Submit
-          </Button>
+          </button>
         </>
       );
     } else {
@@ -909,9 +909,9 @@ const TrainingAndEval = ({
               </div>
             </>
           )}
-          <Button variant="primary" onClick={editOperationalTraining}>
+          <button className="btn greyButton" onClick={editOperationalTraining}>
             Submit
-          </Button>
+          </button>
         </>
       );
     }
@@ -1072,7 +1072,7 @@ const TrainingAndEval = ({
 
           {allowed && (
             <button
-              className="btn btn-primary m-1 navyButton"
+              className="btn m-1 navyButton"
               type="button"
               onClick={promptAddOpen}
             >
@@ -1082,7 +1082,7 @@ const TrainingAndEval = ({
 
           {allowed && (
             <button
-              className="btn btn-primary m-1 greyButton"
+              className="btn m-1 greyButton"
               type="button"
               onClick={promptEditOpen}
             >
@@ -1092,7 +1092,7 @@ const TrainingAndEval = ({
 
           {allowed && (
             <button
-              className="btn btn-primary m-1 redButton"
+              className="btn m-1 redButton"
               type="button"
               onClick={promptDeleteOpen}
             >

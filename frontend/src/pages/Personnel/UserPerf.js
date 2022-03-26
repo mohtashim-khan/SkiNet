@@ -65,7 +65,7 @@ export default function UserPerf({ session, userID, allowed }) {
                   <tr>
                     <td className="tdbreak">{row.event.eventName}</td>
                     <td className="tdbreak">
-                      {row.area === null ? "Unassigned" : row.area}
+                      {row.area === null ? "Unassigned" : row.area.areaname}
                     </td>
                     <td className="tdbreak">
                       {row.event.startDate.substring(0, 10)}

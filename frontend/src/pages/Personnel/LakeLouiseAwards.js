@@ -264,7 +264,7 @@ const LakeLouiseAwards = ({
           </div>
           {allowed && (
             <button
-              className="btn btn-primary m-1 navyButton"
+              className="btn m-1 navyButton"
               type="button"
               onClick={promptAddOpen}
             >
@@ -274,7 +274,7 @@ const LakeLouiseAwards = ({
 
           {allowed && (
             <button
-              className="btn btn-primary m-1"
+              className="btn greyButton m-1"
               type="button"
               onClick={promptEditOpen}
             >
@@ -283,7 +283,7 @@ const LakeLouiseAwards = ({
           )}
           {allowed && (
             <button
-              className="btn btn-primary m-1"
+              className="btn redButton m-1"
               type="button"
               onClick={promptDeleteOpen}
             >
@@ -363,9 +363,9 @@ const LakeLouiseAwards = ({
               ></textarea>
             </div>
 
-            <Button variant="primary" onClick={addLakeLouiseAward}>
+            <button className="btn navyButton" onClick={addLakeLouiseAward}>
               Submit
-            </Button>
+            </button>
           </Modal.Body>
         </Modal>
 
@@ -396,9 +396,9 @@ const LakeLouiseAwards = ({
                 </div>
               ))}
             </div>
-            <Button variant="primary" onClick={deleteAwards}>
-              Submit
-            </Button>
+            <button className="btn redButton" onClick={deleteAwards}>
+              Delete
+            </button>
           </Modal.Body>
         </Modal>
 
@@ -498,7 +498,7 @@ const LakeLouiseAwards = ({
               </div>
             )}
             <button
-              className="btn btn-primary"
+              className="btn greyButton"
               type="button"
               onClick={editLakeLouiseAward}
             >

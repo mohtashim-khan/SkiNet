@@ -97,7 +97,7 @@ const Password = ({ session, userID, allowed, selfView }) => {
 
               {
                 <button
-                  className="btn btn-primary m-1"
+                  className="btn greyButton m-1"
                   type="button"
                   onClick={changePassword}
                 >
@@ -113,7 +113,7 @@ const Password = ({ session, userID, allowed, selfView }) => {
           <Modal.Body>Password Changed Succesfully!</Modal.Body>
           <Modal.Footer>
             <button
-              className="btn btn-primary m-1"
+              className="btn greyButton m-1"
               type="button"
               onClick={closePrompt}
             >

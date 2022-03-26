@@ -115,14 +115,14 @@ const SeasonLookup = ({ session, error }) => {
           <button
             type="button"
             onClick={promptDeleteOpen}
-            className="btn btn-danger"
+            className="btn redButton"
           >
             Delete
           </button>
           <button
             type="button"
             onClick={promptCreateOpen}
-            className="btn btn-primary"
+            className="btn navyButton"
           >
             Add
           </button>
@@ -149,12 +149,12 @@ const SeasonLookup = ({ session, error }) => {
           </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={promptDeleteExecute}>
+          <button className="btn navyButton" onClick={promptDeleteExecute}>
             Save Changes
-          </Button>
-          <Button variant="secondary" onClick={promptDeleteCancel}>
+          </button>
+          {/* <Button variant="secondary" onClick={promptDeleteCancel}>
             Close
-          </Button>
+          </Button> */}
         </Modal.Footer>
       </Modal>
 
@@ -173,12 +173,12 @@ const SeasonLookup = ({ session, error }) => {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={promptCreateExecute}>
+          <button className="btn navyButton" onClick={promptCreateExecute}>
             Save Changes
-          </Button>
-          <Button variant="secondary" onClick={promptCreateCancel}>
+          </button>
+          {/* <Button variant="secondary" onClick={promptCreateCancel}>
             Close
-          </Button>
+          </Button> */}
         </Modal.Footer>
       </Modal>
     </div>

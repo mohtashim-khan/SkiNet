@@ -21,7 +21,7 @@ const NewsBulletinPage = ({ session }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const [availableTopics, setAvailableTopics] = useState([]);
-  const [selectedTopic, setSelectedTopic] = useState(); 
+  const [selectedTopic, setSelectedTopic] = useState();
 
   const history = useHistory();
 
@@ -31,19 +31,17 @@ const NewsBulletinPage = ({ session }) => {
 
   const POSTS_PER_PAGE = 5;
 
-    useEffect(() => {
-        session
-            .get("topics")
-            .then((resp) => {
-                if (resp.status == 200) {
-                    const topics = resp.data._embedded.topics;
-                    topics.sort((a, b) => {
-                        return a.sequence > b.sequence ? 1 : -1;
-                    });                    
-                    setAvailableTopics(topics);
-                }
-            });
-    }, [setAvailableTopics]);
+  useEffect(() => {
+    session.get("topics").then((resp) => {
+      if (resp.status == 200) {
+        const topics = resp.data._embedded.topics;
+        topics.sort((a, b) => {
+          return a.sequence > b.sequence ? 1 : -1;
+        });
+        setAvailableTopics(topics);
+      }
+    });
+  }, [setAvailableTopics]);
 
   function getPosts() {
     session
@@ -67,7 +65,7 @@ const NewsBulletinPage = ({ session }) => {
     if (searchRef.current.value.trim().length == 0) return;
 
     setSelectedTopic(undefined);
-      
+
     setSearchState(true);
     const searchTerms = searchRef.current.value.split(" ");
     const searchPayload = JSON.stringify(searchTerms);
@@ -95,21 +93,21 @@ const NewsBulletinPage = ({ session }) => {
   }
 
   function selectTopic(id) {
-      if (selectedTopic === id) {
-          setSelectedTopic(undefined);
-          getPosts();
-      } else {
-          setSelectedTopic(id);
-          session.get("topics/" + id + "/post").then((resp) => {
-              if (resp.status == 200) {
-                  setPosts(resp.data._embedded.posts);
-              }
-          });
-      }
+    if (selectedTopic === id) {
+      setSelectedTopic(undefined);
+      getPosts();
+    } else {
+      setSelectedTopic(id);
+      session.get("topics/" + id + "/post").then((resp) => {
+        if (resp.status == 200) {
+          setPosts(resp.data._embedded.posts);
+        }
+      });
+    }
   }
 
   function showPagination() {
-      return (!searchState && selectedTopic === undefined);
+    return !searchState && selectedTopic === undefined;
   }
 
   return (
@@ -143,7 +141,7 @@ const NewsBulletinPage = ({ session }) => {
 
           {session.session_data() !== null &&
             session.session_data().user_type === "SYSTEM_ADMIN" && (
-              <Link to="/news/create" className="btn btn-secondary">
+              <Link to="/news/create" className="btn greyButton">
                 Draft Post
               </Link>
             )}
@@ -154,18 +152,20 @@ const NewsBulletinPage = ({ session }) => {
           {!searchState ? (
             <Col xs={2}>
               <h4>Topics</h4>
-                <ListGroup>
-                {
-                    availableTopics.map((topic) => {
-                        return <ListGroup.Item className="py-1"
-                                               key={topic.id}
-                                               action
-                                               active={topic.id === selectedTopic}
-                                               onClick={() => selectTopic(topic.id)}>
-                                   { topic.description }
-                               </ListGroup.Item>
-                    })
-                }
+              <ListGroup>
+                {availableTopics.map((topic) => {
+                  return (
+                    <ListGroup.Item
+                      className="py-1"
+                      key={topic.id}
+                      action
+                      active={topic.id === selectedTopic}
+                      onClick={() => selectTopic(topic.id)}
+                    >
+                      {topic.description}
+                    </ListGroup.Item>
+                  );
+                })}
               </ListGroup>
             </Col>
           ) : (
@@ -180,14 +180,14 @@ const NewsBulletinPage = ({ session }) => {
                     <a href="#">Cancel Search</a>
                   </small>{" "}
                 </>
-              ) : (<></>)}{" "}
+              ) : (
+                <></>
+              )}{" "}
             </h4>
             {posts.map((post) => (
               <Card className="mb-2">
                 <Card.Body>
-                  <Card.Title>
-                    {post.title}
-                  </Card.Title>
+                  <Card.Title>{post.title}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
                     {post.publishedDate}
                   </Card.Subtitle>
@@ -195,7 +195,7 @@ const NewsBulletinPage = ({ session }) => {
                     onClick={() => {
                       history.push("/news/view/" + post.id);
                     }}
-                    className="btn btn-primary stretched-link btn-sm navyButton"
+                    className="btn stretched-link btn-sm navyButton"
                   >
                     Read more
                   </a>
@@ -226,7 +226,9 @@ const NewsBulletinPage = ({ session }) => {
                 />
               </Pagination>
             ) : (
-              <><hr /></>
+              <>
+                <hr />
+              </>
             )}
           </Col>
         </Row>

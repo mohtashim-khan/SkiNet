@@ -113,7 +113,7 @@ const Contact = ({ session, userID, allowed }) => {
 
               {allowed && (
                 <button
-                  className="btn btn-primary m-1"
+                  className="btn greyButton m-1"
                   type="button"
                   onClick={promptEditOpen}
                 >
@@ -195,9 +195,9 @@ const Contact = ({ session, userID, allowed }) => {
                 />
               </div>
 
-              <Button variant="primary" onClick={editEmergencyContact}>
+              <button className="btn greyButton" onClick={editEmergencyContact}>
                 Submit
-              </Button>
+              </button>
             </div>
           </Modal.Body>
         </Modal>

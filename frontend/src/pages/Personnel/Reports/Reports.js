@@ -532,27 +532,6 @@ const Reports = ({ session }) => {
               <div class="col col-sm" id="accordion">
                 <div class="row">
                   <div class="col">
-                    <button
-                      type="button"
-                      class="myButton btn btn-warning float-end d-flex-inline"
-                      onClick={refreshPage}
-                    >
-                      Reset
-                    </button>
-                    <button
-                      type="button"
-                      className="myButton btn btn-primary float-end d-flex-inline"
-                      onClick={generateReport}
-                    >
-                      Generate Report
-                    </button>
-                    <button
-                      type="button"
-                      className="myButton btn btn-info float-end d-flex-inline"
-                      onClick={loadPreviousReport}
-                    >
-                      Load Previous Report Parameters
-                    </button>
                     <ReactHTMLTableToExcel
                       id="test-table-xls-button"
                       className="download-table-xls-button myButton btn btn-success float-end d-flex-inline"
@@ -561,6 +540,28 @@ const Reports = ({ session }) => {
                       sheet="tablexls"
                       buttonText="Export to Excel"
                     />
+                    <button
+                      type="button"
+                      class="myButton btn redButton float-end d-flex-inline"
+                      onClick={refreshPage}
+                    >
+                      Reset
+                    </button>
+
+                    <button
+                      type="button"
+                      className="myButton btn navyButton float-end d-flex-inline"
+                      onClick={generateReport}
+                    >
+                      Generate Report
+                    </button>
+                    <button
+                      type="button"
+                      className="myButton btn greyButton float-end d-flex-inline"
+                      onClick={loadPreviousReport}
+                    >
+                      Load Previous Report Parameters
+                    </button>
                   </div>
                 </div>
 
@@ -580,7 +581,7 @@ const Reports = ({ session }) => {
                   <div class="col">
                     <button
                       type="button"
-                      class="myButton btn btn-primary float-end"
+                      class="myButton btn navyButton float-end"
                       onClick={generateReport}
                     >
                       Generate Report

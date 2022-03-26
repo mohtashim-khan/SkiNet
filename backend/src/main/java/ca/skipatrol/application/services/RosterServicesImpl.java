@@ -66,7 +66,7 @@ public class RosterServicesImpl implements RosterServices {
 
         String shadowingURI = gson.fromJson(eventLogJSON.get("shadowing"), String.class);
         if(shadowingURI != null && !shadowingURI.isEmpty())
-            eventLog.setUser((User) Hibernate.unproxy(userRepository.getById(ParseLastURIPartToUUID(shadowingURI))));
+            eventLog.setShadowing((User) Hibernate.unproxy(userRepository.getById(ParseLastURIPartToUUID(shadowingURI))));
 
         return eventLog;
     }

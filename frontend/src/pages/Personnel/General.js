@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./UserProfileEdit.css";
 import $ from "jquery";
 
-const General = ({ session, userID, allowed }) => {
+const General = ({ session, userID, allowed, isAdmin }) => {
   const [editPrompted, setEditPrompted] = useState(false);
   const [user, setUser] = useState({});
 
@@ -101,7 +101,7 @@ const General = ({ session, userID, allowed }) => {
                 ></input>
               </div>
 
-              <div className="input-group mb-3">
+              {isAdmin && (<div className="input-group mb-3">
                 <div className="input-group-prepend">
                   <label
                     className="input-group-text"
@@ -116,7 +116,7 @@ const General = ({ session, userID, allowed }) => {
                   value={user.trainer ? "Trainer" : "Trainee"} //this is not a good solution
                   disabled
                 ></input>
-              </div>
+              </div>)}
 
               {allowed && (
                 <button
@@ -181,7 +181,7 @@ const General = ({ session, userID, allowed }) => {
                 />
               </div>
 
-              <div className="form-check">
+              {isAdmin && (<><div className="form-check">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -201,7 +201,7 @@ const General = ({ session, userID, allowed }) => {
                   id="trainee"
                 />
                 <label className="form-check-label">Trainee</label>
-              </div>
+              </div></>)}
 
               <Button variant="primary" onClick={editUserInfo}>
                 Submit

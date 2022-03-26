@@ -7,7 +7,7 @@ import ClockIcon from "../../images/Clock.png";
 import OneAvatarIcon from "../../images/OneAvatar.png";
 import LetterPMultipleAvatarsIcon from "../../images/LetterPMultipleAvatars.png";
 import LetterTMultipleAvatarsIcon from "../../images/LetterTMultipleAvatars.png";
-import $ from 'jquery';
+import $ from "jquery";
 
 import {
   Container,
@@ -105,7 +105,6 @@ const RosterPlanner = ({ session }) => {
   const [BulkEventDeleteModal, setBulkEventDeleteModal] = useState(false);
   const [BulkEditModal, setBulkEditModal] = useState(false);
 
-
   const [AddEventDetailsVisibility, setAddEventDetailsVisibility] =
     useState(false);
 
@@ -120,7 +119,6 @@ const RosterPlanner = ({ session }) => {
     setActiveDateTitle(
       getCalendarApi().currentDataManager.getCurrentData().viewTitle
     );
-
   }, []);
 
   //will update calendar if the Add Roster Modal changes
@@ -129,11 +127,26 @@ const RosterPlanner = ({ session }) => {
       setUpdater(false);
     }
     if (proxySelect) {
-      selectShiftHandler(proxySelect, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session)
+      selectShiftHandler(
+        proxySelect,
+        setCurrentShift,
+        currentShift,
+        dragDropEnable,
+        setDragDropEnable,
+        setShiftInfo,
+        setRosteredList,
+        setUnavailList,
+        setTraineeList,
+        setWaitlist,
+        setUpdater,
+        setShadowList,
+        setList,
+        setActionLog,
+        session
+      );
       setProxySelect(false);
     }
   }, [Updater, proxySelect, currentShift, dragDropEnable, session]);
-
 
   function renameKeys(obj, newKeys) {
     const keyValues = Object.keys(obj).map((key) => {
@@ -148,8 +161,6 @@ const RosterPlanner = ({ session }) => {
     if (Updater) {
       const startDate = args.start;
       const endDate = args.end;
-
-
 
       //Used To Solve Bug where event at beginning Is not fetched. this is a backend oversight.
       var hackyStartDate = new Date(startDate);
@@ -173,12 +184,16 @@ const RosterPlanner = ({ session }) => {
             };
 
             session
-              .get("roster/retrieveEventIDsUser?userID=" + session.session_data().userID, {}, {}, true)
+              .get(
+                "roster/retrieveEventIDsUser?userID=" +
+                  session.session_data().userID,
+                {},
+                {},
+                true
+              )
               .then((EventIDsResponse) => {
                 if (EventIDsResponse.status === 200) {
-
                   response.data._embedded.events.forEach((event) => {
-
                     let backgroundColor = "#0047AB";
 
                     let currentDate = new Date();
@@ -186,39 +201,25 @@ const RosterPlanner = ({ session }) => {
 
                     if (eventDate < currentDate) {
                       backgroundColor = "#696969";
-
-                    }
-
-                    else {
-
-                      EventIDsResponse.data.every(eventID => {
+                    } else {
+                      EventIDsResponse.data.every((eventID) => {
                         if (event.eventID === eventID) {
                           backgroundColor = "#228B22";
                           return false;
                         }
                         return true;
                       });
-
                     }
-
-
                     event["backgroundColor"] = backgroundColor;
                     events = [...events, renameKeys(event, newKeyNames)];
                     setTotalShifts(events);
                     successCb(events);
-
                   });
-
                 }
               })
               .catch((error) => {
                 console.log(error);
               });
-
-
-
-
-
           } else {
             failureCb(response.status);
           }
@@ -227,8 +228,6 @@ const RosterPlanner = ({ session }) => {
           failureCb(e);
         });
     }
-
-
   }
 
   function onDateSetEvent(dateSetEvent) {
@@ -240,8 +239,6 @@ const RosterPlanner = ({ session }) => {
       setUpdater(true);
     }
   }
-
-
 
   return (
     <>
@@ -264,20 +261,20 @@ const RosterPlanner = ({ session }) => {
               headerToolbar={
                 window.innerWidth > 760
                   ? {
-                    left: "prev,next",
-                    center: "title",
-                    right: "dayGridMonth,dayGridWeek",
-                  }
+                      left: "prev,next",
+                      center: "title",
+                      right: "dayGridMonth,dayGridWeek",
+                    }
                   : {
-                    left: "title",
-                    right: "prev,next",
-                  }
+                      left: "title",
+                      right: "prev,next",
+                    }
               }
               footerToolbar={
                 window.innerWidth > 760
                   ? {
-                    /** Empty */
-                  }
+                      /** Empty */
+                    }
                   : { center: "dayGridMonth,dayGridWeek" }
               }
               initialView={
@@ -286,12 +283,12 @@ const RosterPlanner = ({ session }) => {
               dayHeaderFormat={
                 window.innerWidth > 760
                   ? {
-                    weekday: "short",
-                  }
+                      weekday: "short",
+                    }
                   : {
-                    month: "numeric",
-                    day: "numeric",
-                  }
+                      month: "numeric",
+                      day: "numeric",
+                    }
               }
               editable={true}
               eventStartEditable={true}
@@ -300,10 +297,30 @@ const RosterPlanner = ({ session }) => {
               dayMaxEvents={true} //Enables it so that only 4 shifts can be fit in one date. Additional dates will be shown in "+# more", where # is the additional numbers of shifts
               eventResizableFromStart={false}
               datesSet={onDateSetEvent}
-              events={(Updater) ? (args, successCb, failureCb) => refreshEvents(args, successCb, failureCb) : totalShifts}
+              events={
+                Updater
+                  ? (args, successCb, failureCb) =>
+                      refreshEvents(args, successCb, failureCb)
+                  : totalShifts
+              }
               eventClick={(e) => {
-                selectShiftHandler(e, setCurrentShift, currentShift, dragDropEnable, setDragDropEnable, setShiftInfo, setRosteredList, setUnavailList, setTraineeList, setWaitlist, setUpdater, setShadowList, setList, setActionLog, session); //Specifies the handler that is called when an shift is clicked//Specifies the handler that is called when an shift is clicked
-
+                selectShiftHandler(
+                  e,
+                  setCurrentShift,
+                  currentShift,
+                  dragDropEnable,
+                  setDragDropEnable,
+                  setShiftInfo,
+                  setRosteredList,
+                  setUnavailList,
+                  setTraineeList,
+                  setWaitlist,
+                  setUpdater,
+                  setShadowList,
+                  setList,
+                  setActionLog,
+                  session
+                ); //Specifies the handler that is called when an shift is clicked//Specifies the handler that is called when an shift is clicked
               }}
               select={(e) =>
                 createShiftHandler(
@@ -326,38 +343,113 @@ const RosterPlanner = ({ session }) => {
                     {session.session_data() !== null &&
                       session.session_data().user_type === "SYSTEM_ADMIN" && (
                         <>
-
-                          <EditBulk currentShift={currentShift} BulkEditModal={BulkEditModal} setBulkEditModal={setBulkEditModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session={session} />
-
-
-                          <DeleteBulk BulkEventDeleteModal={BulkEventDeleteModal} setBulkEventDeleteModal={setBulkEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} session={session} />
+                          <div className="row">
+                            <div className="col">
+                              <EditBulk
+                                currentShift={currentShift}
+                                BulkEditModal={BulkEditModal}
+                                setBulkEditModal={setBulkEditModal}
+                                setProxySelect={setProxySelect}
+                                setUpdater={setUpdater}
+                                shiftInfo={shiftInfo}
+                                setCurrentShift={setCurrentShift}
+                                session={session}
+                              />
+                              <DeleteBulk
+                                BulkEventDeleteModal={BulkEventDeleteModal}
+                                setBulkEventDeleteModal={
+                                  setBulkEventDeleteModal
+                                }
+                                currentShift={currentShift}
+                                setUpdater={setUpdater}
+                                session={session}
+                              />
+                            </div>
+                          </div>
                         </>
                       )}
                   </div>
                 </div>
-                <ShiftInfo currentShift={currentShift} shiftInfo={shiftInfo} />
-                {/* <ShiftInfo /> */}
-                <div className="ShiftButtons">
-                  <SignUpShift currentShift={currentShift} setList={setList} setShiftInfo={setShiftInfo} setRosteredList={setRosteredList} setUnavailList={setUnavailList} setTraineeList={setTraineeList} setWaitlist={setWaitlist} setShadowList={setShadowList} session={session} setProxySelect={setProxySelect} shiftInfo={shiftInfo} />
+                {shiftInfo !== null && currentShift ? (
+                  <>
+                    <ShiftInfo
+                      currentShift={currentShift}
+                      shiftInfo={shiftInfo}
+                    />
 
-                  <UnavailableShift currentShift={currentShift} setProxySelect={setProxySelect} name={session.session_data().firstName + " " + session.session_data().lastName} username={session.session_data().username} user_type={session.session_data().user_type} session={session} setList={setList} setUnavailList={setUnavailList} setShiftInfo={setShiftInfo} shiftInfo={shiftInfo} />
+                    <div className="ShiftButtons">
+                      <SignUpShift
+                        currentShift={currentShift}
+                        setList={setList}
+                        setShiftInfo={setShiftInfo}
+                        setRosteredList={setRosteredList}
+                        setUnavailList={setUnavailList}
+                        setTraineeList={setTraineeList}
+                        setWaitlist={setWaitlist}
+                        setShadowList={setShadowList}
+                        session={session}
+                        setProxySelect={setProxySelect}
+                        shiftInfo={shiftInfo}
+                      />
+                      <UnavailableShift
+                        currentShift={currentShift}
+                        setProxySelect={setProxySelect}
+                        name={
+                          session.session_data().firstName +
+                          " " +
+                          session.session_data().lastName
+                        }
+                        username={session.session_data().username}
+                        user_type={session.session_data().user_type}
+                        session={session}
+                        setList={setList}
+                        setUnavailList={setUnavailList}
+                        setShiftInfo={setShiftInfo}
+                        shiftInfo={shiftInfo}
+                      />
 
-                  <button
-                    type="button"
-                    className="myButton btn btn-secondary float-start d-flex-inline"
-                    onClick={() => printSignInSheet(currentShift, list, session)}
-                  >
-                    Attendance(PDF)
-                  </button>
-                  {session.session_data() !== null &&
-                    (session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") && (
-                      <>
-                        <EditShift currentShift={currentShift} EditShiftModal={EditShiftModal} setEditShiftModal={setEditShiftModal} setProxySelect={setProxySelect} setUpdater={setUpdater} shiftInfo={shiftInfo} setCurrentShift={setCurrentShift} session={session} />
-                        <DeleteShift EventDeleteModal={EventDeleteModal} setEventDeleteModal={setEventDeleteModal} currentShift={currentShift} setUpdater={setUpdater} setResetter={setResetter} session={session} />
-
-                      </>
-                    )}
-                </div>
+                      <button
+                        type="button"
+                        className="btn attendColour rosterButton float-start"
+                        // className="myButton btn btn-secondary float-start d-flex-inline"
+                        onClick={() =>
+                          printSignInSheet(currentShift, list, session)
+                        }
+                      >
+                        Attendance(PDF)
+                      </button>
+                      {session.session_data() !== null &&
+                        (session.session_data().user_type === "SYSTEM_ADMIN" ||
+                          session.session_data().user_type ===
+                            "HILL_ADMIN") && (
+                          <>
+                            <EditShift
+                              currentShift={currentShift}
+                              EditShiftModal={EditShiftModal}
+                              setEditShiftModal={setEditShiftModal}
+                              setProxySelect={setProxySelect}
+                              setUpdater={setUpdater}
+                              shiftInfo={shiftInfo}
+                              setCurrentShift={setCurrentShift}
+                              session={session}
+                            />
+                            <DeleteShift
+                              EventDeleteModal={EventDeleteModal}
+                              setEventDeleteModal={setEventDeleteModal}
+                              currentShift={currentShift}
+                              setUpdater={setUpdater}
+                              setResetter={setResetter}
+                              session={session}
+                            />
+                          </>
+                        )}
+                    </div>
+                  </>
+                ) : (
+                  <h3>
+                    <b>No Event Selected</b>
+                  </h3>
+                )}
               </div>
             </div>
             <div className="card ShiftInfo w-auto">
@@ -461,7 +553,8 @@ const RosterPlanner = ({ session }) => {
                           shiftInfo={shiftInfo}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
-                        {true ? (
+                        {session.session_data().user_type === "SYSTEM_ADMIN" ||
+                        session.session_data().user_type === "HILL_ADMIN" ? (
                           <AddRoster
                             currentShift={currentShift}
                             setCurrentShift={setCurrentShift}
@@ -498,7 +591,8 @@ const RosterPlanner = ({ session }) => {
                           rosteredList={rosteredList}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
-                        {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (
+                        {session.session_data().user_type === "SYSTEM_ADMIN" ||
+                        session.session_data().user_type === "HILL_ADMIN" ? (
                           <AddTrainee
                             currentShift={currentShift}
                             setCurrentShift={setCurrentShift}
@@ -584,7 +678,8 @@ const RosterPlanner = ({ session }) => {
                           traineeList={traineeList}
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
-                        {(session.session_data().user_type === "SYSTEM_ADMIN" || session.session_data().user_type === "HILL_ADMIN") ? (
+                        {session.session_data().user_type === "SYSTEM_ADMIN" ||
+                        session.session_data().user_type === "HILL_ADMIN" ? (
                           <AddShadow
                             currentShift={currentShift}
                             setCurrentShift={setCurrentShift}

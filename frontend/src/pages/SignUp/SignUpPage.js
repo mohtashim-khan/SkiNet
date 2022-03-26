@@ -35,7 +35,11 @@ export default function SignUpPage({ session }) {
     if (localError) {
       return;
     }
-
+    if (myUsername.length === 0) {
+      setError(true);
+      setErrorMsg("Missing Username Field!");
+      localError = true;
+    }
     session
       .get("users/search/findByUsername?username=" + myUsername)
       .then((resp) => {
@@ -49,14 +53,28 @@ export default function SignUpPage({ session }) {
           }
         }
       });
+    let pNumber = String($("#phoneSelect").val());
+    if (pNumber.length === 0) {
+      setError(true);
+      setErrorMsg("Missing Phone Number Field!");
+      localError = true;
+    }
+    let fName = String($("#firstNameInput").val());
+    if (fName.length === 0) {
+      setError(true);
+      setErrorMsg("Missing First Name Field!");
+      localError = true;
+    }
+    let lName = String($("#lastNameInput").val());
+    if (lName.length === 0) {
+      setError(true);
+      setErrorMsg("Missing Last Name Field!");
+      localError = true;
+    }
+    let er = $("#isAdmin").is(":checked") ? "SYSTEM_ADMIN" : "ROSTERED";
     if (localError) {
       return;
     }
-    let pNumber = String($("#phoneSelect").val());
-    let fName = String($("#firstNameInput").val());
-    let lName = String($("#lastNameInput").val());
-    let er = $("#isAdmin").is(":checked") ? "SYSTEM_ADMIN" : "ROSTERED";
-
     session
       .post(
         "profile/user/CreateNewUser",
@@ -115,7 +133,7 @@ export default function SignUpPage({ session }) {
         onClose={() => setError(false)}
         dismissible={true}
       >
-        <Alert.Heading>Uh oh!</Alert.Heading>
+        <Alert.Heading>Error!</Alert.Heading>
         <p>{errorMsg}</p>
       </Alert>
 
@@ -187,7 +205,7 @@ export default function SignUpPage({ session }) {
           </label>
         </div>
 
-        <button class="btn btn-primary" type="button" onClick={attemptSubmit}>
+        <button class="btn navyButton" type="button" onClick={attemptSubmit}>
           Submit
         </button>
       </form>

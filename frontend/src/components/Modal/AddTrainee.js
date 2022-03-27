@@ -158,7 +158,7 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
 
     }, [AddTraineeModal, session]);
 
-    const openBtn = <Button color="primary" onClick={() => toggle(true)}>Add Trainee</Button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
+    const openBtn = <button className="btn navyButton m1" onClick={() => toggle(true)}>Add Trainee</button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
     const closeBtn = <Button className="close" onClick = {() =>toggle(false)}>Close</Button>;
 
     return (

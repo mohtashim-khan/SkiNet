@@ -202,9 +202,9 @@ const AddShadow = ({
   }, [userInfo, AddShadowModal]);
 
   const openBtn = (
-    <Button color="primary" className="m1" onClick={() => toggle(true)}>
+    <button className="btn navyButton" onClick={() => toggle(true)}>
       Add Shadow
-    </Button>
+    </button>
   );
   const closeBtn = (
     <Button className="close" onClick={() => toggle(false)}>

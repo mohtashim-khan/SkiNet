@@ -158,7 +158,7 @@ const AddUnavailable = ({AddUnavailableModal , setAddUnavailableModal, currentSh
 
     }, [AddUnavailableModal, session]);
 
-    const openBtn = <Button color="primary" onClick={() => toggle(true)}>Add Unavailable</Button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
+    const openBtn = <button className="btn navyButton" onClick={() => toggle(true)}>Add Unavailable</button> //<Button color="primary">ADD TO TRAINEE</Button>{' '}
     const closeBtn = <Button className="close" onClick = {() =>toggle(false)}>Close</Button>;
 
     return (

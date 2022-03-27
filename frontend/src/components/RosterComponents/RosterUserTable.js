@@ -41,7 +41,7 @@ const RosterUserTable = ({
               <div class="btn-group">
                 <button
                   type="button"
-                  class="btn btn-primary dropdown-toggle navyButton"
+                  class="btn dropdown-toggle navyButton"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
@@ -76,7 +76,7 @@ const RosterUserTable = ({
               <div class="btn-group">
                 <button
                   type="button"
-                  class="btn btn-secondary dropdown-toggle redButton"
+                  class="btn dropdown-toggle redButton"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >

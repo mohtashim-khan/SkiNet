@@ -46,7 +46,7 @@ const TraineeUserTable = ({
             <td>
               <button
                 type="button"
-                class="btn btn-primary dropdown-toggle"
+                class="btn navyButton dropdown-toggle"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
@@ -83,7 +83,7 @@ const TraineeUserTable = ({
             <td>
               <button
                 type="button"
-                class="btn btn-secondary dropdown-toggle"
+                class="btn redButton dropdown-toggle"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >

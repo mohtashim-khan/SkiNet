@@ -37,8 +37,8 @@ const UserProfileEdit = ({ session }) => {
           {user.firstName} {user.lastName}
         </h1>
         <h5>
-          {isAdmin ? (user.trainer ? "Trainer - " : "Trainee - ") : ("")} {user.phoneNumber} -{" "}
-          {user.email}
+          {isAdmin ? (user.trainer ? "Trainer - " : "Trainee - ") : ""}{" "}
+          {user.phoneNumber} - {user.email}
         </h5>
         <div className="row">
           <div className="col">
@@ -72,6 +72,7 @@ const UserProfileEdit = ({ session }) => {
             <General
               session={session}
               userID={id}
+              isAdmin={isAdmin}
               allowed={
                 isAdmin || session.session_data().username === user.username
               }

@@ -112,11 +112,11 @@ public class RosterServicesImpl implements RosterServices {
                 if (eventLog.getRole() == EventRole.TRAINEE)
                     transfer = existingEventLogs.stream().filter(x -> x.getRole() == EventRole.TRAINEE &&
                             x.getUser().getUserType() == EventRole.TRAINEE &&
-                            x.getTimestampSubrequest() != minDate).findFirst();
+                            !x.getTimestampSubrequest().equals(minDate)).findFirst();
                 else
                     transfer = existingEventLogs.stream().filter(x -> x.getRole() == eventLog.getRole() &&
                             x.getUser().getUserType() != EventRole.TRAINEE &&
-                            x.getTimestampSubrequest() != minDate).findFirst();
+                            !x.getTimestampSubrequest().equals(minDate)).findFirst();
 
                 if (transfer.isPresent() && currentCount-1 < maxVal) //someone has sub request
                 {

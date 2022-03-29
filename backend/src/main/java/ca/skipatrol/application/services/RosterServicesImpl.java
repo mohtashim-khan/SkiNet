@@ -277,7 +277,7 @@ public class RosterServicesImpl implements RosterServices {
                 int maxVal = (eventLog.getRole() == EventRole.TRAINEE) ? event.getMaxTrainees() : event.getMaxPatrollers();
                 long currentVal = existingEventLogs.stream().filter(x -> x.getRole() == eventLog.getRole()).count();
 
-                if(currentVal < maxVal)
+                if(currentVal - 1 < maxVal)
                 {
                     Optional<EventLog> transfer = null;
                     if (eventLog.getRole() == EventRole.TRAINEE)
@@ -285,7 +285,7 @@ public class RosterServicesImpl implements RosterServices {
                                 x.getUser().getUserType() == EventRole.TRAINEE).findFirst();
                     else if (eventLog.getRole() == EventRole.ROSTERED)
                         transfer = existingEventLogs.stream().filter(x -> x.getRole().equals(EventRole.WAITLIST) &&
-                                x.getUser().getUserType() != EventRole.ROSTERED).findFirst();
+                                x.getUser().getUserType() != EventRole.TRAINEE).findFirst();
 
                     if (transfer.isPresent())
                     {

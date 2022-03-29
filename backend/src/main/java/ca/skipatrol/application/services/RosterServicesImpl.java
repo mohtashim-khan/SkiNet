@@ -252,7 +252,7 @@ public class RosterServicesImpl implements RosterServices {
     public int RemoveUserEventLog(EventLog eventLog, User actionUser)
     {
         List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
-        Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser().getUserID() == eventLog.getUser().getUserID()).findFirst();
+        Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser().getUserID().equals(eventLog.getUser().getUserID())).findFirst();
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         if (userEventLogReturn.isEmpty())

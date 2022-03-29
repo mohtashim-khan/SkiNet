@@ -79,12 +79,13 @@ export async function printSignInSheet(currentShift, list, session) {
 
         if (
           i === areas.length - 1 &&
-          list[j].area === null &&
-          list[j].name &&
-          (list[j].role === "TRAINEE" ||
+          list[j].area === null 
+          
+          && (list[j].role === "TRAINEE" ||
             list[j].role === "ROSTERED" ||
             list[j].role === "SHADOW")
         ) {
+          console.log("hi 2 " + list[j].name)
           seperatedList[areas.length - 1].unshift(list[j]);
         }
       }

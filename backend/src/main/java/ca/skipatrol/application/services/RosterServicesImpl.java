@@ -79,6 +79,10 @@ public class RosterServicesImpl implements RosterServices {
         List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
+        // check if event is in the past
+        if (event.getStartDate().isBefore(LocalDateTime.now()))
+            return 405;
+
         //check if user exists and await result
         if (eventLog.getUser() != null){
 
@@ -160,6 +164,7 @@ public class RosterServicesImpl implements RosterServices {
                     eventLog.setRole(EventRole.WAITLIST);
                     eventLogRepository.save(eventLog);
                     AddActionToActionLog(eventLog.getUser().getUsername() + " inserted into Waitlist by " + actionUser.getUsername(), actionUser, event);
+                    return 202;
                 }
             }
         }
@@ -211,12 +216,16 @@ public class RosterServicesImpl implements RosterServices {
                             {
                                 EventLog transferEventLog = transfer.get();
                                 transferEventLog.setTimestampRostered(LocalDateTime.now());
+                                EventRole transferRole = transferEventLog.getUser().getUserType();
+                                if(transferRole == EventRole.TRAINEE)
+                                    transferEventLog.setRole(EventRole.TRAINEE);
+                                else
+                                    transferEventLog.setRole(EventRole.ROSTERED);
+
                                 eventLogRepository.save(transferEventLog);
 
-
                                 eventLogRepository.deleteById(existingEventLogs.stream().filter(x ->
-                                        x.getUser().equals(eventLog.getUser()) &&
-                                        x.getRole().equals(eventLog.getRole())).findFirst().get().getEventLogID());
+                                        x.getUser().getUserID().equals(eventLog.getUser().getUserID())).findFirst().get().getEventLogID());
 
                                 AddActionToActionLog("Sub Requested by"
                                         + actionUser.getUsername().toString()
@@ -225,15 +234,14 @@ public class RosterServicesImpl implements RosterServices {
                                         actionUser,
                                         event);
 
-                                return 204;
                             }
                             else //check if user exists and await result
                             {
                                 userEventLog.setTimestampSubrequest(LocalDateTime.now());
 
                                 AddActionToActionLog("Sub Requested by " + actionUser.getUsername().toString(), actionUser, event);
-                                return 204;
                             }
+                            return 204;
 
                         }
 
@@ -283,7 +291,14 @@ public class RosterServicesImpl implements RosterServices {
                     {
                         EventLog transferEventLog = transfer.get();
                         transferEventLog.setTimestampRostered(LocalDateTime.now());
-                        transferEventLog.setRole(transferEventLog.getUser().getUserType());
+                        EventRole transferRole = transferEventLog.getUser().getUserType();
+                        if(transferRole == EventRole.TRAINEE)
+                            transferEventLog.setRole(EventRole.TRAINEE);
+                        else
+                            transferEventLog.setRole(EventRole.ROSTERED);
+
+                        eventLogRepository.save(transferEventLog);
+
                         AddActionToActionLog("Replaced from Waitlist" + transferEventLog.getUser().getUsername(), actionUser, event);
 
                         return 204;

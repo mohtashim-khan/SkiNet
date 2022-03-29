@@ -56,4 +56,18 @@ public class PostServicesImpl implements PostServices {
         return repository.findAll(specification);
     }
 
+    public int DeletePost(Long postID)
+    {
+        try
+        {
+            // put S3 file delete code here
+
+            repository.deleteById(postID);
+            return 200;
+        }
+        catch(Exception exception) {
+            return 500;
+        }
+    }
+
 }

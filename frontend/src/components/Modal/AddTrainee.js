@@ -13,6 +13,11 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
     const successModalShow = () => setSuccessModal(true);
     const successModalClose = () => setSuccessModal(false);
 
+    const [waitListModal, setWaitListModal] = useState(false);
+    const waitListModalShow = () => setWaitListModal(true);
+    const waitListModalClose = () => setWaitListModal(false);
+
+
     const [failModal, setFailModal] = useState(false);
     const failModalShow = () => setFailModal(true);
     const failModalClose = () => setFailModal(false);
@@ -116,6 +121,41 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
 
 
             }
+
+            else if (response.status === 202) {
+                        
+                //** PROXY SELECT ** /
+                let storeShift = {
+                    event: {
+                        proxy: 'yes',
+                        extendedProps:
+                        {
+                            hlUser: shiftInfo.hl,
+                            minPatrollers: shiftInfo.min_pat,
+                            maxPatrollers: shiftInfo.max_pat,
+                            maxTrainees: shiftInfo.max_trainee,
+                            eventID: currentShift.event.extendedProps.eventID,
+
+
+
+
+                        },
+                        allDay: shiftInfo.all_day,
+                        title: shiftInfo.event_name,
+                        startStr: shiftInfo.startStr,
+
+                    }
+                }
+
+                //update Shift infos
+                setProxySelect(storeShift);
+
+
+                waitListModalShow();
+
+
+            }
+
             else {
                 failModalShow();
             }
@@ -191,6 +231,17 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
                 </ReactBootStrapModal.Header>
                 <ReactBootStrapModal.Footer>
                     <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={waitListModal} onHide={waitListModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Added to Waitlist!</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={waitListModalClose}>
                         Close
                     </Button>
                 </ReactBootStrapModal.Footer>

@@ -20,6 +20,10 @@ const SignUpShift = ({
   const successModalShow = () => setSuccessModal(true);
   const successModalClose = () => setSuccessModal(false);
 
+  const [waitListModal, setWaitListModal] = useState(false);
+  const waitListModalShow = () => setWaitListModal(true);
+  const waitListModalClose = () => setWaitListModal(false);
+
   const [failModal, setFailModal] = useState(false);
   const failModalShow = () => setFailModal(true);
   const failModalClose = () => setFailModal(false);
@@ -65,7 +69,43 @@ const SignUpShift = ({
             setProxySelect(storeShift);
 
             successModalShow();
-          } else {
+          }
+
+          else if (response.status === 202) {
+
+            //** PROXY SELECT ** /
+            let storeShift = {
+              event: {
+                proxy: 'yes',
+                extendedProps:
+                {
+                  hlUser: shiftInfo.hl,
+                  minPatrollers: shiftInfo.min_pat,
+                  maxPatrollers: shiftInfo.max_pat,
+                  maxTrainees: shiftInfo.max_trainee,
+                  eventID: currentShift.event.extendedProps.eventID,
+
+
+
+
+                },
+                allDay: shiftInfo.all_day,
+                title: shiftInfo.event_name,
+                startStr: shiftInfo.startStr,
+
+              }
+            }
+
+            //update Shift infos
+            setProxySelect(storeShift);
+
+
+            waitListModalShow();
+
+
+          }
+
+          else {
             failModalShow();
           }
         })
@@ -76,7 +116,7 @@ const SignUpShift = ({
     }
   };
 
-  useEffect(() => {}, [currentShift]);
+  useEffect(() => { }, [currentShift]);
 
   // const signUpButton = <Button color="primary" onClick={() => signUp()}>Sign Up</Button>
   const signUpButton = (
@@ -96,6 +136,17 @@ const SignUpShift = ({
         </Modal.Header>
         <Modal.Footer>
           <Button variant="secondary" onClick={successModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={waitListModal} onHide={waitListModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Added to Waitlist!</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={waitListModalClose}>
             Close
           </Button>
         </Modal.Footer>

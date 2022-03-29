@@ -7,5 +7,5 @@ import java.util.List;
 public interface PostServices {
 
     List<Post> getPostsWhereTitleOrBodyContainsAnyWord(List<String> words);
-
+    int DeletePost(Long postID);
 }

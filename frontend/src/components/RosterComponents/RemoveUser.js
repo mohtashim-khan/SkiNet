@@ -22,11 +22,18 @@ const RemoveUser = ({
   const removeUser = async (e) => {
     //NEED ACTION LOG QUERY HERE
 
+    let article = {...user};
+    if(article.user != null)
+      article.user = user.user.userID;
+
+    if(article.event != null)
+      article.event = user.event.eventID;
+
     session
-      .delete("eventLogs/" + user.eventLogID, {}, {}, false)
+      .put("roster/removeUserEventLog", article, {}, true)
       .then((response) => {
         //if error from database
-        if (response.status === 204) {
+        if (response.status === 200) {
           //** PROXY SELECT ** /
           let storeShift = {
             event: {

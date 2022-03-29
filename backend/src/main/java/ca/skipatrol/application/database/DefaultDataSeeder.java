@@ -34,6 +34,8 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
     private ConditionsRepository conditionsRepository;
     @Autowired
     private TopicRepository topicRepository;
+    @Autowired
+    private  AreaRepository areaRepository;
 
     @Override
     @Order(value = 1)
@@ -111,6 +113,15 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             }
         }
 
+        Optional<Area> areaLookup;
+        for (String name : areaDefaults) {
+            areaLookup = this.areaRepository.findByAreaname(name);
+            if (areaLookup.isEmpty()) {
+                Area area = new Area(name);
+                this.areaRepository.save(area);
+            }
+        }
+
     }
 
     private String[] awardDefaults = {
@@ -182,6 +193,20 @@ public class DefaultDataSeeder implements ApplicationListener<ApplicationReadyEv
             "Good",
             "Average",
             "Poor"
+    };
+
+    private String[] areaDefaults = {
+            "Eagle",
+            "Larch",
+            "Paradise",
+            "Summit",
+            "Whiskey",
+            "Training Event",
+            "Special Event",
+            "Returning Weekend",
+            "NorAms",
+            "Mens WC",
+            "Womens WC"
     };
 
     private List<Pair<String, Integer>> topicDefaults = new ArrayList<>(List.of(

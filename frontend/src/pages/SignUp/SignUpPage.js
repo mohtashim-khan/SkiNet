@@ -35,6 +35,12 @@ export default function SignUpPage({ session }) {
     if (localError) {
       return;
     }
+
+    if(myEmail.length === 0){
+      setError(true);
+      setErrorMsg("Missing Email Field!");
+      localError = true;
+    }
     if (myUsername.length === 0) {
       setError(true);
       setErrorMsg("Missing Username Field!");

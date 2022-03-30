@@ -81,7 +81,7 @@ const JacketBrandLookup = ({ session, error }) => {
 
   return (
     <div className="col-4 p-3">
-      <h5>Jacket Brand</h5>
+      <h5>Brand</h5>
       <div className="overflow-auto" data-spy="scroll">
         <ul className="list-group scrollableList ">
           {Array.from(brand).map((kv) => {
@@ -163,7 +163,7 @@ const JacketBrandLookup = ({ session, error }) => {
           <form>
             <div className="form-group">
               <label htmlFor="jacket-name" className="col-form-label">
-                Jacket Name:
+                Brand Name:
               </label>
               <input type="text" className="form-control" id="jacket-name" />
             </div>

@@ -186,7 +186,7 @@ const RosterPlanner = ({ session }) => {
             session
               .get(
                 "roster/retrieveEventIDsUser?userID=" +
-                  session.session_data().userID,
+                session.session_data().userID,
                 {},
                 {},
                 true
@@ -261,20 +261,20 @@ const RosterPlanner = ({ session }) => {
               headerToolbar={
                 window.innerWidth > 760
                   ? {
-                      left: "prev,next",
-                      center: "title",
-                      right: "dayGridMonth,dayGridWeek",
-                    }
+                    left: "prev,next",
+                    center: "title",
+                    right: "dayGridMonth,dayGridWeek",
+                  }
                   : {
-                      left: "title",
-                      right: "prev,next",
-                    }
+                    left: "title",
+                    right: "prev,next",
+                  }
               }
               footerToolbar={
                 window.innerWidth > 760
                   ? {
-                      /** Empty */
-                    }
+                    /** Empty */
+                  }
                   : { center: "dayGridMonth,dayGridWeek" }
               }
               initialView={
@@ -283,12 +283,12 @@ const RosterPlanner = ({ session }) => {
               dayHeaderFormat={
                 window.innerWidth > 760
                   ? {
-                      weekday: "short",
-                    }
+                    weekday: "short",
+                  }
                   : {
-                      month: "numeric",
-                      day: "numeric",
-                    }
+                    month: "numeric",
+                    day: "numeric",
+                  }
               }
               editable={true}
               eventStartEditable={true}
@@ -300,7 +300,7 @@ const RosterPlanner = ({ session }) => {
               events={
                 Updater
                   ? (args, successCb, failureCb) =>
-                      refreshEvents(args, successCb, failureCb)
+                    refreshEvents(args, successCb, failureCb)
                   : totalShifts
               }
               eventClick={(e) => {
@@ -408,20 +408,28 @@ const RosterPlanner = ({ session }) => {
                         shiftInfo={shiftInfo}
                       />
 
-                      <button
-                        type="button"
-                        className="btn greyButton rosterButton float-start"
-                        // className="myButton btn btn-secondary float-start d-flex-inline"
-                        onClick={() =>
-                          printSignInSheet(currentShift, list, session)
-                        }
-                      >
-                        Attendance(PDF)
-                      </button>
                       {session.session_data() !== null &&
                         (session.session_data().user_type === "SYSTEM_ADMIN" ||
                           session.session_data().user_type ===
-                            "HILL_ADMIN") && (
+                          "HILL_ADMIN") && (
+                          <>
+                            <button
+                              type="button"
+                              className="btn greyButton rosterButton float-start"
+                              // className="myButton btn btn-secondary float-start d-flex-inline"
+                              onClick={() =>
+                                printSignInSheet(currentShift, list, session)
+                              }
+                            >
+                              Attendance(PDF)
+                            </button>
+                          </>
+                        )}
+
+                      {session.session_data() !== null &&
+                        (session.session_data().user_type === "SYSTEM_ADMIN" ||
+                          session.session_data().user_type ===
+                          "HILL_ADMIN") && (
                           <>
                             <EditShift
                               currentShift={currentShift}
@@ -516,18 +524,25 @@ const RosterPlanner = ({ session }) => {
                     >
                       Shadow
                     </button>
-                    <button
-                      class="nav-link"
-                      id="nav-actionLog-tab"
-                      data-bs-toggle="tab"
-                      data-bs-target="#nav-actionLog"
-                      type="button"
-                      role="tab"
-                      aria-controls="nav-actionLog"
-                      aria-selected="false"
-                    >
-                      Action Log
-                    </button>
+
+                    {session.session_data().user_type === "SYSTEM_ADMIN" ||
+                          session.session_data().user_type === "HILL_ADMIN" ? (
+                            <button
+                            class="nav-link"
+                            id="nav-actionLog-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-actionLog"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-actionLog"
+                            aria-selected="false"
+                          >
+                            Action Log
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                   
                   </div>
                 </nav>
               </div>
@@ -554,7 +569,7 @@ const RosterPlanner = ({ session }) => {
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {session.session_data().user_type === "SYSTEM_ADMIN" ||
-                        session.session_data().user_type === "HILL_ADMIN" ? (
+                          session.session_data().user_type === "HILL_ADMIN" ? (
                           <AddRoster
                             currentShift={currentShift}
                             setCurrentShift={setCurrentShift}
@@ -592,7 +607,7 @@ const RosterPlanner = ({ session }) => {
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {session.session_data().user_type === "SYSTEM_ADMIN" ||
-                        session.session_data().user_type === "HILL_ADMIN" ? (
+                          session.session_data().user_type === "HILL_ADMIN" ? (
                           <AddTrainee
                             currentShift={currentShift}
                             setCurrentShift={setCurrentShift}
@@ -643,7 +658,8 @@ const RosterPlanner = ({ session }) => {
                         session={session}
                       />
                       {/** ACCESS FOR ADMINS ONLY */}
-                      {true ? (
+                      {session.session_data().user_type === "SYSTEM_ADMIN" ||
+                          session.session_data().user_type === "HILL_ADMIN" ? (
                         <AddUnavailable
                           currentShift={currentShift}
                           setCurrentShift={setCurrentShift}
@@ -679,7 +695,7 @@ const RosterPlanner = ({ session }) => {
                         />
                         {/** ACCESS FOR ADMINS ONLY */}
                         {session.session_data().user_type === "SYSTEM_ADMIN" ||
-                        session.session_data().user_type === "HILL_ADMIN" ? (
+                          session.session_data().user_type === "HILL_ADMIN" ? (
                           <AddShadow
                             currentShift={currentShift}
                             setCurrentShift={setCurrentShift}
@@ -703,10 +719,17 @@ const RosterPlanner = ({ session }) => {
                   >
                     <Row>
                       <Col sm="12">
-                        <ActionTable
-                          currentShift={currentShift}
-                          actionLog={actionLog}
-                        />
+                        {/** ACCESS FOR ADMINS ONLY */}
+                        {session.session_data().user_type === "SYSTEM_ADMIN" ||
+                          session.session_data().user_type === "HILL_ADMIN" ? (
+                          <ActionTable
+                            currentShift={currentShift}
+                            actionLog={actionLog}
+                          />
+                        ) : (
+                          <></>
+                        )}
+
                       </Col>
                     </Row>
                   </div>

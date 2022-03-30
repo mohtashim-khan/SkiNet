@@ -68,7 +68,7 @@ const RemoveUser = ({
 
   const removeButton = (
     <a color="danger" className="dropdown-item" onClick={() => removeUser()}>
-      Remove User
+      Remove from Event
     </a>
   );
 

@@ -260,7 +260,7 @@ public class RosterServicesImpl implements RosterServices {
     public int RemoveUserEventLog(EventLog eventLog, User actionUser)
     {
         List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
-        Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser().getUserID().equals(eventLog.getUser().getUserID())).findFirst();
+        Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser() != null && x.getUser().getUserID().equals(eventLog.getUser().getUserID())).findFirst();
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         if (userEventLogReturn.isEmpty())
@@ -272,7 +272,7 @@ public class RosterServicesImpl implements RosterServices {
                     actionUser,
                     event);
 
-            if (!eventLog.getRole().equals(EventRole.SHADOW) && !eventLog.getRole().equals(EventRole.WAITLIST))
+            if (!eventLog.getRole().equals(EventRole.SHADOW) && !eventLog.getRole().equals(EventRole.WAITLIST) && !eventLog.getRole().equals(EventRole.UNAVAILABLE))
             {
                 int maxVal = (eventLog.getRole() == EventRole.TRAINEE) ? event.getMaxTrainees() : event.getMaxPatrollers();
                 long currentVal = existingEventLogs.stream().filter(x -> x.getRole() == eventLog.getRole()).count();

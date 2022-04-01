@@ -45,6 +45,8 @@ public class RosterController {
 
         if (code == 204)
             return ResponseEntity.status(HttpStatus.OK).build();
+        else if (code == 202)
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }

@@ -32,6 +32,9 @@ const RemoveUser = ({
     if (article.shadowing != null)
       article.shadowing = user.shadowing.userID;
 
+    if (article.area != null)
+      article.area = user.area.areaID;
+      
     session
       .put("roster/removeUserEventLog", article, {}, true)
       .then((response) => {

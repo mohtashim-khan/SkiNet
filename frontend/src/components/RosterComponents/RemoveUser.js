@@ -15,6 +15,10 @@ const RemoveUser = ({
   const successModalShow = () => setSuccessModal(true);
   const successModalClose = () => setSuccessModal(false);
 
+  const [alreadyAssignedModal, setalreadyAssignedModal] = useState(false);
+  const alreadyAssignedModalShow = () => setalreadyAssignedModal(true);
+  const alreadyAssignedModalClose = () => setalreadyAssignedModal(false);
+
   const [failModal, setFailModal] = useState(false);
   const failModalShow = () => setFailModal(true);
   const failModalClose = () => setFailModal(false);
@@ -60,7 +64,15 @@ const RemoveUser = ({
           setProxySelect(storeShift);
 
           successModalShow();
-        } else {
+        }
+        
+        else if (response.status === 405)
+        {
+          alreadyAssignedModalShow();
+          
+        }
+        
+        else {
           failModalShow();
         }
       })
@@ -89,6 +101,17 @@ const RemoveUser = ({
         </ReactBootStrapModal.Header>
         <ReactBootStrapModal.Footer>
           <Button variant="secondary" onClick={successModalClose}>
+            Close
+          </Button>
+        </ReactBootStrapModal.Footer>
+      </ReactBootStrapModal>
+
+      <ReactBootStrapModal show={alreadyAssignedModal} onHide={alreadyAssignedModalClose}>
+        <ReactBootStrapModal.Header closeButton>
+          <ReactBootStrapModal.Title>Shadow/Trainee Assigned to this person: Unable to Remove</ReactBootStrapModal.Title>
+        </ReactBootStrapModal.Header>
+        <ReactBootStrapModal.Footer>
+          <Button variant="secondary" onClick={alreadyAssignedModalClose}>
             Close
           </Button>
         </ReactBootStrapModal.Footer>

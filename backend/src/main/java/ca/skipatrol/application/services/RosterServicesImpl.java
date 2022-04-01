@@ -308,10 +308,8 @@ public class RosterServicesImpl implements RosterServices {
                 }
 
             }
-
+            return 204;
         }
-
-        return 500;
     }
 
     public int DeleteEventFull(UUID eventID)

@@ -24,6 +24,10 @@ const SignUpShift = ({
   const waitListModalShow = () => setWaitListModal(true);
   const waitListModalClose = () => setWaitListModal(false);
 
+  const [unavailableModal, setunavailableModal] = useState(false);
+  const unavailableModalShow = () => setunavailableModal(true);
+  const unavailableModalClose = () => setunavailableModal(false);
+
   const [failModal, setFailModal] = useState(false);
   const failModalShow = () => setFailModal(true);
   const failModalClose = () => setFailModal(false);
@@ -110,8 +114,18 @@ const SignUpShift = ({
           }
         })
         .catch((error) => {
-          console.log("error " + error);
-          failModalShow();
+
+          if(error.response.status === 405)
+          {
+            unavailableModalShow();
+          }
+
+          else
+          {
+            console.log("error " + error);
+            failModalShow();
+          }
+          
         });
     }
   };
@@ -147,6 +161,17 @@ const SignUpShift = ({
         </Modal.Header>
         <Modal.Footer>
           <Button variant="secondary" onClick={waitListModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={unavailableModal} onHide={unavailableModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error: User In Unavailable List</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={unavailableModalClose}>
             Close
           </Button>
         </Modal.Footer>

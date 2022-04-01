@@ -17,6 +17,9 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
     const waitListModalShow = () => setWaitListModal(true);
     const waitListModalClose = () => setWaitListModal(false);
 
+    const [unavailableModal, setunavailableModal] = useState(false);
+    const unavailableModalShow = () => setunavailableModal(true);
+    const unavailableModalClose = () => setunavailableModal(false);
 
     const [failModal, setFailModal] = useState(false);
     const failModalShow = () => setFailModal(true);
@@ -161,8 +164,14 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
             }
         })
         .catch((error) => {
-            console.log("error " + error);
-            failModalShow();
+            if (error.response.status === 405) {
+                unavailableModalShow();
+            }
+
+            else {
+                console.log("error " + error);
+                failModalShow();
+            }
         });
     }
 
@@ -231,6 +240,17 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
                 </ReactBootStrapModal.Header>
                 <ReactBootStrapModal.Footer>
                     <Button variant="secondary" onClick={successModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={unavailableModal} onHide={unavailableModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error: User in Unavailable List</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={unavailableModalClose}>
                         Close
                     </Button>
                 </ReactBootStrapModal.Footer>

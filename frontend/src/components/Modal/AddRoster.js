@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { CustomInput, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
-import{Modal as ReactBootStrapModal} from 'react-bootstrap';
+import { Modal as ReactBootStrapModal } from 'react-bootstrap';
 
 
 
@@ -15,6 +15,10 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
     const [waitListModal, setWaitListModal] = useState(false);
     const waitListModalShow = () => setWaitListModal(true);
     const waitListModalClose = () => setWaitListModal(false);
+
+    const [unavailableModal, setunavailableModal] = useState(false);
+    const unavailableModalShow = () => setunavailableModal(true);
+    const unavailableModalClose = () => setunavailableModal(false);
 
     const [failModal, setFailModal] = useState(false);
     const failModalShow = () => setFailModal(true);
@@ -67,7 +71,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
 
 
         let user = Users[eventInfo.selectUser];
-        
+
 
         const article = {
             event: currentShift.event.extendedProps.eventID,
@@ -81,84 +85,90 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
         };
 
         session
-                .put("roster/addToEventLog", article, {}, true)
-                .then(response => {
-                    //if error from database
-                    if (response.status === 200) {
-                        
-                        //** PROXY SELECT ** /
-                        let storeShift = {
-                            event: {
-                                proxy: 'yes',
-                                extendedProps:
-                                {
-                                    hlUser: shiftInfo.hl,
-                                    minPatrollers: shiftInfo.min_pat,
-                                    maxPatrollers: shiftInfo.max_pat,
-                                    maxTrainees: shiftInfo.max_trainee,
-                                    eventID: currentShift.event.extendedProps.eventID,
+            .put("roster/addToEventLog", article, {}, true)
+            .then(response => {
+                //if error from database
+                if (response.status === 200) {
+
+                    //** PROXY SELECT ** /
+                    let storeShift = {
+                        event: {
+                            proxy: 'yes',
+                            extendedProps:
+                            {
+                                hlUser: shiftInfo.hl,
+                                minPatrollers: shiftInfo.min_pat,
+                                maxPatrollers: shiftInfo.max_pat,
+                                maxTrainees: shiftInfo.max_trainee,
+                                eventID: currentShift.event.extendedProps.eventID,
 
 
 
 
-                                },
-                                allDay: shiftInfo.all_day,
-                                title: shiftInfo.event_name,
-                                startStr: shiftInfo.startStr,
+                            },
+                            allDay: shiftInfo.all_day,
+                            title: shiftInfo.event_name,
+                            startStr: shiftInfo.startStr,
 
-                            }
                         }
-
-                        //update Shift infos
-                        setProxySelect(storeShift);
-
-
-                        successModalShow();
-
-
                     }
 
-                    else if (response.status === 202) {
-                        
-                        //** PROXY SELECT ** /
-                        let storeShift = {
-                            event: {
-                                proxy: 'yes',
-                                extendedProps:
-                                {
-                                    hlUser: shiftInfo.hl,
-                                    minPatrollers: shiftInfo.min_pat,
-                                    maxPatrollers: shiftInfo.max_pat,
-                                    maxTrainees: shiftInfo.max_trainee,
-                                    eventID: currentShift.event.extendedProps.eventID,
+                    //update Shift infos
+                    setProxySelect(storeShift);
+
+
+                    successModalShow();
+
+
+                }
+
+                else if (response.status === 202) {
+
+                    //** PROXY SELECT ** /
+                    let storeShift = {
+                        event: {
+                            proxy: 'yes',
+                            extendedProps:
+                            {
+                                hlUser: shiftInfo.hl,
+                                minPatrollers: shiftInfo.min_pat,
+                                maxPatrollers: shiftInfo.max_pat,
+                                maxTrainees: shiftInfo.max_trainee,
+                                eventID: currentShift.event.extendedProps.eventID,
 
 
 
 
-                                },
-                                allDay: shiftInfo.all_day,
-                                title: shiftInfo.event_name,
-                                startStr: shiftInfo.startStr,
+                            },
+                            allDay: shiftInfo.all_day,
+                            title: shiftInfo.event_name,
+                            startStr: shiftInfo.startStr,
 
-                            }
                         }
-
-                        //update Shift infos
-                        setProxySelect(storeShift);
-
-
-                        waitListModalShow();
-
-
                     }
-                    else {
-                        failModalShow();
-                    }
-                })
-                .catch((error) => {
+
+                    //update Shift infos
+                    setProxySelect(storeShift);
+
+
+                    waitListModalShow();
+
+
+                }
+                else {
+                    failModalShow();
+                }
+            })
+            .catch((error) => {
+                if (error.response.status === 405) {
+                    unavailableModalShow();
+                }
+
+                else {
                     console.log("error " + error);
                     failModalShow();
-                });
+                }
+            });
     }
 
     const userRender = () => {
@@ -167,7 +177,7 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
             let userOptionRender = [];
 
             for (let i = 0; i < Users.length; i++) {
-                userOptionRender.push(<option value={i}>{Users[i].firstName+" "+Users[i].lastName}</option>)
+                userOptionRender.push(<option value={i}>{Users[i].firstName + " " + Users[i].lastName}</option>)
             }
             return userOptionRender;
         }
@@ -227,6 +237,19 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
                     </Button>
                 </ReactBootStrapModal.Footer>
             </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={unavailableModal} onHide={unavailableModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error: User in Unavailable List</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={unavailableModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+
 
             <ReactBootStrapModal show={waitListModal} onHide={waitListModalClose}>
                 <ReactBootStrapModal.Header closeButton>

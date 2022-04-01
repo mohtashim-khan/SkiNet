@@ -66,18 +66,18 @@ const RemoveUser = ({
           successModalShow();
         }
         
-        else if (response.status === 405)
-        {
-          alreadyAssignedModalShow();
-          
-        }
-        
         else {
           failModalShow();
         }
       })
       .catch((error) => {
         console.log("error " + error);
+        if (error.status === 405)
+        {
+          alreadyAssignedModalShow();
+          
+        }
+        
         failModalShow();
       });
   };

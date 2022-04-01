@@ -89,6 +89,8 @@ public class RosterController {
 
         if (code == 204)
             return ResponseEntity.status(HttpStatus.OK).build();
+        if (code == 405)
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
         else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }

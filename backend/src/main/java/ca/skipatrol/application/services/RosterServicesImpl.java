@@ -261,10 +261,13 @@ public class RosterServicesImpl implements RosterServices {
     {
         List<EventLog> existingEventLogs = eventLogRepository.findAllByEvent_eventID(eventLog.getEvent().getEventID());
         Optional<EventLog> userEventLogReturn = existingEventLogs.stream().filter(x -> x.getUser() != null && x.getUser().getUserID().equals(eventLog.getUser().getUserID())).findFirst();
+        Optional<EventLog> traineeShadow = existingEventLogs.stream().filter(x -> x.getShadowing() != null && x.getShadowing().getUserID().equals(eventLog.getUser().getUserID())).findFirst();
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         if (userEventLogReturn.isEmpty())
             return 404;
+        else if(traineeShadow.isPresent())
+            return 405;
         else
         {
             eventLogRepository.deleteById(userEventLogReturn.get().getEventLogID());

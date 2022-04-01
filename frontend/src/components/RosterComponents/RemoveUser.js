@@ -72,13 +72,12 @@ const RemoveUser = ({
       })
       .catch((error) => {
         console.log("error " + error);
-        if (error.status === 405)
+        if (error.response.status === 405)
         {
           alreadyAssignedModalShow();
-          
         }
-        
-        failModalShow();
+        else
+          failModalShow();
       });
   };
 

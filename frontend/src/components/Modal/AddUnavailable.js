@@ -167,7 +167,7 @@ const AddUnavailable = ({AddUnavailableModal , setAddUnavailableModal, currentSh
         <>
             {openBtn}
             <Modal isOpen={AddUnavailableModal} toggle={() => toggle(false)} className= "">
-                <ModalHeader  close={closeBtn}>Add Trainee</ModalHeader>
+                <ModalHeader  close={closeBtn}>Add Unavailable</ModalHeader>
                 <ModalBody>
                     <Form  onSubmit = {(e) => AddTrainee(e)}>
                         <FormGroup>

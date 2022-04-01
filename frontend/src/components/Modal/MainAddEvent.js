@@ -371,20 +371,6 @@ const MainAddEvent = ({
             </FormGroup>
             <Row form>
               <Col md={3}>
-                <FormGroup check>
-                  <Label for="all_day" check>
-                    Urgent Day
-                    <br />
-                  </Label>
-                  <Input
-                    type="checkbox"
-                    name="all_day"
-                    id="exampleCheck"
-                    onChange={onSwitch}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md={3}>
                 <FormGroup inline>
                   <Label for="user_type">Reoccuring</Label>
                   <Dropdown

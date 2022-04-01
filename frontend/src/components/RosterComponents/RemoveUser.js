@@ -22,12 +22,15 @@ const RemoveUser = ({
   const removeUser = async (e) => {
     //NEED ACTION LOG QUERY HERE
 
-    let article = {...user};
-    if(article.user != null)
+    let article = { ...user };
+    if (article.user != null)
       article.user = user.user.userID;
 
-    if(article.event != null)
+    if (article.event != null)
       article.event = user.event.eventID;
+
+    if (article.shadowing != null)
+      article.shadowing = user.shadowing.userID;
 
     session
       .put("roster/removeUserEventLog", article, {}, true)
@@ -64,7 +67,7 @@ const RemoveUser = ({
       });
   };
 
-  useEffect(() => {}, [currentShift]);
+  useEffect(() => { }, [currentShift]);
 
   const removeButton = (
     <a color="danger" className="dropdown-item" onClick={() => removeUser()}>

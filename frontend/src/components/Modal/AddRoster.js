@@ -19,6 +19,10 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
     const [unavailableModal, setunavailableModal] = useState(false);
     const unavailableModalShow = () => setunavailableModal(true);
     const unavailableModalClose = () => setunavailableModal(false);
+    
+    const [pastEventModal, setpastEventModal] = useState(false);
+    const pastEventModalShow = () => setpastEventModal(true);
+    const pastEventModalClose = () => setpastEventModal(false);
 
     const [failModal, setFailModal] = useState(false);
     const failModalShow = () => setFailModal(true);
@@ -164,6 +168,10 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
                     unavailableModalShow();
                 }
 
+                else if (error.response.status === 401) {
+                    pastEventModalShow();
+                }
+
                 else {
                     console.log("error " + error);
                     failModalShow();
@@ -244,6 +252,17 @@ const AddRoster = ({ AddRosterModal, setAddRosterModal, currentShift, setProxySe
                 </ReactBootStrapModal.Header>
                 <ReactBootStrapModal.Footer>
                     <Button variant="secondary" onClick={unavailableModalClose}>
+                        Close
+                    </Button>
+                </ReactBootStrapModal.Footer>
+            </ReactBootStrapModal>
+
+            <ReactBootStrapModal show={pastEventModal} onHide={pastEventModalClose}>
+                <ReactBootStrapModal.Header closeButton>
+                    <ReactBootStrapModal.Title>Error: Event Date has Passed</ReactBootStrapModal.Title>
+                </ReactBootStrapModal.Header>
+                <ReactBootStrapModal.Footer>
+                    <Button variant="secondary" onClick={pastEventModalClose}>
                         Close
                     </Button>
                 </ReactBootStrapModal.Footer>

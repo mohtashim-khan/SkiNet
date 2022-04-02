@@ -80,7 +80,7 @@ public class RosterServicesImpl implements RosterServices {
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         // check if event is in the past
-        if (event.getStartDate().isBefore(LocalDateTime.now()))
+        if (event.getStartDate().toLocalDate().isBefore(LocalDateTime.now().toLocalDate()))
             return 401;
 
         //check if user exists and await result

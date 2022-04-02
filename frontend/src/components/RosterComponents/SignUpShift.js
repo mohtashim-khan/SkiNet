@@ -28,6 +28,10 @@ const SignUpShift = ({
   const unavailableModalShow = () => setunavailableModal(true);
   const unavailableModalClose = () => setunavailableModal(false);
 
+  const [pastEventModal, setpastEventModal] = useState(false);
+  const pastEventModalShow = () => setpastEventModal(true);
+  const pastEventModalClose = () => setpastEventModal(false);
+
   const [failModal, setFailModal] = useState(false);
   const failModalShow = () => setFailModal(true);
   const failModalClose = () => setFailModal(false);
@@ -120,6 +124,11 @@ const SignUpShift = ({
             unavailableModalShow();
           }
 
+          else if(error.response.status === 401)
+          {
+            pastEventModalShow();
+          }
+
           else
           {
             console.log("error " + error);
@@ -172,6 +181,17 @@ const SignUpShift = ({
         </Modal.Header>
         <Modal.Footer>
           <Button variant="secondary" onClick={unavailableModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={pastEventModal} onHide={pastEventModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error: Event Date has Passed</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={pastEventModalClose}>
             Close
           </Button>
         </Modal.Footer>

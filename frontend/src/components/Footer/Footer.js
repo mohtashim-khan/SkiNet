@@ -45,14 +45,15 @@ function Footer() {
           <FooterLinkItems>
             <FooterLinkTitle>Canadian Ski Patrol</FooterLinkTitle>
             <FooterLink href={"//www.skipatrol.ca"}>National Page</FooterLink>
+            <FooterLink href={"//www.skipatrol.ca/mountain"}>Mountain Division</FooterLink>
             <FooterLink href={"//www.skipatrol.ca/calgary/"}>
-              Calgary Chapter
+              Calgary Zone
             </FooterLink>
             {/* <FooterLink href={'//www.skipatrol.ca/calgary/'}>Registration</FooterLink>
             <FooterLink href={'//www.skipatrol.ca/faqs'}>FAQ</FooterLink> */}
           </FooterLinkItems>
         </FooterLinksWrapper>
-      </FooterLinksContainer>
+      </FooterLinksContainer> 
       <SocialMedia>
         <SocialMediaWrap>
           <SocialLogo to="/">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -18,9 +18,11 @@ import {
   Img,
 } from "../../components/Elements/Elements";
 import "./SignIn.css";
+import {Modal} from "react-bootstrap"
 
 const SignIn = ({ session }) => {
   const history = useHistory();
+  const [hasError, setHasError] = useState(false);
 
   function verifyCredentials(username, password) {
     const authorization = "Basic " + window.btoa(username + ":" + password);
@@ -53,7 +55,7 @@ const SignIn = ({ session }) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        setHasError(true);
       });
   }
 
@@ -96,6 +98,20 @@ const SignIn = ({ session }) => {
 
   return (
     <div className="container-bg">
+      <Modal
+        show={hasError}
+        onHide={() => {
+          setHasError(false);
+        }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Login Unsuccessful!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          
+          One or more of the sign-in fields is incorrect!
+        </Modal.Body>
+      </Modal>
       <InfoSec lightBg="false">
         <Container>
           <InfoRow imgStart="start">

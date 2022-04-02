@@ -38,11 +38,11 @@ const UserProfileEdit = ({ session }) => {
         </h1>
         <h5>
           {isAdmin ? (user.trainer ? "Trainer - " : "Trainee - ") : ""}{" "}
-          {user.phoneNumber} - {user.email}
+          {user.username} - {user.phoneNumber} - {user.email}
         </h5>
         <div className="row">
           <div className="col">
-            <UserPerf session={session} userID={id} allowed={isAdmin} />
+            {(isAdmin || session.session_data().username === user.username) && (<UserPerf session={session} userID={id} allowed={isAdmin} />)}
           </div>
         </div>
 
@@ -58,7 +58,7 @@ const UserProfileEdit = ({ session }) => {
               setErrHeading={setErrHeading}
             />
 
-            <PatrolCommitment
+            {(isAdmin || session.session_data().username === user.username) && (<PatrolCommitment
               session={session}
               userID={id}
               allowed={isAdmin}
@@ -66,21 +66,22 @@ const UserProfileEdit = ({ session }) => {
               setError={setHasError}
               setErrBody={setErrBody}
               setErrHeading={setErrHeading}
-            />
+            />)}
 
             <LakeLouiseRoles session={session} userID={id} allowed={isAdmin} />
-            <General
-              session={session}
-              userID={id}
-              isAdmin={isAdmin}
-              allowed={
-                isAdmin || session.session_data().username === user.username
-              }
-            />
+            
+            {(isAdmin || session.session_data().username === user.username) && (
+              <Password
+                session={session}
+                userID={id}
+                allowed={isAdmin}
+                selfView={session.session_data().username === user.username}
+              />
+            )}
           </div>
 
           <div className="col-lg">
-            <PatrolUniformAndEquipment
+            {(isAdmin || session.session_data().username === user.username) && (<PatrolUniformAndEquipment
               session={session}
               userID={id}
               allowed={isAdmin}
@@ -88,7 +89,7 @@ const UserProfileEdit = ({ session }) => {
               setError={setHasError}
               setErrBody={setErrBody}
               setErrHeading={setErrHeading}
-            />
+            />)}
 
             <LakeLouiseAwards
               session={session}
@@ -108,14 +109,14 @@ const UserProfileEdit = ({ session }) => {
               }
               isAdmin={isAdmin}
             />
-            {(isAdmin || session.session_data().username === user.username) && (
-              <Password
-                session={session}
-                userID={id}
-                allowed={isAdmin}
-                selfView={session.session_data().username === user.username}
-              />
-            )}
+            <General
+              session={session}
+              userID={id}
+              isAdmin={isAdmin}
+              allowed={
+                isAdmin || session.session_data().username === user.username
+              }
+            />
           </div>
         </div>
       </Container>

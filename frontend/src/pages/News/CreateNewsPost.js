@@ -97,7 +97,7 @@ const CreateNewsPost = ({ session }) => {
       .then((response) => {
         if (response.status == 201) {
           const postId = response.data.id;
-          if (isFilePicked) {
+          if (isFilePicked && selectedFiles.length > 0) {
             Promise.all(
               selectedFiles.map((file) => {
                 var data = new FormData();

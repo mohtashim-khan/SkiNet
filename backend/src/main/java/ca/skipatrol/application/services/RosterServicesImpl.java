@@ -80,22 +80,28 @@ public class RosterServicesImpl implements RosterServices {
         Event event = eventRepository.getById(eventLog.getEvent().getEventID());
 
         // check if event is in the past
-        if (event.getStartDate().isBefore(LocalDateTime.now()))
-            return 405;
+        if (event.getStartDate().toLocalDate().isBefore(LocalDateTime.now().toLocalDate()))
+            return 401;
 
         //check if user exists and await result
-        if (eventLog.getUser() != null){
-
-            if (existingEventLogs.stream().anyMatch(x -> x.getUser() != null && x.getUser().getUserID().equals(eventLog.getUser().getUserID()))) {
-                AddActionToActionLog(actionUser.getUsername() + " already in table. No action.", actionUser, event);
-                return 204;
+        if (eventLog.getUser() != null) {
+            Optional<EventLog> existing = existingEventLogs.stream().filter(x -> x.getUser() != null && x.getUser().getUserID().equals(eventLog.getUser().getUserID())).findFirst();
+            if (existing.isPresent()) {
+                if (existing.get().getRole() == EventRole.UNAVAILABLE) {
+                    AddActionToActionLog(actionUser.getUsername() + " is marked as unavailable. Could not add.", actionUser, event);
+                    return 405;
+                }
+                else {
+                    AddActionToActionLog(actionUser.getUsername() + " already in table. No action.", actionUser, event);
+                    return 200;
+                }
             }
         }
 
         //adding a shadow or unavailable no questions
         if (eventLog.getRole().equals(EventRole.SHADOW) || eventLog.getRole() == EventRole.UNAVAILABLE) {
             eventLogRepository.save(eventLog);
-            return 204;
+            return 200;
         }
         else //need to insert
         {
@@ -169,7 +175,7 @@ public class RosterServicesImpl implements RosterServices {
             }
         }
 
-        return 204;
+        return 200;
     }
 
     @Override

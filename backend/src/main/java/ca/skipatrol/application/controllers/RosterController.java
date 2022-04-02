@@ -43,10 +43,14 @@ public class RosterController {
         if (principal != null)
             code = rosterServices.AddToEventLog(eventLog, userRepository.findByUsername(principal.getName()).get());
 
-        if (code == 204)
+        if (code == 200)
             return ResponseEntity.status(HttpStatus.OK).build();
         else if (code == 202)
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        else if (code == 401)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        else if (code == 405)
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
         else
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }

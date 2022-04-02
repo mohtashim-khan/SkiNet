@@ -47,7 +47,7 @@ const SinglePostPage = ({ session }) => {
         <Col>
             <h1>{post.title}</h1>
             <span>
-                <small class="text-muted">{post.publishedDate}</small>
+                <small class="text-muted">{new Date(post.publishedDate).toLocaleString('en-CA', { timeZone: 'Canada/Mountain' })}</small>
                 {associatedTopic !== undefined && (<small class="text-muted"> &middot; {associatedTopic}</small> || <></>)}
             </span>
           <hr />
@@ -55,20 +55,22 @@ const SinglePostPage = ({ session }) => {
           <hr />
         </Col>
       </Row>
-        <Row>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Attachments</h5>
-                    <ul>
-                        {
-                            attachments.map((attachment) => {
-                                return (<li><a href={session._get_base_url() + "/public/attachments/" + attachment.id }>{attachment.originalFileName}</a></li>);
-                            })
-                        }
-                    </ul>                 
-                </div>
-            </div>            
-        </Row>
+        {(attachments !== undefined && attachments.length > 0) ? 
+         (<Row>
+              <div class="card">
+                  <div class="card-body">
+                      <h5 class="card-title">Attachments</h5>
+                      <ul>
+                          {
+                              attachments.map((attachment) => {
+                                  return (<li><a href={session._get_base_url() + "/public/attachments/" + attachment.id }>{attachment.originalFileName}</a></li>);
+                              })
+                          }
+                      </ul>                 
+                  </div>
+              </div>            
+          </Row>) : <></>
+        }
     </Container>
   );
 };

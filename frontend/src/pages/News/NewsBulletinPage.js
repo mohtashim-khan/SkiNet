@@ -38,7 +38,13 @@ const NewsBulletinPage = ({ session }) => {
         topics.sort((a, b) => {
           return a.sequence > b.sequence ? 1 : -1;
         });
-        setAvailableTopics(topics);
+          setAvailableTopics(topics);          
+          topics.forEach(function (item, index) {
+              if (item.description === "News / Announcements") {
+                  selectTopic(item.id);
+              }
+          });          
+
       }
     });
   }, [setAvailableTopics]);
@@ -62,19 +68,20 @@ const NewsBulletinPage = ({ session }) => {
   }, [setPosts, currentPage]);
 
   function performSearch() {
-    if (searchRef.current.value.trim().length == 0) return;
+      if (searchRef.current.value.trim().length == 0) return;
 
-    setSelectedTopic(undefined);
+      setSelectedTopic(undefined);
 
-    setSearchState(true);
-    const searchTerms = searchRef.current.value.split(" ");
-    const searchPayload = JSON.stringify(searchTerms);
+      setSearchState(true);
+      const searchTerms = searchRef.current.value.split(" ");
 
-    session.post("posts/search", searchPayload, {}, true).then((response) => {
-      if (response.status == 200) {
-        setPosts(response.data);
-      }
-    });
+      const searchPayload = JSON.stringify(searchTerms);
+
+      session.post("posts/search", searchPayload, {}, true).then((response) => {
+          if (response.status == 200) {
+              setPosts(response.data);
+          }
+      });
   }
 
   function cancelSearch() {
@@ -188,8 +195,8 @@ const NewsBulletinPage = ({ session }) => {
               <Card className="mb-2">
                 <Card.Body>
                   <Card.Title>{post.title}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
-                    {post.publishedDate}
+                    <Card.Subtitle className="mb-2 text-muted">
+                        {new Date(post.publishedDate).toLocaleString('en-CA', { timeZone: 'Canada/Mountain' })}
                   </Card.Subtitle>
                   <a
                     onClick={() => {

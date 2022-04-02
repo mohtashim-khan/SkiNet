@@ -1,5 +1,6 @@
 package ca.skipatrol.application.models.cms;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +33,8 @@ public class Topic {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "topic", cascade = CascadeType.ALL)
     @Getter
     @Setter
-    private Set<Post> post = new HashSet<>();
+    @JsonManagedReference
+    private Set<Post> post;
 
     Topic() {}
 

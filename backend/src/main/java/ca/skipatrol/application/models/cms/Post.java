@@ -33,6 +33,7 @@ public class Post {
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "topic_id", nullable = true)
+    @JsonBackReference
     private Topic topic;
 
     @Column(insertable = false,

@@ -261,7 +261,7 @@ export const ImgWrapper = styled.div`
 `;
 
 export const TopLine = styled.div`
-  color: ${({ lightTopLine }) => (lightTopLine ? "#a9b3c1" : "#4B59F7")};
+  color: ${({ lightTopLine }) => (lightTopLine ? "#FFFFFF" : "#4B59F7")};
   font-size: 18px;
   line-height: 16px;
   font-weight: 700;

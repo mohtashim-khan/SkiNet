@@ -524,13 +524,14 @@ public class ProfileServicesImpl implements ProfileServices {
         }
     }
 
-    public boolean updateUserGeneral(UUID userID, String email, String phone, String trainer){
+    public boolean updateUserGeneral(UUID userID, String email, String phone, String trainer, String trainee){
         try{
             User user = userRepository.getById(userID);
 
             user.setEmail(email);
             user.setPhoneNumber(phone);
             user.setTrainer(trainer.equalsIgnoreCase("true"));
+            user.setTrainee(trainee.equalsIgnoreCase("true"));
             return true;
         }
         catch(Exception ex)

@@ -90,7 +90,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Newton",
                                         "test@email.com",
                                         "000-000-0000",
-                                        EventRole.SYSTEM_ADMIN, true);
+                                        EventRole.SYSTEM_ADMIN, true, false);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("username").get();
@@ -137,14 +137,14 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Scott",
                                         "testMichael@email.com",
                                         "000-000-0000",
-                                        EventRole.SYSTEM_ADMIN, true);
+                                        EventRole.SYSTEM_ADMIN, true, false);
                         this.userRepository.save(new User("AAAAA",
                                         new BCryptPasswordEncoder().encode("password"),
                                         "Michael",
                                         "Scott",
                                         "testMichael@email.com",
                                         "000-000-0000",
-                                        EventRole.SYSTEM_ADMIN, true));
+                                        EventRole.SYSTEM_ADMIN, true, false));
                         userLookup2 = Optional.of(user);
 
                         user = userRepository.findByUsername("AAAAA").get();
@@ -175,7 +175,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Bob",
                                         "Really_Fast_Skier_324@email.com",
                                         "028-006-01914",
-                                        EventRole.ROSTERED, false);
+                                        EventRole.ROSTERED, false, false);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("Really_Fast_Skier_324").get();
@@ -231,7 +231,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Apple",
                                         "tim.apple@apple.com",
                                         "291-321-1252",
-                                        EventRole.ROSTERED, true);
+                                        EventRole.ROSTERED, true, false);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("AppleOverlord241").get();
@@ -304,7 +304,7 @@ public final class TestDataSeeder implements ApplicationListener<ApplicationRead
                                         "Flenderson",
                                         "test_Tobey@email.com",
                                         "000-000-0000",
-                                        EventRole.ROSTERED, true);
+                                        EventRole.ROSTERED, true, false);
                         this.userRepository.save(user);
 
                         user = userRepository.findByUsername("HRisTheBest").get();

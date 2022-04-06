@@ -203,7 +203,7 @@ const AddTrainee = ({AddTraineeModal , setAddTraineeModal, currentShift, setProx
     useEffect(() => {
         if(AddTraineeModal)
         {
-            session.get("users/search/findByTrainer?trainer=false")
+            session.get("users/search/findByTrainee?trainee=true")
                 .then(response => {
                     // If request is good...
                     setUsers(response.data._embedded.users);

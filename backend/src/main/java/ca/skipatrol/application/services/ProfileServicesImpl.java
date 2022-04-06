@@ -116,7 +116,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             if (getEvalTrainings) {
                 Hibernate.initialize(user.getEvalTrainings().size());
@@ -150,7 +151,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             Hibernate.initialize(user.getEmergencyContacts().size());
             returnVal.setEmergencyContacts(user.getEmergencyContacts());
@@ -174,7 +176,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             Hibernate.initialize(user.getPatrolCommitments().size());
             returnVal.setPatrolCommitments(user.getPatrolCommitments());
@@ -198,7 +201,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             Hibernate.initialize(user.getPersonAwards().size());
             returnVal.setPersonAwards(user.getPersonAwards());
@@ -222,7 +226,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             List<Uniform> uniforms = new ArrayList<Uniform>();
 
@@ -254,7 +259,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             returnVal.setRole(user.getRole());
 
@@ -277,7 +283,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             Hibernate.initialize(user.getEvalTrainings().size());
             returnVal.setEvalTrainings(user.getEvalTrainings());
@@ -313,7 +320,8 @@ public class ProfileServicesImpl implements ProfileServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             return returnVal;
         }
@@ -516,13 +524,14 @@ public class ProfileServicesImpl implements ProfileServices {
         }
     }
 
-    public boolean updateUserGeneral(UUID userID, String email, String phone, String trainer){
+    public boolean updateUserGeneral(UUID userID, String email, String phone, String trainer, String trainee){
         try{
             User user = userRepository.getById(userID);
 
             user.setEmail(email);
             user.setPhoneNumber(phone);
             user.setTrainer(trainer.equalsIgnoreCase("true"));
+            user.setTrainee(trainee.equalsIgnoreCase("true"));
             return true;
         }
         catch(Exception ex)
@@ -658,7 +667,7 @@ public class ProfileServicesImpl implements ProfileServices {
         }
 
         User myUser = new User(username, new BCryptPasswordEncoder().encode(password), firstName, lastName, email,
-                phoneNumber, EventRole.valueOf(eventRole), trainer);
+                phoneNumber, EventRole.valueOf(eventRole), trainer, false);
 
         this.userRepository.save(myUser);
         Optional<User> userEntity = userRepository.findByUsername(username);
@@ -681,7 +690,8 @@ public class ProfileServicesImpl implements ProfileServices {
                 user.getEmail(),
                 user.getPhoneNumber(),
                 user.getUserType(),
-                user.getTrainer());
+                user.getTrainer(),
+                user.getTrainee());
 
         return returnVal;
 

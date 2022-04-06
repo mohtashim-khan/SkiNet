@@ -36,6 +36,11 @@ const General = ({ session, userID, allowed, isAdmin }) => {
     } else {
       temp.trainer = "false";
     }
+    if ($("#trainee").is(":checked")) {
+      temp.trainee = "true";
+    } else {
+      temp.trainee = "false";
+    }
 
     session
       .patch("profile/changeGeneral?userID=" + userID, temp, {}, true)
@@ -188,7 +193,7 @@ const General = ({ session, userID, allowed, isAdmin }) => {
                   <div className="form-check">
                     <input
                       className="form-check-input"
-                      type="radio"
+                      type="checkbox"
                       name="selectTraineeEdit"
                       defaultChecked={user.trainer}
                       id="trainer"
@@ -199,9 +204,9 @@ const General = ({ session, userID, allowed, isAdmin }) => {
                   <div className="form-check">
                     <input
                       className="form-check-input"
-                      type="radio"
+                      type="checkbox"
                       name="selectTraineeEdit"
-                      defaultChecked={!user.trainer}
+                      defaultChecked={user.trainee}
                       id="trainee"
                     />
                     <label className="form-check-label">Trainee</label>

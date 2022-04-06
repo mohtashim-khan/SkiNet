@@ -548,7 +548,8 @@ public class ReportsServicesImpl implements ReportsServices {
                     user.getEmail(),
                     user.getPhoneNumber(),
                     user.getUserType(),
-                    user.getTrainer());
+                    user.getTrainer(),
+                    user.getTrainee());
 
             if (onSnowEval) {
                 Hibernate.initialize(user.getOnSnowEvals().size());

@@ -50,6 +50,10 @@ public class User {
 
     @Getter
     @Setter
+    private Boolean trainee;
+
+    @Getter
+    @Setter
     @JsonManagedReference
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private Role role;
@@ -112,7 +116,7 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType, Boolean trainer) {
+    public User(String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType, Boolean trainer, Boolean trainee) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -121,9 +125,10 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.userType = userType;
         this.trainer = trainer;
+        this.trainee = trainee;
     }
 
-    public User(UUID userID, String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType, Boolean trainer) {
+    public User(UUID userID, String username, String password, String firstName, String lastName, String email, String phoneNumber, EventRole userType, Boolean trainer, Boolean trainee) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -133,7 +138,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.userType = userType;
         this.trainer = trainer;
-
+        this.trainee = trainee;
     }
 
     public User(UUID userID,
@@ -152,7 +157,8 @@ public class User {
                 List<PatrolCommitment> patrolCommitments,
                 List<PersonAward> personAwards,
                 List<Uniform> uniforms,
-                Boolean trainer) {
+                Boolean trainer,
+                Boolean trainee) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -170,5 +176,6 @@ public class User {
         this.personAwards = personAwards;
         this.uniforms = uniforms;
         this.trainer = trainer;
+        this.trainee = trainee;
     }
 }

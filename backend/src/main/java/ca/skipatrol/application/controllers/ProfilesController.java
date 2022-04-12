@@ -211,7 +211,8 @@ public class ProfilesController {
     @RequestMapping(value = "customapi/profile/changeGeneral", method = RequestMethod.PATCH)
     public ResponseEntity<Object> UpdateUserGeneral(@RequestParam UUID userID, @RequestBody Map<String, String> userInfo) {
 
-        boolean rV = profileServices.updateUserGeneral(userID, userInfo.get("email"), userInfo.get("phone"), userInfo.get("trainer"), userInfo.get("trainee"));
+        boolean rV = profileServices.updateUserGeneral(userID, userInfo.get("email"), userInfo.get("phone"),
+                userInfo.get("trainer"), userInfo.get("trainee"), userInfo.get("firstName"), userInfo.get("lastName"));
 
         if (rV)
             return new ResponseEntity<>("User Information Updated successfully", HttpStatus.OK);

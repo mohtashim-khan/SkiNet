@@ -22,13 +22,16 @@ const General = ({ session, userID, allowed, isAdmin }) => {
     let tempLastName = $("#lastNameSelect").val();
     let tempEmail = $("#emailSelect").val();
     let tempPhone = $("#phoneSelect").val();
+    let nameChanged = false;
     if (tempFirstName !== "") {
       temp.firstName = tempFirstName;
+      nameChanged = true;
     } else {
       temp.firstName = user.firstName;
     }
     if (tempLastName !== "") {
       temp.lastName = tempLastName;
+      nameChanged = true;
     } else {
       temp.lastName = user.lastName;
     }
@@ -60,6 +63,9 @@ const General = ({ session, userID, allowed, isAdmin }) => {
           getUserInfo();
         }
       });
+    if (nameChanged){
+      window.location.reload();
+    }
     promptEditCancel();
   }
   function getUserInfo() {

@@ -18,14 +18,25 @@ const General = ({ session, userID, allowed, isAdmin }) => {
 
   function editUserInfo() {
     let temp = {};
+    let tempFirstName = $("#firstNameSelect").val();
+    let tempLastName = $("#lastNameSelect").val();
     let tempEmail = $("#emailSelect").val();
     let tempPhone = $("#phoneSelect").val();
+    if (tempFirstName !== "") {
+      temp.firstName = tempFirstName;
+    } else {
+      temp.firstName = user.firstName;
+    }
+    if (tempLastName !== "") {
+      temp.lastName = tempLastName;
+    } else {
+      temp.lastName = user.lastName;
+    }
     if (tempEmail !== "") {
       temp.email = tempEmail;
     } else {
       temp.email = user.email;
     }
-
     if (tempPhone !== "") {
       temp.phone = tempPhone;
     } else {
@@ -156,6 +167,39 @@ const General = ({ session, userID, allowed, isAdmin }) => {
               <h5>
                 <b>User Information</b>
               </h5>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" htmlFor="firstNameSelect">
+                    First Name
+                  </label>
+                </div>
+                <input
+                  type="tel"
+                  className="form-control"
+                  id="firstNameSelect"
+                  name="myEvalInput"
+                  aria-describedby="emailHelp"
+                  placeholder={user.firstName}
+                />
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <label className="input-group-text" htmlFor="lastNameSelect">
+                    Last Name
+                  </label>
+                </div>
+                <input
+                  type="tel"
+                  className="form-control"
+                  id="lastNameSelect"
+                  name="myEvalInput"
+                  aria-describedby="emailHelp"
+                  placeholder={user.lastName}
+                />
+              </div>
+
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
                   <label className="input-group-text" htmlFor="emailSelect">
